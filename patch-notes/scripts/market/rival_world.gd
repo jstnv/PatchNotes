@@ -15,6 +15,7 @@ var historical_archive: Dictionary = {}
 var calendar_offsets: Dictionary = {} # Private typed prelude projection; normal worlds use zero.
 var policy_states: Dictionary = {}
 var legacy: Dictionary = {}
+var annual_awards: Dictionary = {}
 var _busy := false
 ## Scheduler only; policy/state/order remain the same. Tools may force serial.
 var parallel_careers:=true
@@ -22,7 +23,7 @@ var _scheduler_failed:=false
 
 func license_engine(engine_id: StringName) -> Dictionary:
 	if _busy or _scheduler_failed or player == null: return {"ok":false,"error":"Marketplace is unavailable"}
-	var listing: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").find(engine_id)
+	var listing: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").current_listing(engine_id)
 	if listing.is_empty() or not preload("res://scripts/engines/engine_marketplace.gd").creator_matches_world(listing,self): return {"ok":false,"error":"Engine owner is unavailable"}
 	var creator: RunState = studios[listing.creator_id].run
 	if not player.can_mutate_checkpoint() or not creator.can_mutate_checkpoint(): return {"ok":false,"error":"Studio checkpoint is unavailable"}
@@ -33,8 +34,8 @@ func license_engine(engine_id: StringName) -> Dictionary:
 	var creator_plan: Dictionary = StudioFinanceLedger.plan(creator._studio_finance,creator.get_completed_run_cycles(),creator.get_cash_cents(),quote.creator_delta_cents,&"other_income",0,0,false,quote.receipt_id)
 	if buyer_plan.is_empty() or creator_plan.is_empty(): return {"ok":false,"error":"Engine license could not be settled"}
 	var feature_state: Dictionary=player.get_engine_feature_state()
-	var library: Array[StringName]=player.get_future_project_feature_ids()
-	if not player.EngineFeatures.add_record(feature_state,engine_id,str(listing.name),&"rival_licensed",int(listing.max_scope),library,"legacy-access-v1"):return {"ok":false,"error":"Engine library unavailable"}
+	var library: Array[StringName]=[];library.assign(listing.library)
+	if not player.EngineFeatures.add_record(feature_state,engine_id,str(listing.name),&"rival_licensed",int(listing.max_scope),library,preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN):return {"ok":false,"error":"Engine library unavailable"}
 	player._engine_features=feature_state
 	player._cash_cents = buyer_plan.cash_cents
 	player._studio_finance = buyer_plan.ledger
@@ -53,12 +54,12 @@ func settle_engine_royalties() -> Dictionary:
 	for release_id: StringName in player._release_engine_ids:
 		var engine_id: StringName = player._release_engine_ids[release_id]
 		if engine_id not in licensed_engine_ids or player._commission_deals.has(release_id): continue
-		var listing: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").find(engine_id)
+		var listing: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").terms_for_record(engine_id,player._engine_features.get("engines",{}).get(engine_id,{}))
 		if listing.is_empty() or not studios.has(listing.creator_id) or not player._released_games.has(release_id): return {"ok":false,"error":"Royalty owner or release is unavailable"}
 		var creator: RunState = studios[listing.creator_id].run
 		var settled: int = player._support_rights[release_id].studio_settled_cents if player._support_rights.has(release_id) else player._released_games[release_id].settled_cents
 		if settled < 0: return {"ok":false,"error":"Royalty sales are invalid"}
-		var due: int = preload("res://scripts/engines/engine_royalty.gd").cumulative(settled)
+		var due: int = preload("res://scripts/engines/engine_royalty.gd").cumulative(settled,int(listing.royalty_basis_points))
 		var paid: int = int(creator._engine_royalty_receipts.get(release_id,0))
 		if paid > due: return {"ok":false,"error":"Royalty receipt exceeds sales"}
 		var delta := due - paid
@@ -141,6 +142,7 @@ func initialize_projected_cohort(player_run: RunState,sessions: Dictionary,archi
 	return true
 
 func bind_market_providers() -> void:
+	if player != null: preload("res://scripts/awards/annual_awards_ledger.gd").initialize(self)
 	if player!=null: player._market_provider=Callable(self,"market_for_run")
 	for id: StringName in studios:
 		studios[id].run._market_provider=Callable(self,"market_for_run")
@@ -223,7 +225,34 @@ func advance_committed_player_cycle(policies: Dictionary, max_zero_steps: int) -
 		if royalties.transfers.has(report.studio_id): report.cash_cents = studios[report.studio_id].run.get_cash_cents()
 	cycle = next_cycle
 	_busy = false
+	var annual: Dictionary = preload("res://scripts/awards/annual_awards_ledger.gd").settle(self)
+	if not annual.ok:
+		_scheduler_failed = true
+		return {"ok":false,"reason":annual.error,"cycle":cycle,"requires_checkpoint_recovery":true}
 	return {"ok":true,"cycle":cycle,"studios":reports,"new_releases":published}
+
+func get_annual_awards() -> Dictionary:
+	return annual_awards.duplicate(true)
+
+func pending_awards_index() -> int:
+	return preload("res://scripts/awards/annual_awards_ledger.gd").pending(annual_awards)
+
+func advance_awards_stage(skip_to_results: bool = false) -> bool:
+	var index := pending_awards_index()
+	if _busy or _scheduler_failed or index < 0: return false
+	var entry: Dictionary = annual_awards.entries[index]
+	if entry.stage >= 9: return false
+	if skip_to_results:
+		if preload("res://scripts/awards/annual_awards_ledger.gd").first_presentation(annual_awards,index): return false
+		entry.stage = 9
+	else: entry.stage += 1
+	return true
+
+func complete_awards_presentation() -> bool:
+	var index := pending_awards_index()
+	if _busy or _scheduler_failed or index < 0 or annual_awards.entries[index].stage != 9: return false
+	annual_awards.entries[index].complete = true
+	return true
 func _advance_studio(id: StringName, policy: Callable, target: int, limit: int, collect_only: bool=false) -> Dictionary:
 	var session: RefCounted = studios[id]
 	var run: RunState = session.run

@@ -155,7 +155,7 @@ func commit_priorities(distribution: Dictionary,context: RefCounted=null) -> boo
 
 
 func plan_hand(cards: Array[CardData]) -> Dictionary:
-	if is_completed() or _successful_hands >= get_required_hands() or cards.size() != 4 or cards[0]==null:
+	if is_completed() or _successful_hands >= get_required_hands() or (cards.is_empty() or cards.size() > 4) or cards[0]==null:
 		return {}
 	var seen_features: Dictionary = {}
 	var specialization_stat := cards[0].primary_stat if not cards.is_empty() else StringName()
@@ -170,6 +170,7 @@ func plan_hand(cards: Array[CardData]) -> Dictionary:
 			if seen_features.has(card.id):
 				return {}
 			seen_features[card.id] = true
+	if cards.size() != 4: specialization_stat = &""
 	var score_additions: Dictionary = {}
 	for category: ProjectState.CoreScore in PriorityAllocation.CORE_CATEGORIES:
 		score_additions[category] = 0

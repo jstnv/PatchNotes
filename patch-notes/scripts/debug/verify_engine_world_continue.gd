@@ -34,19 +34,24 @@ func _verify() -> void:
 	var deadline := Time.get_ticks_msec() + 20000
 	while game._transition_in_progress and Time.get_ticks_msec() < deadline: await process_frame
 	await process_frame
-	check(game.rival_world != null and game.rival_world.studios.has(&"incumbent-action"),"Certified Action creator is active in the normal world")
+	check(game.rival_world != null and game.rival_world.studios.has(&"incumbent-adventure"),"Certified Adventure creator is active in the normal world")
 	if game.rival_world == null: quit(1);return
-	var creator_before: int = game.rival_world.studios[&"incumbent-action"].run.get_cash_cents()
-	check(game.run_state.add_cash_cents(200000),"Player funds the engine license")
-	check(game.rival_world.license_engine(&"action_engine").get("ok",false),"Normal world settles the license")
-	check(game.run_state.select_engine(&"action_engine"),"Player selects the licensed engine")
-	var creator_after: int = game.rival_world.studios[&"incumbent-action"].run.get_cash_cents()
-	check(creator_after == creator_before + 750000,"Real rival bankroll receives exactly $7,500")
+	var creator_before: int = game.rival_world.studios[&"incumbent-adventure"].run.get_cash_cents()
+	check(game.run_state.get_cash_cents()>=250000,"Player can afford the engine license")
+	check(game.rival_world.license_engine(&"adventure_engine").get("ok",false),"Normal world settles the license")
+	check(game.run_state.select_engine(&"adventure_engine"),"Player selects the licensed engine")
+	var manifest: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://../docs/codex/threads/engine-system/2026-10-31-starting-libraries-recommended.json"))
+	var expected: Array[StringName]=[]
+	for id: String in manifest.libraries.rival_adventure.ids:expected.append(StringName(id))
+	check(Array(game.run_state.get_future_project_feature_ids())==Array(expected) and game.run_state.get_selected_engine_capacity()==27,"Adventure fixed library and capacity are available immediately")
+	var creator_after: int = game.rival_world.studios[&"incumbent-adventure"].run.get_cash_cents()
+	check(creator_after == creator_before + 250000,"Real rival bankroll receives exactly $2,500")
 	check(await game.checkpoints.wait_saved() and game.checkpoints.store.inspect().status == &"valid","Player and rival world save together")
 	game._continue_checkpoint()
 	await process_frame
-	check(game.rival_world != null and game.run_state.get_selected_engine_id() == &"action_engine","Continue restores selected engine")
-	check(game.rival_world != null and game.rival_world.studios[&"incumbent-action"].run.get_cash_cents() == creator_after,"Continue restores creator bankroll without replaying purchase")
+	check(game.rival_world != null and game.run_state.get_selected_engine_id() == &"adventure_engine","Continue restores selected engine")
+	check(game.run_state.get_future_project_feature_ids()==expected,"Continue restores the Adventure Feature library")
+	check(game.rival_world != null and game.rival_world.studios[&"incumbent-adventure"].run.get_cash_cents() == creator_after,"Continue restores creator bankroll without replaying purchase")
 	print("Engine world Continue: %d failures" % failures)
 	game.checkpoints.store.release_writer()
 	quit(1 if failures else 0)

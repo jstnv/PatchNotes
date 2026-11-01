@@ -30,15 +30,15 @@ var _budget_projection := -1
 var _budget_reserved := 0
 
 func pass_budget_available() -> int:
-	return PassBudget.generated(_budget_printed) - _budget_spent if pass_budget_active() else CANDIDATE_POOL_SIZE
+	return PassBudget.generated(_budget_printed, _project_state._pass_budget_version if _project_state != null else 2) - _budget_spent if pass_budget_active() else CANDIDATE_POOL_SIZE
 
 func pass_budget_active() -> bool:
-	return _project_state==null or _project_state._pass_budget_version==1
+	return _project_state==null or _project_state._pass_budget_version in [1,2]
 
 func can_play_pass_budget(cards: Array[CardData]) -> bool:
 	if not pass_budget_active():return true
 	var change:=_selected_budget_delta(cards)
-	return int(change.passes)<=PassBudget.generated(_budget_printed+int(change.printed))-_budget_spent
+	return int(change.passes)<=PassBudget.generated(_budget_printed+int(change.printed), _project_state._pass_budget_version if _project_state != null else 2)-_budget_spent
 
 func _selected_budget_delta(cards: Array[CardData]) -> Dictionary:
 	var printed := 0
@@ -77,7 +77,7 @@ func _execute(request: Dictionary) -> Dictionary:
 	if _run_state != null and not _run_state.can_advance_calendar_cycle(): return reject("Calendar cannot advance")
 	if request.get("revision", -1) != revision or request.get("project_cycle", -1) != _project_state.get_current_cycle() or request.get("run_cycle", -2) != (_run_state.get_completed_run_cycles() if _run_state != null else -1): return reject("Stale command")
 	var ids: Variant = request.get("candidate_ids")
-	if not ids is Array or ids.size() != SELECTED_HAND_SIZE or candidate_ids.size() != _candidate_cards.size(): return reject("Select four current instances")
+	if not ids is Array or (ids.is_empty() or ids.size() > SELECTED_HAND_SIZE) or candidate_ids.size() != _candidate_cards.size(): return reject("Select one to four current instances")
 	var selected: Array[CardData] = []
 	var seen := {}
 	var selected_features := {}
@@ -125,17 +125,18 @@ func _execute(request: Dictionary) -> Dictionary:
 		if candidate_ids[index] not in ids:
 			retained.append(_candidate_cards[index])
 			retained_ids.append(candidate_ids[index])
-	_budget_projection = PassBudget.generated(_budget_printed + int(budget_delta.printed)) - _budget_spent - int(budget_delta.passes) if pass_budget_active() else CANDIDATE_POOL_SIZE
+	_budget_projection = PassBudget.generated(_budget_printed + int(budget_delta.printed), _project_state._pass_budget_version if _project_state != null else 2) - _budget_spent - int(budget_delta.passes) if pass_budget_active() else CANDIDATE_POOL_SIZE
 	_budget_reserved = retained.filter(func(card: CardData): return card.card_type == &"pass").size()
 	var tutorial := _get_first_game_tutorial()
+	var refill_count := maxi(0, CANDIDATE_POOL_SIZE - retained.size())
 	var refill: Dictionary
-	if tutorial != null and tutorial.stage == FirstGameTutorial.Stage.FIRST_HAND:
+	if tutorial != null and tutorial.stage == FirstGameTutorial.Stage.FIRST_HAND and refill_count == 4:
 		var costs := {}
 		for card in _available_features: costs[card.id] = _run_state.primitive_feature_hand_cost_cents([card] as Array[CardData], _project_state.get_release_id())
 		refill = tutorial.plan_deal(_available_features, _pass_definitions, refill_priorities, _run_state.get_cash_cents()-play_cost, costs, _deal_rng, retained, true, maxi(0,_budget_projection-_budget_reserved))
-		if refill.is_empty(): refill = _build_weighted_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE)
+		if refill.is_empty(): refill = _build_weighted_candidate_definitions(refill_priorities, [], refill_count)
 	else:
-		refill = _build_weighted_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE)
+		refill = _build_weighted_candidate_definitions(refill_priorities, [], refill_count)
 	_budget_projection = -1
 	_budget_reserved = 0
 	if not refill.get("valid", false):
@@ -181,6 +182,7 @@ func _execute(request: Dictionary) -> Dictionary:
 
 
 func calculate_base(cards: Array[CardData]) -> Dictionary:
+	if cards.is_empty() or cards.size() > SELECTED_HAND_SIZE: return _invalid_base_hand("Select one to four cards")
 	for card in cards:
 		if card == null: return _invalid_base_hand("Null card")
 		var validation_error := _get_card_validation_error(card)

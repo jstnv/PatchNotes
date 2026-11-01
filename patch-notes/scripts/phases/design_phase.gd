@@ -377,7 +377,7 @@ func _on_redraw_pressed() -> void:
 func _refresh_redraw_controls() -> void:
 	if not is_node_ready(): return
 	for view: CardView in %HandContainer.card_views():
-		view.set_shared_pass_budget(2 + _budget_printed / 8 - _budget_spent, posmod(_budget_printed, 8))
+		view.set_shared_pass_budget(_capture_design_command().pass_budget_available(), posmod(_budget_printed, 8))
 	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
 	%RedrawButton.disabled = not _can_redraw_selection()
 	if not %RedrawButton.disabled:
@@ -435,7 +435,7 @@ func _on_card_pressed(card_view: CardView) -> void:
 		_update_play_button()
 		return
 	if _selected_card_views.size() >= SELECTED_HAND_SIZE:
-		push_warning("Exactly four Design candidates may be selected.")
+		push_warning("At most four Design candidates may be selected.")
 		return
 
 	_selected_card_views.append(card_view)
@@ -549,7 +549,7 @@ func _return_feature_to_available(card: CardData) -> void:
 func _can_play_selected_hand() -> bool:
 	if _hand_command_busy: return false
 	if is_gameplay_input_blocked(): return false
-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested or _project_state == null or not _project_state.can_advance_cycle() or (_run_state != null and not _run_state.can_advance_calendar_cycle()) or _selected_card_views.size() != SELECTED_HAND_SIZE:
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested or _project_state == null or not _project_state.can_advance_cycle() or (_run_state != null and not _run_state.can_advance_calendar_cycle()) or (_selected_card_views.is_empty() or _selected_card_views.size() > SELECTED_HAND_SIZE):
 		return false
 	var seen_views: Dictionary[int, bool] = {}
 	for card_view in _selected_card_views:
@@ -653,7 +653,7 @@ func _update_play_button() -> void:
 		play_card_button.text = "Implement"
 		play_card_button.tooltip_text = ""
 		play_card_button.disabled = not _can_play_selected_hand()
-		if _run_state != null and _run_state.uses_first_studio_economy() and _selected_card_views.size() == SELECTED_HAND_SIZE:
+		if _run_state != null and _run_state.uses_first_studio_economy() and not _selected_card_views.is_empty():
 			var cards: Array[CardData] = []
 			for view: CardView in _selected_card_views:
 				cards.append(view.card_data)
@@ -751,7 +751,7 @@ func refresh_overlay_actions() -> void:
 func get_employee_hand_status() -> Dictionary:
 	if _run_state == null or _project_state == null: return {}
 	var roster := _run_state.get_employees()
-	var base := _validate_and_calculate_base_action()
+	var base := _validate_and_calculate_base_action() if not _selected_card_views.is_empty() and not _hand_command_busy else {}
 	return {"hired":roster.employees.values().any(func(e):return e.type==&"production"),"available":EmployeeRoster.available(roster,_project_state.get_release_id()),"qualifying":base.get("valid",false) and EmployeeRoster.matches(EmployeeRoster.card_facts(base.get("cards",[])))}
 
 

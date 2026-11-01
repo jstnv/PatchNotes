@@ -1,0 +1,12 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+TARGET_RESULT { "short": false, "host": true, "short_owner": &"", "host_owner": &"incumbent-puzzle" } player_studio=true world=104
+ERROR: A real one-Feature rival hand and actual Playtest both committed before Studio
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/flex-hands-20261101-v1/legal_rival_overflow.gd:9)
+       [1] _initialize (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/flex-hands-20261101-v1/legal_rival_overflow.gd:56)
+FLEXIBLE_RIVAL_OVERFLOW checks=30 failures=1 target=104
+WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

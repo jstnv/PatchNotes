@@ -34,7 +34,7 @@ static func specialize(scores: Dictionary, category_bonus_bp: Dictionary = {}) -
 
 static func calculate(records: Array, scores: Dictionary, has_feature: bool, category_bonus_bp: Dictionary = {}) -> Dictionary:
 	var stat := specialization_stat(records)
-	var eligible := has_feature and BalancedProduction.qualifies(scores)
+	var eligible := records.size() == 4 and has_feature and BalancedProduction.qualifies(scores)
 	var additions: Dictionary[ProjectState.CoreScore, int] = {}
 	for category: ProjectState.CoreScore in scores:
 		additions[category] = scores[category]

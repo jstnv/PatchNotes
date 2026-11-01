@@ -14,7 +14,7 @@ func _initialize() -> void:
 	var matching := [{"primary_stat": &"graphics"}, {"primary_stat": &"graphics"}, {"primary_stat": &"graphics"}, {"primary_stat": &"graphics"}]
 	var raw := {0: 10, 1: 10, 2: 10, 3: 10}
 	var bonus := {0: 2000, 2: 1000} # +0.1 engine and +0.1 employee on Graphics; +0.1 engine on Technology.
-	check(Marketplace.production_bonus(&"action_engine") == {0: 1000, 2: 1000} and Marketplace.production_bonus(&"puzzle_engine") == {2: 1000, 3: 1000}, "Engine bonus map follows dominant Core categories")
+	check(Marketplace.production_bonus(&"adventure_engine") == {0: 1000, 3: 1000} and Marketplace.production_bonus(&"puzzle_engine") == {2: 1000, 3: 1000}, "Engine bonus map follows dominant Core categories")
 	check(Marketplace.production_bonus(&"legacy_engine").is_empty(), "Built-in engine has no production bonus")
 	var result: Dictionary = Production.calculate(matching, raw, true, bonus)
 	check(result.specialization_stat == &"graphics" and result.score_additions[0] == 17 and result.score_additions[2] == 16, "Engine and employee specialization bonuses add to the base 1.5 multiplier")

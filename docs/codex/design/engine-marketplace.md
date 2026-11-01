@@ -1,15 +1,20 @@
 # Engine System and Marketplace — implementation intake
 
-**2026-10-31 status: user-approved implementation direction; implementation IN PROGRESS.** The pasted Engine System brief authorizes a reusable engine model, two opening listings, specialization integration, licenses, royalties, Scope capacity, save compatibility and Studio Management UI. The user resolved the three integration rules below on 2026-10-31.
+**2026-11-01 current ruling — ACTIVE/TRIAL; implementation under focused verification.** The user's latest marketplace instruction supersedes the 2026-10-31 rival terms. Public Action remains free, 27 Scope, fixed 17 Features and 30% post-platform external royalty. New rival licenses are Puzzle and Adventure, each 27 Scope, $2,500, fixed October 31 library and 15% post-platform royalty paid to its persistent creator rival. The Action rival listing is retired for new purchases. Historical sections below describe earlier implementation decisions.
 
 ## Selected starting definitions
 
 | Engine | Creator in both certified 1980 openings | Specialty | Max Scope | License | Royalty | Dominant Core | Specialization bonus |
 |---|---|---|---:|---:|---:|---|---:|
-| Action Engine | `incumbent-action` / Arcade Foundry | Action | 25 | $7,500 | 20% | Graphics, Technology | +0.1 each |
-| Puzzle Engine | `incumbent-puzzle` / Prism Logic | Puzzle | 25 | $7,500 | 20% | Technology, Design | +0.1 each |
+| Public Action | external provider | Action | 27 | Free | 30% | Graphics, Technology | +0.1 each |
+| Puzzle Engine | `incumbent-puzzle` / Prism Logic | Puzzle | 27 | $2,500 | 15% | Technology, Design | +0.1 each |
+| Adventure Engine | `incumbent-adventure` / Wayfinder Works | Adventure | 27 | $2,500 | 15% | Graphics, Design | +0.1 each |
 
-Puzzle's dominant categories follow the current approved Genre target table: Technology 40, Design 59. Both owners are real persistent rival `RunState`s in `certified/rival-opening-5607-v1.json` and `rival-opening-5613-v1.json`. The catalog at `scripts/engines/engine_marketplace.gd` is fixed data; the current world checks creator ID and specialty before a purchase.
+Puzzle's dominant categories follow the current Genre target table: Technology 40, Design 59. Adventure uses Graphics/Design, the pair assumed by the October 31 research manifest; this bonus pair remains a separate balance assumption. Both owners are real persistent rival `RunState`s in `certified/rival-opening-5607-v1.json` and `rival-opening-5613-v1.json`. The catalog at `scripts/engines/engine_marketplace.gd` is fixed data; the world checks creator ID and specialty before a purchase. The exact fixed library IDs are pinned in [the October 31 manifest](../threads/engine-system/2026-10-31-starting-libraries-recommended.json), with the new $2,500 fee overriding that file's proposed $4,000.
+
+Existing Action licenses remain selectable with their 25-Scope/20% terms but cannot be newly bought. Existing Puzzle records marked `legacy-access-v1` keep their 25-Scope library snapshot and 20% royalty; new Puzzle and Adventure purchases use `rival-library-manifest-2026-10-31-v1`. Saved payments and creator receipts are not rewritten. Existing active projects retain their frozen capacity/pool. No Engine Skill Tree was added. [Focused reconciliation log](../logs/2026-11-01-rival-marketplace-reconciliation-v1.md).
+
+**2026-11-01 price revision — ACTIVE/TRIAL:** The user reduced each current rival license to $2,500. This supersedes the $7,500 price in the 2026-10-31 decision and implementation records. Other listing terms and existing paid licenses remain unchanged.
 
 ## Implemented integration boundaries
 

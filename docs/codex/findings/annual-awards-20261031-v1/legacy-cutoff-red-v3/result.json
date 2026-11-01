@@ -1,0 +1,27 @@
+{
+  "exit": 1,
+  "errors": [
+    "FAIL: legacy1980 DecWeek3 first eligible year",
+    "FAIL: legacy1981 DecWeek3 first eligible year",
+    "FAIL: Skip unrepresentable expired year",
+    "FAIL: Next-year ledger validates without missing expired year",
+    "FAIL: Typed ledger checkpoint round trip preserves valid next-year result",
+    "FAIL: Skip unrepresentable expired year",
+    "FAIL: Next-year ledger validates without missing expired year",
+    "FAIL: Typed ledger checkpoint round trip preserves valid next-year result"
+  ],
+  "ok": false,
+  "source_fenced": true,
+  "source_unchanged": true,
+  "seconds": 4.6560000000026776,
+  "argv": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_annual_awards_legacy_cutoff.gd"
+  ]
+}

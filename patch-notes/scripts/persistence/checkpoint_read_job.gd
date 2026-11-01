@@ -10,6 +10,7 @@ class ReadValidator extends "res://scripts/persistence/checkpoint_write_validato
 	func _validate_payload(payload: Dictionary) -> String:
 		var next:=_market_compatible_payload(payload)
 		if next.is_empty():return "Invalid pre-market migration payload"
+		if preload("res://scripts/awards/award_receipts.gd").missing_world(next):return "Awarded Studio requires its global annual ledger"
 		var p: Dictionary=next.duplicate(true);p.erase("rival_world")
 		var r: RunState=adapter.hydrate(p)
 		if r==null:return adapter.error

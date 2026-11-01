@@ -1,0 +1,39 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+ERROR: A short hand never rolls Specialization-only QA proc RNG
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_flexible_review_edges.gd:7)
+       [1] _initialize (res://scripts/debug/verify_flexible_review_edges.gd:25)
+ERROR: A short hand records no QA Specialization proc
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_flexible_review_edges.gd:7)
+       [1] _initialize (res://scripts/debug/verify_flexible_review_edges.gd:26)
+ERROR: Project Manager records ordinary short hand
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_flexible_review_edges.gd:7)
+       [1] _initialize (res://scripts/debug/verify_flexible_review_edges.gd:33)
+ERROR: Malformed protected-token length rejects cleanly in version0
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_flexible_review_edges.gd:7)
+       [1] _initialize (res://scripts/debug/verify_flexible_review_edges.gd:37)
+ERROR: Unprotected overflow rejects in version0
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/debug/verify_flexible_review_edges.gd:7)
+       [1] _initialize (res://scripts/debug/verify_flexible_review_edges.gd:41)
+SCRIPT ERROR: Invalid access of index '1' on a base object of type: 'Array'.
+   at: _valid_pass_budget (res://scripts/market/rival_world_checkpoint.gd:936)
+   GDScript backtrace (most recent call first):
+       [0] _valid_pass_budget (res://scripts/market/rival_world_checkpoint.gd:936)
+       [1] _initialize (res://scripts/debug/verify_flexible_review_edges.gd:37)
+SCRIPT ERROR: Invalid access of index '1' on a base object of type: 'Array'.
+   at: _valid_pass_budget (res://scripts/market/rival_world_checkpoint.gd:936)
+   GDScript backtrace (most recent call first):
+       [0] _valid_pass_budget (res://scripts/market/rival_world_checkpoint.gd:936)
+       [1] _initialize (res://scripts/debug/verify_flexible_review_edges.gd:37)
+FLEXIBLE_REVIEW_EDGES checks=11 failures=5

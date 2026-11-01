@@ -1,0 +1,64 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WARNING: Case mismatch opening requested file 'res://scenes/phases/post_game_review.tscn', stored as 'res://Scenes/phases/post_game_review.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+WARNING: Case mismatch opening requested file 'res://scenes/phases/post_game_review.tscn', stored as 'res://Scenes/phases/post_game_review.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+WARNING: Case mismatch opening requested file 'res://scenes/cards/card_view.tscn', stored as 'res://Scenes/cards/card_view.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+WARNING: Case mismatch opening requested file 'res://scenes/cards/card_view.tscn', stored as 'res://Scenes/cards/card_view.tscn' in the filesystem. This file will not open when exported to other case-sensitive platforms.
+   at: open_internal (drivers/windows/file_access_windows.cpp:192)
+Loaded 40 cards.
+PASS: Create active traits Studio
+PASS: Initial Studio captures: 
+PASS: Initial Studio hydrates: 
+PASS: Initial Studio all mapped values and RNG are lossless
+PASS: Frozen first-release fixture
+ERROR: FAIL: Release history captures: Invalid engine state
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] roundtrip (res://scripts/debug/verify_studio_checkpoint.gd:10)
+       [2] _run (res://scripts/debug/verify_studio_checkpoint.gd:29)
+PASS: Native earning cycle
+PASS: Native earning cycle
+PASS: Native earning cycle
+PASS: Native earning cycle
+ERROR: FAIL: Two sales settlements captures: Invalid engine state
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] roundtrip (res://scripts/debug/verify_studio_checkpoint.gd:10)
+       [2] _run (res://scripts/debug/verify_studio_checkpoint.gd:31)
+ERROR: FAIL: Accept loan
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] _run (res://scripts/debug/verify_studio_checkpoint.gd:33)
+ERROR: FAIL: Accepted loan captures: Invalid engine state
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] roundtrip (res://scripts/debug/verify_studio_checkpoint.gd:10)
+       [2] _run (res://scripts/debug/verify_studio_checkpoint.gd:34)
+PASS: Synthetic second-release payroll prerequisite
+PASS: Hire Specialist
+ERROR: FAIL: Payroll contract captures: Invalid engine state
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] roundtrip (res://scripts/debug/verify_studio_checkpoint.gd:10)
+       [2] _run (res://scripts/debug/verify_studio_checkpoint.gd:40)
+PASS: Native installment/payroll earning
+PASS: Native installment/payroll earning
+PASS: Native installment/payroll earning
+ERROR: FAIL: Paid installment and payroll captures: Invalid engine state
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] expect (res://scripts/debug/verify_main_menu_history.gd:9)
+       [1] roundtrip (res://scripts/debug/verify_studio_checkpoint.gd:10)
+       [2] _run (res://scripts/debug/verify_studio_checkpoint.gd:42)
+SCRIPT ERROR: Out of bounds get index '0' (on base: 'Array')
+   at: _run (res://scripts/debug/verify_studio_checkpoint.gd:44)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://scripts/debug/verify_studio_checkpoint.gd:44)

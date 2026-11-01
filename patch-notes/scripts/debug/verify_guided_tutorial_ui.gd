@@ -237,9 +237,12 @@ func _run() -> void:
 	await settle()
 	expect(game._active_phase is MainMenu,"Cold scene enters the actual Main Menu")
 	game._active_phase.continue_requested.emit()
-	for frame in 600:
-		if not game._loading_checkpoint: break
+	# Paired world hydration runs in a worker; elapsed frames are not a time bound.
+	var continue_started := Time.get_ticks_msec()
+	var continue_deadline := continue_started + 90000
+	while game._loading_checkpoint and Time.get_ticks_msec() < continue_deadline:
 		await process_frame
+	print("Tutorial Continue wait: %d ms, loading=%s" % [Time.get_ticks_msec()-continue_started,game._loading_checkpoint])
 	await settle()
 	view = game.guided_tutorial
 	expect(not game._loading_checkpoint and view!=null and view.asking,"First-time Continue offers the invitation after the loading overlay closes")

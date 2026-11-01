@@ -1,0 +1,7 @@
+# Annual Game Awards readiness check — 2026-10-31
+
+User: wait five minutes, then check TODO for ceremony implementation using existing menu design. Wait04:39:26→04:44:40 UTC verified before the first queue read. Branch main, HEAD49d769235474a880a73d996499cefa72beec63e5; existing dirty splash/design work preserved.
+
+[Source-pinned readiness packet and shared-menu contract](../threads/annual-game-awards/2026-10-31-implementation-readiness-v1.md). Read current state/queue/design, branch/HEAD/status/diff, then focused source. Independent read-only world/Fans/Promotion and UI/Settings audits found no existing ceremony implementation. Queue remains canonical-adoption gated: Studio eligibility, gross/net Fans, tie rules, stacking/trial values, first/old-save years and skip/resume order remain OPEN. Immediate calendar-only adjudication also needs explicit parity with zero-cycle player launch; direct Fan/Promotion grants would violate current Continue provenance.
+
+Changed only this log, the readiness packet/hash manifest, the existing design's user-directed shared-menu clause and a minimal TODO evidence link. No canonical gameplay/UI implementation, no reward mutation, no tests rerun, no commit/push/automation. Preserve Studio-only Continue and certified historical inputs. Next action: complete the adopting handoff's structural decisions, then execute the staged verification sequence in the packet.

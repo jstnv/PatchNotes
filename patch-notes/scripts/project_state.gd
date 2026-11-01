@@ -7,7 +7,7 @@ var _release_id := StringName("release_" + Crypto.new().generate_random_bytes(16
 func get_release_id() -> StringName:
 	return _release_id
 ## Prospective project rules; unversioned active rival projects are grandfathered.
-var _pass_budget_version := 1
+var _pass_budget_version := 2
 var _pass_budget_origin := ""
 signal values_changed
 signal cycle_changed

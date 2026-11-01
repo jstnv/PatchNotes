@@ -67,7 +67,7 @@ func _execute(kind: StringName,payload: Dictionary,readiness: Callable,publicati
 		if not id is int or id not in candidate_ids or candidate_ids.find(id) in slots: return reject("Invalid candidate token")
 		slots.append(candidate_ids.find(id))
 	if kind == &"redraw": return redraw(slots,[],[],readiness,publication)
-	if slots.size() != HAND_SIZE: return reject("Four candidates required")
+	if slots.is_empty() or slots.size() > HAND_SIZE: return reject("One to four candidates required")
 	var selected: Array[CardData] = []
 	for slot in slots: selected.append(cards[slot])
 	var plan := _state.plan_hand(selected)
@@ -80,7 +80,7 @@ func _execute(kind: StringName,payload: Dictionary,readiness: Callable,publicati
 		for id: StringName in plan.exhausted_ids: reserved[id] = true
 		for slot in range(cards.size()):
 			if slot not in slots and not cards[slot].renewable: reserved[cards[slot].id] = true
-		replacements = _build_candidate_pool(reserved,[],[],HAND_SIZE)
+		replacements = _build_candidate_pool(reserved,[],[],CANDIDATE_COUNT - (cards.size() - slots.size()))
 		if replacements.is_empty() or (readiness.is_valid() and not readiness.call(replacements)):
 			_rng.state = before
 			return reject("Contract refill rejected")

@@ -1,0 +1,24 @@
+{
+  "exit": 5,
+  "errors": [
+    "ERROR: FAIL: Acceptance atomically pays exact 40000 cents without cycle, redraw, sales or ProjectState mutation",
+    "ERROR: FAIL: Valid changed priorities commit",
+    "ERROR: FAIL: Priority commit advances once and restores one redraw",
+    "ERROR: FAIL: Priority commit preserves current draw and integrates with sales earning",
+    "ERROR: FAIL: Committed priorities control later redraw category weighting"
+  ],
+  "ok": false,
+  "source_fenced": true,
+  "source_unchanged": true,
+  "seconds": 11.031000000002678,
+  "argv": [
+    "C:/Users/64jus/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+    "--headless",
+    "--audio-driver",
+    "Dummy",
+    "--path",
+    "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\patch-notes",
+    "--script",
+    "res://scripts/debug/verify_balanced_primitive_contract.gd"
+  ]
+}

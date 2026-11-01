@@ -1,3 +1,13 @@
+# Pass Budget — version2 starting allowance
+
+**2026-11-01 ACTIVE/TRIAL; implemented locally.** User requested +2 initial Passes per category each phase. The existing four-category budget stays shared: +8 moves the base2→10. Each new project's Design and Alpha phase independently uses `10 + floor(cumulative printed Feature Core / 8)`. Only actual Pass plays spend allowance; printed Feature Core earns it. Existing active version1 projects retain2/K8 and version0 legacy provenance remains unchanged; future projects use version2.
+
+Hands now accept1–4 cards; all four-card synergies and their employee Specialization effects still need four. Playtest corrections are added immediately, may overflow seven only as protected Passes, and reserve existing allowance in Alpha. No ordinary refill/deal RNG while7+ unplayed candidates remain; below7, refill only the gap. Beta's existing$500/one-cycle Playtest and Alpha's free/one-cycle Playtest remain. No Beta/Contract starting quota is invented. See [source, exact checks and remaining fixture gates](../findings/flex-hands-20261101-v1/README.md).
+
+The dated2/K8 studies below remain historical evidence, not current version2 predictions. Final balance/current export/device and broad performance acceptance remain separate.
+
+---
+
 # Pass Budget — provisional 2/K8 baseline
 
 **2026-10-31 status: ACTIVE/TRIAL2/K8 baseline, implemented locally; available-runtime career/functional acceptance COMPLETE.** The user selected2/K8 after the Action studies. Seven normal 12-Scope eight-release careers, budget persistence/legacy migration, current native/shared-command checks and maintained historical traces are verified in Godot 4.7.1. Godot 4.4, current public-package/device checks and final balance remain OPEN. This does not approve a27-Scope player grant or guarantee8.0 Review. [Implementation](../logs/2026-10-31-pass-budget-implementation-v1.md) · [career repairs/evidence](../logs/2026-10-31-pass-budget-career-acceptance-v1.md).

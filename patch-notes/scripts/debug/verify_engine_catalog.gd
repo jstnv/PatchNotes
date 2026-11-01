@@ -12,15 +12,24 @@ func check(ok: bool, message: String) -> void:
 func _initialize() -> void:
 	var listings: Array = Marketplace.starting_listings()
 	check(listings.size() == 2, "Exactly two engines are listed at game start")
-	var action: Dictionary = Marketplace.find(&"action_engine")
 	var puzzle: Dictionary = Marketplace.find(&"puzzle_engine")
-	check(action.get("creator_id") == &"incumbent-action" and action.get("creator_specialty") == &"action", "Action engine points to the actual Action rival")
+	var adventure: Dictionary = Marketplace.find(&"adventure_engine")
+	check(listings.all(func(row: Dictionary) -> bool: return row.id!=&"action_engine") and not Marketplace.find(&"action_engine").is_empty(), "Retired Action remains available only for existing licenses")
 	check(puzzle.get("creator_id") == &"incumbent-puzzle" and puzzle.get("creator_specialty") == &"puzzle", "Puzzle engine points to the actual Puzzle rival")
+	check(adventure.get("creator_id") == &"incumbent-adventure" and adventure.get("creator_specialty") == &"adventure", "Adventure engine points to the actual Adventure rival")
 	for listing: Dictionary in listings:
-		check(listing.get("max_scope") == 25 and listing.get("license_cents") == 750000 and listing.get("royalty_basis_points") == 2000, "Starting engine terms are exact")
-	check(Marketplace.bonus_basis_points(action, &"graphics") == 1000 and Marketplace.bonus_basis_points(action, &"technology") == 1000, "Action dominant bonuses are Graphics and Technology")
+		check(listing.get("max_scope") == 27 and listing.get("license_cents") == 250000 and listing.get("royalty_basis_points") == 1500, "Starting engine terms are exact")
 	check(Marketplace.bonus_basis_points(puzzle, &"technology") == 1000 and Marketplace.bonus_basis_points(puzzle, &"design") == 1000, "Puzzle dominant bonuses follow the approved Core targets")
-	check(Marketplace.bonus_basis_points(puzzle, &"graphics") == 0 and Marketplace.bonus_basis_points(action, &"sound") == 0, "Non-dominant categories receive no engine bonus or penalty")
+	check(Marketplace.bonus_basis_points(adventure, &"graphics") == 1000 and Marketplace.bonus_basis_points(adventure, &"design") == 1000, "Adventure dominant bonuses use Graphics and Design")
+	check(Marketplace.bonus_basis_points(puzzle, &"graphics") == 0 and Marketplace.bonus_basis_points(adventure, &"sound") == 0, "Non-dominant categories receive no engine bonus or penalty")
+	var old_puzzle: Dictionary=Marketplace.terms_for_record(&"puzzle_engine",{"origin":"legacy-access-v1"})
+	check(old_puzzle.max_scope==25 and old_puzzle.royalty_basis_points==2000,"Existing Puzzle license retains its frozen capacity and royalty")
+	var manifest: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://../docs/codex/threads/engine-system/2026-10-31-starting-libraries-recommended.json"))
+	for listing: Dictionary in listings:
+		var key: String="rival_puzzle" if listing.id==&"puzzle_engine" else "rival_adventure"
+		var expected: Array[StringName]=[]
+		for id: String in manifest.libraries[key].ids:expected.append(StringName(id))
+		check(Array(listing.library)==Array(expected),"Exact October 31 fixed library for "+key)
 	check(Marketplace.find(&"unknown_engine").is_empty(), "Unknown engines are unavailable")
 	for path in ["res://certified/rival-opening-5607-v1.json", "res://certified/rival-opening-5613-v1.json"]:
 		var certificate: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))

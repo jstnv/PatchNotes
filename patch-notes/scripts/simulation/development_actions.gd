@@ -199,46 +199,80 @@ func corrective_pass_ids() -> Array[StringName]:
 	for category in corrective_categories(): ids.append(hand.PASS_ID_BY_CORE_SCORE[category])
 	return ids
 
-func host_playtest() -> bool:
-	if phase not in [&"alpha",&"beta"] or not hand.active or not valid_pool(): return false
+func _playtest_cards() -> Array[CardData]:
+	var cards: Array[CardData] = []
+	for category in corrective_categories():
+		var card: CardData = hand._get_pass_for_category(category) if phase == &"alpha" else catalog.get_card(hand.PASS_ID_BY_CORE_SCORE[category])
+		if card == null or (phase == &"beta" and not hand._is_valid_corrective_pass(card)): return []
+		cards.append(card)
+	return cards
+
+func can_host_playtest() -> bool:
+	if phase not in [&"alpha", &"beta"] or not hand.active or not valid_pool(): return false
 	var project: ProjectState = hand._project_state
 	var run: RunState = hand._run_state
-	var pending: Array = hand._pending_playtest_categories if phase==&"alpha" else hand._pending_corrective_pass_ids
-	var cost:=BETA_PLAYTEST_COST_CENTS if phase==&"beta" else 0
+	var pending: Array = hand._pending_playtest_categories if phase == &"alpha" else hand._pending_corrective_pass_ids
+	var cost := BETA_PLAYTEST_COST_CENTS if phase == &"beta" else 0
 	if not pending.is_empty() or not project.can_advance_cycle(): return false
-	if run!=null and not run.can_complete_productive_cycle(-cost): return false
-	if phase==&"beta" and (run==null or not project.has_alpha_finalization() or not run.is_cash_initialized() or run.get_cash_cents()<cost): return false
-	var selected: Array = corrective_categories() if phase==&"alpha" else corrective_pass_ids()
-	if selected.size()!=2 or selected[0]==selected[1]: return false
-	if phase==&"beta":
-		for id: StringName in selected:
-			if not hand._is_valid_corrective_pass(catalog.get_card(id)): return false
-	var commit:=func() -> bool:
-		if phase==&"alpha": pending.assign(selected)
+	if run != null and not run.can_complete_productive_cycle(-cost): return false
+	if phase == &"beta" and (run == null or not project.has_alpha_finalization() or not run.is_cash_initialized() or run.get_cash_cents() < cost): return false
+	if phase == &"alpha" and hand.pass_budget_active():
+		var held: int = hand._candidate_cards.filter(func(card: CardData): return card.card_type == &"pass").size()
+		if hand.pass_budget_available() - held < 2: return false
+	return _playtest_cards().size() == 2
+
+## Prepare any live views before the productive transaction. No random deal.
+func host_playtest(readiness: Callable = Callable()) -> bool:
+	if not can_host_playtest(): return false
+	var cards := _playtest_cards()
+	if readiness.is_valid() and not readiness.call(cards): return false
+	var project: ProjectState = hand._project_state
+	var run: RunState = hand._run_state
+	var cost := BETA_PLAYTEST_COST_CENTS if phase == &"beta" else 0
+	var commit := func() -> bool:
+		for card: CardData in cards:
+			hand._candidate_cards.append(card)
+			hand.candidate_ids.append(hand.next_candidate_id)
+			hand.injected_candidate_ids.append(hand.next_candidate_id)
+			hand.next_candidate_id += 1
+		hand.revision += 1
 		project.advance_cycle()
-		if phase==&"beta": pending.assign(selected)
 		return true
-	return run.complete_productive_action(commit,-cost,-1,&"",&"playtest",project.get_release_id()) if run!=null else commit.call()
+	return run.complete_productive_action(commit, -cost, -1, &"", &"playtest", project.get_release_id()) if run != null else commit.call()
 
 func valid_pool() -> bool:
-	if phase==&"beta": return hand._candidate_cards.size()==7
-	if hand._candidate_cards.size()>7 or hand.candidate_ids.size()!=hand._candidate_cards.size(): return false
-	var held_passes:=0
+	if hand.candidate_ids.size() != hand._candidate_cards.size(): return false
+	var seen_tokens := {}
+	for token: int in hand.candidate_ids:
+		if token < 0 or seen_tokens.has(token): return false
+		seen_tokens[token] = true
+	var protected: Array[int] = []
+	if phase in [&"alpha", &"beta"]:
+		for token: int in hand.injected_candidate_ids:
+			if token not in hand.candidate_ids or token in protected: return false
+			var card: CardData = hand._candidate_cards[hand.candidate_ids.find(token)]
+			if card == null or card.card_type != &"pass": return false
+			if phase == &"beta" and not hand._is_valid_corrective_pass(card): return false
+			protected.append(token)
+	if hand._candidate_cards.size() - protected.size() > 7: return false
+	var held_passes := 0
 	for card: CardData in hand._candidate_cards:
-		if card.card_type==&"pass":held_passes+=1
-	if held_passes>hand.pass_budget_available():return false
-	if phase!=&"alpha": return true
-	var protected: Array[int]=[]
-	for token: int in hand.injected_candidate_ids:
-		if token not in hand.candidate_ids or token in protected or hand._candidate_cards[hand.candidate_ids.find(token)].card_type!=&"pass":return false
-		protected.append(token)
+		if card == null: return false
+		if card.card_type == &"pass": held_passes += 1
+	if phase in [&"design", &"alpha"] and hand.pass_budget_active() and held_passes > hand.pass_budget_available(): return false
+	if phase == &"beta":
+		for index in hand._candidate_cards.size():
+			var card: CardData = hand._candidate_cards[index]
+			if hand._definitions_by_id.get(card.id) != card: return false
+			if hand.candidate_ids[index] not in protected and (card.phase != CardData.PHASE_BETA or card.card_type != &"beta"): return false
+		return true
+	if phase != &"alpha": return true
 	var seen: Array[StringName] = []
 	for card: CardData in hand._candidate_cards:
-		if card==null: return false
-		if card.card_type==&"feature":
+		if card.card_type == &"feature":
 			if not hand._get_feature_validation_error(card).is_empty() or not hand._available_features.has(card) or hand._exhausted_feature_ids.has(card.id) or card.id in seen: return false
 			seen.append(card.id)
-		elif card.card_type==&"pass":
+		elif card.card_type == &"pass":
 			if not hand._get_pass_validation_error(card).is_empty() or not hand._pass_definitions.has(card): return false
 		else: return false
 	return true
@@ -254,17 +288,10 @@ func can_finalize() -> bool:
 			remaining.assign(hand._available_features)
 			for card: CardData in hand._candidate_cards:
 				if card.card_type==&"feature" and not remaining.has(card):remaining.append(card)
-			# A lone cheap Feature is not actionable without a complete hand.
-			# Cheapest necessary Features + free Pass fillers give the minimum
-			# possible fee, without consuming RNG or enumerating every subset.
-			var passes: int=hand.pass_budget_available() if not hand._pass_definitions.is_empty() else 0
-			var needed:=maxi(1,4-passes)
-			remaining.sort_custom(func(a: CardData,b: CardData):return run.primitive_feature_hand_cost_cents([a])<run.primitive_feature_hand_cost_cents([b]))
-			if remaining.size()>=needed:
-				var selected: Array[CardData]=[];selected.assign(remaining.slice(0,needed))
-				while selected.size()<4:selected.append(hand._pass_definitions[0])
-				var fee: int=run.primitive_feature_hand_cost_cents(selected,project.get_release_id())
-				if fee>=0 and run.can_complete_productive_cycle(-fee):return false
+			# A single affordable remaining Feature is now a legal hand.
+			for card: CardData in remaining:
+				var fee: int = run.primitive_feature_hand_cost_cents([card] as Array[CardData], project.get_release_id())
+				if fee >= 0 and run.can_complete_productive_cycle(-fee): return false
 	if phase==&"design": return not project.has_design_bug_finalization()
 	if not hand.active or not valid_pool(): return false
 	if phase==&"alpha":

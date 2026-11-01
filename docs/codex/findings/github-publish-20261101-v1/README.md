@@ -1,0 +1,11 @@
+# Verified GitHub publication preparation — 2026-11-01
+
+User authorized commit/push of the completed fixes without input. Base main and GitHub main were both49d769235474a880a73d996499cefa72beec63e5. Capture the exact1228-file final combined inventory/runtime ee16630a62508df8170e15b6dbc39a874a24d977792a42e0f3b56bd8bf10254f in an isolated snapshot. Recover9 changed files from the exact-hash prior isolated copy. Concurrent proprietary-engine and new menu-audio work are excluded; canonical working files and .codex-godot-temp are preserved.
+
+Fresh isolated pre-push checks:9/9 latest results PASS—Design/Alpha/Beta checksum commands, Studio checkpoint, Engine catalog/entitlements/marketplace, Public Action93/0 and development replay. Initial Public run lacked an external test fixture; retained its errors, copied the unchanged tracked1,697,472-byte fixture, then reran Public only. No product fix or golden rewrite was needed. Original selected27-suite plus legal careers, old saves, rival overflow and native acceptance remain source-identical. Credentials-pattern scan found zero matches in1202 selected text files. Full source fence and external fixture pin are retained here.
+
+Publish source, approved design/logs, scoped result/log/hash records, required synthetic fixture, and supplied boot assets. Exclude caches, private copies, player profiles, exports and large redundant raw traces; all local evidence remains. Source/RNG/balance semantics and OPEN boundaries are unchanged. No EXE/ZIP rebuild or release acceptance.
+
+Git publication uses an isolated index, an exact-parent ref update, and per-entry reconciliation of the default index under Git's index lock. Preserve independently staged entries and every current working file. Push is a normal fast-forward to origin/main; no force push or worktree reset. Readback of the remote commit is required before reporting completion. Publication result/commit SHA will be recorded locally after successful Git operations.
+
+See [fresh accepted results](prepush-final.json), [snapshot capture](snapshot-capture.json), [combined evidence](../checksum-combined-20261101-v1/README.md), and [session log](../../logs/2026-11-01-github-verified-fixes-v1.md).

@@ -15,5 +15,8 @@ func _initialize() -> void:
 	check(action.set_engine_id(&"action_engine") and action.get_engine_max_scope() == 25, "Marketplace engine freezes a 25-Scope capacity without changing the requirement")
 	check(action.add_scope(24) and not action.add_scope(2) and action.get_current_scope() == 24, "Overshooting Scope is rejected atomically")
 	check(action.add_scope(1) and not action.add_scope(1) and action.get_current_scope() == 25, "Exactly 25 Scope is permitted")
+	var adventure:=ProjectState.new(30)
+	check(adventure.set_engine_id(&"adventure_engine") and adventure.get_engine_max_scope()==27,"New Adventure uses 27 Scope")
+	check(adventure.add_scope(27) and not adventure.add_scope(1),"Exactly 27 Scope is permitted")
 	print("Engine Scope: %d failures" % failures)
 	quit(1 if failures else 0)

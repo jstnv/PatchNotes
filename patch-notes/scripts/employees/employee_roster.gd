@@ -27,7 +27,7 @@ static func matches(facts: Array) -> bool:
 static func plan_hand(state: Dictionary, project_id: StringName, phase: StringName, project_cycle: int, run_cycle: int, cards: Array, before: Dictionary, proposed: Dictionary = {}) -> Dictionary:
 	if not valid(state): return {}
 	var facts := card_facts(cards)
-	if facts.size() != 4 or project_id.is_empty() or project_cycle < 0 or run_cycle < 0 or phase not in [&"design",&"alpha"]: return {}
+	if (facts.is_empty() or facts.size() > 4) or project_id.is_empty() or project_cycle < 0 or run_cycle < 0 or phase not in [&"design",&"alpha"]: return {}
 	var changed := not proposed.is_empty()
 	if changed and (not PriorityAllocation.is_valid_with_bounds(proposed,Career.limits(state)) or proposed == before): return {}
 	return _apply(state,{"type":&"hand","project_id":project_id,"phase":phase,"project_cycle":project_cycle,"cycle":run_cycle,"cards":facts,"before":before.duplicate(),"proposed":proposed.duplicate()})
@@ -50,7 +50,7 @@ static func _apply(state: Dictionary, event: Dictionary, copy_source: bool=true)
 			if typeof(event.get(key)) != TYPE_STRING_NAME or event[key].is_empty(): return {}
 		for key in ["project_cycle","cycle"]:
 			if typeof(event.get(key)) != TYPE_INT or event[key] < 0: return {}
-		if event.phase not in [&"design",&"alpha"] or typeof(event.get("cards")) != TYPE_ARRAY or event.cards.size()!=4: return {}
+		if event.phase not in [&"design",&"alpha"] or typeof(event.get("cards")) != TYPE_ARRAY or (event.cards.is_empty() or event.cards.size()>4): return {}
 		for card in event.cards:
 			if typeof(card)!=TYPE_DICTIONARY: return {}
 			for key in ["id","type","primary","secondary"]:

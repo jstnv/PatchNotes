@@ -14,7 +14,8 @@ static func create(owned: Array[StringName],engines: Array[StringName],studio: S
 			continue
 		var listing: Dictionary=preload("res://scripts/engines/engine_marketplace.gd").find(id)
 		var kind: StringName=&"proprietary" if id==LEGACY or listing.get("creator_id")==studio else &"rival_licensed"
-		add_record(state,id,"Built-in Engine" if id==LEGACY else str(listing.get("name",id)),kind,ProjectState.MAX_SIGNED_INT if id==LEGACY else int(listing.get("max_scope",25)),owned,"legacy-access-v1")
+		var legacy_capacity: int=25 if id in [&"action_engine",&"puzzle_engine"] else int(listing.get("max_scope",25))
+		add_record(state,id,"Built-in Engine" if id==LEGACY else str(listing.get("name",id)),kind,ProjectState.MAX_SIGNED_INT if id==LEGACY else legacy_capacity,owned,"legacy-access-v1")
 		state.engines[id].committed=FeatureStoreCatalog.future_supply(owned,offers)
 	return state
 
@@ -65,9 +66,12 @@ static func valid(state: Dictionary,definitions: Dictionary,offers: Dictionary,l
 	var available_at: Dictionary={}
 	for id: Variant in state.engines:
 		var row: Variant=state.engines[id]
-		if not id is StringName or id.is_empty() or not row is Dictionary or row.size()!=9 or row.get("kind") not in KINDS or not row.get("name") is String or row.name.is_empty() or row.name.length()>80 or not row.get("capacity") is int or row.capacity<1 or not row.get("revision") is int or row.revision<0 or row.get("origin") not in ["legacy-access-v1","declared-v1",Public.ORIGIN]:return false
+		if not id is StringName or id.is_empty() or not row is Dictionary or row.size()!=9 or row.get("kind") not in KINDS or not row.get("name") is String or row.name.is_empty() or row.name.length()>80 or not row.get("capacity") is int or row.capacity<1 or not row.get("revision") is int or row.revision<0 or row.get("origin") not in ["legacy-access-v1","declared-v1",Public.ORIGIN,preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN]:return false
 		if id==Public.ID and (row.kind!=&"public" or row.name!=Public.definition().name or row.capacity!=27 or row.origin!=Public.ORIGIN or row.initial!=Public.LIBRARY):return false
 		if id!=Public.ID and row.origin==Public.ORIGIN:return false
+		if row.origin==preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN:
+			var fixed: Dictionary=preload("res://scripts/engines/engine_marketplace.gd").current_listing(id)
+			if fixed.is_empty() or row.kind!=&"rival_licensed" or row.name!=fixed.name or row.capacity!=fixed.max_scope or row.initial!=fixed.library:return false
 		for key: String in ["initial","implemented","committed","staged"]:
 			if not row.get(key) is Array or not unique_ids(row[key]):return false
 			for feature: StringName in row[key]:
@@ -157,6 +161,7 @@ static func bindings_valid(state: Dictionary,entitlements: Dictionary,owned: Dic
 		if id in entitlements.licensed_ids and row.kind!=&"rival_licensed":return false
 		if id in entitlements.owned_ids and row.kind not in [&"proprietary",&"public"]:return false
 		var listing:=preload("res://scripts/engines/engine_marketplace.gd").find(id)
-		var capacity: int=ProjectState.MAX_SIGNED_INT if id==LEGACY else int(listing.get("max_scope",20))
+		var terms: Dictionary=preload("res://scripts/engines/engine_marketplace.gd").terms_for_record(id,row)
+		var capacity: int=ProjectState.MAX_SIGNED_INT if id==LEGACY else int(terms.get("max_scope",listing.get("max_scope",20)))
 		if row.capacity!=capacity:return false
 	return true

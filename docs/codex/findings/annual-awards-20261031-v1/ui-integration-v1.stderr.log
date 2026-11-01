@@ -1,0 +1,12 @@
+SCRIPT ERROR: Invalid access to property or key 'fullscreen' on a base object of type 'Dictionary'.
+   at: DemoSettingsMenu._sync (res://scripts/ui/demo_settings_menu.gd:169)
+   GDScript backtrace (most recent call first):
+       [0] _sync (res://scripts/ui/demo_settings_menu.gd:169)
+       [1] set_skip_awards (res://scripts/ui/demo_settings_menu.gd:235)
+       [2] mount (res://scripts/debug/verify_annual_awards_gameplay.gd:70)
+       [3] go (res://scripts/debug/verify_annual_awards_gameplay.gd:92)
+       [4] settle (res://scripts/debug/verify_annual_awards_gameplay.gd:30)
+ERROR: Condition "!is_inside_tree()" is true.
+   at: grab_focus (scene/gui/control.cpp:2996)
+WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

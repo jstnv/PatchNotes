@@ -70,7 +70,7 @@ func _execute(request: Dictionary, insight_rolls: Array[int], replacement_catego
 	if request.get("project_id") != _project_state.get_release_id(): return reject("Wrong project")
 	if request.get("revision",-1) != revision or request.get("project_cycle",-1) != _project_state.get_current_cycle() or request.get("run_cycle",-1) != _run_state.get_completed_run_cycles(): return reject("Stale command")
 	var ids: Variant = request.get("candidate_ids")
-	if not ids is Array or ids.size() != SELECTED_HAND_SIZE or candidate_ids.size() != CANDIDATE_POOL_SIZE or _candidate_cards.size() != CANDIDATE_POOL_SIZE: return reject("Select four current candidates")
+	if not ids is Array or (ids.is_empty() or ids.size() > SELECTED_HAND_SIZE) or candidate_ids.size() != _candidate_cards.size(): return reject("Select one to four current candidates")
 	var seen := {}
 	var selected_ids: Array[int] = []
 	for id in ids:
@@ -279,13 +279,13 @@ func _build_hand_preflight(selected_ids: Array[int], insight_rolls: Array[int], 
 		return _invalid_play("The run calendar cannot advance safely.")
 	var definitions: Array[CardData] = []
 	definitions.assign(_beta_definitions)
-	var replacement := _build_replacement_candidate_definitions(definitions, get_priority_distribution(), replacement_category_rolls, replacement_definition_rolls, projected_exhausted)
+	var replacement := _build_replacement_candidate_definitions(definitions, get_priority_distribution(), replacement_category_rolls, replacement_definition_rolls, projected_exhausted, maxi(0, CANDIDATE_POOL_SIZE - (_candidate_cards.size() - selected_ids.size())))
 	if not replacement.valid:
 		return _invalid_play("A complete replacement pool could not be prepared.")
 	return {&"valid": true, &"qa_specialization": qa_specialization, &"marketing_specialization": marketing_specialization, &"balanced_operations": balanced_operations, &"corrective_score_additions": corrective_score_additions, &"search_requests": search_requests, &"debug_requests": debug_requests, &"marketing_gain": marketing_gain, &"cash_gain": cash_gain, &"cash_gain_cents": cash_gain_cents, &"reveal_competitor": competitor_revealed and not _project_state.is_competitor_snapshot_revealed(), &"reveal_forecast": forecast_revealed and not _project_state.is_market_forecast_snapshot_revealed(), &"rival_attempted": rival_attempted, &"rival_gained": rival_gained, &"forecast_attempted": forecast_attempted, &"forecast_gained": forecast_gained, &"finite_ids": finite_ids, &"next_cards": replacement.cards, &"injected_corrective_count": replacement.injected_count, &"consumed_pending_ids": replacement.consumed_pending_ids}
 
 func _qualifies_for_qa_specialization(cards: Array[CardData]) -> bool:
-	if cards.size() < 2:
+	if cards.size() != SELECTED_HAND_SIZE:
 		return false
 	for card: CardData in cards:
 		if card == null or card.beta_category != CardData.BETA_CATEGORY_QA:
@@ -293,7 +293,7 @@ func _qualifies_for_qa_specialization(cards: Array[CardData]) -> bool:
 	return true
 
 func _qualifies_for_marketing_specialization(cards: Array[CardData]) -> bool:
-	if cards.size() < 2:
+	if cards.size() != SELECTED_HAND_SIZE:
 		return false
 	for card: CardData in cards:
 		if card == null or card.beta_category != CardData.BETA_CATEGORY_MARKETING:
@@ -344,9 +344,9 @@ func _next_insight_roll(controlled: Array[int], cursor: Array) -> int:
 func _invalid_play(message: String) -> Dictionary:
 	return {&"valid": false, &"error": message}
 
-func _build_replacement_candidate_definitions(definitions: Array[CardData], priorities: Dictionary, category_rolls: Array[float], definition_rolls: Array[float], excluded_ids: Array[StringName]) -> Dictionary:
-	if _pending_corrective_pass_ids.is_empty():
-		var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, SELECTED_HAND_SIZE)
+func _build_replacement_candidate_definitions(definitions: Array[CardData], priorities: Dictionary, category_rolls: Array[float], definition_rolls: Array[float], excluded_ids: Array[StringName], candidate_count: int = SELECTED_HAND_SIZE) -> Dictionary:
+	if _pending_corrective_pass_ids.is_empty() or candidate_count < 2:
+		var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, candidate_count)
 		ordinary[&"injected_count"] = 0
 		ordinary[&"consumed_pending_ids"] = [] as Array[StringName]
 		return ordinary
@@ -358,7 +358,7 @@ func _build_replacement_candidate_definitions(definitions: Array[CardData], prio
 		if not _is_valid_corrective_pass(pass_card):
 			return _invalid_deal("A queued corrective Core Pass is unavailable.")
 		cards.append(pass_card)
-	var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, SELECTED_HAND_SIZE - cards.size())
+	var ordinary := _build_candidate_definitions(definitions, priorities, category_rolls, definition_rolls, excluded_ids, candidate_count - cards.size())
 	if not ordinary.valid:
 		return ordinary
 	cards.append_array(ordinary.cards)
@@ -367,7 +367,7 @@ func _build_replacement_candidate_definitions(definitions: Array[CardData], prio
 func _build_candidate_definitions(definitions: Array[CardData], priorities: Dictionary, category_rolls: Array[float] = [], definition_rolls: Array[float] = [], excluded_ids: Array[StringName] = [], candidate_count: int = CANDIDATE_POOL_SIZE) -> Dictionary:
 	if not BetaPriorityAllocation.is_valid_distribution(priorities):
 		return _invalid_deal("Invalid committed Beta priority distribution.")
-	if candidate_count < 1 or candidate_count > CANDIDATE_POOL_SIZE:
+	if candidate_count < 0 or candidate_count > CANDIDATE_POOL_SIZE:
 		return _invalid_deal("Beta candidate count must be between one and seven.")
 	if (not category_rolls.is_empty() and category_rolls.size() != candidate_count) or (not definition_rolls.is_empty() and definition_rolls.size() != candidate_count):
 		return _invalid_deal("Controlled Beta deals require exactly %d category and definition rolls." % candidate_count)

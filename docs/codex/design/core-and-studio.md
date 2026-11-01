@@ -1,5 +1,7 @@
 # Core gameplay and Studio
 
+**2026-11-01 — flexible hands / immediate correction override.** Mandatory four-card actions below are superseded: Design/Alpha/Beta/Contracts accept1–4 current instances, preserving one-cycle action economics. Four-card synergy requirements remain. Playtest Passes appear immediately and may overflow seven as protected corrections; normal draws only refill the gap once unplayed cards fall below7. New Design/Alpha projects use shared10/K8; old active projects keep saved versions. [Current rules and checks](pass-budget.md).
+
 **2026-10-31 calendar acceptance closeout:** previously stale fixtures now use actual public-engine provenance/capacity, owned-engine research controls and real monthly Fan/Continue boundaries. Current4.7.1 native loading/calendar and packaged Windows checks pass; frozen4.7.1 AI certificates remain engine-version bound. [Evidence and limits](../logs/2026-10-31-calendar-acceptance-push-v2.md).
 
 **2026-10-31 calendar pacing — IMPLEMENTED locally.** Fresh Studios use4 productive cycles/month,48/year, with Week1–4 labels. Run/project action counts, passive actions, hands, draws, Pass Budget, scoring, reviews and Studio-only Continue are unchanged. Existing saved dates and progress convert through explicit metadata; monthly boundaries may initially be odd raw cycles. Use the central Clock/current run profile for all new consumers. [Source, tests and limits](../logs/2026-10-31-calendar-four-cycle-v1.md).

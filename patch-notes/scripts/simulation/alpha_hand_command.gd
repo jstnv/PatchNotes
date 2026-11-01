@@ -32,15 +32,15 @@ var _budget_projection := -1
 var _budget_reserved := 0
 
 func pass_budget_available() -> int:
-	return PassBudget.generated(_budget_printed) - _budget_spent if pass_budget_active() else CANDIDATE_POOL_SIZE
+	return PassBudget.generated(_budget_printed, _project_state._pass_budget_version if _project_state != null else 2) - _budget_spent if pass_budget_active() else CANDIDATE_POOL_SIZE
 
 func pass_budget_active() -> bool:
-	return _project_state==null or _project_state._pass_budget_version==1
+	return _project_state==null or _project_state._pass_budget_version in [1,2]
 
 func can_play_pass_budget(cards: Array[CardData]) -> bool:
 	if not pass_budget_active():return true
 	var change:=_selected_budget_delta(cards)
-	return int(change.passes)<=PassBudget.generated(_budget_printed+int(change.printed))-_budget_spent
+	return int(change.passes)<=PassBudget.generated(_budget_printed+int(change.printed), _project_state._pass_budget_version if _project_state != null else 2)-_budget_spent
 
 func _selected_budget_delta(cards: Array[CardData]) -> Dictionary:
 	var printed := 0
@@ -76,7 +76,7 @@ func _execute(request: Dictionary) -> Dictionary:
 	if _run_state != null and not _run_state.can_advance_calendar_cycle(): return reject("Calendar cannot advance")
 	if request.get("revision", -1) != revision or request.get("project_cycle", -1) != _project_state.get_current_cycle() or request.get("run_cycle", -2) != (_run_state.get_completed_run_cycles() if _run_state != null else -1): return reject("Stale command")
 	var ids: Variant = request.get("candidate_ids")
-	if not ids is Array or ids.size() != SELECTED_HAND_SIZE or candidate_ids.size() != _candidate_cards.size(): return reject("Select four current instances")
+	if not ids is Array or (ids.is_empty() or ids.size() > SELECTED_HAND_SIZE) or candidate_ids.size() != _candidate_cards.size(): return reject("Select one to four current instances")
 	var selected: Array[CardData] = []
 	var seen := {}
 	var selected_features := {}
@@ -121,13 +121,14 @@ func _execute(request: Dictionary) -> Dictionary:
 		if candidate_ids[index] not in ids:
 			retained.append(_candidate_cards[index])
 			retained_ids.append(candidate_ids[index])
-	_budget_projection = PassBudget.generated(_budget_printed + int(budget_delta.printed)) - _budget_spent - int(budget_delta.passes) if pass_budget_active() else CANDIDATE_POOL_SIZE
+	_budget_projection = PassBudget.generated(_budget_printed + int(budget_delta.printed), _project_state._pass_budget_version if _project_state != null else 2) - _budget_spent - int(budget_delta.passes) if pass_budget_active() else CANDIDATE_POOL_SIZE
 	_budget_reserved = retained.filter(func(card: CardData): return card.card_type == &"pass").size()
 	# Played and retained finite Features cannot be drawn by this refill.
 	var excluded: Array[StringName] = []
 	for card in _candidate_cards:
 		if not card.renewable: excluded.append(card.id)
-	var refill := _build_corrective_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE, excluded) if not _pending_playtest_categories.is_empty() else _build_weighted_candidate_definitions(refill_priorities, [], SELECTED_HAND_SIZE, excluded)
+	var refill_count := maxi(0, CANDIDATE_POOL_SIZE - retained.size())
+	var refill := _build_corrective_candidate_definitions(refill_priorities, [], refill_count, excluded) if not _pending_playtest_categories.is_empty() and refill_count >= 2 else _build_weighted_candidate_definitions(refill_priorities, [], refill_count, excluded)
 	_budget_projection = -1
 	_budget_reserved = 0
 	if not refill.get("valid", false):
@@ -171,7 +172,7 @@ func _execute(request: Dictionary) -> Dictionary:
 		if refill_index<int(refill.get("injected_count",0)):injected_candidate_ids.append(next_candidate_id)
 		refill_index+=1
 		next_candidate_id += 1
-	_pending_playtest_categories.clear()
+	if int(refill.get("injected_count",0)) > 0: _pending_playtest_categories.clear()
 	revision += 1
 	events.append({"type":"refill", "candidate_ids":candidate_ids.duplicate()})
 	return {"ok":true, "events":events, "base_hand":base_hand, "final_action":final_action, "refill":refill, "rng_before":rng_before, "rng_after":_deal_rng.state, "streams_before":streams_before, "streams_after":_run_state.random_streams.snapshot() if _run_state != null else {}}
@@ -179,8 +180,8 @@ func _execute(request: Dictionary) -> Dictionary:
 
 
 func calculate_base(selected: Array[CardData]) -> Dictionary:
-	if selected.size() != SELECTED_HAND_SIZE:
-		return _invalid_action("A complete Alpha action requires four current candidate instances.")
+	if selected.is_empty() or selected.size() > SELECTED_HAND_SIZE:
+		return _invalid_action("Select one to four current Alpha instances.")
 	var score_additions: Dictionary[ProjectState.CoreScore, int] = {}
 	var scope_amount := 0
 	var alpha_bug_pressure := 0.0

@@ -20,7 +20,15 @@ var _failures := 0
 # Frozen extraction digests intentionally describe the historical v2 roster.
 # Current-v3 campaigns are independently covered by live/headless parity checks.
 func historical_v2_roster(run: RunState) -> void:
+	# Pre-extraction fixtures use their original two-cycle clock and issued rent.
+	_expect(run.get_completed_run_cycles()==0 and run._studio_finance.last_cycle==0, "Historical clock is pinned before any action")
+	run._calendar={}
+	run._fanbase.erase("calendar")
+	run._studio_finance.erase("calendar")
+	run._studio_finance.erase("calendar_cutover_actions")
+	run._studio_finance.monthly_rent_cents=51500 if StudioTraits.is_active(run._studio_traits,&"expensive_lease") else 50000
 	run._engine_entitlements={} # Dormant Engine state in pre-Engine hand-only oracles.
+	run._engine_features={} # Public default registry is outside these pre-Engine fixtures.
 	run._owned_features.clear()
 	for id in StudioSpecialties.preview(&"action", 2).ids: run._owned_features[id] = true
 	run._founding_roster_version = 2
@@ -1380,6 +1388,8 @@ func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "a
 	for step: Dictionary in historical.steps:
 		for boundary in boundaries:
 			var roster_state: Dictionary = step[boundary].run
+			_expect(roster_state._calendar.is_empty(), "Historical hand oracle is explicitly two-cycle")
+			roster_state.erase("_calendar")
 			_expect(roster_state._calendar_start_year=={"integer":"1980"} and roster_state._historical_close_cycle=={"integer":"-1"} and roster_state._closed_historical_ids.is_empty() and roster_state._rival_founder_profile=="","Historical hand oracle has no founder epoch/history")
 			for field in ["_calendar_start_year","_historical_close_cycle","_closed_historical_ids","_rival_founder_profile"]:roster_state.erase(field)
 			_expect(roster_state._engine_entitlements.is_empty(),"Historical hand oracle has no Engine ownership")

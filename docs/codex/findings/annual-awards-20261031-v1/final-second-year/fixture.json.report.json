@@ -1,0 +1,5935 @@
+{
+  "awards": 2,
+  "cash_cents": 465190,
+  "checks": 128,
+  "cycle": 96,
+  "failures": [],
+  "fans": 50,
+  "first_complete": true,
+  "fixture": "C:\\Users\\64jus\\OneDrive\\Documents\\GitHub\\PatchNotes\\docs\\codex\\findings\\annual-awards-20261031-v1\\final-second-year\\fixture.json",
+  "hands": {
+    "alpha": 2,
+    "beta": 2,
+    "design": 3
+  },
+  "loans": [],
+  "recipe": {
+    "schema_version": 1,
+    "seed": "4417",
+    "specialty": "action",
+    "studio_id": "annual-legal-player",
+    "studio_name": "Annual two year studio",
+    "traits": [
+      "college_dropout"
+    ]
+  },
+  "releases": [
+    {
+      "cash_cents": 427000,
+      "cycle": 8,
+      "release_id": "annual-legal-player:project:1",
+      "review_tenths": 24
+    },
+    {
+      "cash_cents": 425727,
+      "cycle": 16,
+      "release_id": "annual-legal-player:project:2",
+      "review_tenths": 27
+    },
+    {
+      "cash_cents": 434650,
+      "cycle": 24,
+      "release_id": "annual-legal-player:project:3",
+      "review_tenths": 27
+    },
+    {
+      "cash_cents": 408328,
+      "cycle": 32,
+      "release_id": "annual-legal-player:project:4",
+      "review_tenths": 29
+    },
+    {
+      "cash_cents": 404035,
+      "cycle": 40,
+      "release_id": "annual-legal-player:project:5",
+      "review_tenths": 25
+    },
+    {
+      "cash_cents": 398763,
+      "cycle": 48,
+      "release_id": "annual-legal-player:project:6",
+      "review_tenths": 35
+    },
+    {
+      "cash_cents": 408235,
+      "cycle": 56,
+      "release_id": "annual-legal-player:project:7",
+      "review_tenths": 28
+    },
+    {
+      "cash_cents": 414281,
+      "cycle": 64,
+      "release_id": "annual-legal-player:project:8",
+      "review_tenths": 39
+    },
+    {
+      "cash_cents": 456654,
+      "cycle": 72,
+      "release_id": "annual-legal-player:project:9",
+      "review_tenths": 33
+    },
+    {
+      "cash_cents": 477490,
+      "cycle": 80,
+      "release_id": "annual-legal-player:project:10",
+      "review_tenths": 39
+    },
+    {
+      "cash_cents": 499690,
+      "cycle": 88,
+      "release_id": "annual-legal-player:project:11",
+      "review_tenths": 29
+    },
+    {
+      "cash_cents": 465190,
+      "cycle": 96,
+      "release_id": "annual-legal-player:project:12",
+      "review_tenths": 44
+    }
+  ],
+  "studio": true,
+  "trace": [
+    {
+      "cash_after": 580000,
+      "cash_before": 580000,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 1",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 0,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 0
+    },
+    {
+      "cash_after": 580000,
+      "cash_before": 580000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 1,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 1,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 1
+    },
+    {
+      "cash_after": 556000,
+      "cash_before": 580000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 1,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 1,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 2
+    },
+    {
+      "cash_after": 531000,
+      "cash_before": 556000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                8
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 2,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 2,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 3
+    },
+    {
+      "cash_after": 492000,
+      "cash_before": 531000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                9,
+                7,
+                10,
+                11
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 3,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 3,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 4
+    },
+    {
+      "cash_after": 492000,
+      "cash_before": 492000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 4,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 4,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 5
+    },
+    {
+      "cash_after": 492000,
+      "cash_before": 492000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 4,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 4,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 6
+    },
+    {
+      "cash_after": 492000,
+      "cash_before": 492000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 4,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 4,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 7
+    },
+    {
+      "cash_after": 470000,
+      "cash_before": 492000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 4,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 4,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 8
+    },
+    {
+      "cash_after": 457000,
+      "cash_before": 470000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                7,
+                0,
+                1
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 5,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 5,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 9
+    },
+    {
+      "cash_after": 457000,
+      "cash_before": 457000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 6,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 6,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 10
+    },
+    {
+      "cash_after": 457000,
+      "cash_before": 457000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 6,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 6,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 11
+    },
+    {
+      "cash_after": 457000,
+      "cash_before": 457000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 6,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 6,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 12
+    },
+    {
+      "cash_after": 457000,
+      "cash_before": 457000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 6,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 6,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 13
+    },
+    {
+      "cash_after": 457000,
+      "cash_before": 457000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 6,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 6,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 14
+    },
+    {
+      "cash_after": 427000,
+      "cash_before": 457000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 7,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 7,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 15
+    },
+    {
+      "cash_after": 427000,
+      "cash_before": 427000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 8,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 8,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 16
+    },
+    {
+      "cash_after": 427000,
+      "cash_before": 427000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:1",
+            "run_cycle": 8,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 8,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 17
+    },
+    {
+      "cash_after": 427000,
+      "cash_before": 427000,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 8,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 18
+    },
+    {
+      "cash_after": 427000,
+      "cash_before": 427000,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 2",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 8,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 19
+    },
+    {
+      "cash_after": 427000,
+      "cash_before": 427000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 9,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 9,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 20
+    },
+    {
+      "cash_after": 406000,
+      "cash_before": 427000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 9,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 9,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 21
+    },
+    {
+      "cash_after": 372000,
+      "cash_before": 406000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 10,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 10,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 22
+    },
+    {
+      "cash_after": 461846,
+      "cash_before": 372000,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                9,
+                13,
+                8,
+                10
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 11,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 11,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 23
+    },
+    {
+      "cash_after": 461846,
+      "cash_before": 461846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 12,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 12,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 24
+    },
+    {
+      "cash_after": 461846,
+      "cash_before": 461846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 12,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 12,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 25
+    },
+    {
+      "cash_after": 461846,
+      "cash_before": 461846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 12,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 12,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 26
+    },
+    {
+      "cash_after": 434846,
+      "cash_before": 461846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 12,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 12,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 27
+    },
+    {
+      "cash_after": 426846,
+      "cash_before": 434846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                7,
+                0,
+                1
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 13,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 13,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 28
+    },
+    {
+      "cash_after": 426846,
+      "cash_before": 426846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 14,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 14,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 29
+    },
+    {
+      "cash_after": 426846,
+      "cash_before": 426846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 14,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 14,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 30
+    },
+    {
+      "cash_after": 426846,
+      "cash_before": 426846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 14,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 14,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 31
+    },
+    {
+      "cash_after": 426846,
+      "cash_before": 426846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 14,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 14,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 32
+    },
+    {
+      "cash_after": 426846,
+      "cash_before": 426846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 14,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 14,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 33
+    },
+    {
+      "cash_after": 425727,
+      "cash_before": 426846,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 15,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 15,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 34
+    },
+    {
+      "cash_after": 425727,
+      "cash_before": 425727,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 16,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 16,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 35
+    },
+    {
+      "cash_after": 425727,
+      "cash_before": 425727,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:2",
+            "run_cycle": 16,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 16,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 36
+    },
+    {
+      "cash_after": 425727,
+      "cash_before": 425727,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 16,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 37
+    },
+    {
+      "cash_after": 425727,
+      "cash_before": 425727,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 3",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 16,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 38
+    },
+    {
+      "cash_after": 425727,
+      "cash_before": 425727,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 17,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 17,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 39
+    },
+    {
+      "cash_after": 396727,
+      "cash_before": 425727,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 17,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 17,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 40
+    },
+    {
+      "cash_after": 371727,
+      "cash_before": 396727,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 18,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 18,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 41
+    },
+    {
+      "cash_after": 464896,
+      "cash_before": 371727,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                8,
+                9,
+                10,
+                11
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 19,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 19,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 42
+    },
+    {
+      "cash_after": 464896,
+      "cash_before": 464896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 20,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 20,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 43
+    },
+    {
+      "cash_after": 464896,
+      "cash_before": 464896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 20,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 20,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 44
+    },
+    {
+      "cash_after": 464896,
+      "cash_before": 464896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 20,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 20,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 45
+    },
+    {
+      "cash_after": 437896,
+      "cash_before": 464896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 20,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 20,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 46
+    },
+    {
+      "cash_after": 429896,
+      "cash_before": 437896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                7,
+                4,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 21,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 21,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 47
+    },
+    {
+      "cash_after": 429896,
+      "cash_before": 429896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 22,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 22,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 48
+    },
+    {
+      "cash_after": 429896,
+      "cash_before": 429896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 22,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 22,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 49
+    },
+    {
+      "cash_after": 429896,
+      "cash_before": 429896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 22,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 22,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 50
+    },
+    {
+      "cash_after": 429896,
+      "cash_before": 429896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 22,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 22,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 51
+    },
+    {
+      "cash_after": 429896,
+      "cash_before": 429896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 22,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 22,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 52
+    },
+    {
+      "cash_after": 434650,
+      "cash_before": 429896,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 23,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 23,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 53
+    },
+    {
+      "cash_after": 434650,
+      "cash_before": 434650,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 24,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 24,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 54
+    },
+    {
+      "cash_after": 434650,
+      "cash_before": 434650,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:3",
+            "run_cycle": 24,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 24,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 55
+    },
+    {
+      "cash_after": 434650,
+      "cash_before": 434650,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 24,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 56
+    },
+    {
+      "cash_after": 434650,
+      "cash_before": 434650,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 4",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 24,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 57
+    },
+    {
+      "cash_after": 434650,
+      "cash_before": 434650,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 25,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 25,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 58
+    },
+    {
+      "cash_after": 424650,
+      "cash_before": 434650,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                2,
+                4,
+                5
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 25,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 25,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 59
+    },
+    {
+      "cash_after": 389650,
+      "cash_before": 424650,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                7,
+                8,
+                9
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 26,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 26,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 60
+    },
+    {
+      "cash_after": 444937,
+      "cash_before": 389650,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                10,
+                12,
+                13,
+                1
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 27,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 27,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 61
+    },
+    {
+      "cash_after": 444937,
+      "cash_before": 444937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 28,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 28,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 62
+    },
+    {
+      "cash_after": 444937,
+      "cash_before": 444937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 28,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 28,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 63
+    },
+    {
+      "cash_after": 444937,
+      "cash_before": 444937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 28,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 28,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 64
+    },
+    {
+      "cash_after": 422937,
+      "cash_before": 444937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 28,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 28,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 65
+    },
+    {
+      "cash_after": 409937,
+      "cash_before": 422937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                7,
+                4,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 29,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 29,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 66
+    },
+    {
+      "cash_after": 409937,
+      "cash_before": 409937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 30,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 30,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 67
+    },
+    {
+      "cash_after": 409937,
+      "cash_before": 409937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 30,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 30,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 68
+    },
+    {
+      "cash_after": 409937,
+      "cash_before": 409937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 30,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 30,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 69
+    },
+    {
+      "cash_after": 409937,
+      "cash_before": 409937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 30,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 30,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 70
+    },
+    {
+      "cash_after": 409937,
+      "cash_before": 409937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 30,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 30,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 71
+    },
+    {
+      "cash_after": 408328,
+      "cash_before": 409937,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 31,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 31,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 72
+    },
+    {
+      "cash_after": 408328,
+      "cash_before": 408328,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 32,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 32,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 73
+    },
+    {
+      "cash_after": 408328,
+      "cash_before": 408328,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:4",
+            "run_cycle": 32,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 32,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 74
+    },
+    {
+      "cash_after": 408328,
+      "cash_before": 408328,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 32,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 75
+    },
+    {
+      "cash_after": 408328,
+      "cash_before": 408328,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 5",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 32,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 76
+    },
+    {
+      "cash_after": 408328,
+      "cash_before": 408328,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 33,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 33,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 77
+    },
+    {
+      "cash_after": 392328,
+      "cash_before": 408328,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                4
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 33,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 33,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 78
+    },
+    {
+      "cash_after": 367328,
+      "cash_before": 392328,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                5,
+                8,
+                10,
+                3
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 34,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 34,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 79
+    },
+    {
+      "cash_after": 434280,
+      "cash_before": 367328,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                11,
+                12,
+                13,
+                14
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 35,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 35,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 80
+    },
+    {
+      "cash_after": 434280,
+      "cash_before": 434280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 36,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 36,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 81
+    },
+    {
+      "cash_after": 434280,
+      "cash_before": 434280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 36,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 36,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 82
+    },
+    {
+      "cash_after": 434280,
+      "cash_before": 434280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 36,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 36,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 83
+    },
+    {
+      "cash_after": 412280,
+      "cash_before": 434280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 36,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 36,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 84
+    },
+    {
+      "cash_after": 399280,
+      "cash_before": 412280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                8,
+                4,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 37,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 37,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 85
+    },
+    {
+      "cash_after": 399280,
+      "cash_before": 399280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 38,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 38,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 86
+    },
+    {
+      "cash_after": 399280,
+      "cash_before": 399280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 38,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 38,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 87
+    },
+    {
+      "cash_after": 399280,
+      "cash_before": 399280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 38,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 38,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 88
+    },
+    {
+      "cash_after": 399280,
+      "cash_before": 399280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 38,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 38,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 89
+    },
+    {
+      "cash_after": 399280,
+      "cash_before": 399280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 38,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 38,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 90
+    },
+    {
+      "cash_after": 404035,
+      "cash_before": 399280,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 39,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 39,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 91
+    },
+    {
+      "cash_after": 404035,
+      "cash_before": 404035,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 40,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 40,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 92
+    },
+    {
+      "cash_after": 404035,
+      "cash_before": 404035,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:5",
+            "run_cycle": 40,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 40,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 93
+    },
+    {
+      "cash_after": 404035,
+      "cash_before": 404035,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 40,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 94
+    },
+    {
+      "cash_after": 404035,
+      "cash_before": 404035,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 6",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 40,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 95
+    },
+    {
+      "cash_after": 404035,
+      "cash_before": 404035,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 41,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 41,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 96
+    },
+    {
+      "cash_after": 381035,
+      "cash_before": 404035,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                4
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 41,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 41,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 97
+    },
+    {
+      "cash_after": 350035,
+      "cash_before": 381035,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 42,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 42,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 98
+    },
+    {
+      "cash_after": 430965,
+      "cash_before": 350035,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                9,
+                10,
+                11,
+                3
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 43,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 43,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 99
+    },
+    {
+      "cash_after": 430965,
+      "cash_before": 430965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 44,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 44,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 100
+    },
+    {
+      "cash_after": 430965,
+      "cash_before": 430965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 44,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 44,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 101
+    },
+    {
+      "cash_after": 430965,
+      "cash_before": 430965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 44,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 44,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 102
+    },
+    {
+      "cash_after": 408965,
+      "cash_before": 430965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 44,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 44,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 103
+    },
+    {
+      "cash_after": 395965,
+      "cash_before": 408965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                9,
+                3,
+                4
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 45,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 45,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 104
+    },
+    {
+      "cash_after": 395965,
+      "cash_before": 395965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 46,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 46,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 105
+    },
+    {
+      "cash_after": 395965,
+      "cash_before": 395965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 46,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 46,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 106
+    },
+    {
+      "cash_after": 395965,
+      "cash_before": 395965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 46,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 46,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 107
+    },
+    {
+      "cash_after": 395965,
+      "cash_before": 395965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 46,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 46,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 108
+    },
+    {
+      "cash_after": 395965,
+      "cash_before": 395965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 46,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 46,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 109
+    },
+    {
+      "cash_after": 398763,
+      "cash_before": 395965,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 47,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 47,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 110
+    },
+    {
+      "cash_after": 398763,
+      "cash_before": 398763,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 48,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 48,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 111
+    },
+    {
+      "cash_after": 398763,
+      "cash_before": 398763,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:6",
+            "run_cycle": 48,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 48,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 112
+    },
+    {
+      "cash_after": 398763,
+      "cash_before": 398763,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 48,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 113
+    },
+    {
+      "cash_after": 398763,
+      "cash_before": 398763,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 7",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 48,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 114
+    },
+    {
+      "cash_after": 398763,
+      "cash_before": 398763,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 49,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 49,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 115
+    },
+    {
+      "cash_after": 373763,
+      "cash_before": 398763,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                2,
+                3,
+                5
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 49,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 49,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 116
+    },
+    {
+      "cash_after": 343763,
+      "cash_before": 373763,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                7,
+                8,
+                9
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 50,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 50,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 117
+    },
+    {
+      "cash_after": 441143,
+      "cash_before": 343763,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                10,
+                11,
+                13,
+                1
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 51,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 51,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 118
+    },
+    {
+      "cash_after": 441143,
+      "cash_before": 441143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 52,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 52,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 119
+    },
+    {
+      "cash_after": 441143,
+      "cash_before": 441143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 52,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 52,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 120
+    },
+    {
+      "cash_after": 441143,
+      "cash_before": 441143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 52,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 52,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 121
+    },
+    {
+      "cash_after": 410143,
+      "cash_before": 441143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 52,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 52,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 122
+    },
+    {
+      "cash_after": 406143,
+      "cash_before": 410143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                9,
+                3,
+                4
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 53,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 53,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 123
+    },
+    {
+      "cash_after": 406143,
+      "cash_before": 406143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 54,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 54,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 124
+    },
+    {
+      "cash_after": 406143,
+      "cash_before": 406143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 54,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 54,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 125
+    },
+    {
+      "cash_after": 406143,
+      "cash_before": 406143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 54,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 54,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 126
+    },
+    {
+      "cash_after": 406143,
+      "cash_before": 406143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 54,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 54,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 127
+    },
+    {
+      "cash_after": 406143,
+      "cash_before": 406143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 54,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 54,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 128
+    },
+    {
+      "cash_after": 408235,
+      "cash_before": 406143,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 55,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 55,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 129
+    },
+    {
+      "cash_after": 408235,
+      "cash_before": 408235,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 56,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 56,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 130
+    },
+    {
+      "cash_after": 408235,
+      "cash_before": 408235,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:7",
+            "run_cycle": 56,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 56,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 131
+    },
+    {
+      "cash_after": 408235,
+      "cash_before": 408235,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 56,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 132
+    },
+    {
+      "cash_after": 408235,
+      "cash_before": 408235,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 8",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 56,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 133
+    },
+    {
+      "cash_after": 408235,
+      "cash_before": 408235,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 57,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 57,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 134
+    },
+    {
+      "cash_after": 378235,
+      "cash_before": 408235,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                2,
+                3,
+                4
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 57,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 57,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 135
+    },
+    {
+      "cash_after": 365235,
+      "cash_before": 378235,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 58,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 58,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 136
+    },
+    {
+      "cash_after": 446209,
+      "cash_before": 365235,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                9,
+                10,
+                12,
+                1
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 59,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 59,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 137
+    },
+    {
+      "cash_after": 446209,
+      "cash_before": 446209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 60,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 60,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 138
+    },
+    {
+      "cash_after": 446209,
+      "cash_before": 446209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 60,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 60,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 139
+    },
+    {
+      "cash_after": 446209,
+      "cash_before": 446209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 60,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 60,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 140
+    },
+    {
+      "cash_after": 424209,
+      "cash_before": 446209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                1,
+                2,
+                3,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 60,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 60,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 141
+    },
+    {
+      "cash_after": 411209,
+      "cash_before": 424209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                7,
+                0,
+                4
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 61,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 61,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 142
+    },
+    {
+      "cash_after": 411209,
+      "cash_before": 411209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 62,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 62,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 143
+    },
+    {
+      "cash_after": 411209,
+      "cash_before": 411209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 62,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 62,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 144
+    },
+    {
+      "cash_after": 411209,
+      "cash_before": 411209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 62,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 62,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 145
+    },
+    {
+      "cash_after": 411209,
+      "cash_before": 411209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 62,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 62,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 146
+    },
+    {
+      "cash_after": 411209,
+      "cash_before": 411209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 62,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 62,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 147
+    },
+    {
+      "cash_after": 414281,
+      "cash_before": 411209,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 63,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 63,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 148
+    },
+    {
+      "cash_after": 414281,
+      "cash_before": 414281,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 64,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 64,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 149
+    },
+    {
+      "cash_after": 414281,
+      "cash_before": 414281,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:8",
+            "run_cycle": 64,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 64,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 150
+    },
+    {
+      "cash_after": 414281,
+      "cash_before": 414281,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 64,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 151
+    },
+    {
+      "cash_after": 414281,
+      "cash_before": 414281,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 9",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 64,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 152
+    },
+    {
+      "cash_after": 414281,
+      "cash_before": 414281,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 65,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 65,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 153
+    },
+    {
+      "cash_after": 404281,
+      "cash_before": 414281,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 65,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 65,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 154
+    },
+    {
+      "cash_after": 369281,
+      "cash_before": 404281,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                7,
+                10
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 66,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 66,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 155
+    },
+    {
+      "cash_after": 479773,
+      "cash_before": 369281,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                12,
+                14,
+                6,
+                8
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 67,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 67,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 156
+    },
+    {
+      "cash_after": 479773,
+      "cash_before": 479773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 68,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 68,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 157
+    },
+    {
+      "cash_after": 479773,
+      "cash_before": 479773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 68,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 68,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 158
+    },
+    {
+      "cash_after": 479773,
+      "cash_before": 479773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 68,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 68,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 159
+    },
+    {
+      "cash_after": 453773,
+      "cash_before": 479773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 68,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 68,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 160
+    },
+    {
+      "cash_after": 444773,
+      "cash_before": 453773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                7,
+                3,
+                4
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 69,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 69,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 161
+    },
+    {
+      "cash_after": 444773,
+      "cash_before": 444773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 70,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 70,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 162
+    },
+    {
+      "cash_after": 444773,
+      "cash_before": 444773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 70,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 70,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 163
+    },
+    {
+      "cash_after": 444773,
+      "cash_before": 444773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 70,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 70,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 164
+    },
+    {
+      "cash_after": 444773,
+      "cash_before": 444773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 70,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 70,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 165
+    },
+    {
+      "cash_after": 444773,
+      "cash_before": 444773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 70,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 70,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 166
+    },
+    {
+      "cash_after": 456654,
+      "cash_before": 444773,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 71,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 71,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 167
+    },
+    {
+      "cash_after": 456654,
+      "cash_before": 456654,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 72,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 72,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 168
+    },
+    {
+      "cash_after": 456654,
+      "cash_before": 456654,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:9",
+            "run_cycle": 72,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 72,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 169
+    },
+    {
+      "cash_after": 456654,
+      "cash_before": 456654,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 72,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 170
+    },
+    {
+      "cash_after": 456654,
+      "cash_before": 456654,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 10",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 72,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 171
+    },
+    {
+      "cash_after": 456654,
+      "cash_before": 456654,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 73,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 73,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 172
+    },
+    {
+      "cash_after": 427654,
+      "cash_before": 456654,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                4
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 73,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 73,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 173
+    },
+    {
+      "cash_after": 407654,
+      "cash_before": 427654,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                5,
+                7,
+                8,
+                9
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 74,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 74,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 174
+    },
+    {
+      "cash_after": 506482,
+      "cash_before": 407654,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                11,
+                12,
+                3,
+                6
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 75,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 75,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 175
+    },
+    {
+      "cash_after": 506482,
+      "cash_before": 506482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 76,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 76,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 176
+    },
+    {
+      "cash_after": 506482,
+      "cash_before": 506482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 76,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 76,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 177
+    },
+    {
+      "cash_after": 506482,
+      "cash_before": 506482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 76,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 76,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 178
+    },
+    {
+      "cash_after": 475482,
+      "cash_before": 506482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                1,
+                3,
+                4,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 76,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 76,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 179
+    },
+    {
+      "cash_after": 471482,
+      "cash_before": 475482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                8,
+                0,
+                2
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 77,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 77,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 180
+    },
+    {
+      "cash_after": 471482,
+      "cash_before": 471482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 78,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 78,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 181
+    },
+    {
+      "cash_after": 471482,
+      "cash_before": 471482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 78,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 78,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 182
+    },
+    {
+      "cash_after": 471482,
+      "cash_before": 471482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 78,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 78,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 183
+    },
+    {
+      "cash_after": 471482,
+      "cash_before": 471482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 78,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 78,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 184
+    },
+    {
+      "cash_after": 471482,
+      "cash_before": 471482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 78,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 78,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 185
+    },
+    {
+      "cash_after": 477490,
+      "cash_before": 471482,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 79,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 79,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 186
+    },
+    {
+      "cash_after": 477490,
+      "cash_before": 477490,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 80,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 80,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 187
+    },
+    {
+      "cash_after": 477490,
+      "cash_before": 477490,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:10",
+            "run_cycle": 80,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 80,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 188
+    },
+    {
+      "cash_after": 477490,
+      "cash_before": 477490,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 80,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 189
+    },
+    {
+      "cash_after": 477490,
+      "cash_before": 477490,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 11",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 80,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 190
+    },
+    {
+      "cash_after": 477490,
+      "cash_before": 477490,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 81,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 81,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 191
+    },
+    {
+      "cash_after": 456490,
+      "cash_before": 477490,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 81,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 81,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 192
+    },
+    {
+      "cash_after": 434490,
+      "cash_before": 456490,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                8,
+                9,
+                0
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 82,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 82,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 193
+    },
+    {
+      "cash_after": 527213,
+      "cash_before": 434490,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                12,
+                13,
+                14,
+                1
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 83,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 83,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 194
+    },
+    {
+      "cash_after": 527213,
+      "cash_before": 527213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 84,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 84,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 195
+    },
+    {
+      "cash_after": 527213,
+      "cash_before": 527213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 84,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 84,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 196
+    },
+    {
+      "cash_after": 527213,
+      "cash_before": 527213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 84,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 84,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 197
+    },
+    {
+      "cash_after": 505213,
+      "cash_before": 527213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                1,
+                2,
+                3,
+                5
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 84,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 84,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 198
+    },
+    {
+      "cash_after": 492213,
+      "cash_before": 505213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                6,
+                8,
+                0,
+                4
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 85,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 85,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 199
+    },
+    {
+      "cash_after": 492213,
+      "cash_before": 492213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 86,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 86,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 200
+    },
+    {
+      "cash_after": 492213,
+      "cash_before": 492213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 86,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 86,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 201
+    },
+    {
+      "cash_after": 492213,
+      "cash_before": 492213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 86,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 86,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 202
+    },
+    {
+      "cash_after": 492213,
+      "cash_before": 492213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 86,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 86,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 203
+    },
+    {
+      "cash_after": 492213,
+      "cash_before": 492213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 86,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 86,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 204
+    },
+    {
+      "cash_after": 499690,
+      "cash_before": 492213,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 87,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 87,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 205
+    },
+    {
+      "cash_after": 499690,
+      "cash_before": 499690,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 88,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 88,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 206
+    },
+    {
+      "cash_after": 499690,
+      "cash_before": 499690,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:11",
+            "run_cycle": 88,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 88,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 207
+    },
+    {
+      "cash_after": 499690,
+      "cash_before": 499690,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 88,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 208
+    },
+    {
+      "cash_after": 499690,
+      "cash_before": 499690,
+      "choice": {
+        "payload": {
+          "genre": "action",
+          "name": "Annual career 12",
+          "theme": "fantasy"
+        },
+        "type": "begin_development"
+      },
+      "cycle": 88,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 209
+    },
+    {
+      "cash_after": 499690,
+      "cash_before": 499690,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 89,
+            "schema_version": 1,
+            "sequence": 0,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 89,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 210
+    },
+    {
+      "cash_after": 470690,
+      "cash_before": 499690,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 0,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 89,
+            "schema_version": 1,
+            "sequence": 1,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 89,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 211
+    },
+    {
+      "cash_after": 451690,
+      "cash_before": 470690,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                5,
+                6,
+                7,
+                9
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 1,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 90,
+            "schema_version": 1,
+            "sequence": 2,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 90,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 212
+    },
+    {
+      "cash_after": 505441,
+      "cash_before": 451690,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                10,
+                13,
+                4,
+                8
+              ]
+            },
+            "phase": "design",
+            "project_cycle": 2,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 91,
+            "schema_version": 1,
+            "sequence": 3,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 91,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 213
+    },
+    {
+      "cash_after": 505441,
+      "cash_before": 505441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 92,
+            "schema_version": 1,
+            "sequence": 4,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 92,
+      "error": "",
+      "ok": true,
+      "phase": "design",
+      "step": 214
+    },
+    {
+      "cash_after": 505441,
+      "cash_before": 505441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "design",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 92,
+            "schema_version": 1,
+            "sequence": 5,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 92,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 215
+    },
+    {
+      "cash_after": 505441,
+      "cash_before": 505441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 92,
+            "schema_version": 1,
+            "sequence": 6,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 92,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 216
+    },
+    {
+      "cash_after": 483441,
+      "cash_before": 505441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 3,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 92,
+            "schema_version": 1,
+            "sequence": 7,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 92,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 217
+    },
+    {
+      "cash_after": 470441,
+      "cash_before": 483441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                5,
+                9,
+                4,
+                6
+              ]
+            },
+            "phase": "alpha",
+            "project_cycle": 4,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 93,
+            "schema_version": 1,
+            "sequence": 8,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 93,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 218
+    },
+    {
+      "cash_after": 470441,
+      "cash_before": 470441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 94,
+            "schema_version": 1,
+            "sequence": 9,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 94,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 219
+    },
+    {
+      "cash_after": 470441,
+      "cash_before": 470441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 94,
+            "schema_version": 1,
+            "sequence": 10,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 94,
+      "error": "",
+      "ok": true,
+      "phase": "alpha",
+      "step": 220
+    },
+    {
+      "cash_after": 470441,
+      "cash_before": 470441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "alpha",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 94,
+            "schema_version": 1,
+            "sequence": 11,
+            "type": "enter_next_phase"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 94,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 221
+    },
+    {
+      "cash_after": 470441,
+      "cash_before": 470441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 94,
+            "schema_version": 1,
+            "sequence": 12,
+            "type": "begin"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 94,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 222
+    },
+    {
+      "cash_after": 470441,
+      "cash_before": 470441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 5,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 94,
+            "schema_version": 1,
+            "sequence": 13,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 94,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 223
+    },
+    {
+      "cash_after": 465190,
+      "cash_before": 470441,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {
+              "candidate_ids": [
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "phase": "beta",
+            "project_cycle": 6,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 95,
+            "schema_version": 1,
+            "sequence": 14,
+            "type": "play"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 95,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 224
+    },
+    {
+      "cash_after": 465190,
+      "cash_before": 465190,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 96,
+            "schema_version": 1,
+            "sequence": 15,
+            "type": "request_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 96,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 225
+    },
+    {
+      "cash_after": 465190,
+      "cash_before": 465190,
+      "choice": {
+        "payload": {
+          "request": {
+            "payload": {},
+            "phase": "beta",
+            "project_cycle": 7,
+            "project_id": "annual-legal-player:project:12",
+            "run_cycle": 96,
+            "schema_version": 1,
+            "sequence": 16,
+            "type": "confirm_exit"
+          }
+        },
+        "type": "development"
+      },
+      "cycle": 96,
+      "error": "",
+      "ok": true,
+      "phase": "beta",
+      "step": 226
+    },
+    {
+      "cash_after": 465190,
+      "cash_before": 465190,
+      "choice": {
+        "type": "launch"
+      },
+      "cycle": 96,
+      "error": "",
+      "ok": true,
+      "phase": "studio",
+      "step": 227
+    }
+  ]
+}

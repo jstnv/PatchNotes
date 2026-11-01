@@ -1,5 +1,19 @@
 # Cross-system decisions
 
+## 2026-11-01 — Flexible hands and prospective10/K8 Pass allowance
+
+User authorized1–4-card actions, +2 starting Passes per category per phase, and immediate one-cycle Playtest injection/overflow. Shared four-category allowance therefore gains8: new project v2 uses10/K8 independently in Design/Alpha; v1/legacy active project counters/terms remain. Empty/stale/duplicate/overlarge hands reject, costs/exhaustion/familiarity remain, and Specialization/Balanced/Beta bonuses plus QA/Manager specialization tracking still require4. Alpha corrections reserve existing quota; Beta keeps$500, both one cycle. Overflow is protected corrections only; no ordinary draw or deal RNG until fewer than7 remain, then fill only the gap. Existing Studio-only Continue/certified inputs and previous Awards/splash edits remain. [Evidence and exact scope](findings/flex-hands-20261101-v1/README.md).
+
+## 2026-10-31 — Annual Game Awards v1 implementation rulings
+
+User explicitly authorized the implementation owner to resolve prior OPEN rules and implement fully without input. ACTIVE/TRIAL v1 requires a current-year release for Studio eligibility, gross earned monthly Fan gains excluding founding/award gifts, frozen integer Core/published Review tenths, stable textual Studio/release-ID ties with no sales influence, and additive10 Fans per nomination plus40 Fans/5 next-successful-release Awareness per win. The committed world transaction entering December Week2 freezes actual releases; later zero-cycle launches are after cutoff. Old saves receive no catch-up; actual date/quarter determines next eligible year, including legacy cutovers. First viewing is mandatory, later skip preference affects presentation only; ten stages persist at safe Studio boundaries. No production Continue, cash prize, retrospective sales, frozen certificate/cohort transform or victory activation. These rulings supersede the unresolved parts of the earlier same-day design entry; human pacing/final balance remain OPEN. [Resolved design](design/annual-game-awards.md) · [contract](threads/annual-game-awards/2026-10-31-implementation-contract-v1.md).
+
+## 2026-10-31 — Annual Game Awards December Week 2 cutoff
+
+User direction at DESIGN scope: the annual ceremony occurs in December Week 2 and considers only games released in the current calendar year through the committed ceremony snapshot. Later December releases do not roll into the next year's award. Game of the Year ranks by frozen Review without units sold affecting standing; four Core awards use their matching frozen category scores; Studio of the Year uses current Fans and Best Rising Studio uses Fans gained in that year. Three-place nominees, staged leaderboard reveal and Fan/Awareness rewards are requested, but amounts, ties, Studio eligibility, Fan gain interpretation, skip details and implementation remain OPEN. This timing and no-sales ranking supersede the earlier Founder Legacy January/first-month-units award proposals. [Design draft](design/annual-game-awards.md).
+
+User clarification: nominees generate Fans; winners generate additional Fans and Awareness reserved for their Studio's next successfully released game. No direct cash or retroactive current-game sales effect. Exact amounts may be selected as ACTIVE/TRIAL during implementation; final balance remains OPEN. [Reward contract](design/annual-game-awards.md#rewards-and-durable-result).
+
 ## 2026-10-31 — Four productive cycles per calendar month
 
 User-authorized pacing conversion:4 cycles/month,48/year, without compensatory balance changes. One Clock with versioned cutover metadata preserves raw action/project/history counters and existing saved dates/financial state. Historical2-cycle proofs and raw72 rival offsets stay exact; future dues and current world clocks share the new profile. Finance uses a journal cutover index for same-cycle operations; sales uses age/run contexts; paired saves reject inconsistent profiles. Fixed action-count rules and Studio-only Continue remain intact. [Source, checks and remaining acceptance](logs/2026-10-31-calendar-four-cycle-v1.md).
@@ -11,6 +25,14 @@ The authorized Phase2A brief approves only the public subset of the October31 re
 ## 2026-10-31 — Pass Budget prospective projects, persistence and passive rival clock
 
 Under the user's authorized2/K8 career-check/repair request, new Design/Alpha projects share authoritative quota/counters across live/headless commands. Unversioned saved active rivals finish that project under explicit legacy version0 with an admitted generation origin and no fabricated past spend; subsequent projects use version1. Preserve all actual historical state and the Studio-only player Continue boundary. A1977-founder-only zero-delta/no-callback passive calendar may service real sales/debt in arrears; player productive gates, debt, funding, prices and roster values remain. Stable simulator identities also rekey Engine ownership. These are functional/persistence repairs;2/K8 and other values remain ACTIVE/TRIAL and no new balance/package is approved. [Source/evidence/limits](logs/2026-10-31-pass-budget-career-acceptance-v1.md).
+
+## 2026-11-01 — Rival Marketplace supersession
+
+The user selected Public Action (free,27 Scope,30% external royalty,fixed17 Features) and two rival licenses: Puzzle and Adventure (each27 Scope,$2,500,15% post-platform creator royalty,exact October31 fixed library). Retire the rival Action listing for new purchases. Preserve existing Action and Puzzle entitlements, prior payments and frozen project/release terms. This supersedes the 2026-10-31 rival catalog/capacity/royalty decision and the narrower 2026-11-01 price-only revision for future purchases. Adventure's Graphics/Design bonus follows the research assumption and remains ACTIVE/TRIAL. [Current design](design/engine-marketplace.md).
+
+## 2026-11-01 — Engine Marketplace license price revision
+
+The user reduced both current rival-owned Action and Puzzle engine licenses from $7,500 to $2,500 each. New purchases transfer $2,500 to the creator; already purchased licenses and past transfers are unchanged. The 20% post-platform royalty, 25-Scope capacity, owners and specialization bonuses retain their 2026-10-31 status. Price remains ACTIVE/TRIAL pending broader balance acceptance. [Current design](design/engine-marketplace.md).
 
 ## 2026-10-31 — Engine Marketplace starting rules
 

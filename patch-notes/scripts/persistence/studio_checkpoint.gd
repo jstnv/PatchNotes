@@ -518,10 +518,21 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 	for id: StringName in r.publisher_offers:
 		var publisher: StringName = r.publisher_offers[id].publisher_id
 		if publisher not in [PublisherCatalog.CROWN_QUILL,PublisherCatalog.NEON_CIRCUIT,PublisherCatalog.STARWAVE] or id!=StringName("%s:%s:first" % [r.bank_run_id,publisher]): return "Unknown trial offer"
+	# Add annual awards only after Contract completion/Starwave eligibility.
+	# Award gifts never count as completed Contracts.
+	var annual_receipts := {}
+	for row: Dictionary in r.fanbase.get("annual_awards",[]): annual_receipts[row.id]=row
+	expected_awards.merge(StudioFanbase.AwardReceipts.expected_awareness(r.fanbase))
 	if expected_awards!=r.promotion_awards: return "Promotion award mismatch"
 	for id: StringName in r.promotion_consumed:
 		if not r.promotion_awards.has(id) or not r.released_games.has(r.promotion_consumed[id]): return "Invalid Promotion consumption"
 	for id: StringName in r.promotion_awards:
+		if annual_receipts.has(id):
+			var award_next := StudioFanbase.AwardReceipts.next_release(annual_receipts[id],r.release_metadata)
+			if award_next.is_empty():
+				if r.promotion_consumed.has(id): return "Premature annual award consumption"
+			elif r.promotion_consumed.get(id,&"")!=award_next: return "Annual award next-release mismatch"
+			continue
 		var completed_cycle := -1
 		for action: Dictionary in r.studio_finance.actions:
 			if action.source_id==id and action.productive: completed_cycle = action.cycle

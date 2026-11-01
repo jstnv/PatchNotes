@@ -73,7 +73,7 @@ func _inspect(id: StringName) -> void:
 func _refresh_details() -> void:
 	if run==null:return
 	var state:=run.get_engine_feature_state()
-	var listing:=Market.find(selected_id)
+	var listing:=Market.terms_for_record(selected_id,state.engines.get(selected_id,{}))
 	var owned: bool=state.engines.has(selected_id)
 	var row: Dictionary=state.engines.get(selected_id,{})
 	heading.text=str(row.get("name",listing.get("name","Engine")))
@@ -96,7 +96,10 @@ func _refresh_details() -> void:
 		var creator:=str(listing.creator_id)
 		if world!=null and world.studios.has(listing.creator_id):creator=world.studios[listing.creator_id].run.get_studio_name()
 		text.append("Creator: %s · %s specialty"%[creator,str(listing.creator_specialty).capitalize()])
-		text.append("License: %s · Royalty: %d%% of Studio net sales"%[CashFormatter.format_exact_cents(listing.license_cents),int(listing.royalty_basis_points)/100])
+		if row.get("origin")=="legacy-access-v1":
+			text.append("Existing license · Royalty: %d%% of Studio net sales"%(int(listing.royalty_basis_points)/100))
+		else:
+			text.append("License: %s · Royalty: %d%% of Studio net sales"%[CashFormatter.format_exact_cents(listing.license_cents),int(listing.royalty_basis_points)/100])
 		text.append("Specialization: +0.1 on %s and %s"%[str(listing.dominant[0]).capitalize(),str(listing.dominant[1]).capitalize()])
 	var capacity: int=int(row.get("capacity",listing.get("max_scope",ProjectState.MAX_SIGNED_INT)))
 	text.append("No engine Scope cap." if capacity==ProjectState.MAX_SIGNED_INT else "Maximum played Scope: %d. Game requirement remains 30."%capacity)

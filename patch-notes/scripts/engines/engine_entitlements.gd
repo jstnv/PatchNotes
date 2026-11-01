@@ -48,7 +48,7 @@ static func valid(state: Dictionary,registered: Array[StringName]=[]) -> bool:
 
 static func plan_license(state: Dictionary, engine_id: StringName, buyer_cash_cents: int, creator_id: StringName, creator_cash_cents: int,registered: Array[StringName]=[]) -> Dictionary:
 	if not valid(state,registered): return {}
-	var listing: Dictionary = Marketplace.find(engine_id)
+	var listing: Dictionary = Marketplace.current_listing(engine_id)
 	if engine_id == Public.ID: return {}
 	if listing.is_empty() or listing.creator_id != creator_id or state.studio_id == creator_id: return {}
 	if engine_id in state.owned_ids or engine_id in state.licensed_ids: return {}

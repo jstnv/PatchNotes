@@ -15,6 +15,7 @@ var confirmation: HBoxContainer
 var apply_button: Button
 var back_button: Button
 var reset_button: Button
+var skip_awards: CheckBox
 var deadline := 0.0
 var previewing := false
 var _return_focus: Control
@@ -28,6 +29,7 @@ func _ready() -> void:
 	layer = 120
 	var loaded := DemoSettingsStore.read_settings(settings_path)
 	committed = loaded.values
+	draft = committed.duplicate(true)
 	_startup_error = loaded.error
 	DemoSettingsStore.apply_audio(committed)
 	_apply_display(committed)
@@ -49,14 +51,14 @@ func _build() -> void:
 	var folder := VBoxContainer.new()
 	folder.add_theme_constant_override("separation",12)
 	panel.add_child(folder)
-	var header := FolderUI.header(folder,"Settings","Display and audio preferences",close)
+	var header := FolderUI.header(folder,"Settings","Display, audio and ceremony preferences",close)
 	back_button=header.get_node("Back")
 	var center := CenterContainer.new()
 	center.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	folder.add_child(center)
 	var box := VBoxContainer.new()
 	box.custom_minimum_size.x = 640
-	box.add_theme_constant_override("separation", 6)
+	box.add_theme_constant_override("separation", 4)
 	center.add_child(box)
 	var title := Label.new()
 	title.text = "Settings"
@@ -108,8 +110,17 @@ func _build() -> void:
 		sliders[bus] = slider
 		mutes[bus] = mute
 	var audio_note := Label.new()
-	audio_note.text = "Crunch Time soundtrack prototype - 70 BPM.\nMusic controls the loop; SFX controls card taps and removal whooshes."
+	audio_note.text = "Crunch Time prototype · 70 BPM. Music: loop · SFX: taps / whooshes."
 	box.add_child(audio_note)
+	skip_awards = CheckBox.new()
+	skip_awards.name = "SkipAwards"
+	skip_awards.text = "Skip future Annual Game Awards presentations"
+	skip_awards.tooltip_text = "The first ceremony in each Studio always plays. Rewards are always accounted for."
+	box.add_child(skip_awards)
+	skip_awards.toggled.connect(func(value: bool): if not _syncing: draft.skip_awards = value)
+	var awards_note := Label.new()
+	awards_note.text = "The first ceremony always plays. Skipping future presentations keeps all rewards."
+	box.add_child(awards_note)
 	status = Label.new()
 	status.name = "Status"
 	status.custom_minimum_size = Vector2(640, 40)
@@ -158,6 +169,7 @@ func _sync() -> void:
 	_syncing = true
 	mode.select(1 if draft.fullscreen else 0)
 	resolution.select(0 if draft.width == 1280 else 1)
+	skip_awards.button_pressed = draft.skip_awards
 	for bus: String in DemoSettingsStore.BUSES:
 		sliders[bus].value = draft[bus]
 		mutes[bus].button_pressed = draft[bus + "_muted"]
@@ -191,6 +203,7 @@ func _set_controls_enabled(enabled: bool) -> void:
 	mode.disabled = not enabled
 	resolution.disabled = not enabled
 	reset_button.disabled = not enabled
+	skip_awards.disabled = not enabled
 	for bus: String in DemoSettingsStore.BUSES:
 		sliders[bus].editable = enabled
 		mutes[bus].disabled = not enabled
@@ -208,6 +221,21 @@ func _save() -> void:
 	_startup_error = ""
 	DemoSettingsStore.apply_audio(committed)
 	status.text = "Settings saved. Run cash, calendar and progress are unchanged."
+
+## Commit only this preference while preserving any unrelated Settings draft
+## and display-confirmation transaction. Failed writes retain prior values.
+func set_skip_awards(value: bool) -> bool:
+	var updated := committed.duplicate(true)
+	updated.skip_awards = value
+	var result := DemoSettingsStore.write_settings(updated, settings_path)
+	if result != OK:
+		status.text = "Awards preference was not saved (%s). Previous value kept." % error_string(result)
+		return false
+	committed = updated
+	draft.skip_awards = value
+	_sync()
+	_startup_error = ""
+	return true
 
 func confirm_display() -> void:
 	if not previewing: return
@@ -253,7 +281,7 @@ func _focusable() -> Array[Control]:
 	if previewing: return [confirmation.get_node("Keep"), confirmation.get_node("Revert"), back_button]
 	var controls: Array[Control] = [mode, resolution]
 	for bus: String in DemoSettingsStore.BUSES: controls.append(sliders[bus]); controls.append(mutes[bus])
-	controls.append_array([apply_button, reset_button, back_button])
+	controls.append_array([skip_awards, apply_button, reset_button, back_button])
 	return controls
 
 func _input(event: InputEvent) -> void:

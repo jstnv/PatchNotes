@@ -7,7 +7,7 @@ const BUSES := ["Master", "Music", "SFX"]
 static func defaults() -> Dictionary:
 	return {"version": 1, "fullscreen": false, "width": 1280, "height": 720,
 		"Master": 80, "Music": 80, "SFX": 80,
-		"Master_muted": false, "Music_muted": false, "SFX_muted": false}
+		"Master_muted": false, "Music_muted": false, "SFX_muted": false, "skip_awards": false}
 
 static func valid(value: Dictionary) -> bool:
 	if value.keys().size() != defaults().keys().size(): return false
@@ -24,6 +24,11 @@ static func read_settings(path: String = PATH) -> Dictionary:
 	if config.load(path) != OK: return {"values": defaults(), "error": "Settings could not be read. Using defaults; the original file is preserved."}
 	var values := {}
 	for key: String in defaults():
+		# The sole additive v1 migration. Missing legacy keys and malformed
+		# present values still reject; reading never overwrites the old file.
+		if key == "skip_awards" and not config.has_section_key("settings", key):
+			values[key] = false
+			continue
 		if not config.has_section_key("settings", key): return {"values": defaults(), "error": "Incomplete settings. Using defaults; original file preserved until Apply."}
 		values[key] = config.get_value("settings", key)
 	if not valid(values): return {"values": defaults(), "error": "Unsupported or invalid settings. Using defaults; the original file is preserved until you Apply."}

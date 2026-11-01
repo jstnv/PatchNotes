@@ -1324,7 +1324,7 @@ func get_released_game_monthly_report(release_id: StringName) -> Dictionary:
 	# same cumulative engine royalty already used by the finance settlement.
 	var engine_id: StringName=_release_engine_ids.get(release_id,&"legacy_engine")
 	if engine_id in get_engine_entitlements().get("licensed_ids",[]) or engine_id==preload("res://scripts/engines/public_action_engine.gd").ID:
-		var engine:=preload("res://scripts/engines/engine_marketplace.gd").find(engine_id)
+		var engine:=preload("res://scripts/engines/engine_marketplace.gd").terms_for_record(engine_id,_engine_features.get("engines",{}).get(engine_id,{}))
 		if engine.is_empty():return {}
 		var rate: int=engine.royalty_basis_points
 		report.engine_royalty_basis_points=rate
@@ -1845,7 +1845,7 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 				support_assessments[id] = Support.assessment(roundi(float(_release_metadata[id].review.final_review)*10.0),next.earned_units)
 		var engine_id: StringName = _release_engine_ids.get(id,&"legacy_engine")
 		if engine_id in licensed_engine_ids or engine_id==preload("res://scripts/engines/public_action_engine.gd").ID:
-			var engine: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").find(engine_id)
+			var engine: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").terms_for_record(engine_id,_engine_features.get("engines",{}).get(engine_id,{}))
 			if engine.is_empty() or studio_settled_after < studio_settled_before or studio_earned_after < studio_earned_before: return {}
 			var rate: int=engine.royalty_basis_points
 			release_payable -= preload("res://scripts/engines/engine_royalty.gd").increment(studio_settled_before,studio_settled_after,rate)
@@ -2079,7 +2079,7 @@ func plan_employee_hand(project: ProjectState, phase: StringName, cards: Array, 
 	if roster.is_empty(): return {}
 	var discoveries:=0
 	var first_stat: StringName=cards[0].primary_stat
-	var specialization: bool=cards.all(func(card):return card.primary_stat==first_stat)
+	var specialization: bool=cards.size()==4 and cards.all(func(card):return card.primary_stat==first_stat)
 	var count: int=cards.filter(func(card):return card.card_type==&"feature").size() if specialization else 0
 	if count>0:
 		for e: Dictionary in roster.employees.values():

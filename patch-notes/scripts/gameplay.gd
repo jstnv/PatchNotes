@@ -37,6 +37,23 @@ var pause_menu: PauseMenu
 var guided_tutorial: GuidedProductionTutorial
 var _onboarding := OnboardingPreferences.new()
 var developer_tools: CanvasLayer
+var annual_awards_ceremony: Control
+var _awards_layer: CanvasLayer
+var _awards_navigation: MenuTransitions
+var _awards_root: Control
+var _awards_retry_timer: Timer
+var _awards_queued := false
+var _awards_waiting := false
+var _awards_saving := false
+var _awards_action: StringName = &""
+var _awards_epoch := 0
+var _awards_phase: Control
+var _awards_phase_visible := false
+var _awards_hud_visible := false
+var _awards_phase_process := Node.PROCESS_MODE_INHERIT
+var _awards_hud_process := Node.PROCESS_MODE_INHERIT
+var _awards_focus: WeakRef
+var _awards_animate := true
 
 func _ready() -> void:
 	get_node("Background").color=FolderUI.color(&"background")
@@ -58,7 +75,7 @@ func _ready() -> void:
 func _build_pause_menu() -> void:
 	pause_menu = PauseMenu.new()
 	pause_menu.can_pause = func():
-		return guided_tutorial == null and is_instance_valid(_active_phase) and not _active_phase is MainMenu and _startup_panel == null and not _transition_in_progress and not _loading_checkpoint and not _save_navigation_pending and not _checkpoint_dialog_visible()
+		return not annual_awards_blocking() and guided_tutorial == null and is_instance_valid(_active_phase) and not _active_phase is MainMenu and _startup_panel == null and not _transition_in_progress and not _loading_checkpoint and not _save_navigation_pending and not _checkpoint_dialog_visible()
 	pause_menu.settings_open = %GameplayHUD.settings_menu.is_open
 	pause_menu.guide_open = %GameplayHUD.how_to_play.is_open
 	pause_menu.settings_requested.connect(%GameplayHUD.show_settings)
@@ -248,6 +265,7 @@ func _present_studio_creation(name: String, specialty: StringName, trait_ids: Ar
 	if guided_tutorial != null:
 		guided_tutorial.set_process_input(true)
 		guided_tutorial.new_button.grab_focus()
+	_queue_annual_awards()
 
 func _commit_new_studio(name: String, specialty: StringName, trait_ids: Array, source: MainMenu) -> bool:
 	if not run_state.create_studio_with_traits(name, specialty, trait_ids):
@@ -283,10 +301,11 @@ func _enter_initial_studio(restored: bool = false) -> bool:
 	if not restored: run_state.refresh_redraws()
 	if checkpoints != null: checkpoints.entered_studio(restored)
 	_offer_guided_tutorial.call_deferred()
+	_queue_annual_awards()
 	return true
 
 func _offer_guided_tutorial(opened_save: bool = false) -> void:
-	if guided_tutorial != null or not _active_phase is StudioPhase or _transition_in_progress or _loading_checkpoint: return
+	if _awards_waiting or guided_tutorial != null or not _active_phase is StudioPhase or _transition_in_progress or _loading_checkpoint: return
 	if opened_save or not _onboarding.read().answered: _create_guided_tutorial()
 
 func _create_guided_tutorial() -> void:
@@ -323,6 +342,7 @@ func _close_guided_tutorial(completed: bool) -> void:
 		%GameplayHUD.show()
 		_active_phase.get_node("%StartNextGame").grab_focus()
 	get_node("/root/Soundtrack").request_theme(&"studio",true)
+	_queue_annual_awards()
 
 func _connect_rival_calendar() -> void:
 	if rival_world == null: return
@@ -360,6 +380,7 @@ func _advance_rival_calendar() -> void:
 	if rival_world == null or checkpoints == null or not checkpoints.failure.is_empty(): return
 	var report: Dictionary = rival_world.advance_committed_player_cycle(RivalTrial.policies(rival_world),RivalTrial.ZERO_STEPS)
 	if not report.ok: checkpoints._failed("Trial rival world stopped: " + str(report.get("reason","Unknown world error")))
+	else: _queue_annual_awards()
 
 
 ## Verifier/new-project injection boundary. Controlled rolls use the locked
@@ -528,11 +549,12 @@ func _replace_beta_with_launch(source_beta_phase: Control, launch_scene: PackedS
 	if checkpoints != null: checkpoints.entered_studio()
 	studio_phase.open_launch_review()
 	_transition_in_progress = false
+	_queue_annual_awards()
 	return true
 
 
 func _on_contract_requested(source_studio: StudioPhase, state: ContractState) -> void:
-	if _transition_in_progress or source_studio != _active_phase or state == null or not run_state.owns_contract_state(state) or state.is_completed():
+	if annual_awards_blocking() or _transition_in_progress or source_studio != _active_phase or state == null or not run_state.owns_contract_state(state) or state.is_completed():
 		return
 	_transition_in_progress = true
 	var contract_phase := CONTRACT_PHASE_SCENE.instantiate() as ContractPhase
@@ -572,10 +594,11 @@ func _on_contract_completion_dismissed(source_contract: ContractPhase) -> void:
 	active_contract_state = null
 	if checkpoints != null: checkpoints.entered_studio()
 	_transition_in_progress = false
+	_queue_annual_awards()
 
 
 func _on_development_requested(source_studio: Control, base_name: String, genre: StringName, theme_id: StringName) -> void:
-	if _save_navigation_pending: return
+	if annual_awards_blocking() or _save_navigation_pending: return
 	if checkpoints!=null and checkpoints.background_saves and checkpoints.is_saving():
 		_save_navigation_pending=true
 		var engine: StringName=run_state.get_selected_engine_id()
@@ -590,6 +613,7 @@ func _on_development_requested(source_studio: Control, base_name: String, genre:
 
 
 func _begin_next_project(source_studio: Control, base_name: String, genre: StringName, theme_id: StringName) -> bool:
+	if annual_awards_blocking(): return false
 	if not (source_studio is StudioPhase or source_studio is FirstProjectSetup):
 		return false
 	if _transition_in_progress or not is_instance_valid(source_studio) or source_studio != _active_phase or source_studio.get_parent() != %PhaseRoot:
@@ -768,7 +792,10 @@ func _retry_checkpoint_save() -> void:
 	_save_navigation_pending=true
 	var saved: bool=await checkpoints.retry_background()
 	_save_navigation_pending=false
-	if saved: _save_failure_dialog.hide()
+	if saved:
+		_save_failure_dialog.hide()
+		if not _awards_action.is_empty(): _finish_annual_awards_save()
+		else: _queue_annual_awards()
 
 func _confirm_return_checkpoint() -> void:
 	_hide_checkpoint_dialogs()
@@ -784,6 +811,7 @@ func _confirm_return_checkpoint() -> void:
 func _continue_checkpoint() -> void:
 	# Synchronous debug/tool entry. Player-facing signals use the staged overlay.
 	if checkpoints==null or _transition_in_progress or _loading_checkpoint: return
+	_clear_annual_awards()
 	_hide_checkpoint_dialogs()
 	_loading_checkpoint = true
 	var restored := checkpoints.load_current()
@@ -795,6 +823,7 @@ func _continue_checkpoint() -> void:
 
 func _present_checkpoint_load() -> void:
 	if checkpoints == null or _transition_in_progress or _loading_checkpoint: return
+	_clear_annual_awards()
 	_loading_checkpoint = true
 	_hide_checkpoint_dialogs()
 	var overlay := preload("res://scripts/ui/continue_loading.gd").new()
@@ -838,6 +867,190 @@ func _present_checkpoint_load() -> void:
 		var start := _active_phase.get_node_or_null("%StartNextGame") as Control
 		if start != null: start.grab_focus()
 	_offer_guided_tutorial.call_deferred(true)
+	_queue_annual_awards()
+
+## Cheap input gate; no checkpoint snapshots or ranking run during presentation.
+func annual_awards_blocking() -> bool:
+	if _awards_waiting or is_instance_valid(annual_awards_ceremony): return true
+	return _active_phase is StudioPhase and checkpoints != null and not checkpoints.debug_session and rival_world != null and rival_world.pending_awards_index() >= 0
+
+func _queue_annual_awards() -> void:
+	if not is_inside_tree() or _awards_queued or _awards_waiting or not _active_phase is StudioPhase or rival_world == null or checkpoints == null or checkpoints.debug_session or rival_world.pending_awards_index() < 0: return
+	_awards_queued = true
+	_schedule_annual_awards.call_deferred()
+
+func _schedule_annual_awards() -> void:
+	# Continue queues its invitation after _enter_initial_studio returns. Yield
+	# one additional deferred boundary so that invitation has first ownership.
+	_try_annual_awards.call_deferred()
+
+func _try_annual_awards() -> void:
+	_awards_queued = false
+	if not is_inside_tree() or _awards_waiting or not _active_phase is StudioPhase or rival_world == null or checkpoints == null or checkpoints.debug_session or rival_world.pending_awards_index() < 0: return
+	var hud := %GameplayHUD
+	if _transition_in_progress or _loading_checkpoint or _save_navigation_pending or guided_tutorial != null or _checkpoint_dialog_visible() or pause_menu.is_open() or hud.settings_menu.is_open() or hud.how_to_play.is_open() or (is_instance_valid(developer_tools) and developer_tools.panel.visible):
+		# Owned, bounded retry while an invitation/menu finishes. Production never
+		# polls, and this check never captures a world or requests another save.
+		if _awards_retry_timer == null:
+			_awards_retry_timer = Timer.new()
+			_awards_retry_timer.one_shot = true
+			_awards_retry_timer.wait_time = 0.2
+			_awards_retry_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+			_awards_retry_timer.timeout.connect(_queue_annual_awards)
+			add_child(_awards_retry_timer)
+		_awards_retry_timer.start()
+		return
+	_awards_waiting = true
+	_awards_phase = _active_phase
+	_awards_phase_visible = _active_phase.visible
+	_awards_phase_process = _active_phase.process_mode
+	_awards_hud_visible = hud.visible
+	_awards_hud_process = hud.process_mode
+	var focus := get_viewport().gui_get_focus_owner()
+	_awards_focus = weakref(focus) if focus != null else null
+	_active_phase.hide()
+	_active_phase.process_mode = Node.PROCESS_MODE_DISABLED
+	hud.hide()
+	hud.process_mode = Node.PROCESS_MODE_DISABLED
+	_awards_layer = CanvasLayer.new()
+	_awards_layer.name = "AnnualAwardsPresentation"
+	_awards_layer.layer = 100
+	_awards_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(_awards_layer)
+	_awards_root = Control.new()
+	_awards_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_awards_root.add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
+	_awards_layer.add_child(_awards_root)
+	var shade := ColorRect.new()
+	shade.color = FolderUI.color(&"background")
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_awards_root.add_child(shade)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_awards_root.add_child(center)
+	FolderUI.label(center, "Saving Annual Game Awards…", &"HeadingLabel")
+	_awards_navigation = MenuTransitions.new()
+	_awards_navigation.automatic_entrances = false
+	_awards_navigation.animate = _awards_animate
+	_awards_layer.add_child(_awards_navigation)
+	_awards_navigation.set_root(_awards_root)
+	_awards_action = &"open"
+	# The completed world transaction and any rewards precede first playback.
+	checkpoints._changed()
+	_save_annual_awards()
+
+func _save_annual_awards() -> void:
+	if _awards_saving: return
+	_awards_saving = true
+	var owner: WeakRef = weakref(self)
+	var generation := _awards_epoch
+	var coordinator := checkpoints
+	var saved: bool = await coordinator.wait_saved()
+	# Await callbacks must never access disappearing scenes or superseded loads.
+	if owner.get_ref() == null: return
+	if not is_inside_tree() or generation != _awards_epoch: return
+	_awards_saving = false
+	if saved: _finish_annual_awards_save()
+	else: _checkpoint_status()
+
+func _finish_annual_awards_save() -> void:
+	if not _awards_waiting or _awards_action.is_empty(): return
+	var action := _awards_action
+	_awards_action = &""
+	if action in [&"exit", &"automatic"]:
+		_close_annual_awards()
+		return
+	var index := rival_world.pending_awards_index()
+	var state := rival_world.get_annual_awards()
+	if index < 0 or index >= state.entries.size():
+		_clear_annual_awards()
+		return
+	var entry: Dictionary = state.entries[index]
+	if action != &"open":
+		if is_instance_valid(annual_awards_ceremony): annual_awards_ceremony.set_stage(int(entry.stage))
+		return
+	var first := preload("res://scripts/awards/annual_awards_ledger.gd").first_presentation(state, index)
+	var preference: bool = %GameplayHUD.settings_menu.committed.skip_awards
+	if not first and preference:
+		_commit_annual_awards_progress(&"automatic")
+		return
+	annual_awards_ceremony = preload("res://scripts/ui/annual_awards_ceremony.gd").new()
+	annual_awards_ceremony.configure(entry.result, int(entry.stage), first, preference)
+	_awards_layer.add_child(annual_awards_ceremony)
+	annual_awards_ceremony.advance_requested.connect(_commit_annual_awards_progress.bind(&"next"))
+	annual_awards_ceremony.skip_requested.connect(_commit_annual_awards_progress.bind(&"skip"))
+	annual_awards_ceremony.exit_requested.connect(_commit_annual_awards_progress.bind(&"exit"))
+	annual_awards_ceremony.skip_preference_changed.connect(_annual_awards_preference)
+	annual_awards_ceremony.panel.hide()
+	# Settle the bounded Container before shared navigation captures its origin.
+	_show_annual_awards_surface.call_deferred(_awards_epoch)
+
+func _show_annual_awards_surface(generation: int) -> void:
+	if generation != _awards_epoch or not is_instance_valid(annual_awards_ceremony): return
+	_awards_navigation.push_from_bottom(annual_awards_ceremony.panel, annual_awards_ceremony.next_button, _clear_annual_awards, float(get_viewport_rect().size.y))
+
+func _commit_annual_awards_progress(action: StringName) -> void:
+	if not _awards_waiting or _awards_saving or not _awards_action.is_empty() or rival_world == null: return
+	if is_instance_valid(_awards_navigation) and _awards_navigation.busy:
+		if is_instance_valid(annual_awards_ceremony): annual_awards_ceremony.set_busy(false)
+		return
+	var changed := false
+	if action == &"next": changed = rival_world.advance_awards_stage()
+	elif action == &"skip": changed = rival_world.advance_awards_stage(true)
+	elif action == &"exit": changed = rival_world.complete_awards_presentation()
+	elif action == &"automatic":
+		var index := rival_world.pending_awards_index()
+		var state := rival_world.get_annual_awards()
+		changed = index >= 0 and (int(state.entries[index].stage) == 9 or rival_world.advance_awards_stage(true)) and rival_world.complete_awards_presentation()
+	if not changed:
+		if is_instance_valid(annual_awards_ceremony): annual_awards_ceremony.set_busy(false)
+		return
+	_awards_action = action
+	if is_instance_valid(annual_awards_ceremony): annual_awards_ceremony.set_busy(true)
+	checkpoints._changed()
+	_save_annual_awards()
+
+func _annual_awards_preference(value: bool) -> void:
+	if %GameplayHUD.settings_menu.set_skip_awards(value): return
+	if is_instance_valid(annual_awards_ceremony):
+		var committed: bool = %GameplayHUD.settings_menu.committed.skip_awards
+		annual_awards_ceremony.skip_checkbox.set_pressed_no_signal(committed)
+		annual_awards_ceremony.set("_skip_preference", committed)
+
+func _close_annual_awards() -> void:
+	if is_instance_valid(_awards_navigation) and _awards_navigation.depth() > 1:
+		_awards_navigation.pop()
+	else: _clear_annual_awards()
+
+func _clear_annual_awards() -> void:
+	_awards_epoch += 1
+	_awards_saving = false
+	_awards_action = &""
+	_awards_waiting = false
+	if is_instance_valid(_awards_retry_timer): _awards_retry_timer.stop()
+	if is_instance_valid(_awards_phase) and _awards_phase == _active_phase:
+		_awards_phase.visible = _awards_phase_visible
+		_awards_phase.process_mode = _awards_phase_process
+		%GameplayHUD.visible = _awards_hud_visible
+		%GameplayHUD.process_mode = _awards_hud_process
+	var focus: Control = _awards_focus.get_ref() if _awards_focus != null else null
+	if is_instance_valid(focus) and focus.is_visible_in_tree(): focus.grab_focus()
+	elif is_instance_valid(_active_phase):
+		var fallback := _active_phase.get_node_or_null("%StartProductionButton") as Control
+		if fallback != null and fallback.is_visible_in_tree(): fallback.grab_focus()
+	annual_awards_ceremony = null
+	_awards_phase = null
+	_awards_focus = null
+	if is_instance_valid(_awards_layer):
+		_awards_layer.hide()
+		_awards_layer.queue_free()
+	_awards_layer = null
+	_awards_navigation = null
+	_awards_root = null
+	_queue_annual_awards()
+
+func _exit_tree() -> void:
+	_awards_epoch += 1
 
 func _finish_checkpoint_load(restored: RunState) -> bool:
 	run_state = restored

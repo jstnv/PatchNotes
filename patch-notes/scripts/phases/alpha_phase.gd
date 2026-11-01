@@ -197,11 +197,27 @@ func _on_begin_alpha_pressed() -> void:
 
 func host_playtest() -> bool:
 	if not _can_host_playtest(): return false
-	_hand_command_busy=true
-	var actions:=_capture_development_actions()
-	actions.hand._pending_playtest_categories=_pending_playtest_categories
-	var accepted: bool = actions.host_playtest()
-	_hand_command_busy=false
+	_hand_command_busy = true
+	var actions := _capture_development_actions()
+	var prepared: Array[CardView] = []
+	var readiness := func(cards: Array[CardData]) -> bool:
+		for card: CardData in cards:
+			var view := CARD_VIEW_SCENE.instantiate() as CardView
+			if view == null: return false
+			view.set_card(card)
+			view.card_pressed.connect(_on_card_pressed)
+			prepared.append(view)
+		return true
+	var accepted: bool = actions.host_playtest(readiness)
+	if accepted:
+		_candidate_cards.assign(actions.hand._candidate_cards)
+		for view: CardView in prepared: %HandContainer.add_child(view)
+		_sync_command_tokens(actions.hand)
+		_refresh_redraw_controls()
+	else:
+		for view: CardView in prepared: view.free()
+	_hand_command_busy = false
+	_update_play_action()
 	_update_host_playtest_action()
 	return accepted
 
@@ -341,11 +357,12 @@ func _can_host_playtest() -> bool:
 		and _project_state.can_advance_cycle()
 		and (_run_state == null or _run_state.can_complete_productive_cycle())
 		and _has_valid_active_candidate_pool()
+		and _capture_development_actions().can_host_playtest()
 	)
 
 
 func _has_valid_active_candidate_pool() -> bool:
-	if not is_node_ready() or _candidate_cards.size() > CANDIDATE_POOL_SIZE or %HandContainer.card_views().size() != _candidate_cards.size():
+	if not is_node_ready() or %HandContainer.card_views().size() != _candidate_cards.size():
 		return false
 	var seen_feature_ids: Dictionary[StringName, bool] = {}
 	var pass_count := 0
@@ -364,7 +381,7 @@ func _has_valid_active_candidate_pool() -> bool:
 			pass_count += 1
 		else:
 			return false
-	return pass_count <= (7 if _project_state._pass_budget_version==0 else 2 + _budget_printed / 8 - _budget_spent)
+	return _capture_development_actions().valid_pool()
 
 
 func _select_corrective_categories() -> Array[ProjectState.CoreScore]:
@@ -494,7 +511,7 @@ func _on_redraw_pressed() -> void:
 func _refresh_redraw_controls() -> void:
 	if not is_node_ready(): return
 	for view: CardView in %HandContainer.card_views():
-		view.set_shared_pass_budget(2 + _budget_printed / 8 - _budget_spent, posmod(_budget_printed, 8))
+		view.set_shared_pass_budget(_capture_alpha_command().pass_budget_available(), posmod(_budget_printed, 8))
 	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
 	%RedrawButton.disabled = not _can_redraw_selection()
 	if not %RedrawButton.disabled:
@@ -559,7 +576,7 @@ func _on_card_pressed(card_view: CardView) -> void:
 		_selected_card_views.append(card_view)
 		card_view.set_selected(true)
 	else:
-		push_warning("Exactly four Alpha candidates may be selected.")
+		push_warning("At most four Alpha candidates may be selected.")
 	_update_play_action()
 
 
@@ -575,7 +592,7 @@ func _update_play_action() -> void:
 	%PlayAlphaHandButton.disabled = not _can_play_selected_instances()
 	%PlayAlphaHandButton.text = "Implement"
 	%PlayAlphaHandButton.tooltip_text = ""
-	if _run_state != null and _run_state.uses_first_studio_economy() and _selected_card_views.size() == SELECTED_HAND_SIZE:
+	if _run_state != null and _run_state.uses_first_studio_economy() and not _selected_card_views.is_empty():
 		var cards: Array[CardData] = []
 		for view: CardView in _selected_card_views:
 			cards.append(view.card_data)
@@ -589,7 +606,7 @@ func _update_play_action() -> void:
 
 func _can_play_selected_instances() -> bool:
 	if is_gameplay_input_blocked(): return false
-	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or not _project_state.can_advance_cycle() or (_run_state != null and not _run_state.can_advance_calendar_cycle()) or _selected_card_views.size() != SELECTED_HAND_SIZE:
+	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or not _project_state.can_advance_cycle() or (_run_state != null and not _run_state.can_advance_calendar_cycle()) or (_selected_card_views.is_empty() or _selected_card_views.size() > SELECTED_HAND_SIZE):
 		return false
 	var seen: Dictionary[int, bool] = {}
 	for card_view: CardView in _selected_card_views:
@@ -650,7 +667,7 @@ func _on_play_alpha_hand_pressed() -> void:
 
 
 func _validate_and_calculate_base_action() -> Dictionary:
-	if not _can_play_selected_instances(): return _invalid_action("A complete Alpha action requires four current candidate instances.")
+	if not _can_play_selected_instances(): return _invalid_action("Select one to four current Alpha instances.")
 	var cards: Array[CardData] = []
 	for view in _selected_card_views: cards.append(view.card_data)
 	return _capture_alpha_command().calculate_base(cards)
@@ -825,7 +842,7 @@ func refresh_overlay_actions() -> void:
 func get_employee_hand_status() -> Dictionary:
 	if _run_state == null or _project_state == null: return {}
 	var roster := _run_state.get_employees()
-	var base := _validate_and_calculate_base_action()
+	var base := _validate_and_calculate_base_action() if not _selected_card_views.is_empty() and not _hand_command_busy else {}
 	return {"hired":roster.employees.values().any(func(e):return e.type==&"production"),"available":EmployeeRoster.available(roster,_project_state.get_release_id()),"qualifying":base.get("valid",false) and EmployeeRoster.matches(EmployeeRoster.card_facts(base.get("cards",[])))}
 
 

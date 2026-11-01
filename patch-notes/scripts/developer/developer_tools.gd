@@ -41,10 +41,10 @@ func _ready() -> void:
 	panel.hide();hide()
 
 func _safe_studio() -> bool:
-	return game!=null and game._active_phase is StudioPhase and game.checkpoints!=null and game.checkpoints.in_studio and game.run_state.get_active_contract()==null and not game._transition_in_progress and not game._loading_checkpoint and not game._save_navigation_pending and game.guided_tutorial==null
+	return game!=null and not game.annual_awards_blocking() and game._active_phase is StudioPhase and game.checkpoints!=null and game.checkpoints.in_studio and game.run_state.get_active_contract()==null and not game._transition_in_progress and not game._loading_checkpoint and not game._save_navigation_pending and game.guided_tutorial==null
 
 func open() -> void:
-	if _busy:return
+	if _busy or game==null or game.annual_awards_blocking():return
 	_focus=get_viewport().gui_get_focus_owner()
 	if game.pause_menu!=null and game.pause_menu.is_open():game.pause_menu.close()
 	if sandbox==null or sandbox.run!=game.run_state:
@@ -93,6 +93,7 @@ func _refresh() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_F8:
+		if game!=null and game.annual_awards_blocking():get_viewport().set_input_as_handled();return
 		if panel.visible:close()
 		else:open()
 		get_viewport().set_input_as_handled()

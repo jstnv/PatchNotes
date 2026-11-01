@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-31T23:02:50.6141441-07:00",
+  "branch": "main",
+  "head": "49d769235474a880a73d996499cefa72beec63e5",
+  "files": [
+    {
+      "path": "patch-notes/scripts/awards/award_receipts.gd",
+      "sha256": "23b55499def20c241f71f13734cb50697016f0ea616ebd37a9516eabcba07dcd"
+    },
+    {
+      "path": "patch-notes/scripts/fanbase/studio_fanbase.gd",
+      "sha256": "fb90d78b7c7f8c7e85e8b7f86112e84be6673e75a2863e9628a2082bbb0579ed"
+    },
+    {
+      "path": "patch-notes/scripts/persistence/studio_checkpoint.gd",
+      "sha256": "baac46b31868bd75f15e6b6e7752e9e5e6933bc9fee280bbcc7a3c6b9330f156"
+    },
+    {
+      "path": "patch-notes/scripts/debug/verify_award_receipts.gd",
+      "sha256": "2748523627378f397619343588a40b9359fe777b97d3f3688a3d0c7b807a624d"
+    },
+    {
+      "path": "patch-notes/scripts/awards/annual_awards_rules.gd",
+      "sha256": "13dcd8b36e5fe63fd3d51000c03f4b255721dce85a55139a5eb611d2f30bc998"
+    }
+  ],
+  "tests": {
+    "verify_studio_fanbase": "PASS0 failures",
+    "verify_fanbase_checkpoint": "PASS0 failures",
+    "verify_publisher_trial_promotion": "PASS0 failures",
+    "verify_studio_checkpoint": "FAIL Invalid engine state; Accept loan; out-of-bounds line44; interrupted after exception",
+    "verify_award_receipts": "PASS60/0 final-v2.log"
+  }
+}

@@ -104,7 +104,7 @@ static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) 
 		employee.career.games[event.course]=[]
 		employee.career.projects={}
 	elif kind==&"career_hand":
-		if event.size()!=7 or typeof(event.get("project_id"))!=TYPE_STRING_NAME or event.project_id.is_empty() or typeof(event.get("project_cycle"))!=TYPE_INT or event.project_cycle<0 or event.get("phase") not in [&"design",&"alpha",&"beta"] or not event.get("cards") is Array or event.cards.size()!=4 or not event.get("priorities") is Dictionary:return {}
+		if event.size()!=7 or typeof(event.get("project_id"))!=TYPE_STRING_NAME or event.project_id.is_empty() or typeof(event.get("project_cycle"))!=TYPE_INT or event.project_cycle<0 or event.get("phase") not in [&"design",&"alpha",&"beta"] or not event.get("cards") is Array or (event.cards.is_empty() or event.cards.size()>4) or not event.get("priorities") is Dictionary:return {}
 		for card in event.cards:
 			if not card is Dictionary or card.size()!=5:return {}
 			for key in ["id","type","primary","secondary","beta"]:
@@ -136,7 +136,7 @@ static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) 
 						employee.trained=true;employee.career.courses[course].completed_cycle=event.cycle
 			else:
 				var stat: StringName=event.cards[0].beta if event.phase==&"beta" else event.cards[0].primary
-				var same: bool=event.cards.all(func(card):return (card.beta if event.phase==&"beta" else card.primary)==stat)
+				var same: bool=event.cards.size()==4 and event.cards.all(func(card):return (card.beta if event.phase==&"beta" else card.primary)==stat)
 				var key: Variant=stat if event.phase==&"beta" else CORE.find(stat)
 				var eligible: bool=stat in [&"qa",&"marketing"] and event.priorities.get(&"insider",-1)==0 if event.phase==&"beta" else stat in CORE
 				if same and eligible and event.priorities.get(key,-1)==limits(state,event.phase==&"beta").x and project.specializations.size()<2:project.specializations.append(action)

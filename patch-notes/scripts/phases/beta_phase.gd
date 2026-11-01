@@ -453,24 +453,36 @@ func _retire_beta_interface() -> void:
 
 
 func host_playtest() -> bool:
-	if not _can_host_playtest():
-		return false
-	_transaction_in_progress=true
-	var actions:=_capture_development_actions()
-	actions.hand._pending_corrective_pass_ids=_pending_corrective_pass_ids
-	if not actions.host_playtest():
-		_transaction_in_progress=false
+	if not _can_host_playtest(): return false
+	_transaction_in_progress = true
+	var actions := _capture_development_actions()
+	var prepared: Array[CardView] = []
+	var readiness := func(cards: Array[CardData]) -> bool:
+		for card: CardData in cards:
+			var view := _instantiate_card_view()
+			if view == null: return false
+			view.set_card(card)
+			view.card_pressed.connect(_on_card_pressed)
+			prepared.append(view)
+		return true
+	if not actions.host_playtest(readiness):
+		for view: CardView in prepared: view.free()
+		_transaction_in_progress = false
 		_update_all_actions()
 		return false
-	var pass_ids:=_pending_corrective_pass_ids.duplicate()
-	var names := _format_pass_names(pass_ids)
-	%ActionFeedbackLabel.text = "Beta Host Playtest complete! $500 spent. One cycle advanced. Corrective Passes queued: %s" % names
+	_candidate_cards.assign(actions.hand._candidate_cards)
+	for view: CardView in prepared:
+		_candidate_views.append(view)
+		_injected_corrective_views.append(view)
+		%HandContainer.add_child(view)
+	_command_revision = actions.hand.revision
+	_command_next_id = actions.hand.next_candidate_id
+	_command_view_ids.clear()
+	for index in _candidate_views.size(): _command_view_ids[_candidate_views[index].get_instance_id()] = actions.hand.candidate_ids[index]
+	%ActionFeedbackLabel.text = "Playtest complete · $500 · 1 cycle · Corrective Passes added to the pool."
 	%ActionFeedbackLabel.visible = true
-	print(%ActionFeedbackLabel.text)
 	_transaction_in_progress = false
-	_update_play_action()
-	_update_host_playtest_action()
-	_update_launch_action()
+	_update_all_actions()
 	return true
 
 
@@ -517,7 +529,7 @@ func _can_attempt_play() -> bool:
 	if is_gameplay_input_blocked(): return false
 	if _launch_confirmation_pending or _transaction_in_progress or _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or _run_state == null or _snapshot_database == null:
 		return false
-	if not _project_state.has_alpha_finalization() or not _run_state.is_cash_initialized() or _selected_card_views.size() != SELECTED_HAND_SIZE or not _has_valid_active_pool():
+	if not _project_state.has_alpha_finalization() or not _run_state.is_cash_initialized() or (_selected_card_views.is_empty() or _selected_card_views.size() > SELECTED_HAND_SIZE) or not _has_valid_active_pool():
 		return false
 	var seen_views: Dictionary[int, bool] = {}
 	for view: CardView in _selected_card_views:
@@ -543,17 +555,18 @@ func _can_host_playtest() -> bool:
 		and _run_state.get_cash_cents() >= HOST_PLAYTEST_COST_CENTS
 		and _pending_corrective_pass_ids.is_empty()
 		and _has_valid_active_pool()
+		and _capture_development_actions().can_host_playtest()
 	)
 
 
 func _has_valid_active_pool() -> bool:
-	if not is_node_ready() or _candidate_cards.size() != CANDIDATE_POOL_SIZE or _candidate_views.size() != CANDIDATE_POOL_SIZE or %HandContainer.card_views().size() != CANDIDATE_POOL_SIZE:
+	if not is_node_ready() or _candidate_views.size() != _candidate_cards.size() or %HandContainer.card_views().size() != _candidate_cards.size():
 		return false
-	for index in range(CANDIDATE_POOL_SIZE):
+	for index in range(_candidate_views.size()):
 		var view := _candidate_views[index]
 		if not is_instance_valid(view) or view.get_parent() != %HandContainer or view.card_data != _candidate_cards[index]:
 			return false
-	return true
+	return _capture_development_actions().valid_pool()
 
 
 

@@ -24,7 +24,7 @@ func _verify() -> void:
 		var world: RivalWorld = loader.create(session.run,catalog) if session != null else null
 		check(world != null and world.studios.size() == 8,"Certified opening %d restores with legacy Pass Budget provenance: %s" % [index,loader.error])
 		if world == null: continue
-		for engine_id in [&"action_engine",&"puzzle_engine"]:
+		for engine_id in [&"puzzle_engine",&"adventure_engine"]:
 			var listing: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").find(engine_id)
 			check(preload("res://scripts/engines/engine_marketplace.gd").creator_matches_world(listing,world),"Opening %d retains the actual engine creator %s" % [index,engine_id])
 	print("Engine certified openings: %d failures" % failures)

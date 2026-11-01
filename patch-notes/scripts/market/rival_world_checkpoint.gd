@@ -3,6 +3,7 @@
 ## no classes, resource paths, constructors or executable Variant objects.
 extends RefCounted
 const Clock := preload("res://scripts/calendar/calendar_clock.gd")
+const AWARD_LEDGER_PREDECESSORS := ["303959a85af6268f88e1cd4b855e747838a25fad8779d85621a17f77a0b19253"]
 
 const CAREER_PREDECESSORS := ["2b93740a7ca8a4eb1ed01946e63ea8cfa4e944f4aad1198f0e60f3a831225ae6"]
 ## Studio Management navigation only; exact preceding current-content world.
@@ -15,6 +16,8 @@ const MARKET_HISTORY_PREDECESSORS := ["c4436b020d6580b0ddc79f40e18f085e43c742965
 ## Exact immediately preceding unversioned-budget builds; active projects finish
 ## under explicit legacy rules, and all newly begun projects use2/K8.
 const VERSIONED_BUDGET_PREDECESSORS := [
+	"303959a85af6268f88e1cd4b855e747838a25fad8779d85621a17f77a0b19253", # Exact pre-flexible-hand award-bearing source; retain v1 counters and all saved results.
+	"ef14cc34682dbe4ab3e739ea13396da9979c3a8efb9c057c7c8cfa25d78980f6", # Genuine pre-awards capture; closed optional receipt schema, unchanged prior rules.
 	"5717e5e2573ea90a83ac8fe2bc87bbd3c6c10da3fe67524603ae57d3286cf54a", # Genuine calendar-v2 world; same rules/state, fixture/report closeout.
 	"eea06deffab0895c9a80adacc7f6238cbef5cc313cd03d2f93f6b3d2e1603b3e", # Verified pre-calendar Public build; old raw profiles validate before migration.
 	"46036810d92d20c22d3e08f554de308c1352673ce8d525764b007a0288370d33", # Exact pre-Public Studio/world; retain its v1 access and frozen projects.
@@ -398,6 +401,8 @@ func snapshot(world: RivalWorld, studio_adapter: StudioCheckpoint = null) -> Dic
 	# Run snapshots, encoded development/legacy and observation history already
 	# own their values. Only the live archive/market/origin containers above need
 	# copying; re-copying every detached rival ledger stalls the main thread.
+	if world.annual_awards.is_empty() or not preload("res://scripts/awards/annual_awards_ledger.gd").valid(world,world.annual_awards): error="Invalid annual award provenance";return {}
+	payload.annual_awards=world.annual_awards.duplicate(true)
 	return payload
 
 func encode_snapshot(native: Dictionary) -> Dictionary:
@@ -422,6 +427,9 @@ func encode_snapshot(native: Dictionary) -> Dictionary:
 	if payload.has("market_origin"):
 		payload.market_origin=_encode(payload.market_origin,_origin_schema())
 		if not error.is_empty(): return {}
+	if payload.has("annual_awards"):
+		payload.annual_awards=_encode(payload.annual_awards,preload("res://scripts/awards/annual_awards_ledger.gd").schema())
+		if not error.is_empty():return {}
 	payload["source_identity"]=Replay.source_identity()
 	return payload
 
@@ -475,9 +483,17 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 				error = "Mismatched relationship Studio source/content pair"; return {}
 	var projected: bool=payload.get("schema_version") in ["2","3"]
 	var career: bool=payload.get("schema_version")=="3"
-	if payload.size()!=7+int(payload.has("legacy"))+int(payload.has("market_origin")) or payload.get("schema_version") not in ["1","2","3"] or not source_ok or payload.get("rng_algorithm")!=RunRandom.ALGORITHM or not payload.get("studios") is Array or not payload.get("history") is Array or not payload.get("market") is Dictionary:
+	if payload.size()!=7+int(payload.has("legacy"))+int(payload.has("market_origin"))+int(payload.has("annual_awards")) or payload.get("schema_version") not in ["1","2","3"] or not source_ok or payload.get("rng_algorithm")!=RunRandom.ALGORITHM or not payload.get("studios") is Array or not payload.get("history") is Array or not payload.get("market") is Dictionary:
 		error = "INCOMPATIBLE_RIVAL_WORLD_SOURCE_OR_SCHEMA"
 		return {}
+	if (predecessor_source==current_source or predecessor_source in AWARD_LEDGER_PREDECESSORS) and captured_source_identity.is_empty() and not payload.has("annual_awards"):
+		error="Missing current annual world ledger";return {}
+	var annual: Dictionary={}
+	if payload.has("annual_awards"):
+		if predecessor_source!=current_source and predecessor_source not in AWARD_LEDGER_PREDECESSORS:error="Legacy source cannot manufacture awards";return {}
+		var decoded_annual: Variant=_decode(payload.annual_awards,preload("res://scripts/awards/annual_awards_ledger.gd").schema())
+		if not error.is_empty() or not decoded_annual is Dictionary:error="Malformed annual ledger";return {}
+		annual=decoded_annual
 	var legacy := {}
 	if payload.has("legacy"):
 		if not payload.legacy is Dictionary: error="Malformed founder world"; return {}
@@ -559,7 +575,7 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 			if active_native.run.commission_deals.has(dev.project._release_id):
 				var terms: Dictionary = active_native.run.commission_deals[dev.project._release_id].terms
 				if terms.base_name != dev.project._base_name or terms.genre != dev.project._genre_id or terms.theme != dev.project._theme_id or terms.required_scope != dev.project._required_scope: error="Commission/project mismatch"; return {}
-			if dev.hand.candidate_ids.size()!=dev.hand.candidate_cards.size() or dev.hand.candidate_ids.size()>32: error = "Invalid rival hand"; return {}
+			if dev.hand.candidate_ids.size()!=dev.hand.candidate_cards.size(): error = "Invalid rival hand"; return {}
 		if projected and not _validate_projected_archive(adapter,row.run,archive,dev,offset): return {}
 		var memory: Dictionary={}
 		if career:
@@ -589,7 +605,7 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 	if not _validate_frozen_market(player_payload,payload.studios,rows,cycle,origin): return {}
 	if Market.is_book(market) and not _book_matches_owners(market,rows):return {}
 
-	return {"cycle":cycle,"rows":rows,"history":history,"legacy":legacy,"market":market,"market_origin":origin}
+	return {"cycle":cycle,"rows":rows,"history":history,"legacy":legacy,"market":market,"market_origin":origin,"annual_awards":annual}
 
 func _validate_projected_archive(adapter: StudioCheckpoint, encoded_run: Dictionary, archive: Array, development: Dictionary, offset: int) -> bool:
 	var native: Dictionary=_decode_run(adapter,encoded_run,not development.is_empty())
@@ -715,6 +731,7 @@ func validate(payload: Dictionary, player_payload: Dictionary) -> String:
 	world.player = player
 	world.cycle = decoded.cycle
 	world.legacy = decoded.legacy
+	world.annual_awards = decoded.get("annual_awards",{}).duplicate(true)
 	for row: Dictionary in decoded.rows:
 		var run := adapter.hydrate(row.run,not row.development.is_empty())
 		if run == null: error = adapter.error; return error
@@ -723,7 +740,17 @@ func validate(payload: Dictionary, player_payload: Dictionary) -> String:
 		world.studios[row.id] = session
 		if row.offset>0: world.calendar_offsets[row.id]=row.offset
 	_check_history_and_legacy(world,decoded.history)
+	if error.is_empty() and not _check_annual(world):error="Annual world provenance mismatch"
 	return error
+
+func _check_annual(world: RivalWorld) -> bool:
+	if not world.annual_awards.is_empty():
+		return preload("res://scripts/awards/annual_awards_ledger.gd").valid(world,world.annual_awards)
+	# Older captures have no global result and cannot carry new owner awards.
+	if world.player._fanbase.has("annual_awards"): return false
+	for id: StringName in world.studios:
+		if world.studios[id].run._fanbase.has("annual_awards"): return false
+	return true
 
 func _check_history_and_legacy(world: RivalWorld, history: Array) -> bool:
 	var actual := {}
@@ -754,6 +781,7 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 	world.market_snapshot = decoded.market
 	world.market_origin = decoded.market_origin
 	world.legacy = decoded.legacy
+	world.annual_awards = decoded.get("annual_awards",{}).duplicate(true)
 	var snapshots := PrimitiveSnapshotDatabase.new()
 	if not snapshots.load_ledgers(): error = "Rival snapshots unavailable"; return null
 	var adapter := StudioCheckpoint.new()
@@ -851,6 +879,7 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 		world.historical_archive[row.id] = row.archive
 		if row.offset>0: world.calendar_offsets[row.id]=row.offset
 	if not _check_history_and_legacy(world,decoded.history): return null
+	if not _check_annual(world): error="Annual world provenance mismatch";return null
 	if not world.calendars_aligned():error="Rival/player calendar profiles differ";return null
 	world.bind_market_providers()
 	return world
@@ -894,7 +923,16 @@ static func _known_budget_origin(source: String) -> bool:
 
 func _valid_pass_budget(state: Dictionary,definitions: Dictionary) -> bool:
 	var budget: Dictionary=state.pass_budget
-	if budget.version not in [0,1]:error="Unknown Pass Budget version";return false
+	if budget.version not in [0,1,2]:error="Unknown Pass Budget version";return false
+	if state.hand.candidate_ids.size()!=state.hand.candidate_cards.size():error="Mismatched candidate arrays";return false
+	var protected: Array = state.hand.get("injected_candidate_ids", [])
+	var seen_protected := {}
+	for token in protected:
+		if token not in state.hand.candidate_ids or seen_protected.has(token):error="Invalid protected Pass token";return false
+		seen_protected[token] = true
+		var id: StringName = state.hand.candidate_cards[state.hand.candidate_ids.find(token)]
+		if id not in [&"graphics_pass", &"sound_pass", &"technology_pass", &"design_pass"]:error="Protected candidate is not a corrective Pass";return false
+	if state.hand.candidate_cards.size()-protected.size()>7:error="Ordinary candidate pool exceeds seven";return false
 	if budget.version==0:
 		if budget.printed!=0 or budget.spent!=0 or not _known_budget_origin(budget.origin):error="Unproven legacy Pass Budget";return false
 		return true
@@ -912,8 +950,8 @@ func _valid_pass_budget(state: Dictionary,definitions: Dictionary) -> bool:
 		else:printed+=int(card.get("primary_value",0))+int(card.get("secondary_value",0))
 	for id: StringName in state.hand.candidate_cards:
 		if not definitions.has(id):held+=1 # Pass definitions are outside Feature table.
-	var generated: int=preload("res://scripts/simulation/pass_budget.gd").generated(printed)
-	if budget.printed!=printed or budget.spent>generated or held>generated-int(budget.spent) or state.hand.candidate_cards.size()>7 or (int(budget.spent)+state.hand.exhausted.size())%4!=0 or (int(budget.spent)+state.hand.exhausted.size())/4>int(state.project._current_cycle):error="Inconsistent Pass Budget counters/reservations";return false
+	var generated: int=preload("res://scripts/simulation/pass_budget.gd").generated(printed,budget.version)
+	if budget.printed!=printed or budget.spent>generated or held>generated-int(budget.spent) or (int(budget.spent)+state.hand.exhausted.size())/4 + int((int(budget.spent)+state.hand.exhausted.size())%4 != 0)>int(state.project._current_cycle):error="Inconsistent Pass Budget counters/reservations";return false
 	return true
 
 static func _payload_calendar(payload: Dictionary) -> Dictionary:

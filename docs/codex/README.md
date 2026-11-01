@@ -14,8 +14,9 @@ Code establishes what runs; approved design establishes intended behavior. A mis
 
 ## System documents
 
+- [Annual Game Awards: deterministic yearly results, shared ceremony and durable rewards](design/annual-game-awards.md)
 - [Public Action Engine Phase2A: fixed27-Scope starting access and external royalties](design/public-action-engine.md)
-- [Pass Budget provisional 2/K8 design and intermediate counts](design/pass-budget.md)
+- [Pass Budget v2 10/K8, versioned legacy rules and intermediate counts](design/pass-budget.md)
 - [Shared UI identity, folder components and navigation](design/ui-design-system.md)
 - [F8 Developer Tools: session-only unlimited money and current Features](design/debug-mode.md)
 - [Headless simulation: isolated runs, paired studies/reports, custom policies, replay and Studio continuation](threads/simulation-engine/USAGE.md)

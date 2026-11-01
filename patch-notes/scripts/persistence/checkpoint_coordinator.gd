@@ -119,6 +119,7 @@ func _init() -> void:
 func _validate_payload(payload: Dictionary) -> String:
 	var candidate := _market_compatible_payload(payload)
 	if candidate.is_empty(): return "Invalid pre-market migration payload"
+	if preload("res://scripts/awards/award_receipts.gd").missing_world(candidate): return "Awarded Studio requires its global annual ledger"
 	if not candidate.has("rival_world"): return adapter.validate(candidate)
 	if not candidate.rival_world is Dictionary: return "Malformed rival world field"
 	var player_payload := candidate.duplicate(true)

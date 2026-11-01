@@ -525,7 +525,7 @@ func _show_completion() -> void:
 
 func _refresh_all() -> void:
 	if _state == null: return
-	_status_label.text = "Hands remaining: %d / %d · Select exactly four cards" % [maxi(0, _state.get_required_hands() - _state.get_successful_hand_count()), _state.get_required_hands()]
+	_status_label.text = "Hands remaining: %d / %d · Select one to four cards" % [maxi(0, _state.get_required_hands() - _state.get_successful_hand_count()), _state.get_required_hands()]
 	if not _state.get_challenge_terms().is_empty():
 		_status_label.text += "\n" + ContractChallenges.description(_state.get_contract_id())
 		if _state.get_contract_id() in [ContractDefinitions.SIDESTREET,ContractDefinitions.SIDESTREET_BRIEF]: _status_label.text += " Successful redraws: %d" % _state.get_challenge_redraws()
@@ -552,7 +552,7 @@ func _refresh_actions() -> void:
 	if _state == null: return
 	var animating := hand_motion != null and hand_motion.busy
 	_change_priorities.disabled = animating or not can_edit_priorities()
-	var plan := _state.plan_hand(_selected_cards()) if _selected_views.size() == HAND_SIZE else {}
+	var plan := _state.plan_hand(_selected_cards()) if not _selected_views.is_empty() and _selected_views.size() <= HAND_SIZE else {}
 	_play_button.disabled = animating or _state.is_completed() or plan.is_empty() or not _run.can_complete_contract_hand(_state,plan)
 	_play_button.tooltip_text = _run.get_financial_block_reason() if _play_button.disabled else ""
 	_redraw_button.text = "Redraw Selected (%d/4)" % _run.get_available_redraws()

@@ -1,6 +1,7 @@
 class_name StudioFanbase
 extends RefCounted
 const Clock := preload("res://scripts/calendar/calendar_clock.gd")
+const AwardReceipts := preload("res://scripts/awards/award_receipts.gd")
 ## First playable fan rules. The numerical rates are deliberately kept here so
 ## the fan economy can be tuned without changing sales or settlement.
 const CONVERSION_PERCENT := 8
@@ -122,7 +123,11 @@ static func schema() -> Dictionary:
 	var old := {"fans":"uint", "last_cycle":"uint", "releases":CheckpointSchema.map_of("id", release), "months":CheckpointSchema.array_of(month)}
 	var current: Dictionary = old.duplicate(true)
 	current.calendar = CheckpointSchema.fields("version legacy_until")
-	return CheckpointSchema.union_of([old,current])
+	var awarded_old: Dictionary = old.duplicate(true)
+	awarded_old.annual_awards = CheckpointSchema.array_of(AwardReceipts.schema())
+	var awarded_current: Dictionary = current.duplicate(true)
+	awarded_current.annual_awards = CheckpointSchema.array_of(AwardReceipts.schema())
+	return CheckpointSchema.union_of([old,current,awarded_old,awarded_current])
 
 static func _neutral_schema(source: Dictionary) -> Dictionary:
 	var result := source.duplicate(true)
@@ -137,6 +142,7 @@ static func _neutral_schema(source: Dictionary) -> Dictionary:
 ## the live RunState, nor does it manufacture Fan history for older saves.
 static func validate(state: Dictionary, records: Dictionary, metadata: Dictionary, cycle: int, starting_fans: int = 0, closed_historical_ids: Dictionary = {}, historical_close_cycle: int = -1) -> bool:
 	var calendar: Dictionary = state.get("calendar",{})
+	if not AwardReceipts.validate(state,metadata,cycle): return false
 	if not Clock.valid(calendar) or state.last_cycle != cycle or state.months.size() != Clock.month(cycle,calendar)-1 or records.keys() != metadata.keys() or records.keys() != state.releases.keys(): return false
 	if historical_close_cycle < -1 or historical_close_cycle > cycle or (historical_close_cycle == -1 and not closed_historical_ids.is_empty()): return false
 	var launches := {}
@@ -149,6 +155,8 @@ static func validate(state: Dictionary, records: Dictionary, metadata: Dictionar
 		launches[meta.release_cycle].append(id)
 	var rebuilt := create(starting_fans,calendar)
 	var current := {}
+	var awards := {}
+	for row: Dictionary in state.get("annual_awards",[]): awards[row.cycle]=row
 	for boundary in range(cycle + 1):
 		if boundary > 0:
 			var next := {}
@@ -167,7 +175,22 @@ static func validate(state: Dictionary, records: Dictionary, metadata: Dictionar
 			rebuilt = plan(rebuilt, current, next, boundary, closed_historical_ids if boundary > historical_close_cycle else {})
 			if rebuilt.is_empty(): return false
 			current = next
-		for id: StringName in launches.get(boundary, []):
+		var award: Dictionary = awards.get(boundary,{})
+		var ordered: Array = launches.get(boundary,[]).duplicate()
+		if not award.is_empty():
+			# A native before list may be Array[StringName]; construct a fresh
+			# untyped event sequence so the cutoff marker is representable.
+			ordered = []
+			ordered.append_array(award.before)
+			ordered.append(null) # Committed-event cutoff between launch groups.
+			for id: StringName in launches.get(boundary,[]):
+				if not award.before.has(id): ordered.append(id)
+		for launch: Variant in ordered:
+			if launch==null:
+				rebuilt=AwardReceipts.plan(rebuilt,award)
+				if rebuilt.is_empty(): return false
+				continue
+			var id: StringName = launch
 			if metadata[id].review.launch_fans != rebuilt.fans: return false
 			var final: Dictionary = records[id]
 			var initial := ReleasedGameSales.create(id, final.total_units, final.review_tenths, final.launch_awareness, final.market_bp,int(final.get("market_clock_offset",0)),final.get("calendar",{}),final.get("run_calendar",{}))

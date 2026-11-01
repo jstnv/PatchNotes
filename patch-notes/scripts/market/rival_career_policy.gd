@@ -126,6 +126,19 @@ func _hand(session: RefCounted,view: Dictionary,production: bool) -> Array[int]:
 						else:score+=marketing*0.1
 						features=0
 					if features>best_features or (features==best_features and score>value):best_features=features;value=score;best=tokens
+	if best.is_empty():
+		for row: Dictionary in cards:
+			if not by_token.has(int(row.token)): continue
+			var selected: Array[CardData] = [by_token[int(row.token)]]
+			if production:
+				if not session.development.hand.can_play_pass_budget(selected) or not session.development.hand.calculate_base(selected).get("valid",false): continue
+				var fee: int = run.primitive_feature_hand_cost_cents(selected,session.project_id())
+				if fee < 0 or not run.can_complete_productive_cycle(-fee): continue
+			else:
+				if row.type != "beta" or row.beta_category == "insider" or not run.can_complete_productive_cycle(0): continue
+			best.assign([int(row.token)])
+			break
+
 	return best
 
 func choose(session: RefCounted,view: Dictionary) -> Dictionary:
@@ -199,7 +212,7 @@ func choose(session: RefCounted,view: Dictionary) -> Dictionary:
 		if int(card.token) in tokens:
 			if card.qa_operation=="search":_search+=int(card.beta_value)
 			if card.beta_category=="marketing":_marketing+=int(card.beta_value)
-	return _dev(view,&"play",{"candidate_ids":tokens}) if tokens.size()==4 else {"type":&"blocked","payload":{"reason":"No legal Beta hand"}}
+	return _dev(view,&"play",{"candidate_ids":tokens}) if not tokens.is_empty() else {"type":&"blocked","payload":{"reason":"No legal Beta hand"}}
 
 func observe_result(view: Dictionary,choice: Dictionary,result: Dictionary) -> void:
 	if result.get("ok",false) and choice.get("type")==&"bank_borrow":state["loan_project"]=view.releases.size()+1

@@ -9,7 +9,8 @@ func _initialize() -> void:
 	ProjectSettings.set_setting("gameplay/beta/insider_enabled",true)
 	await process_frame
 	mode = OS.get_environment("PN_DEVELOPMENT_MODE")
-	var modes := [mode] if not mode.is_empty() else ["live", "headless"]
+	# Frozen rules and current rules have separate evidence paths; never rebaseline the oracle.
+	var modes := [mode] if not mode.is_empty() else ["oracle", "live", "headless"]
 	var live_hashes: Array = []
 	for selected_mode in modes:
 		mode = selected_mode
@@ -41,6 +42,9 @@ func development_cases(database: Node) -> void:
 	for seed_value in [1104,4417,90210]:
 		for scenario in ["normal", "tutorial", "lean", "under_scope"]:
 			var project := ProjectState.new(300 if scenario=="under_scope" else 30)
+			if mode=="oracle":
+				project.set("_pass_budget_version",0)
+				project.set("_pass_budget_origin","")
 			project.set("_release_id",&"development_replay_project")
 			project.initialize_snapshots(&"fast_follower",&"market_surge")
 			var run := RunState.new()
@@ -134,9 +138,11 @@ func development_cases(database: Node) -> void:
 				if mode!="headless": phase.free()
 			traces.append({"seed":seed_value,"scenario":scenario,"steps":steps})
 	var digests: Array = []
-	for trace in traces: digests.append({"seed":trace.seed,"scenario":trace.scenario,"sha256":version7_oracle_digest(trace, ["state"])})
+	for trace in traces:
+		var digest: String = version7_oracle_digest(trace,["state"]) if mode=="oracle" else JSON.stringify(trace).sha256_text()
+		digests.append({"seed":trace.seed,"scenario":trace.scenario,"sha256":digest})
 	var fixture:="res://scripts/debug/fixtures/development_replay_oracle_digests.json"
-	if mode!="oracle":
+	if mode=="oracle":
 		_expect(FileAccess.file_exists(fixture),"Pinned development oracle exists")
 		if FileAccess.file_exists(fixture): _expect(JSON.parse_string(JSON.stringify(digests))==JSON.parse_string(FileAccess.get_file_as_string(fixture)),mode+" development traces match original")
 	var output:=OS.get_environment("PN_CARD_FRAME_OUTPUT")
