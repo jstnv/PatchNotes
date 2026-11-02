@@ -24,8 +24,14 @@ var _busy := false
 var _body: VBoxContainer
 var _heading: Label
 var _progress: Label
-var _counter_tween: Tween
 var _targets: Array = []
+var _bar_fills: Array = []
+var _bar_tracks: Array = []
+var _maximum_score := 1
+var _counter_elapsed := 0.0
+var _counter_running := false
+var _first_visible_frame := false
+const COUNTER_SECONDS := 1.4
 
 func configure(result: Dictionary, initial_stage: int, first_ceremony: bool, skip_preference: bool) -> void:
 	_result = result.duplicate(true)
@@ -116,6 +122,8 @@ func _render() -> void:
 		child.queue_free()
 	score_labels.clear()
 	_targets.clear()
+	_bar_fills.clear()
+	_bar_tracks.clear()
 	podium = null
 	tie_note = null
 	_progress.text = "ANNUAL GAME AWARDS · %d · %d / 10" % [int(_result.get("year", 0)), stage + 1]
@@ -135,7 +143,7 @@ func _render() -> void:
 		FolderUI.label(_body, "Cutoff: the completed world transaction reaching December Week 2 (cycle %d). Only current-year releases committed by that snapshot qualify. A later release in the same displayed week is excluded." % int(_result.get("cutoff_cycle", 0)))
 		FolderUI.label(_body, "Graphics · Sound · Technology · Design\nRising Studio · Studio of the Year · Game of the Year", &"HeadingLabel")
 		FolderUI.label(_body, "Every nomination: +10 Fans. Every winner: an additional +40 Fans and +5 banked Awareness for its next successful release. Studios can earn multiple nominations and wins.")
-		FolderUI.label(_body, "Category awards use released Core. Game of the Year uses released Review. Rising Studio counts positive Fans recruitment; Studio of the Year uses Fans before award gifts.")
+		FolderUI.label(_body, "Category awards use released Graphics, Sound, Technology and Design scores. Game of the Year uses released Review. Rising Studio counts positive Fans recruitment; Studio of the Year uses Fans before award gifts.")
 	elif stage == 9:
 		_heading.text = "The final results"
 		_final_results()
@@ -151,8 +159,9 @@ func _render() -> void:
 func _award(award: Dictionary) -> void:
 	_heading.text = str(award.get("name", "Annual award"))
 	var kind := str(award.get("metric_kind", "core"))
+	var category := str(award.get("id", ""))
 	var nominees: Array = award.get("nominees", [])
-	FolderUI.label(_body, "Released Review" if kind == "review_tenths" else ("Positive Fans earned this year" if kind == "gained_fans" else ("Fans before award gifts" if kind == "fans" else "Released category Core")))
+	FolderUI.label(_body, "Released Review" if kind == "review_tenths" else ("Positive Fans earned this year" if kind == "gained_fans" else ("Fans before award gifts" if kind == "fans" else "Released "+core_category(category))))
 	podium = HBoxContainer.new()
 	podium.name = "Podium"
 	podium.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -160,6 +169,10 @@ func _award(award: Dictionary) -> void:
 	_body.add_child(podium)
 	score_labels.resize(nominees.size())
 	_targets.resize(nominees.size())
+	_bar_fills.resize(nominees.size())
+	_bar_tracks.resize(nominees.size())
+	_maximum_score=1
+	for row: Dictionary in nominees: _maximum_score=maxi(_maximum_score,int(row.score))
 	# Spatial podium: second / first / third. Frozen rank never changes as scores animate.
 	for place in [1, 0, 2]:
 		var column := VBoxContainer.new()
@@ -172,27 +185,47 @@ func _award(award: Dictionary) -> void:
 		card.add_child(text)
 		if place < nominees.size():
 			var row: Dictionary = nominees[place]
-			var rank := FolderUI.label(text, "#%d%s" % [int(row.rank), " · WINNER" if int(row.rank) == 1 else ""], &"HeadingLabel")
+			var rank := FolderUI.label(text, "#%d%s" % [int(row.rank), " · WINNER" if int(row.rank) == 1 else ""], &"FolderHeading")
 			rank.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			if not str(row.title).is_empty(): FolderUI.label(text, str(row.title), &"HeadingLabel").horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			if not str(row.title).is_empty(): FolderUI.label(text, str(row.title), &"FolderHeading").horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			FolderUI.label(text, str(row.studio_name)).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			var score := FolderUI.label(text, format_score(0, kind), &"MetadataLabel")
+			var score := FolderUI.label(text, format_score(0, kind,category), &"FolderHeading")
 			score.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			score_labels[place] = score
-			_targets[place] = {"score": int(row.score), "kind": kind}
+			_targets[place] = {"score": int(row.score), "kind": kind,"category":category}
 		else:
 			var empty := FolderUI.label(text, "No eligible nominee")
 			empty.name = "EmptyPlace"
 			empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		var step := PanelContainer.new()
-		step.custom_minimum_size.y = [100, 64, 36][place]
-		var style := StyleBoxFlat.new()
-		style.bg_color = FolderUI.color(&"cyan") if place == 0 else FolderUI.color(&"secondary")
-		style.border_color = FolderUI.color(&"cyan")
-		style.set_border_width_all(1)
-		step.add_theme_stylebox_override("panel", style)
-		column.add_child(step)
-		var caption := FolderUI.label(step, str(place + 1), &"HeadingLabel")
+		var track := Control.new()
+		track.name="ScoreTrack%d"%[place+1]
+		track.custom_minimum_size.y=180
+		track.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		column.add_child(track)
+		var fill := ColorRect.new()
+		fill.name="ScoreBar%d"%[place+1]
+		fill.color=FolderUI.color(&"cyan") if place==0 else FolderUI.color(&"secondary").lerp(FolderUI.color(&"cyan"),0.45)
+		fill.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		track.add_child(fill)
+		fill.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+		var baseline := ColorRect.new()
+		baseline.color=FolderUI.color(&"cyan")
+		baseline.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+		baseline.offset_top=-1
+		baseline.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		track.add_child(baseline)
+		if place<nominees.size():
+			_bar_fills[place]=fill
+			_bar_tracks[place]=track
+		var caption := FolderUI.label(track, str(place + 1), &"FolderHeading")
+		caption.name="PodiumRank%d"%[place+1]
+		caption.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+		caption.offset_left=-26;caption.offset_right=26
+		var rank_plate:=StyleBoxFlat.new()
+		rank_plate.bg_color=FolderUI.color(&"background")
+		rank_plate.set_corner_radius_all(6);rank_plate.corner_detail=1
+		caption.add_theme_stylebox_override("normal",rank_plate)
+		caption.offset_top=-36
 		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	tie_note = FolderUI.label(_body, "Equal scores keep a deterministic order: ascending Studio ID, then ascending release ID. Sales do not break ties.")
@@ -203,14 +236,32 @@ func _award(award: Dictionary) -> void:
 	tie_note.visible = tied
 	if nominees.is_empty(): FolderUI.label(_body, "No eligible nominees this year. No winner or award gift was created.")
 	if animate_counters and not nominees.is_empty():
-		_counter_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-		_counter_tween.tween_method(_counter_progress, 0.0, 1.0, 0.85).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		_counter_tween.tween_callback(finish_counters)
+		_counter_elapsed=0.0
+		_counter_running=true
+		_first_visible_frame=false
+		_counter_progress(0.0)
+		set_process(true)
 	else: finish_counters()
 
-static func format_score(value: int, kind: String) -> String:
+static func core_category(id: String) -> String:
+	return {"graphics":"Graphics","sound":"Sound","technology":"Technology","design":"Design"}.get(id,"Core")
+
+static func format_score(value: int, kind: String, category: String = "") -> String:
 	if kind == "review_tenths": return "%d.%d / 10" % [value / 10, value % 10]
-	return str(value) + (" Core" if kind == "core" else " Fans")
+	return str(value) + (" "+core_category(category) if kind == "core" else " Fans")
+
+func _process(delta: float) -> void:
+	if not _counter_running or not panel.is_visible_in_tree(): return
+	# Shared navigation starts below the window. Preserve the0 frame until the
+	# actual page is in view; hidden/save/layout time cannot consume its reveal.
+	if not get_viewport_rect().encloses(panel.get_global_rect().grow(-2)): return
+	if not _first_visible_frame:
+		_first_visible_frame=true
+		return
+	_counter_elapsed+=minf(delta,0.05)
+	var progress:=minf(1.0,_counter_elapsed/COUNTER_SECONDS)
+	_counter_progress(1.0-pow(1.0-progress,3.0))
+	if progress>=1.0:finish_counters()
 
 func _counter_progress(progress: float) -> void:
 	for index in score_labels.size():
@@ -218,12 +269,18 @@ func _counter_progress(progress: float) -> void:
 			# Final integers come directly from the frozen result, never a float
 			# round trip (large valid Fan totals may exceed float exactness).
 			var value: int = _targets[index].score if progress >= 1.0 else roundi(float(_targets[index].score) * progress)
-			score_labels[index].text = format_score(value, _targets[index].kind)
+			score_labels[index].text = format_score(value, _targets[index].kind,_targets[index].category)
+			if is_instance_valid(_bar_fills[index]) and is_instance_valid(_bar_tracks[index]):
+				var fill: Control=_bar_fills[index]
+				# Relative anchors survive Container layout and later window resizes,
+				# including immediate completion before a track has its first width.
+				fill.anchor_top=1.0-float(_targets[index].score)/float(_maximum_score)*progress
+				fill.offset_top=0.0
+				fill.offset_bottom=0.0
 
 func finish_counters() -> void:
-	if _counter_tween != null:
-		_counter_tween.kill()
-		_counter_tween = null
+	_counter_running=false
+	set_process(false)
 	_counter_progress(1.0)
 
 func _final_results() -> void:
@@ -232,7 +289,7 @@ func _final_results() -> void:
 		var nominees: Array = award.get("nominees", [])
 		if nominees.is_empty(): FolderUI.label(_body, "No eligible nominees")
 		for row: Dictionary in nominees:
-			FolderUI.label(_body, "#%d · %s%s · %s" % [int(row.rank), str(row.studio_name), " — " + str(row.title) if not str(row.title).is_empty() else "", format_score(int(row.score), str(award.metric_kind))])
+			FolderUI.label(_body, "#%d · %s%s · %s" % [int(row.rank), str(row.studio_name), " — " + str(row.title) if not str(row.title).is_empty() else "", format_score(int(row.score), str(award.metric_kind),str(award.id))])
 	FolderUI.label(_body, "Recorded rewards", &"HeadingLabel")
 	for reward: Dictionary in _result.get("rewards", []):
 		var studio_name := str(reward.studio_id)

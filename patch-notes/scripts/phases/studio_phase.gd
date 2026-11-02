@@ -1,6 +1,7 @@
 class_name StudioPhase
 extends Control
 const Clock := preload("res://scripts/calendar/calendar_clock.gd")
+const HUB_GROUPS := [&"studio_info", &"management", &"market", &"production"]
 
 signal tutorial_context_changed(context: StringName)
 
@@ -50,6 +51,7 @@ var _hub_motion: MenuTransitions
 var _returning_destination := false
 var _destination_layer: CanvasLayer
 var _destination_fits: Array[Dictionary]=[]
+var _overview: Control
 
 func set_rival_world(world: RivalWorld) -> void:
 	_rival_world = world
@@ -63,6 +65,8 @@ func _refresh_rivals() -> void:
 
 
 func _ready() -> void:
+	FolderUI.enable_menu_gamepad()
+	theme=preload("res://resources/ui/onyx_theme.tres")
 	resized.connect(_fit_dashboard)
 	%Dashboard.visibility_changed.connect(_dashboard_visibility_changed)
 	%Dashboard.minimum_size_changed.connect(_fit_dashboard)
@@ -76,7 +80,7 @@ func _ready() -> void:
 	_market_button.pressed.connect(_open_market)
 	%PostGameSummaries.get_parent().add_child(_market_button)
 	%PostGameSummaries.get_parent().move_child(_market_button,1)
-	%FeatureStoreButton.pressed.connect(_open_feature_store)
+	%FeatureStoreButton.hide()
 	%Employees.disabled = true
 	%Employees.tooltip_text = "Unlocks after releasing 2 games."
 	%Employees.pressed.connect(_open_employees)
@@ -92,7 +96,6 @@ func _ready() -> void:
 	%CampaignButton.pressed.connect(_purchase_selected_campaign)
 	%GameList.item_selected.connect(_on_game_selected)
 	%PostGameSummaries.tooltip_text = "Browse every released game, its category Reviews, and earned versus projected sales. Opening is free."
-	%FeatureStoreButton.tooltip_text = "Browse owned Features, prices and prerequisites. Opening the Store costs no cycles."
 	%StartNextGame.tooltip_text = "Name the next game and choose its Genre and Theme. Opening setup is free."
 	if _run_state != null:
 		_refresh_game_list()
@@ -122,27 +125,30 @@ func _menu_page(key: StringName,title: String) -> VBoxContainer:
 func _build_management_menu() -> void:
 	_hub_motion=MenuTransitions.new();_hub_motion.name="StudioNavigation";_hub_motion.automatic_entrances=false;add_child(_hub_motion)
 	_hub=preload("res://scripts/ui/studio_hub.gd").new();_hub.motion=_hub_motion;%Dashboard.add_child(_hub)
-	var market: VBoxContainer=_hub.add_group(&"market","Market Info")
+	_overview=_hub.overview;_overview.bind_run(_run_state)
+	var studio_info: VBoxContainer=_hub.add_group(&"studio_info","Studio Info")
 	var management: VBoxContainer=_hub.add_group(&"management","Studio Management")
+	var market: VBoxContainer=_hub.add_group(&"market","Market Info")
 	var production: VBoxContainer=_hub.add_group(&"production","Start Production")
-	_menu_panels[&"market"]=market;_menu_panels[&"management"]=management;_menu_panels[&"production"]=production
-	for entry in [[&"market","MarketInfoButton"],[&"management","StudioManagementButton"],[&"production","StartProductionButton"]]:
+	_menu_panels[&"studio_info"]=studio_info;_menu_panels[&"market"]=market;_menu_panels[&"management"]=management;_menu_panels[&"production"]=production
+	for entry in [[&"studio_info","StudioInfoMenuButton"],[&"management","StudioManagementButton"],[&"market","MarketInfoButton"],[&"production","StartProductionButton"]]:
 		var button: Button=_hub.root_buttons[entry[0]];button.name=entry[1];button.owner=self;button.unique_name_in_owner=true;_menu_buttons[entry[0]]=button
 	_management_button=_menu_buttons[&"management"];_management_panel=management
 	_hub.selection_changed.connect(func(id: StringName):_active_menu=id;_refresh_dashboard_actions();tutorial_context_changed.emit(&"studio"))
 	_market_button.reparent(market,false);%PublisherList.reparent(market,false)
 	_menu_button(market,"Rival Info","RivalInfoButton",_open_rival_info)
-	%FeatureStoreButton.reparent(management,false);%Employees.reparent(management,false);%PostGameSummaries.reparent(management,false)
+	%Employees.reparent(management,false)
 	_menu_button(management,"Engines","StudioEnginesButton",_open_engines)
-	_menu_button(management,"Bank","StudioBankButton",_open_bank)
-	_menu_button(management,"Studio Info","StudioInfoButton",_open_studio_info)
+	_menu_button(studio_info,"Studio Info","StudioInfoButton",_open_studio_info)
+	%PostGameSummaries.reparent(studio_info,false)
+	_menu_button(studio_info,"Bank","StudioBankButton",_open_bank)
 	%StartNextGame.reparent(production,false);%Contracts.reparent(production,false)
 	$Dashboard/Layout.hide()
 	_hub_motion.set_root(%Dashboard)
 
 func _hide_menu_pages() -> void:
 	for key: StringName in _menu_panels:
-		if key not in [&"market",&"management",&"production"]:_menu_panels[key].hide()
+		if key not in HUB_GROUPS:_menu_panels[key].hide()
 
 func _show_group(key: StringName,focus: Control=null) -> void:
 	%SummaryPanel.hide();%Dashboard.show();_active_menu=key
@@ -181,10 +187,15 @@ func _present_destination(view: Control,focus: Control=null,layer: CanvasLayer=n
 			view.get_node("Margin").add_theme_constant_override("margin_top",28)
 			view.get_node("Margin").add_theme_constant_override("margin_left",32)
 			view.get_node("Margin").add_theme_constant_override("margin_right",32)
-	var group: StringName=_active_menu if _active_menu in [&"market",&"management",&"production"] else &"production"
+	var group: StringName=_active_menu if _active_menu in HUB_GROUPS else &"production"
 	_destination_layer=layer
+	var layer_ref: WeakRef=weakref(layer) if is_instance_valid(layer) else null
+	var view_ref: WeakRef=weakref(view)
 	var closed:=func():
-		if is_instance_valid(layer):layer.hide();view.remove_meta("folder_navigation_managed")
+		var current_layer: CanvasLayer=layer_ref.get_ref() if layer_ref!=null else null
+		var current_view: Control=view_ref.get_ref()
+		if is_instance_valid(current_layer):current_layer.hide()
+		if is_instance_valid(current_view):current_view.remove_meta("folder_navigation_managed")
 		_destination_layer=null;_returning_destination=false
 		if _hub_motion.depth()==1:_show_group(group)
 	if view.get_parent()==self:
@@ -194,12 +205,12 @@ func _present_destination(view: Control,focus: Control=null,layer: CanvasLayer=n
 	_hub_motion.push_from_bottom(view,focus,closed,get_global_rect().end.y)
 
 func _destination_invoker(view: Control) -> Control:
-	for pair in [[_engine_browser,get_node_or_null("%StudioEnginesButton")],[_feature_store,%FeatureStoreButton],[_employees_panel,%Employees],[_rival_info,get_node_or_null("%RivalInfoButton")],[_studio_info,get_node_or_null("%StudioInfoButton")],[_market_browser,_market_button],[_publisher_browser,%PublisherList],[_predevelopment,%StartNextGame],[_contract_detail,%Contracts],[%SummaryPanel,%PostGameSummaries],[_review_view,%DetailedReviewButton],[_monthly_report,%MonthlySalesButton]]:
+	for pair in [[_engine_browser,get_node_or_null("%StudioEnginesButton")],[_feature_store,get_node_or_null("%StudioEnginesButton")],[_employees_panel,%Employees],[_rival_info,get_node_or_null("%RivalInfoButton")],[_studio_info,get_node_or_null("%StudioInfoButton")],[_market_browser,_market_button],[_publisher_browser,%PublisherList],[_predevelopment,%StartNextGame],[_contract_detail,%Contracts],[%SummaryPanel,%PostGameSummaries],[_review_view,%DetailedReviewButton],[_monthly_report,%MonthlySalesButton]]:
 		if pair[0]==view:return pair[1]
 	return get_node_or_null("%StudioBankButton") if is_instance_valid(_destination_layer) else null
 
 func _close_menu(key: StringName) -> void:
-	if key==&"info":_open_management(get_node("%StudioInfoButton"));return
+	if key==&"info":_open_menu(&"studio_info",get_node("%StudioInfoButton"));return
 	if key==&"engines":_open_management(get_node("%StudioEnginesButton"));return
 	if _hub_motion.depth()>1:_open_menu(key);return
 	_hub.close_group();_menu_buttons[key].grab_focus()
@@ -225,13 +236,14 @@ func _open_studio_info() -> void:
 		FolderUI.label(choices,StudioTraits.summary(_run_state.get_studio_traits()))
 	_hide_menu_pages();_studio_info.show();_present_destination(_studio_info,_studio_info.find_child("Back",true,false))
 
-func _open_engines() -> void:
+func _open_engines(detail_id: StringName=&"") -> void:
 	if _engine_browser==null:
 		_engine_browser=preload("res://scripts/ui/engine_market_browser.gd").new()
 		add_child(_engine_browser);_menu_panels[&"engines"]=_engine_browser
 		_engine_browser.closed.connect(_close_menu.bind(&"engines"))
+		_engine_browser.configure_requested.connect(_open_feature_store)
 	_hide_menu_pages();%Dashboard.hide();%SummaryPanel.hide();
-	_engine_browser.open(_run_state,_rival_world)
+	_engine_browser.open(_run_state,_rival_world,detail_id)
 	_present_destination(_engine_browser,_engine_browser.find_child("Back",true,false))
 	tutorial_context_changed.emit(&"studio")
 
@@ -246,7 +258,7 @@ func _open_bank() -> void:
 		ancestor=ancestor.get_parent()
 
 func _bank_closed() -> void:
-	if is_instance_valid(_destination_layer):_open_management(get_node("%StudioBankButton"))
+	if is_instance_valid(_destination_layer):_open_menu(&"studio_info",get_node("%StudioBankButton"))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not MenuTransitions.cancel_pressed(event):return
@@ -333,9 +345,12 @@ func _show_pending_publisher_notice() -> void:
 	if _publisher_notice == null:
 		_publisher_notice = PanelContainer.new()
 		_publisher_notice.name = "PublisherUnlockNotice"
-		_hub.add_child(_publisher_notice)
-		_publisher_notice.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-		_publisher_notice.offset_left=-300;_publisher_notice.offset_top=12;_publisher_notice.size=Vector2(300,0)
+		# The decorative overview area owns notifications; menus and values stay clear.
+		_overview.notice_host.add_child(_publisher_notice)
+		_publisher_notice.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+		_publisher_notice.offset_left=12;_publisher_notice.offset_right=312
+		_publisher_notice.offset_top=-112;_publisher_notice.offset_bottom=-12
+		_publisher_notice.grow_vertical=Control.GROW_DIRECTION_BEGIN
 		var row := HBoxContainer.new()
 		_publisher_notice.add_child(row)
 		var message := Label.new()
@@ -408,7 +423,7 @@ func close_summary(to_dashboard := false) -> void:
 	if to_dashboard:
 		_open_menu(&"production",_menu_buttons[&"production"])
 	else:
-		_open_management(%PostGameSummaries)
+		_open_menu(&"studio_info",%PostGameSummaries)
 	tutorial_context_changed.emit(&"studio")
 
 
@@ -462,7 +477,7 @@ func open_monthly_sales() -> void:
 	_present_destination(_monthly_report)
 
 
-func _open_contracts(select_id: StringName = &"") -> void:
+func _open_contracts(select_id: StringName = &"",preview_only: bool=false) -> void:
 	_hide_menu_pages()
 	if _run_state == null:
 		return
@@ -483,7 +498,7 @@ func _open_contracts(select_id: StringName = &"") -> void:
 	for i in range(choices.size()):
 		if choices[i].offer_id==select_id:_selected_contract_offer_id=select_id;_contract_chooser.select(i)
 	_contract_chooser.visible = choices.size()>1
-	_configure_contract_detail()
+	_configure_contract_detail(preview_only)
 	%SummaryPanel.hide()
 	%Dashboard.hide()
 	_contract_detail.show()
@@ -513,6 +528,7 @@ func _ensure_contract_detail() -> void:
 	var title := Label.new()
 	title.name = "ContractDetailTitle"
 	title.text = "Balanced Primitive Contract"
+	title.theme_type_variation=&"HeadingLabel"
 	title.add_theme_font_size_override("font_size", 26)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
@@ -557,7 +573,7 @@ func _ensure_contract_detail() -> void:
 	layout.add_child(scroll)
 	var details := Label.new()
 	details.name = "ContractDetailText"
-	details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum total payout: $2,400.00\nAccept for a guaranteed %s immediately; completion pool %s pays proportionally after hand two.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cycles. The contract cannot be abandoned after acceptance." % [CashFormatter.format_exact_cents(_run_state.get_ironclad_advance_cents()),CashFormatter.format_exact_cents(240000-_run_state.get_ironclad_advance_cents())]
+	details.text = "Publisher: Ironclad Interactive\nTwo production hands · one to four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum total payout: $2,400.00\nAccept for a guaranteed %s immediately; completion pool %s pays proportionally after hand two.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cycles. The contract cannot be abandoned after acceptance." % [CashFormatter.format_exact_cents(_run_state.get_ironclad_advance_cents()),CashFormatter.format_exact_cents(240000-_run_state.get_ironclad_advance_cents())]
 	details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(details)
@@ -572,12 +588,15 @@ func _ensure_contract_detail() -> void:
 	actions.add_child(accept)
 
 
-func _configure_contract_detail() -> void:
+func _configure_contract_detail(preview_only: bool=false) -> void:
 	_contract_engine_picker.bind(_run_state)
 	var title := _contract_detail.find_child("ContractDetailTitle", true, false) as Label
-	_refresh_contract_search()
+	if preview_only:
+		_search_quote={};_search_action.disabled=true;_prepare_found.hide()
+		_search_status.text="Tour preview: searching advances one productive cycle. No search is performed during this tour."
+	else:_refresh_contract_search()
 	var accept: Button=_contract_detail.find_child("AcceptContractButton",true,false)
-	accept.disabled=_selected_contract_offer_id.is_empty()
+	accept.disabled=preview_only or _selected_contract_offer_id.is_empty()
 	if _selected_contract_offer_id.is_empty():
 		title.text="Contract Search"
 		var copy: Label=_contract_detail.find_child("ContractDetailText",true,false)
@@ -589,7 +608,7 @@ func _configure_contract_detail() -> void:
 	if not brief.is_empty() and brief.offer_id == _selected_contract_offer_id:
 		_selected_contract_quote = {}
 		title.text = "SideStreet Reputation Brief"
-		details.text = "Two successful hands · four cards per hand\nTargets: Scope 10 · Graphics / Sound / Technology / Design 3 each\nNo advance, cash, Promotion or Investment. Up to 10 Reputation.\nAward: 10 × the lower of completion and promise, rounded down to 0.01 Reputation. Completion uses the existing 64-unit denominator.\nPromise: finish at Scope 10 or less with no successful redraws for 100%; Scope 11 gives 50%; Scope 12+ or any successful redraw gives 0%.\nEach played hand costs one productive calendar cycle. Rent, payroll and Bank obligations continue.\nAcceptance and browsing cost no cycles. The Brief cannot be abandoned. This does not count as a completed cash Contract.\nReputation 20 unlocks an optional publisher-owned commission; access does not spend standing."
+		details.text = "Two successful hands · one to four cards per hand\nTargets: Scope 10 · Graphics / Sound / Technology / Design 3 each\nNo advance, cash, Promotion or Investment. Up to 10 Reputation.\nAward: 10 × the lower of completion and promise, rounded down to 0.01 Reputation. Completion uses the existing 64-unit denominator.\nPromise: finish at Scope 10 or less with no successful redraws for 100%; Scope 11 gives 50%; Scope 12+ or any successful redraw gives 0%.\nEach played hand costs one productive calendar cycle. Rent, payroll and Bank obligations continue.\nAcceptance and browsing cost no cycles. The Brief cannot be abandoned. This does not count as a completed cash Contract.\nReputation 20 unlocks an optional publisher-owned commission; access does not spend standing."
 		return
 	_selected_contract_quote = _run_state.get_publisher_contract_offer(_selected_contract_offer_id)
 	if not _selected_contract_quote.is_empty():
@@ -597,17 +616,17 @@ func _configure_contract_detail() -> void:
 		var terms: Dictionary = quote.terms
 		title.text = PublisherCatalog.name_for(quote.publisher_id)+" Contract"
 		if quote.publisher_id==PublisherCatalog.STARWAVE:
-			details.text = "Three production hands · four cards per hand\nTargets: Scope 14 · Graphics/Sound/Technology/Design 7 each\nAdvance on acceptance: $0.00\nBase maximum cash: $2,240.00, paid only after hand three. Hands one and two pay $0.00.\nCash scales with capped Scope and Core completion, rounded down to cents; no minimum completion is required.\nNo Promotion from this Contract. Existing awards are unchanged.\nYour %d owned Primitive Features and Core Passes are frozen at acceptance.\nEach hand costs one productive cycle; Feature play costs $0.\nAcceptance and browsing cost no cycles. This Contract cannot be abandoned." % quote.eligible.size()
+			details.text = "Three production hands · one to four cards per hand\nTargets: Scope 14 · Graphics/Sound/Technology/Design 7 each\nAdvance on acceptance: $0.00\nBase maximum cash: $2,240.00, paid only after hand three. Hands one and two pay $0.00.\nCash scales with capped Scope and Core completion, rounded down to cents; no minimum completion is required.\nNo Promotion from this Contract. Existing awards are unchanged.\nYour %d owned Primitive Features and Core Passes are frozen at acceptance.\nEach hand costs one productive cycle; Feature play costs $0.\nAcceptance and browsing cost no cycles. This Contract cannot be abandoned." % quote.eligible.size()
 			details.text = details.text.replace("No Promotion from this Contract. Existing awards are unchanged.", "No base Promotion. A separate challenge can award up to $100 and 4 Promotion for the next successful launch.")
 			details.text += "\n" + ContractChallenges.description(PublisherTrialTerms.STARWAVE)
 			return
 		var focus := "Balanced Cores: each Core target 4, with an additional weakest-Core share." if quote.focus<0 else "Frozen Core focus: %s (target 9); other Core targets: 2 each." % String(PublisherTrialTerms.STATS[quote.focus]).capitalize()
-		details.text = "Two production hands · four cards per hand\nScope target: %d\n%s\nAdvance on acceptance: %s\nBase maximum cash (including advance): %s\nMaximum Promotion: %d Awareness for your next successful launch.\nCash and whole Promotion are separately rounded down according to completion.\nYour %d owned Primitive Features and Core Passes are frozen at acceptance.\nEach hand costs one productive cycle; Feature play costs $0.\nAcceptance and browsing cost no cycles. This Contract cannot be abandoned." % [terms.scope,focus,CashFormatter.format_exact_cents(terms.advance_cents),CashFormatter.format_exact_cents(terms.cash_cents),terms.promotion,quote.eligible.size()]
+		details.text = "Two production hands · one to four cards per hand\nScope target: %d\n%s\nAdvance on acceptance: %s\nBase maximum cash (including advance): %s\nMaximum Promotion: %d Awareness for your next successful launch.\nCash and whole Promotion are separately rounded down according to completion.\nYour %d owned Primitive Features and Core Passes are frozen at acceptance.\nEach hand costs one productive cycle; Feature play costs $0.\nAcceptance and browsing cost no cycles. This Contract cannot be abandoned." % [terms.scope,focus,CashFormatter.format_exact_cents(terms.advance_cents),CashFormatter.format_exact_cents(terms.cash_cents),terms.promotion,quote.eligible.size()]
 		details.text += "\nSeparate challenge bonus: up to $100 and 4 Promotion. Base rewards stay intact.\n" + ContractChallenges.description(PublisherTrialTerms.contract_id(quote.publisher_id))
 		return
 	if _selected_contract_offer_id == ContractState.CONTRACT_ID:
 		title.text = "Balanced Primitive Contract"
-		details.text = "Publisher: Ironclad Interactive\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum total payout: $2,400.00\nAccept for a guaranteed %s immediately; completion pool %s pays proportionally after hand two.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cycles. The contract cannot be abandoned after acceptance." % [CashFormatter.format_exact_cents(_run_state.get_ironclad_advance_cents()),CashFormatter.format_exact_cents(240000-_run_state.get_ironclad_advance_cents())]
+		details.text = "Publisher: Ironclad Interactive\nTwo production hands · one to four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nInvestment and maximum total payout: $2,400.00\nAccept for a guaranteed %s immediately; completion pool %s pays proportionally after hand two.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cycles. The contract cannot be abandoned after acceptance." % [CashFormatter.format_exact_cents(_run_state.get_ironclad_advance_cents()),CashFormatter.format_exact_cents(240000-_run_state.get_ironclad_advance_cents())]
 	else:
 		var offer := {}
 		for release: StringName in _run_state._sidestreet_entitlements:
@@ -616,7 +635,7 @@ func _configure_contract_detail() -> void:
 			details.text = "This offer is no longer available. Return to Studio and reopen Contracts."
 			return
 		title.text = "SideStreet Cash Contract"
-		details.text = "Publisher: SideStreet Games\nOffer for: %s\nTwo production hands · four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nBase maximum payout: $1,200.00, paid only after hand two according to completion.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cash or cycles. The contract cannot be abandoned after acceptance." % ("Found by a paid search" if not _run_state.ContractSearch.source(_run_state,_selected_contract_offer_id,&"cash").is_empty() else _run_state.get_released_game_display_name(offer.release_id))
+		details.text = "Publisher: SideStreet Games\nOffer for: %s\nTwo production hands · one to four cards per hand\nTargets: Scope 12 · Graphics/Sound/Technology/Design 6 each\nBase maximum payout: $1,200.00, paid only after hand two according to completion.\nUnlocked Primitive Design and Alpha Features are finite; Core Passes are renewable.\nAcceptance costs no cash or cycles. The contract cannot be abandoned after acceptance." % ("Found by a paid search" if not _run_state.ContractSearch.source(_run_state,_selected_contract_offer_id,&"cash").is_empty() else _run_state.get_released_game_display_name(offer.release_id))
 		details.text += "\nSeparate challenge bonus: up to $100 and 4 Promotion. Base payout stays intact.\n" + ContractChallenges.description(ContractDefinitions.SIDESTREET)
 
 
@@ -666,20 +685,23 @@ func _open_market() -> void:
 
 
 func _open_feature_store() -> void:
-	_hide_menu_pages()
-	if _run_state == null:
+	if _run_state == null or _engine_browser==null:
 		return
+	var engine_id: StringName=_engine_browser.selected_id
+	var state:=_run_state.get_engine_feature_state()
+	if not state.engines.has(engine_id) or state.engines[engine_id].kind!=&"proprietary":return
+	_hide_menu_pages()
 	if _feature_store == null:
 		_feature_store = FeatureStore.new()
 		add_child(_feature_store)
 		_feature_store.setup(_run_state)
 		_feature_store.visibility_changed.connect(func():
 			if not _feature_store.visible:
-				_open_management(%FeatureStoreButton))
+				_open_engines(_engine_browser.selected_id))
 	%SummaryPanel.hide()
 	%Dashboard.hide()
 
-	_feature_store.open_store()
+	_feature_store.open_store(engine_id)
 	_present_destination(_feature_store)
 	tutorial_context_changed.emit(&"feature_store")
 
@@ -696,6 +718,7 @@ func setup(project_state: ProjectState, run_state: RunState, snapshot_database: 
 			if _run_state.is_connected(event,_queue_run_refresh):_run_state.disconnect(event,_queue_run_refresh)
 	_project_state = project_state
 	_run_state = run_state
+	if is_instance_valid(_overview):_overview.bind_run(_run_state)
 	_snapshot_database = snapshot_database
 	# The fully validated Studio-entry boundary is idempotent on reconstruction.
 	if project_state != null and not prepare_only and not _run_state.register_release(project_state):
@@ -860,11 +883,11 @@ func get_predevelopment_support_quote() -> Dictionary:
 	return _predevelopment.get_confirmed_support_quote() if _predevelopment != null and _predevelopment.visible else {}
 
 
-func _open_employees() -> void:
+func _open_employees(preview_only: bool=false) -> void:
 	if _run_state == null or _run_state.get_released_game_ids().size() < 2: return
 	# Browsing is free. A save/mutation guard may defer first-time activation,
 	# but must not turn an enabled navigation button into a silent no-op.
-	var read_only := not _run_state.uses_employee_courses() and not _run_state.activate_employee_trial()
+	var read_only := preview_only or (not _run_state.uses_employee_courses() and not _run_state.activate_employee_trial())
 	if _employees_panel == null:
 		_employees_panel = EmployeePanel.new()
 		add_child(_employees_panel)
@@ -876,7 +899,7 @@ func _open_employees() -> void:
 	_employees_panel.open_for(_run_state)
 	_present_destination(_employees_panel,_employees_panel.back_button)
 	if read_only:
-		_employees_panel.status.text = "Employee management is temporarily read-only. Resolve any save warning, then reopen this menu to retry."
+		_employees_panel.status.text = "Tour preview: no roster has been activated or changed. Finish the tour and open Employees to manage staff." if preview_only else "Employee management is temporarily read-only. Resolve any save warning, then reopen this menu to retry."
 		_employees_panel.status.show()
 
 func _refresh_contract_search() -> void:
@@ -892,13 +915,6 @@ func _refresh_contract_search() -> void:
 
 func _search_for_contracts() -> void:
 	if _checkpoint_action_waiting: return
-	var gate:=preload("res://scripts/persistence/checkpoint_ui_gate.gd")
-	if gate.needs_wait(_run_state):
-		_checkpoint_action_waiting=true
-		var quote:=_search_quote.duplicate(true)
-		var saved: bool=await gate.wait_saved(_run_state)
-		_checkpoint_action_waiting=false
-		if not saved or not _contract_detail.visible or quote!=_search_quote: return
 	var result: Dictionary=preload("res://scripts/simulation/studio_actions.gd").execute(_run_state,&"search_contracts",{"quote":_search_quote.duplicate(true)},true)
 	if not result.ok:
 		_refresh_contract_search();return

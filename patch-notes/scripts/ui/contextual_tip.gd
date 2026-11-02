@@ -13,7 +13,7 @@ func _ready() -> void:
 	layer = 10
 	panel = PanelContainer.new()
 	panel.name = "ContextualTipPanel"
-	panel.theme = preload("res://resources/ui/workspace_theme.tres")
+	panel.theme = preload("res://resources/ui/onyx_theme.tres")
 	panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	panel.offset_left = -360.0
 	panel.offset_right = -16.0
@@ -32,10 +32,12 @@ func _ready() -> void:
 	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content.add_child(heading)
 	title_label = Label.new()
+	title_label.theme_type_variation=&"HeadingLabel"
+	title_label.add_theme_font_size_override("font_size",16)
 	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_label.add_theme_color_override("font_color", Color("#f5bd59"))
+	title_label.add_theme_color_override("font_color", FolderUI.color(&"mint"))
 	heading.add_child(title_label)
 	dismiss_button = Button.new()
 	dismiss_button.name = "DismissTipButton"

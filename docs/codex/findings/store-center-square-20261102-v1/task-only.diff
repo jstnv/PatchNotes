@@ -1,0 +1,231 @@
+--- before/scripts/ui/feature_store_layout.gd
++++ after/scripts/ui/feature_store_layout.gd
+@@ -4,14 +4,14 @@
+ 
+ const PITCH := 212.0
+ const CELLS := {
+-	&"4_color_palette":Vector2i(-1,-1), &"text":Vector2i(-1,0),
+-	&"sprites":Vector2i(-2,-1), &"animated_sprites":Vector2i(-3,-1),
+-	&"colored_text":Vector2i(-2,0), &"8_color_palette":Vector2i(-2,-2),
+-	&"scrolling":Vector2i(-2,1), &"multi_directional_scrolling":Vector2i(-4,-1),
+-	&"8_bit_sound":Vector2i(2,-1), &"16_bit_sound":Vector2i(3,-2),
+-	&"main_theme":Vector2i(3,-1), &"recorded_sounds":Vector2i(3,0),
+-	&"multiple_soundtracks":Vector2i(4,-1), &"instrumental_sounds":Vector2i(4,0),
+-	&"dynamic_sequencing":Vector2i(5,-1),
++	&"4_color_palette":Vector2i(-4,-1), &"text":Vector2i(-4,0),
++	&"sprites":Vector2i(-5,-1), &"animated_sprites":Vector2i(-6,-1),
++	&"colored_text":Vector2i(-5,0), &"8_color_palette":Vector2i(-5,-2),
++	&"scrolling":Vector2i(-5,1), &"multi_directional_scrolling":Vector2i(-7,-1),
++	&"8_bit_sound":Vector2i(4,-1), &"16_bit_sound":Vector2i(5,-2),
++	&"main_theme":Vector2i(5,-1), &"recorded_sounds":Vector2i(5,0),
++	&"multiple_soundtracks":Vector2i(6,-1), &"instrumental_sounds":Vector2i(6,0),
++	&"dynamic_sequencing":Vector2i(7,-1),
+ 	&"menu_system":Vector2i(-1,-3), &"keyboard_and_mouse":Vector2i(0,-3),
+ 	&"controller":Vector2i(1,-3), &"save_files":Vector2i(-1,-4),
+ 	&"branching_nodes":Vector2i(-1,-5), &"split_screen":Vector2i(-2,-6),
+@@ -33,6 +33,10 @@
+ 	&"character_skill_checks":Vector2i(6,8),
+ }
+ 
++static func center_square() -> Rect2:
++	# Five empty cells on each axis, centered on the existing cell lattice.
++	return Rect2(Vector2(64,86)-Vector2.ONE*PITCH*2.5,Vector2.ONE*PITCH*5.0)
++
+ static func cells(ids: Array) -> Dictionary:
+ 	if ids.size()!=CELLS.size(): return {"error":"Store grid coverage differs from catalog"}
+ 	var used := {}
+@@ -48,7 +52,7 @@
+ ## A half-cell corridor separates every 144x172 card/name footprint. Compute
+ ## routes once when the map is built, never during drawing or Research refresh.
+ ## One shared A* grid with fixed insertion order makes every path repeatable.
+-static func routes(cells_by_id: Dictionary, footprints: Dictionary, edges: Array, origin: Vector2, headers: Array[Rect2]) -> Dictionary:
++static func routes(cells_by_id: Dictionary, footprints: Dictionary, edges: Array, origin: Vector2, headers: Array[Rect2], reserved: Rect2=Rect2()) -> Dictionary:
+ 	var low:=Vector2i(0,0)
+ 	var high:=Vector2i(0,0)
+ 	for cell: Vector2i in cells_by_id.values():
+@@ -69,6 +73,7 @@
+ 		for y in range(grid.region.position.y,grid.region.end.y):
+ 			var cell:=Vector2i(x,y)
+ 			var point:=grid.get_point_position(cell)
++			if reserved.has_area() and reserved.has_point(point):grid.set_point_solid(cell,true)
+ 			for header: Rect2 in headers:
+ 				if header.grow(60).has_point(point): grid.set_point_solid(cell,true)
+ 	var result := {}
+--- before/scripts/ui/feature_store_map.gd
++++ after/scripts/ui/feature_store_map.gd
+@@ -28,6 +28,7 @@
+ var bounds := Vector2.ZERO
+ var origins: Dictionary = {}
+ var center := Vector2.ZERO
++var center_square:=Rect2()
+ var category_regions: Dictionary = {}
+ var category_headers: Dictionary = {}
+ var category_paths: Array[PackedVector2Array] = []
+@@ -344,36 +345,45 @@
+ 		tree.add_child(heading)
+ 		category_headers[lane] = heading
+ 		origins[lane] = area.get_center()
+-	# Five category trees share four connecting paths, with no center root.
+-	# These neutral lines organize categories; arrows alone denote prerequisites.
+-	# Shared central corridor between the inward-facing category headings.
+-	var spine_x: float=(category_regions[&"Visuals"].end.x+category_regions[&"Audio"].position.x)/2.0
+-	center = Vector2(spine_x,0)
+-	var crown_end := Vector2(spine_x, category_regions[&"Technology & Tools"].end.y)
+-	for pair: Array in [[&"Visuals", &"Gameplay"], [&"Audio", &"Story & World"]]:
+-		var upper: Rect2 = category_regions[pair[0]]
+-		var lower: Rect2 = category_regions[pair[1]]
+-		var side := -1.0 if pair[0] == &"Visuals" else 1.0
+-		var a := Vector2(upper.end.x if side<0 else upper.position.x, upper.get_center().y)
+-		var b := Vector2(lower.end.x if side<0 else lower.position.x, lower.get_center().y)
+-		category_paths.append(PackedVector2Array([crown_end, Vector2(spine_x, a.y), a]))
+-		category_paths.append(PackedVector2Array([a, Vector2(spine_x+side*42, a.y), Vector2(spine_x+side*42, b.y), b]))
++	# An empty organizing square is presentation, never a purchasable root.
++	center_square=GridLayout.center_square()
++	center=center_square.get_center()
++	category_paths.clear()
++	var top:=Vector2(center.x,center_square.position.y)
++	var technology_end:=Vector2(center.x,node_footprint(store._nodes[&"keyboard_and_mouse"]).end.y+8.0)
++	category_paths.append(PackedVector2Array([top,technology_end]))
++	for lane: StringName in [&"Visuals",&"Audio"]:
++		var area: Rect2=category_regions[lane]
++		var left: bool=lane==&"Visuals"
++		var port:=Vector2(center_square.position.x if left else center_square.end.x,center.y-GridLayout.PITCH)
++		var anchor:=Vector2(area.end.x if left else area.position.x,header_rect(category_headers[lane]).get_center().y)
++		var corridor: float=(port.x+anchor.x)*0.5
++		category_paths.append(PackedVector2Array([port,Vector2(corridor,port.y),Vector2(corridor,anchor.y),anchor]))
++	for lane: StringName in [&"Gameplay",&"Story & World"]:
++		var area: Rect2=category_regions[lane]
++		var left: bool=lane==&"Gameplay"
++		var port:=Vector2(center.x+(-1.0 if left else 1.0)*center_square.size.x*0.25,center_square.end.y)
++		var anchor:=Vector2(area.end.x if left else area.position.x,header_rect(category_headers[lane]).get_center().y)
++		var corridor: float=anchor.x+(16.0 if left else -16.0)
++		var exit_y: float=center_square.end.y+8.0
++		category_paths.append(PackedVector2Array([port,Vector2(port.x,exit_y),Vector2(corridor,exit_y),Vector2(corridor,anchor.y),anchor]))
+ 	var extent: Rect2 = category_regions[&"Technology & Tools"]
+ 	for area: Rect2 in category_regions.values(): extent = extent.merge(area)
+-	extent = extent.grow(32.0)
++	extent = extent.merge(center_square).grow(32.0)
+ 	var half_width := maxf(absf(extent.position.x), absf(extent.end.x))
+ 	extent.position.x = -half_width
+ 	extent.size.x = half_width * 2.0
+ 	var offset := -extent.position
+ 	for lane: StringName in store.LANE_ORDER: _move_category(lane, offset)
+ 	center += offset
++	center_square.position+=offset
+ 	for i in range(category_paths.size()):
+ 		for j in range(category_paths[i].size()): category_paths[i][j] += offset
+ 	var footprints := {}
+ 	for id: StringName in store._nodes: footprints[id]=node_footprint(store._nodes[id])
+ 	var headers: Array[Rect2]=[]
+ 	for header: Label in category_headers.values(): headers.append(header_rect(header))
+-	var routed := GridLayout.routes(layout.cells,footprints,store._edges,offset,headers)
++	var routed := GridLayout.routes(layout.cells,footprints,store._edges,offset,headers,center_square)
+ 	assert(not routed.has("error"),str(routed.get("error","")))
+ 	if routed.has("error"): return
+ 	edge_routes=routed.routes
+@@ -388,8 +398,21 @@
+ 	await get_tree().process_frame
+ 	await get_tree().process_frame
+ 	if revision == _view_revision:
+-		set_zoom(0.74)
+-		center_after_layout(center, _view_revision)
++		# Frame the organizing square plus the nearest actual root in each tree.
++		var frame: Rect2=center_square
++		var graph:=FeatureStoreCatalog.graph(store._run._feature_definitions,store._run._feature_offers)
++		for lane: StringName in store.LANE_ORDER:
++			var closest:=Rect2();var distance:=INF
++			for id: StringName in store.LANE_MEMBERS[lane]:
++				if not graph.parents[id].is_empty():continue
++				var footprint:=node_footprint(store._nodes[id])
++				var next: float=footprint.get_center().distance_squared_to(center)
++				if next<distance:closest=footprint;distance=next
++			if closest.has_area():frame=frame.merge(closest)
++		frame=frame.grow(40.0)
++		var available:=(_map_rect().size-Vector2(56,210)).max(Vector2(100,100))
++		set_zoom(minf(0.74,minf(available.x/frame.size.x,available.y/frame.size.y)))
++		center_after_layout(frame.get_center()-Vector2(0,45.0/zoom), _view_revision)
+ 
+ func _center_canvas() -> void:
+ 	if tree != null:
+@@ -418,6 +441,9 @@
+ 	return Vector2.UP * ROW_STEP if lane in [&"Visuals", &"Audio"] else Vector2.DOWN * ROW_STEP
+ 
+ func draw_core() -> void:
++	# Keep all four edges visible even when the overview scales below one pixel.
++	var corners:=PackedVector2Array([center_square.position,Vector2(center_square.end.x,center_square.position.y),center_square.end,Vector2(center_square.position.x,center_square.end.y),center_square.position])
++	tree.draw_polyline(corners,Color("667688"),maxf(4.0,1.5/zoom),true)
+ 	# The layout regions reserve space only. Nodes and connecting lines are the
+ 	# visual tree; no enclosing cone fill or category border obscures them.
+ 	for path: PackedVector2Array in category_paths:
+@@ -467,6 +493,7 @@
+ 	zoom = clampf(value, 0.025, 2.0)
+ 	var offset := Vector2(scroll.scroll_horizontal, scroll.scroll_vertical)
+ 	tree.scale = Vector2.ONE * zoom
++	tree.queue_redraw()
+ 	canvas.custom_minimum_size = bounds * zoom + _focus_padding * 2.0 + Vector2(0, _toolbar_height())
+ 	canvas.size = canvas.custom_minimum_size.max(_map_rect().size)
+ 	_center_canvas()
+@@ -815,6 +842,7 @@
+ func _camera_frame(value: float, world_center: Vector2) -> void:
+ 	zoom = value
+ 	tree.scale = Vector2.ONE * zoom
++	tree.queue_redraw()
+ 	canvas.custom_minimum_size = bounds * zoom + _focus_padding * 2.0 + Vector2(0, _toolbar_height())
+ 	canvas.size = canvas.custom_minimum_size.max(_map_rect().size)
+ 	_center_canvas()
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -6,6 +6,7 @@
+ ## history, annual ledger, finance and RNG validation still applies.
+ # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
+ const CONTRACT_LATENCY_PREDECESSORS := [
++	"b3bca0e2764772c746b82f4c76a8e087e540714fc4892f81395dd30b9a76e47f",
+ 	"4f84dd8baa0d27022f04b5626629a430496d64fd2f3b84a6af45d22cda79f858", # Exact captured pre-grid UI runtime; current gameplay/finance/RNG unchanged.
+ 	"6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563", "b496434dc8095aefd67d498de3f9f98c2992abaa5d531bbd36ff7017ec9a2547", "5d27b061021aac5944f855395ab011b9f3de844e4145f17c857bdac88f2f01eb", "e4512254abfa3817c820f5f42923946f25ea75012aa7cb1dfa6358d18595cc75", "035345172f2253b32d3e4540f1b299bbdb389f8d4bec487862397a91465fe0c0", "e1720b670204ebb318ed54e92b68cf157b9d9466cd0a61882f92601957c2edf9", "07ce9e0e59fcd60944fc4a117890c0d9ce4a2f437fa4c3b9375693db5908455d", "dd3874909e76aa243eaa8f855230561956c7e18744cd0c2842cabb4035f8dc35", "b8c50f210b5a300f0de547d64cce1e3b4888aeea0f763ae201a4e36954ba8e9e", "a574d685e47db14036bd4ab445a688dd6166de6993026fef1ed94253b42ce3ef"]
+ const AWARDS_PRESENTATION_PREDECESSORS := ["ee16630a62508df8170e15b6dbc39a874a24d977792a42e0f3b56bd8bf10254f", "89b2459915e55f7d203780d6fc0d4b73218c3e44997b3a3111e33267f31080e1"]
+--- before/scripts/debug/verify_feature_store_radial.gd
++++ after/scripts/debug/verify_feature_store_radial.gd
+@@ -53,7 +53,7 @@
+ 		await process_frame
+ 		await process_frame
+ 		await process_frame
+-		expect(is_equal_approx(map.zoom,0.74), "Initial view prioritizes readable nodes at74 percent")
++		expect(map.zoom>0 and map.zoom<=0.74 and map.center_square.size==Vector2.ONE*5*map.GridLayout.PITCH, "Initial view frames the five-cell center and nearby roots")
+ 		map.fit_map()
+ 		await process_frame
+ 		await process_frame
+@@ -166,7 +166,7 @@
+ 
+ func _verify_category_layout(store: FeatureStore) -> void:
+ 	var map := store._map
+-	expect(map.category_regions.size()==5 and map.category_headers.size()==5 and map.category_paths.size()==4 and map.tree.get_node_or_null("FeatureLibraryRoot")==null, "Five trees connected directly with no center hub")
++	expect(map.category_regions.size()==5 and map.category_headers.size()==5 and map.category_paths.size()==5 and map.tree.get_node_or_null("FeatureLibraryRoot")==null, "Five trees stem from a noninteractive empty square")
+ 	var tech_row_bottom := map.node_footprint(store._nodes[&"keyboard_and_mouse"]).end.y
+ 	for id: StringName in [&"menu_system", &"save_files", &"controller", &"split_screen"]:
+ 		tech_row_bottom = maxf(tech_row_bottom, map.node_footprint(store._nodes[id]).end.y)
+@@ -191,22 +191,15 @@
+ 		expect(is_zero_approx(header.rotation) if lane==&"Technology & Tools" else is_equal_approx(absf(header.rotation),PI/2), "Sideways heading except Technology & Tools: "+str(lane))
+ 	expect(complete,"Five bounded categories with clear cards and headers")
+ 	var routes_clear := true
+-	var connected := {}
+ 	for path: PackedVector2Array in map.category_paths:
+-		for point: Vector2 in [path[0],path[-1]]:
+-			var on_category := false
+-			for lane: StringName in store.LANE_ORDER:
+-				if _on_border(map.category_regions[lane],point):
+-					on_category=true
+-					connected[lane]=true
+-			routes_clear = routes_clear and on_category
++		routes_clear=routes_clear and _on_border(map.center_square,path[0])
+ 		for index in range(1,path.size()):
+ 			var a := path[index-1]
+ 			var b := path[index]
+-			routes_clear = routes_clear and (is_equal_approx(a.x,b.x) or is_equal_approx(a.y,b.y))
++			routes_clear = routes_clear and (is_equal_approx(a.x,b.x) or is_equal_approx(a.y,b.y)) and not _segment_crosses_interior(a,b,map.center_square)
+ 			for node: Control in store._nodes.values(): routes_clear = routes_clear and not _segment_crosses_interior(a,b,map.node_footprint(node))
+ 			for header: Label in map.category_headers.values(): routes_clear = routes_clear and not _segment_crosses_interior(a,b,map.header_rect(header))
+-	expect(routes_clear and connected.size()==5,"Four orthogonal connectors join all five category borders without crossing cards or headings")
++	expect(routes_clear,"Five orthogonal stems leave the square without crossing its interior, cards or headings")
+ 
+ func _passive_snapshot(run: RunState) -> Array:
+ 	return [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.get_studio_finance_snapshot()]

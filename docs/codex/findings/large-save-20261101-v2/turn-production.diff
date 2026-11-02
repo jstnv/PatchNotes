@@ -1,0 +1,176 @@
+--- before/scripts/fanbase/studio_fanbase.gd
++++ after/scripts/fanbase/studio_fanbase.gd
+@@ -8,6 +8,50 @@
+ const LOSS_PERCENT_PER_REVIEW_POINT := 15
+ const FAN_AWARENESS_LIMIT := 150
+ const MAX_INT := 9223372036854775807
++## Calculation checkpoints, never validation verdicts. Every call still checks
++## its records/receipts and compares the entire rebuilt ledger with supplied data.
++const REPLAY_LIMIT:=18
++const REPLAY_BYTES:=32*1024*1024
++static var _replays: Array[Dictionary]=[]
++static var _replay_bytes:=0
++static var _replay_lock:=Mutex.new()
++
++static func _replay_context() -> Array:
++	var result: Array=[]
++	for script: Script in [load("res://scripts/fanbase/studio_fanbase.gd"),ReleasedGameSales,LaterMonthSalesCalculator,PrimitiveMonthOneSalesRevenueCalculator,PrimitiveUnitsSoldCalculator,ProjectState,Clock,AwardReceipts,ReleasedGameSales.Market]:
++		result.append([script.get_instance_id(),script.get_source_code().sha256_text()])
++	return result
++
++static func _replay_key(state: Dictionary,records: Dictionary,metadata: Dictionary,cutoff: int,starting: int,closed: Dictionary,close: int,context: Array) -> PackedByteArray:
++	var terms: Dictionary={}
++	var launches: Dictionary={}
++	for id: StringName in records:
++		if metadata[id].release_cycle>cutoff:continue
++		var record: Dictionary=records[id].duplicate(true)
++		for field: String in ["earned_cycles","total_earned_cycles","earned_units","entitlement_cents","settled_cents","exhausted","last_processed_run_cycle","last_settlement_run_cycle","campaign_count","organic_awareness_scaled","active_awareness_scaled","monthly_units"]:record.erase(field)
++		var end: int=mini(cutoff,close) if close>=0 and closed.has(id) else cutoff
++		var age: int=maxi(0,end-int(metadata[id].release_cycle))
++		if not record.later_enabled:age=mini(age,Clock.month_end(1,record.get("calendar",{})))
++		var month: int=Clock.action_month(age,true,record.get("calendar",{})) if age>0 else 0
++		for field: String in ["campaign_months","market_factors"]:
++			for key: Variant in record[field].keys():
++				if key>month:record[field].erase(key)
++		terms[id]=record;launches[id]=metadata[id]
++	var awards: Array=[]
++	for row: Dictionary in state.get("annual_awards",[]):
++		if row.cycle<=cutoff:awards.append(row)
++	return var_to_bytes([context,cutoff,starting,state.get("calendar",{}),closed,close,terms,launches,awards])
++
++static func _remember_replay(key: PackedByteArray,cycle: int,rebuilt: Dictionary,current: Dictionary) -> void:
++	var cost:=key.size()+var_to_bytes([rebuilt,current]).size()
++	if cost>REPLAY_BYTES:return
++	_replay_lock.lock()
++	for entry: Dictionary in _replays:
++		if entry.key==key:_replay_lock.unlock();return
++	_replays.append({"key":key,"cycle":cycle,"rebuilt":rebuilt.duplicate(true),"current":current.duplicate(true),"cost":cost})
++	_replay_bytes+=cost
++	while _replays.size()>REPLAY_LIMIT or _replay_bytes>REPLAY_BYTES:_replay_bytes-=int(_replays.pop_front().cost)
++	_replay_lock.unlock()
+ 
+ static func create(starting_fans: int = 0, calendar: Dictionary = {}) -> Dictionary:
+ 	var state := {"fans": starting_fans, "releases": {}, "months": [], "last_cycle": 0}
+@@ -155,9 +199,17 @@
+ 		launches[meta.release_cycle].append(id)
+ 	var rebuilt := create(starting_fans,calendar)
+ 	var current := {}
++	var context:=_replay_context()
++	var first:=0
++	_replay_lock.lock();var candidates:=_replays.duplicate();_replay_lock.unlock()
++	for index in range(candidates.size()-1,-1,-1):
++		var entry: Dictionary=candidates[index]
++		if entry.cycle>cycle:continue
++		if _replay_key(state,records,metadata,entry.cycle,starting_fans,closed_historical_ids,historical_close_cycle,context)!=entry.key:continue
++		rebuilt=entry.rebuilt.duplicate(true);current=entry.current.duplicate(true);first=int(entry.cycle)+1;break
+ 	var awards := {}
+ 	for row: Dictionary in state.get("annual_awards",[]): awards[row.cycle]=row
+-	for boundary in range(cycle + 1):
++	for boundary in range(first,cycle + 1):
+ 		if boundary > 0:
+ 			var next := {}
+ 			for id: StringName in current:
+@@ -197,4 +249,6 @@
+ 			rebuilt = register_release(rebuilt, initial, metadata[id].review.launch_fans)
+ 			if rebuilt.is_empty(): return false
+ 			current[id] = initial
+-	return rebuilt == state
++	if rebuilt!=state:return false
++	_remember_replay(_replay_key(state,records,metadata,cycle,starting_fans,closed_historical_ids,historical_close_cycle,context),cycle,rebuilt,current)
++	return true
+--- before/scripts/finance/studio_finance_ledger.gd
++++ after/scripts/finance/studio_finance_ledger.gd
+@@ -8,6 +8,7 @@
+ const Education := preload("res://scripts/finance/education_debt.gd")
+ const Bills := preload("res://scripts/finance/outstanding_expenses.gd")
+ const Clock := preload("res://scripts/calendar/calendar_clock.gd")
++const JournalKey:=preload("res://scripts/finance/journal_key.gd")
+ const MAX_INT: int = 9223372036854775807
+ const MONTHLY_RENT_CENTS := 30000
+ const SUPPORTED_RENTS := [30000,31500,50000,51500]
+@@ -23,7 +24,7 @@
+ ## revision counter, mutable Dictionary reference, or a hash alone.
+ const VALIDATED_JOURNAL_LIMIT := 128
+ const VALIDATED_JOURNAL_BYTES := 32 * 1024 * 1024
+-static var _validated_journals: Array[PackedByteArray] = []
++static var _validated_journals: Array[Dictionary] = []
+ static var _validated_journal_bytes := 0
+ static var _validation_lock := Mutex.new()
+ const EXPENSE_FIELDS := {
+@@ -91,7 +92,7 @@
+ 	# used by journal replay. Remember the exact detached result, so its next
+ 	# read need not replay that prefix again. A caller edit changes typed bytes
+ 	# and still takes the ordinary full-validation path.
+-	if not result.is_empty(): _remember_valid_journal(var_to_bytes(result.ledger))
++	if not result.is_empty(): _remember_valid_journal(var_to_bytes(result.ledger),result.ledger)
+ 	return result
+ 
+ 
+@@ -598,26 +599,48 @@
+ 	var key := var_to_bytes(ledger)
+ 	if key.size() > VALIDATED_JOURNAL_BYTES: return _validate_journal(ledger)
+ 	_validation_lock.lock()
+-	var index := _validated_journals.find(key)
++	var index:=-1
++	for i in _validated_journals.size():
++		if _validated_journals[i].key==key:index=i;break
+ 	if index >= 0:
++		var proof: Dictionary=_validated_journals[index]
+ 		_validated_journals.remove_at(index)
+-		_validated_journals.append(key)
++		_validated_journals.append(proof)
+ 		_validation_lock.unlock()
+ 		return true
+ 	_validation_lock.unlock()
++	# Schema codecs reorder fields. Compare the same fully typed contents before
++	# replaying; array/action ordering is deliberately preserved by this key.
++	_validation_lock.lock()
++	var candidates:=_validated_journals.duplicate()
++	_validation_lock.unlock()
++	var actions: Variant=ledger.get("actions")
++	if not actions is Array:return _validate_journal(ledger)
++	for proof: Dictionary in candidates:
++		var native: Dictionary=proof.ledger
++		if native.is_empty() or native.last_cycle!=ledger.get("last_cycle") or native.cash_cents!=ledger.get("cash_cents") or native.actions.size()!=actions.size():continue
++		if JournalKey.same(native,ledger):
++			_remember_valid_journal(key)
++			return true
+ 	if not _validate_journal(ledger): return false
+-	_remember_valid_journal(key)
++	_remember_valid_journal(key,ledger)
+ 	return true
+ 
+ 
+-static func _remember_valid_journal(key: PackedByteArray) -> void:
++static func _remember_valid_journal(key: PackedByteArray,ledger: Dictionary={}) -> void:
+ 	if key.size() > VALIDATED_JOURNAL_BYTES: return
+ 	_validation_lock.lock()
+-	if not _validated_journals.has(key):
+-		_validated_journals.append(key)
+-		_validated_journal_bytes += key.size()
++	var known:=false
++	for proof: Dictionary in _validated_journals:
++		if proof.key==key:known=true;break
++	if not known:
++		var cost:=key.size()+(0 if ledger.is_empty() else key.size())
++		var native: Dictionary=ledger.duplicate(true) if cost<=VALIDATED_JOURNAL_BYTES else {}
++		if native.is_empty():cost=key.size()
++		_validated_journals.append({"key":key,"ledger":native,"cost":cost})
++		_validated_journal_bytes += cost
+ 	while _validated_journals.size() > VALIDATED_JOURNAL_LIMIT or _validated_journal_bytes > VALIDATED_JOURNAL_BYTES:
+-		_validated_journal_bytes -= _validated_journals.pop_front().size()
++		_validated_journal_bytes -= int(_validated_journals.pop_front().cost)
+ 	_validation_lock.unlock()
+ 
+ static func _validate_journal(ledger: Dictionary) -> bool:
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -5,7 +5,7 @@
+ ## Exact published and Phase3A worlds captured before this repair; full actor,
+ ## history, annual ledger, finance and RNG validation still applies.
+ # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
+-const CONTRACT_LATENCY_PREDECESSORS := ["6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563"]
++const CONTRACT_LATENCY_PREDECESSORS := ["6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563", "b496434dc8095aefd67d498de3f9f98c2992abaa5d531bbd36ff7017ec9a2547"]
+ const AWARDS_PRESENTATION_PREDECESSORS := ["ee16630a62508df8170e15b6dbc39a874a24d977792a42e0f3b56bd8bf10254f", "89b2459915e55f7d203780d6fc0d4b73218c3e44997b3a3111e33267f31080e1"]
+ const Clock := preload("res://scripts/calendar/calendar_clock.gd")
+ const AWARD_LEDGER_PREDECESSORS := ["303959a85af6268f88e1cd4b855e747838a25fad8779d85621a17f77a0b19253"]

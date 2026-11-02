@@ -8,6 +8,7 @@ const Bank := preload("res://scripts/finance/bank_loan.gd")
 const Education := preload("res://scripts/finance/education_debt.gd")
 const Bills := preload("res://scripts/finance/outstanding_expenses.gd")
 const Clock := preload("res://scripts/calendar/calendar_clock.gd")
+const JournalKey:=preload("res://scripts/finance/journal_key.gd")
 const MAX_INT: int = 9223372036854775807
 const MONTHLY_RENT_CENTS := 30000
 const SUPPORTED_RENTS := [30000,31500,50000,51500]
@@ -23,9 +24,10 @@ static func starting_rent_cents(expensive_lease: bool = false) -> int:
 ## revision counter, mutable Dictionary reference, or a hash alone.
 const VALIDATED_JOURNAL_LIMIT := 128
 const VALIDATED_JOURNAL_BYTES := 32 * 1024 * 1024
-static var _validated_journals: Array[PackedByteArray] = []
+static var _validated_journals: Array[Dictionary] = []
 static var _validated_journal_bytes := 0
 static var _validation_lock := Mutex.new()
+
 const EXPENSE_FIELDS := {
 	&"feature_play": "feature_play_cents", &"store": "store_cents",
 	&"campaign": "campaign_cents", &"playtest": "playtest_cents",
@@ -84,14 +86,16 @@ static func payroll_due_cycle(employee: Dictionary, issued: int, calendar: Dicti
 
 static func plan(ledger: Dictionary, cycle: int, cash_before: int, direct_delta: int,
 		kind: StringName, sales_earned: int = 0, settled: int = 0, productive: bool = false,
-		source_id: StringName = &"") -> Dictionary:
+		source_id: StringName = &"", remember_result: bool = true) -> Dictionary:
 	if not _is_valid(ledger) or ledger.cash_cents != cash_before: return {}
 	var result := _apply(ledger, cycle, cash_before, direct_delta, kind, sales_earned, settled, productive, source_id)
 	# The full prefix has just validated and this is the same checked transition
 	# used by journal replay. Remember the exact detached result, so its next
-	# read need not replay that prefix again. A caller edit changes typed bytes
+	# read need not replay that prefix again. Pure affordability callers can omit
+	# retaining this speculative result; validation and the full transition above
+	# are identical. A caller edit changes typed bytes
 	# and still takes the ordinary full-validation path.
-	if not result.is_empty(): _remember_valid_journal(var_to_bytes(result.ledger))
+	if remember_result and not result.is_empty(): _remember_valid_journal(var_to_bytes(result.ledger),result.ledger)
 	return result
 
 
@@ -598,27 +602,58 @@ static func _is_valid(ledger: Dictionary) -> bool:
 	var key := var_to_bytes(ledger)
 	if key.size() > VALIDATED_JOURNAL_BYTES: return _validate_journal(ledger)
 	_validation_lock.lock()
-	var index := _validated_journals.find(key)
+	var index:=-1
+	for i in _validated_journals.size():
+		if _validated_journals[i].key==key:index=i;break
 	if index >= 0:
+		var proof: Dictionary=_validated_journals[index]
 		_validated_journals.remove_at(index)
-		_validated_journals.append(key)
+		_validated_journals.append(proof)
 		_validation_lock.unlock()
 		return true
 	_validation_lock.unlock()
+	# Schema codecs reorder fields. Compare the same fully typed contents before
+	# replaying; array/action ordering is deliberately preserved by this key.
+	_validation_lock.lock()
+	var candidates:=_validated_journals.duplicate()
+	_validation_lock.unlock()
+	var actions: Variant=ledger.get("actions")
+	if not actions is Array:return _validate_journal(ledger)
+	for proof: Dictionary in candidates:
+		var native: Dictionary=proof.ledger
+		if native.is_empty() or native.last_cycle!=ledger.get("last_cycle") or native.cash_cents!=ledger.get("cash_cents") or native.actions.size()!=actions.size():continue
+		if JournalKey.same(native,ledger):
+			_remember_valid_journal(key)
+			return true
 	if not _validate_journal(ledger): return false
-	_remember_valid_journal(key)
+	_remember_valid_journal(key,ledger)
 	return true
 
 
-static func _remember_valid_journal(key: PackedByteArray) -> void:
+static func _remember_valid_journal(key: PackedByteArray, ledger: Dictionary={}) -> void:
 	if key.size() > VALIDATED_JOURNAL_BYTES: return
 	_validation_lock.lock()
-	if not _validated_journals.has(key):
-		_validated_journals.append(key)
-		_validated_journal_bytes += key.size()
-	while _validated_journals.size() > VALIDATED_JOURNAL_LIMIT or _validated_journal_bytes > VALIDATED_JOURNAL_BYTES:
-		_validated_journal_bytes -= _validated_journals.pop_front().size()
+	for proof: Dictionary in _validated_journals:
+		if proof.key==key:
+			_validation_lock.unlock()
+			return
 	_validation_lock.unlock()
+	var cost:=key.size()+(0 if ledger.is_empty() else key.size())
+	var native: Dictionary=ledger.duplicate(true) if cost<=VALIDATED_JOURNAL_BYTES else {}
+	if native.is_empty():cost=key.size()
+	_validation_lock.lock()
+	var known:=false
+	for proof: Dictionary in _validated_journals:
+		if proof.key==key:known=true;break
+	if not known:
+		_validated_journals.append({"key":key,"ledger":native,"cost":cost})
+		_validated_journal_bytes+=cost
+	var evicted_proofs:Array[Dictionary]=[]
+	while _validated_journals.size()>VALIDATED_JOURNAL_LIMIT or _validated_journal_bytes>VALIDATED_JOURNAL_BYTES:
+		var removed:Dictionary=_validated_journals.pop_front();evicted_proofs.append(removed)
+		_validated_journal_bytes-=int(removed.cost)
+	_validation_lock.unlock()
+
 
 static func _validate_journal(ledger: Dictionary) -> bool:
 	for key: String in ["schema_version", "initial_cash_cents", "last_cycle", "cash_cents", "unsettled_sales_net_cents"]:

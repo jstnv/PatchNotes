@@ -1,0 +1,929 @@
+--- before/scripts/gameplay.gd
++++ after/scripts/gameplay.gd
+@@ -36,6 +36,7 @@
+ var pause_menu: PauseMenu
+ var guided_tutorial: GuidedProductionTutorial
+ var _onboarding := OnboardingPreferences.new()
++var focused_guidance: Node
+ var developer_tools: CanvasLayer
+ var annual_awards_ceremony: Control
+ var _awards_layer: CanvasLayer
+@@ -75,11 +76,14 @@
+ 	developer_tools=preload("res://scripts/developer/developer_tools.gd").new()
+ 	developer_tools.game=self;add_child(developer_tools)
+ 	%GameplayHUD.tutorial_overlay.practice_requested.connect(_start_guided_practice)
++	focused_guidance=preload("res://scripts/tutorial/focused_guidance_controller.gd").new()
++	add_child(focused_guidance)
++	focused_guidance.bind_game(self)
+ 
+ func _build_pause_menu() -> void:
+ 	pause_menu = PauseMenu.new()
+ 	pause_menu.can_pause = func():
+-		return not annual_awards_blocking() and guided_tutorial == null and is_instance_valid(_active_phase) and not _active_phase is MainMenu and _startup_panel == null and not _transition_in_progress and not _loading_checkpoint and not _save_navigation_pending and not _checkpoint_dialog_visible()
++		return not (is_instance_valid(focused_guidance) and focused_guidance.is_active()) and not annual_awards_blocking() and guided_tutorial == null and is_instance_valid(_active_phase) and not _active_phase is MainMenu and _startup_panel == null and not _transition_in_progress and not _loading_checkpoint and not _save_navigation_pending and not _checkpoint_dialog_visible()
+ 	pause_menu.settings_open = %GameplayHUD.settings_menu.is_open
+ 	pause_menu.guide_open = %GameplayHUD.how_to_play.is_open
+ 	pause_menu.settings_requested.connect(%GameplayHUD.show_settings)
+--- before/scripts/run_state.gd
++++ after/scripts/run_state.gd
+@@ -1693,6 +1693,10 @@
+ 		var state: ContractState = offer.state
+ 		if state!=null and state.is_completed() and state.is_payout_committed(): trials += 1
+ 	return ironclad + _sidestreet_results.size() + trials
++
++
++func get_released_game_engine_id(id: StringName) -> StringName:
++	return _release_engine_ids.get(id,&"") if _released_games.has(id) else &""
+ 
+ 
+ func get_unlocked_publisher_ids() -> Array[StringName]:
+--- before/scripts/ui/gameplay_hud.gd
++++ after/scripts/ui/gameplay_hud.gd
+@@ -1,5 +1,8 @@
+ class_name GameplayHUD
+ extends Control
++
++var focused_guidance_active:=false
++signal phase_changed
+ const Clock := preload("res://scripts/calendar/calendar_clock.gd")
+ 
+ var project: ProjectState
+@@ -241,6 +244,7 @@
+ 	elif phase is ContractPhase: context = &"contract"
+ 	elif phase is MainMenu: context = &"main_menu"
+ 	set_tutorial_context(context)
++	phase_changed.emit()
+ 
+ func _update_studio_glow() -> void:
+ 	if is_instance_valid(studio_glow):
+@@ -307,6 +311,7 @@
+ 
+ 
+ func _refresh_guidance() -> void:
++	if focused_guidance_active:return
+ 	if not _guidance_ready or run == null or contextual_tip == null: return
+ 	# The overview desk has free space below the value cards; full destinations
+ 	# retain their upper hint dock so hints cannot cover their lower actions.
+--- before/scripts/ui/how_to_play_guide.gd
++++ after/scripts/ui/how_to_play_guide.gd
+@@ -1,5 +1,10 @@
+ class_name HowToPlayGuide
+ extends CanvasLayer
++
++signal tour_requested(id: StringName)
++var tour_availability: Callable
++var tour_scroll: ScrollContainer
++var tour_list: VBoxContainer
+ 
+ signal closed
+ 
+@@ -57,6 +62,7 @@
+ 	header.move_child(close_button,0)
+ 	close_button.custom_minimum_size = Vector2(144,42)
+ 	sections = HowToPlayContent.sections()
++	sections[0].topics.append({"id":"guided_tours","title":"Guided system tours","summary":"Focused tours point out real controls without purchases or productive actions.","body":"Open a Studio to replay tours. Locked systems become available as you progress."})
+ 	var folders := HBoxContainer.new()
+ 	folders.name = "Folders"
+ 	folders.add_theme_constant_override("separation",3)
+@@ -126,6 +132,8 @@
+ 	reader.add_theme_font_size_override("bold_font_size",18)
+ 	reader.add_theme_constant_override("line_separation",6)
+ 	page.add_child(reader)
++	tour_scroll=ScrollContainer.new();tour_scroll.follow_focus=true;tour_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;tour_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;page.add_child(tour_scroll)
++	tour_list=VBoxContainer.new();tour_list.size_flags_horizontal=Control.SIZE_EXPAND_FILL;tour_list.add_theme_constant_override("separation",8);tour_scroll.add_child(tour_list)
+ 	var navigation := HBoxContainer.new()
+ 	navigation.add_theme_constant_override("separation",8)
+ 	page.add_child(navigation)
+@@ -156,6 +164,7 @@
+ 	return visible
+ 
+ func open(navigation_host: MenuTransitions = null) -> void:
++	if tour_scroll!=null and tour_scroll.visible:select_topic(topic_index)
+ 	if visible or (navigation_host != null and navigation_host.busy): return
+ 	_navigation=navigation_host
+ 	_return_focus = get_viewport().gui_get_focus_owner()
+@@ -214,12 +223,26 @@
+ 	page_title.text = article.title
+ 	summary.text = article.summary
+ 	reader.text = article.body
++	var guided: bool=article.id=="guided_tours"
++	reader.visible=not guided;tour_scroll.visible=guided
++	for child in tour_list.get_children():tour_list.remove_child(child);child.queue_free()
++	if guided:
++		var catalog=preload("res://scripts/tutorial/focused_guidance_catalog.gd")
++		for id: StringName in catalog.IDS:
++			var button:=FolderUI.button(tour_list,str(catalog.LABELS[id]),func():tour_requested.emit(id))
++			button.name="Tour_"+str(id);button.custom_minimum_size.y=44
++			button.focus_entered.connect(_focus_tour.bind(button))
++			button.disabled=not tour_availability.is_valid() or not tour_availability.call(id)
++			button.tooltip_text="Open an eligible game context or unlock this system first." if button.disabled else "Read-only guided tour"
+ 	reader.get_v_scroll_bar().value = 0
+ 	previous_button.disabled = index == 0
+ 	next_button.disabled = index == section.topics.size()-1
+ 	# If Next/Previous became disabled, keep keyboard focus inside the article.
+ 	var focus := get_viewport().gui_get_focus_owner()
+ 	if focus is BaseButton and focus.disabled: reader.grab_focus()
++
++func _focus_tour(button: Control) -> void:
++	tour_scroll.ensure_control_visible.call_deferred(button)
+ 
+ func _input(event: InputEvent) -> void:
+ 	if not visible: return
+@@ -232,14 +255,17 @@
+ 		var controls: Array = []
+ 		controls.append_array(folder_buttons)
+ 		controls.append_array(topic_buttons)
+-		controls.append(reader)
++		if tour_scroll.visible:
++			for button in tour_list.get_children():
++				if button is Button and not button.disabled:controls.append(button)
++		else:controls.append(reader)
+ 		for button in [previous_button,next_button,close_button]:
+ 			if not button.disabled: controls.append(button)
+ 		var direction := -1 if event.is_action_pressed("ui_focus_prev") else 1
+ 		var index := controls.find(get_viewport().gui_get_focus_owner())
+ 		controls[posmod(index+direction,controls.size())].grab_focus()
+ 	elif event.is_action_pressed("ui_page_down") or event.is_action_pressed("ui_page_up"):
+-		reader.get_v_scroll_bar().value += reader.size.y * 0.8 * (-1 if event.is_action_pressed("ui_page_up") else 1)
++		(tour_scroll.get_v_scroll_bar() if tour_scroll.visible else reader.get_v_scroll_bar()).value += reader.size.y * 0.8 * (-1 if event.is_action_pressed("ui_page_up") else 1)
+ 	else:
+ 		var focus := get_viewport().gui_get_focus_owner()
+ 		if focus is Button and focus in folder_buttons and (event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right")):
+--- before/scripts/phases/studio_phase.gd
++++ after/scripts/phases/studio_phase.gd
+@@ -477,7 +477,7 @@
+ 	_present_destination(_monthly_report)
+ 
+ 
+-func _open_contracts(select_id: StringName = &"") -> void:
++func _open_contracts(select_id: StringName = &"",preview_only: bool=false) -> void:
+ 	_hide_menu_pages()
+ 	if _run_state == null:
+ 		return
+@@ -498,7 +498,7 @@
+ 	for i in range(choices.size()):
+ 		if choices[i].offer_id==select_id:_selected_contract_offer_id=select_id;_contract_chooser.select(i)
+ 	_contract_chooser.visible = choices.size()>1
+-	_configure_contract_detail()
++	_configure_contract_detail(preview_only)
+ 	%SummaryPanel.hide()
+ 	%Dashboard.hide()
+ 	_contract_detail.show()
+@@ -588,12 +588,15 @@
+ 	actions.add_child(accept)
+ 
+ 
+-func _configure_contract_detail() -> void:
++func _configure_contract_detail(preview_only: bool=false) -> void:
+ 	_contract_engine_picker.bind(_run_state)
+ 	var title := _contract_detail.find_child("ContractDetailTitle", true, false) as Label
+-	_refresh_contract_search()
++	if preview_only:
++		_search_quote={};_search_action.disabled=true;_prepare_found.hide()
++		_search_status.text="Tour preview: searching advances one productive cycle. No search is performed during this tour."
++	else:_refresh_contract_search()
+ 	var accept: Button=_contract_detail.find_child("AcceptContractButton",true,false)
+-	accept.disabled=_selected_contract_offer_id.is_empty()
++	accept.disabled=preview_only or _selected_contract_offer_id.is_empty()
+ 	if _selected_contract_offer_id.is_empty():
+ 		title.text="Contract Search"
+ 		var copy: Label=_contract_detail.find_child("ContractDetailText",true,false)
+@@ -880,11 +883,11 @@
+ 	return _predevelopment.get_confirmed_support_quote() if _predevelopment != null and _predevelopment.visible else {}
+ 
+ 
+-func _open_employees() -> void:
++func _open_employees(preview_only: bool=false) -> void:
+ 	if _run_state == null or _run_state.get_released_game_ids().size() < 2: return
+ 	# Browsing is free. A save/mutation guard may defer first-time activation,
+ 	# but must not turn an enabled navigation button into a silent no-op.
+-	var read_only := not _run_state.uses_employee_courses() and not _run_state.activate_employee_trial()
++	var read_only := preview_only or (not _run_state.uses_employee_courses() and not _run_state.activate_employee_trial())
+ 	if _employees_panel == null:
+ 		_employees_panel = EmployeePanel.new()
+ 		add_child(_employees_panel)
+@@ -896,7 +899,7 @@
+ 	_employees_panel.open_for(_run_state)
+ 	_present_destination(_employees_panel,_employees_panel.back_button)
+ 	if read_only:
+-		_employees_panel.status.text = "Employee management is temporarily read-only. Resolve any save warning, then reopen this menu to retry."
++		_employees_panel.status.text = "Tour preview: no roster has been activated or changed. Finish the tour and open Employees to manage staff." if preview_only else "Employee management is temporarily read-only. Resolve any save warning, then reopen this menu to retry."
+ 		_employees_panel.status.show()
+ 
+ func _refresh_contract_search() -> void:
+--- before/scripts/market/rival_world_checkpoint.gd
++++ after/scripts/market/rival_world_checkpoint.gd
+@@ -5,7 +5,7 @@
+ ## Exact published and Phase3A worlds captured before this repair; full actor,
+ ## history, annual ledger, finance and RNG validation still applies.
+ # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
+-const CONTRACT_LATENCY_PREDECESSORS := ["6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563", "b496434dc8095aefd67d498de3f9f98c2992abaa5d531bbd36ff7017ec9a2547", "5d27b061021aac5944f855395ab011b9f3de844e4145f17c857bdac88f2f01eb", "e4512254abfa3817c820f5f42923946f25ea75012aa7cb1dfa6358d18595cc75", "035345172f2253b32d3e4540f1b299bbdb389f8d4bec487862397a91465fe0c0", "e1720b670204ebb318ed54e92b68cf157b9d9466cd0a61882f92601957c2edf9", "07ce9e0e59fcd60944fc4a117890c0d9ce4a2f437fa4c3b9375693db5908455d", "dd3874909e76aa243eaa8f855230561956c7e18744cd0c2842cabb4035f8dc35", "b8c50f210b5a300f0de547d64cce1e3b4888aeea0f763ae201a4e36954ba8e9e"]
++const CONTRACT_LATENCY_PREDECESSORS := ["6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563", "b496434dc8095aefd67d498de3f9f98c2992abaa5d531bbd36ff7017ec9a2547", "5d27b061021aac5944f855395ab011b9f3de844e4145f17c857bdac88f2f01eb", "e4512254abfa3817c820f5f42923946f25ea75012aa7cb1dfa6358d18595cc75", "035345172f2253b32d3e4540f1b299bbdb389f8d4bec487862397a91465fe0c0", "e1720b670204ebb318ed54e92b68cf157b9d9466cd0a61882f92601957c2edf9", "07ce9e0e59fcd60944fc4a117890c0d9ce4a2f437fa4c3b9375693db5908455d", "dd3874909e76aa243eaa8f855230561956c7e18744cd0c2842cabb4035f8dc35", "b8c50f210b5a300f0de547d64cce1e3b4888aeea0f763ae201a4e36954ba8e9e", "a574d685e47db14036bd4ab445a688dd6166de6993026fef1ed94253b42ce3ef"]
+ const AWARDS_PRESENTATION_PREDECESSORS := ["ee16630a62508df8170e15b6dbc39a874a24d977792a42e0f3b56bd8bf10254f", "89b2459915e55f7d203780d6fc0d4b73218c3e44997b3a3111e33267f31080e1"]
+ const Clock := preload("res://scripts/calendar/calendar_clock.gd")
+ const AWARD_LEDGER_PREDECESSORS := ["303959a85af6268f88e1cd4b855e747838a25fad8779d85621a17f77a0b19253"]
+--- /dev/null
++++ scripts/tutorial/focused_guidance_catalog.gd
+@@ -0,0 +1,58 @@
++extends RefCounted
++## Read-only subsystem milestones. Availability is not affordability.
++const IDS: Array[StringName]=[&"bank",&"engines",&"contracts",&"employees",&"implementation",&"skills",&"publishers",&"summaries",&"market"]
++const LABELS={&"bank":"Bank",&"engines":"Engines",&"contracts":"Contracts",&"employees":"Employees",&"implementation":"Feature Implementation",&"skills":"Engine Skill Tree",&"publishers":"Publishers",&"summaries":"Post Game Summaries",&"market":"Daily Chart and Rivals"}
++static func snapshot(run: RunState) -> Dictionary:
++ var result: Dictionary={"releases":0,"public_releases":0,"bankroll_cents":0,"publishers":[],"implementation_engine":&"","skill_engine":&""}
++ if run==null or run._bank_run_id.is_empty():return result
++ var ids:=run.get_released_game_ids();result.releases=ids.size()
++ for id: StringName in ids:
++  if run.get_released_game_engine_id(id)==&"public_action":result.public_releases+=1
++ var debt:=StudioFinanceLedger.get_unpaid(run._studio_finance)
++ if debt>=0:result.bankroll_cents=run.get_cash_cents()-debt
++ result.publishers=run.get_unlocked_publisher_ids()
++ var engines:=run.get_engine_feature_state()
++ var selected:=run.get_selected_engine_id()
++ var ordered: Array=engines.engines.keys()
++ if selected in ordered:ordered.erase(selected);ordered.push_front(selected)
++ for id: StringName in ordered:
++  if engines.engines[id].kind==&"proprietary":result.implementation_engine=id;break
++ var owned:=run.get_proprietary_engine_state()
++ for id: StringName in owned.engines:
++  var row: Dictionary=owned.engines[id]
++  for branch: StringName in [&"graphics",&"sound",&"technology",&"design"]:
++   var next: Dictionary=RunState.ProprietaryEngines.node(branch,RunState.ProprietaryEngines.generation(row,branch)+1)
++   if not next.is_empty() and int(row.challenge_progress.get(branch,0))>=int(next.threshold):
++    result.skill_engine=id;return result
++ return result
++
++static func candidates(s: Dictionary) -> Array[Dictionary]:
++ var result: Array[Dictionary]=[]
++ if int(s.get("bankroll_cents",0))<0:result.append(offer(&"bank","Your bankroll is negative","Overdue bills are included in your bankroll. The Bank can help you inspect what is due and preview available borrowing. Would you like a tour?"))
++ if int(s.get("public_releases",0))>=3:result.append(offer(&"engines","Ready to explore engines?","You have released three games with Public engines. Their fixed libraries and royalties are useful starting terms. Would you like to explore engine choices and owning your own?"))
++ if int(s.get("releases",0))>=1:result.append(offer(&"contracts","Contracts unlocked!","Your first release opened Contract work. Learn how targets, hands, engine choices and payments work before accepting a job."))
++ if int(s.get("releases",0))>=2:result.append(offer(&"employees","Employees unlocked!","You can now manage specialists and their training. Would you like a tour of hiring, monthly wages and planning?"))
++ if not str(s.get("implementation_engine","")).is_empty():result.append(offer(&"implementation","Your engine can grow","Your owned engine can implement Features. Would you like to see prerequisites, the FIFO queue and future-game configuration?"))
++ if not str(s.get("skill_engine","")).is_empty():result.append(offer(&"skills","An engine Skill challenge is ready","Your engine has earned a Skill challenge. The Skill Tree shows its requirements, purchase price and generation progress. Would you like a tour?"))
++ if not s.get("publishers",[]).is_empty():result.append(offer(&"publishers","A publisher is interested","A publisher profile has unlocked. Would you like to learn how to inspect availability and compare the actual terms?"))
++ if int(s.get("releases",0))>=1:
++  result.append(offer(&"summaries","Your release has a report","Your game now has a Post Game Summary. Review its results, actual earnings and Promotion options with a short tour."))
++  result.append(offer(&"market","Follow your game on the market","The Daily Chart includes your released games and rival studios. Would you like to learn how to read the market?"))
++ return result
++
++static func offer(id: StringName,title: String,body: String) -> Dictionary:
++ return {"id":id,"label":LABELS[id],"title":title,"body":body}
++static func step(title: String,body: String,target: String) -> Dictionary:
++ return {"title":title,"body":body,"target":target}
++static func steps(id: StringName) -> Array:
++ match id:
++  &"bank":return [step("Read your bankroll","Your bankroll is cash minus overdue obligations. Forecast sales and unpaid earnings are not spendable cash. This tour never borrows or pays anything.","FinanceTotals"),step("Preview before accepting","Enter an amount and term when you are ready to borrow. Preview quote shows the actual offer, debt deductions, interest and repayment schedule. A quote is not an accepted loan.","BankAmount"),step("Inspect repayments","Previous/next payments and financial history explain what has been paid and what is still due. Productive cycles reach the next bill on the game's central calendar.","LoanSelector"),step("Keep room for bills","Check upcoming rent, wages and debt before spending. Close this tour to use the Bank normally; accepting or paying a loan is always your own action.","BankQuote")]
++  &"engines":return [step("Compare engine choices","The list separates Public access, licensed engines, your own engines and market offerings. Inspecting an engine is free and does not select it for a project.","EngineChoices"),step("Read the actual terms","An engine supplies a Feature library, capacity, specialty and any royalties. Public libraries are fixed. The project's frozen engine identity and terms survive through release.","EngineDetails"),step("Create separately","Creating your own engine is a separate paid action. Its library grows through implementation; its Skill Tree supports earned upgrades. This tour never creates, licenses or selects an engine.","DevelopNewEngine")]
++  &"contracts":return [step("Compare the job","Check the offer's Core and Scope targets, required hands and engine choices. Browsing is free; accepting starts that specific job.","ContractDetailText"),step("Understand payment","Read guaranteed upfront and completion/challenge terms. A short hand is legal but still consumes a required hand. Feature plays in Contracts are free; ordinary bills still apply.","ContractDetailText"),step("Commit only when ready","Choose your engine and priorities before accepting. Accepted work cannot be abandoned, and Continue still returns to the last Studio checkpoint. This tour accepts nothing.","AcceptContractButton")]
++  &"employees":return [step("Meet your specialists","Employees unlock after two releases. Roster, Courses and Progress explain candidates, plans and experience. This preview does not activate or hire anyone.","EmployeePanel"),step("Read cost and department","Hiring and recurring wages are separate costs. Specialists contribute through their departments and actual plans; inspect all terms before confirming a hire.","EmployeePanel"),step("Plan and train","Courses and progress depend on their stated requirements. Finish this preview to return to Studio Management; open Employees yourself to manage the roster.","EmployeePanel")]
++  &"implementation":return [step("Follow prerequisites","Your engine's tree distinguishes implemented, held and available Features. Missing-prerequisite controls lead to the necessary nodes. Public and licensed libraries cannot be expanded.","EngineTitle"),step("Queue, then implement","An eligible admission pays its stated down payment without a cycle. The Implement action completes the FIFO head for one productive cycle and the displayed remaining payment. This tour queues and pays nothing.","ImplementFeature"),step("Plan future games","Completed Features affect games begun later with that engine. Existing project pools remain frozen. Familiarity comes from use, and engine capacity/configuration still applies.","ImplementationQueue")]
++  &"skills":return [step("Earn each challenge","Each branch shows its own earned challenge and purchase requirement. Earning a challenge is different from having enough money to buy the Skill.","EngineSkillTree"),step("Inspect the upgrade","Only available generations can be purchased. Read the actual quote, branch effects and automatic capacity milestones; no Feature cards are granted by this tour.","EngineSkillTree"),step("Keep engines distinct","Progress belongs to the particular engine you are inspecting. This tour never buys a Skill, and existing projects keep their frozen engine terms.","BackToEngine")]
++  &"publishers":return [step("Profiles and availability","Profiles can unlock at different milestones. The browser tells you which work and terms are actually available; a new profile is not guaranteed funding.","PublisherList"),step("Compare terms","Inspect work, standing and conditions before choosing. Support and commissions are distinct from ordinary cash Contracts. Existing accepted terms stay frozen.","PublisherBrowser"),step("Decide yourself","Opening the browser is free. Only your own explicit acceptance can commit work or money. Finish this tour to inspect the profiles normally.","PublisherBrowser")]
++  &"summaries":return [step("Choose a released game","Your summaries remain available after the first release. Select a game to inspect its frozen Review, Core and Scope results.","GameList"),step("Actual versus projected","Forecasts are estimates. Monthly sales and earned/paid totals show what really happened; unpaid proceeds are not cash you can spend.","SummaryPanel"),step("Promotion is optional","A campaign uses its displayed money and cycle cost. Detailed Review and Monthly Sales explain more. This tour runs no campaign.","CampaignButton")]
++  &"market":return [step("Read the Daily Chart","Rows include actual games from your Studio and AI rivals. Newest releases appear first; units are actual sales rather than forecasts.","MarketBrowser"),step("Compare carefully","Filters separate studios. Historical records are labelled and may have unavailable sales. Inspect the selected game's details before comparing.","MarketBrowser"),step("Meet the rivals","Market Info also contains Rival Info: live games, Fans and bankroll by Studio. Opening these pages costs no productive cycle.","MarketBrowser")]
++ return []
+--- /dev/null
++++ scripts/tutorial/focused_guidance_preferences.gd
+@@ -0,0 +1,34 @@
++extends RefCounted
++const Catalog=preload("res://scripts/tutorial/focused_guidance_catalog.gd")
++var path: String
++var error:=""
++var _loaded:=false
++var _studios: Dictionary={}
++func _init(value: String="user://focused-guidance-v1.cfg") -> void:path=value
++func _load() -> void:
++ if _loaded:return
++ _loaded=true
++ if not FileAccess.file_exists(path):return
++ var file:=ConfigFile.new()
++ if file.load(path)!=OK or file.get_value("format","version",0)!=1:error="Unreadable focused guidance preferences";return
++ for id: String in file.get_section_keys("studios") if file.has_section("studios") else PackedStringArray():
++  var value: Variant=file.get_value("studios",id)
++  if not value is Array:continue
++  var valid: Array[StringName]=[]
++  for topic: Variant in value:
++   if (topic is String or topic is StringName) and StringName(topic) in Catalog.IDS and StringName(topic) not in valid:valid.append(StringName(topic))
++  _studios[id]=valid
++func seen(studio: String,topic: StringName) -> bool:
++ _load();return topic in _studios.get(studio,[])
++func mark(studio: String,topic: StringName) -> bool:
++ if studio.is_empty() or topic not in Catalog.IDS:return false
++ _load()
++ if seen(studio,topic):return true
++ if not _studios.has(studio):_studios[studio]=[]
++ _studios[studio].append(topic)
++ var file:=ConfigFile.new();file.set_value("format","version",1)
++ for id: String in _studios:file.set_value("studios",id,_studios[id])
++ var result:=file.save(path+".tmp")
++ if result==OK:result=DirAccess.rename_absolute(ProjectSettings.globalize_path(path+".tmp"),ProjectSettings.globalize_path(path))
++ error="" if result==OK else "Could not remember focused guidance; the current session can continue."
++ return result==OK
+--- /dev/null
++++ scripts/tutorial/focused_guidance_controller.gd
+@@ -0,0 +1,263 @@
++extends Node
++const Catalog=preload("res://scripts/tutorial/focused_guidance_catalog.gd")
++const Preferences=preload("res://scripts/tutorial/focused_guidance_preferences.gd")
++const Overlay=preload("res://scripts/ui/focused_guidance_overlay.gd")
++var game: Control
++var view: CanvasLayer
++var preferences=Preferences.new()
++var automatic_enabled:=true
++var current_topic: StringName=&""
++var tour_steps: Array=[]
++var last_opportunity: String=""
++var _run: RunState
++var _dirty:=true
++var _elapsed:=0.0
++var _routing:=false
++var _epoch:=0
++var _step:=0
++var _tour_phase: WeakRef
++var _preview_employee:=false
++var _preview_contract:=false
++const SIGNALS=[&"cash_changed",&"calendar_changed",&"finance_changed",&"sales_changed",&"contracts_changed",&"publishers_changed",&"engines_changed"]
++func _ready() -> void:
++ process_mode=Node.PROCESS_MODE_ALWAYS
++ view=Overlay.new();add_child(view)
++ view.accepted.connect(_accept)
++ view.dismissed.connect(dismiss)
++ view.step_requested.connect(_step_requested)
++ view.closed.connect(_restore_focus)
++func bind_game(value: Control) -> void:
++ game=value
++ var hud=game.get_node("%GameplayHUD")
++ hud.phase_changed.connect(_phase_changed)
++ hud.how_to_play.tour_requested.connect(_guide_tour)
++ hud.how_to_play.tour_availability=can_tour
++ _phase_changed()
++func _phase_changed() -> void:
++ if game==null:return
++ if _run!=game.run_state:
++  if _run!=null:
++   for name: StringName in SIGNALS:
++    if _run.is_connected(name,consider):_run.disconnect(name,consider)
++  _run=game.run_state;last_opportunity=""
++  if _run!=null:
++   for name: StringName in SIGNALS:_run.connect(name,consider)
++ if is_instance_valid(view) and view.is_open():dismiss(true)
++ consider()
++func consider() -> void:
++ _dirty=true;set_process(true)
++func is_active() -> bool:return _routing or is_instance_valid(view) and view.is_open()
++func _opportunity() -> String:
++ return "%s:%s:%s"%[_run._bank_run_id,_run.get_completed_run_cycles(),game._active_phase.get_instance_id()]
++func _process(delta: float) -> void:
++ if game==null or not is_instance_valid(game):return
++ if view.is_open():
++  if game._checkpoint_dialog_visible() or game._active_phase is MainMenu:dismiss(true)
++  return
++ if not _dirty or _routing:return
++ _elapsed+=delta
++ if _elapsed<0.2:return
++ _elapsed=0.0
++ if not automatic_enabled:_dirty=false;set_process(false);return
++ if not _safe():return
++ if game.checkpoints!=null and game.checkpoints.debug_session:_dirty=false;set_process(false);return
++ var opportunity:=_opportunity()
++ if opportunity==last_opportunity:_dirty=false;set_process(false);return
++ var s: Dictionary=Catalog.snapshot(_run)
++ for offer: Dictionary in Catalog.candidates(s):
++  if offer.id!=&"bank" and not game._active_phase is StudioPhase:continue
++  if not preferences.seen(str(_run._bank_run_id),offer.id):
++   current_topic=offer.id;last_opportunity=opportunity;_dirty=false
++   preferences.mark(str(_run._bank_run_id),current_topic)
++   game.get_node("%GameplayHUD").contextual_tip.dismiss()
++   view.show_notice(offer);return
++ _dirty=false;set_process(false)
++func _safe() -> bool:
++ if game==null or _run==null or _run._bank_run_id.is_empty() or not is_instance_valid(game._active_phase):return false
++ if get_tree().paused or game._transition_in_progress or game._loading_checkpoint or game._save_navigation_pending or game._startup_panel!=null or game.guided_tutorial!=null or game.annual_awards_blocking() or game._checkpoint_dialog_visible():return false
++ var phase: Control=game._active_phase
++ if phase is MainMenu or phase is FirstProjectSetup or phase is PostGameReview or not phase.is_visible_in_tree():return false
++ var hud=game.get_node("%GameplayHUD")
++ if hud.how_to_play.is_open() or hud.settings_menu.is_open() or hud.tutorial_overlay.visible or hud.studio_finances.visible or hud.fans_dialog.visible:return false
++ if game.developer_tools!=null and game.developer_tools.panel.visible:return false
++ for window: Window in game.find_children("*","Window",true,false):
++  if window.visible:return false
++ if phase is StudioPhase:
++  if phase._hub_motion==null or phase._hub_motion.busy or phase._hub.transitioning or phase._returning_destination or phase._hub_motion.depth()!=1:return false
++ elif phase.has_method("get_workspace"):
++  var workspace=phase.get_workspace()
++  if workspace!=null and (workspace.overlay.visible or workspace.hand_motion!=null and workspace.hand_motion.busy):return false
++ elif phase is ContractPhase:
++  for node: Node in phase.get_children():
++   if node is HandPresentation and node.busy:return false
++ return true
++func dismiss(immediate: bool=false) -> void:
++ _epoch+=1;_routing=false
++ if game!=null:game.get_node("%GameplayHUD").focused_guidance_active=false
++ if is_instance_valid(view):view.close(immediate)
++ if _preview_contract:
++  _preview_contract=false
++  var studio: StudioPhase=game._active_phase as StudioPhase
++  if studio!=null and _tour_phase!=null and _tour_phase.get_ref()==studio:studio._open_menu(&"production",studio.get_node("%Contracts"))
++ if _preview_employee:
++  _preview_employee=false
++  var studio: StudioPhase=game._active_phase as StudioPhase
++  if studio!=null and _tour_phase!=null and _tour_phase.get_ref()==studio:studio._open_management(studio.get_node("%Employees"))
++ tour_steps=[];current_topic=&"";set_process(false)
++func can_tour(id: StringName) -> bool:
++ if game==null or _run==null or not is_instance_valid(game._active_phase) or game._active_phase is MainMenu or _run._bank_run_id.is_empty():return false
++ if id==&"bank":return not game._active_phase is FirstProjectSetup
++ if not game._active_phase is StudioPhase:return false
++ match id:
++  &"engines",&"publishers",&"market":return true
++  &"contracts":return not _run.get_released_game_ids().is_empty() and _run.get_active_contract()==null
++  &"employees":return _run.get_released_game_ids().size()>=2
++  &"summaries":return not _run.get_released_game_ids().is_empty()
++  &"implementation":
++   var state:=_run.get_engine_feature_state()
++   for row: Dictionary in state.engines.values():
++    if row.kind==&"proprietary":return true
++  &"skills":return not _run.get_proprietary_engine_state().engines.is_empty()
++ return false
++func _modal_blocks(id: StringName) -> bool:
++ if get_tree().paused or game._transition_in_progress or game._loading_checkpoint or game._save_navigation_pending or game._startup_panel!=null or game.guided_tutorial!=null or game.annual_awards_blocking() or game._checkpoint_dialog_visible():return true
++ var hud=game.get_node("%GameplayHUD")
++ if hud.how_to_play.is_open() or hud.settings_menu.is_open() or hud.tutorial_overlay.visible or hud.fans_dialog.visible:return true
++ if hud.studio_finances.visible and id!=&"bank":return true
++ if game.developer_tools!=null and game.developer_tools.panel.visible:return true
++ for window: Window in game.find_children("*","Window",true,false):
++  if window.visible:return true
++ if game._active_phase.has_method("get_workspace"):
++  var workspace=game._active_phase.get_workspace()
++  if workspace!=null and workspace.overlay.visible:return true
++ return false
++func _navigation_token() -> String:
++ var phase: StudioPhase=game._active_phase as StudioPhase
++ return "%s:%s:%s"%[_opportunity(),phase._active_menu,phase._hub_motion.depth()] if phase!=null else _opportunity()
++func _guide_tour(id: StringName) -> void:
++ var epoch:=_epoch
++ var token:=_navigation_token()
++ game.get_node("%GameplayHUD").how_to_play.close()
++ game._resume_from_pause()
++ await get_tree().create_timer(0.26,true).timeout
++ if epoch!=_epoch or token!=_navigation_token() or _modal_blocks(id):return
++ await start_tour(id)
++func _accept() -> void:await start_tour(current_topic)
++func start_tour(id: StringName) -> bool:
++ if _routing or not can_tour(id) or _hand_busy() or _modal_blocks(id):return false
++ _epoch+=1;var epoch:=_epoch
++ game.get_node("%GameplayHUD").contextual_tip.dismiss()
++ game.get_node("%GameplayHUD").focused_guidance_active=true
++ current_topic=id;_routing=true;tour_steps=Catalog.steps(id);_step=0
++ var phase: Control=game._active_phase
++ _tour_phase=weakref(phase)
++ view.show_notice({"title":"Opening "+str(Catalog.LABELS[id]),"body":"This is a read-only tour. No purchase, payment or productive action will be made.","id":id})
++ view.primary.disabled=true
++ var opened: bool=await _route(id,epoch)
++ if epoch!=_epoch or not is_instance_valid(phase) or game._active_phase!=phase:
++  _routing=false;return false
++ _routing=false;view.primary.disabled=false
++ if not opened:
++  view.show_notice({"title":"Tour unavailable right now","body":"Close the current action or save warning and replay this tour from How to Play when you are ready.","id":id})
++  view.primary.disabled=true;return false
++ if game.checkpoints==null or not game.checkpoints.debug_session:preferences.mark(str(_run._bank_run_id),id)
++ last_opportunity=_opportunity()
++ _present_step();set_process(true);return true
++func _step_requested(direction: int) -> void:
++ if _routing or tour_steps.is_empty():return
++ _step+=direction
++ if _step>=tour_steps.size():dismiss();return
++ _step=maxi(0,_step);_present_step()
++func _present_step() -> void:
++ view.show_step(str(Catalog.LABELS[current_topic]),_step,tour_steps.size(),tour_steps[_step],_target(str(tour_steps[_step].target)))
++func _route_valid(epoch: int,studio: StudioPhase) -> bool:
++ return is_instance_valid(studio) and game._active_phase==studio and (epoch<0 or epoch==_epoch) and not game._transition_in_progress and not game._loading_checkpoint and not game._save_navigation_pending and not game._checkpoint_dialog_visible() and not _modal_blocks(current_topic)
++func _wait_motion(studio: StudioPhase,epoch: int=-1) -> bool:
++ var limit:=Time.get_ticks_msec()+5000
++ while _route_valid(epoch,studio) and (studio._hub_motion.busy or studio._hub.transitioning or studio._returning_destination) and Time.get_ticks_msec()<limit:await get_tree().process_frame
++ return _route_valid(epoch,studio) and not studio._hub_motion.busy and not studio._hub.transitioning and not studio._returning_destination
++func return_to_studio_root(epoch: int=-1) -> bool:
++ if game==null or not game._active_phase is StudioPhase:return false
++ var studio: StudioPhase=game._active_phase
++ var hud=game.get_node("%GameplayHUD")
++ if hud.studio_finances.visible:hud.studio_finances.close()
++ if not await _wait_motion(studio,epoch):return false
++ for i in 6:
++  if studio._hub_motion.depth()<=1:return true
++  studio._open_menu(studio._active_menu)
++  if not await _wait_motion(studio,epoch):return false
++ return studio._hub_motion.depth()==1
++func _route(id: StringName,epoch: int) -> bool:
++ var hud=game.get_node("%GameplayHUD")
++ if id==&"bank" and not game._active_phase is StudioPhase:return hud.studio_finances.open("Back to Game",&"bank")
++ if not await return_to_studio_root(epoch):return false
++ var studio: StudioPhase=game._active_phase
++ var group: StringName=&"management" if id in [&"engines",&"implementation",&"skills",&"employees"] else &"production" if id==&"contracts" else &"studio_info" if id in [&"bank",&"summaries"] else &"market"
++ studio._show_group(group)
++ if not await _wait_motion(studio,epoch):return false
++ match id:
++  &"bank":studio._open_bank()
++  &"engines":studio._open_engines()
++  &"employees":
++   _preview_employee=true;studio._open_employees(true)
++  &"contracts":
++   _preview_contract=true;studio._open_contracts(&"",true)
++  &"publishers":studio._open_publishers()
++  &"summaries":studio.open_summary()
++  &"market":studio._open_market()
++  &"implementation",&"skills":
++   var snapshot: Dictionary=Catalog.snapshot(_run)
++   var engine: StringName=snapshot.implementation_engine
++   if id==&"skills":
++    engine=snapshot.skill_engine
++    if engine.is_empty():
++     var owned:=_run.get_proprietary_engine_state();engine=owned.engines.keys()[0]
++   studio._open_engines(engine)
++   if not await _wait_motion(studio,epoch):return false
++   if id==&"implementation":studio._open_feature_store()
++   else:studio._engine_browser._open_skill_tree()
++ if not await _wait_motion(studio,epoch):return false
++ await get_tree().process_frame
++ return _route_valid(epoch,studio) and _target(str(Catalog.steps(id)[0].target))!=null
++func _hand_busy() -> bool:
++ var phase=game._active_phase
++ if phase is ContractPhase:return phase.hand_motion!=null and phase.hand_motion.busy
++ if phase!=null and phase.has_method("get_workspace"):
++  var workspace=phase.get_workspace()
++  return workspace!=null and workspace.hand_motion!=null and workspace.hand_motion.busy
++ return false
++func _restore_focus() -> void:
++ var focused:=get_viewport().gui_get_focus_owner()
++ if is_instance_valid(focused) and focused.is_visible_in_tree():return
++ var hud=game.get_node("%GameplayHUD")
++ if hud.studio_finances.visible:hud.studio_finances.amount_input.grab_focus();return
++ if not is_instance_valid(game._active_phase):return
++ for button: Button in game._active_phase.find_children("*","Button",true,false):
++  if button.is_visible_in_tree() and not button.disabled:button.grab_focus();return
++func _target(key: String) -> Control:
++ var hud=game.get_node("%GameplayHUD")
++ var bank: StudioFinances=hud.studio_finances
++ var studio: StudioPhase=game._active_phase as StudioPhase
++ if key=="FinanceTotals":return bank.totals_label
++ if key=="BankAmount":return bank.amount_input
++ if key=="BankQuote":return bank.quote_details
++ if key=="LoanSelector":return bank.loan_selector
++ if studio==null:return null
++ var browser=studio._engine_browser
++ if browser!=null:
++  if key=="EngineChoices":return browser.engine_list
++  if key=="EngineDetails":return browser.description
++  if key=="DevelopNewEngine":return browser.develop_button
++  if key=="EngineSkillTree":return browser.skill_tree
++  if key=="BackToEngine":return browser.skill_back
++ if key=="EmployeePanel" and studio._employees_panel!=null:return studio._employees_panel.content
++ if key=="PublisherBrowser":return studio._publisher_browser
++ if key=="PublisherList" and studio._publisher_browser!=null:return studio._publisher_browser._list
++ if key=="MarketBrowser":return studio._market_browser
++ for control: Control in game.find_children(key,"Control",true,false):
++  if control.is_visible_in_tree():return control
++ return null
++func _exit_tree() -> void:
++ if _run!=null:
++  for name: StringName in SIGNALS:
++   if _run.is_connected(name,consider):_run.disconnect(name,consider)
+--- /dev/null
++++ scripts/ui/focused_guidance_overlay.gd
+@@ -0,0 +1,123 @@
++extends CanvasLayer
++## Focused, non-pausing presentation. All transactions remain player-owned.
++signal closed
++signal accepted
++signal dismissed
++signal step_requested(direction: int)
++class Spotlight extends Control:
++ var hole:=Rect2()
++ func _draw() -> void:
++  var color:=Color(0.015,0.012,0.03,0.76)
++  if hole.size==Vector2.ZERO:draw_rect(Rect2(Vector2.ZERO,size),color);return
++  draw_rect(Rect2(0,0,size.x,hole.position.y),color)
++  draw_rect(Rect2(0,hole.end.y,size.x,maxf(0,size.y-hole.end.y)),color)
++  draw_rect(Rect2(0,hole.position.y,hole.position.x,hole.size.y),color)
++  draw_rect(Rect2(hole.end.x,hole.position.y,maxf(0,size.x-hole.end.x),hole.size.y),color)
++  draw_rect(hole,Color("5ef2c2"),false,3.0)
++var panel: PanelContainer
++var title: Label
++var body: Label
++var progress: Label
++var primary: Button
++var dismiss: Button
++var back: Button
++var _shade: Spotlight
++var _target: WeakRef
++var _tour:=false
++var _closing:=false
++var _return_focus: WeakRef
++var _animation: Tween
++func _ready() -> void:
++ process_mode=Node.PROCESS_MODE_ALWAYS;layer=150
++ add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
++ _shade=Spotlight.new();_shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);_shade.mouse_filter=Control.MOUSE_FILTER_STOP;add_child(_shade)
++ panel=PanelContainer.new();panel.name="FocusedGuidancePanel";panel.theme=FolderUI.THEME;panel.theme_type_variation=&"FolderPanel";_shade.add_child(panel)
++ var margin:=MarginContainer.new()
++ for edge in ["left","top","right","bottom"]:margin.add_theme_constant_override("margin_"+edge,24)
++ panel.add_child(margin)
++ var box:=VBoxContainer.new();box.add_theme_constant_override("separation",14);margin.add_child(box)
++ progress=FolderUI.label(box,"",&"MetadataLabel");progress.add_theme_font_size_override("font_size",14)
++ title=FolderUI.label(box,"",&"HeadingLabel");title.add_theme_font_size_override("font_size",26);title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
++ body=FolderUI.label(box,"");body.add_theme_font_size_override("font_size",18);body.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
++ var actions:=HBoxContainer.new();actions.add_theme_constant_override("separation",10);box.add_child(actions)
++ back=FolderUI.button(actions,"Back",func():step_requested.emit(-1));back.custom_minimum_size.y=46
++ primary=FolderUI.button(actions,"Show me around",func():
++  if _tour:step_requested.emit(1)
++  else:accepted.emit(),&"PrimaryButton");primary.custom_minimum_size.y=46;primary.size_flags_horizontal=Control.SIZE_EXPAND_FILL
++ dismiss=FolderUI.button(actions,"Dismiss",func():dismissed.emit());dismiss.custom_minimum_size.y=46
++ get_viewport().size_changed.connect(_fit)
++ hide();set_process(false)
++func is_open() -> bool:return visible and not _closing
++func show_notice(offer: Dictionary) -> void:
++ if not visible or _closing:_return_focus=weakref(get_viewport().gui_get_focus_owner()) if get_viewport().gui_get_focus_owner()!=null else null
++ _tour=false;_target=null;progress.text="NEW STUDIO GUIDANCE";title.text=offer.title;body.text=offer.body
++ back.hide();primary.text="Show me around";dismiss.text="Dismiss";_show()
++func show_step(label: String,index: int,total: int,step: Dictionary,target: Control) -> void:
++ _tour=true;_target=weakref(target) if is_instance_valid(target) else null
++ progress.text="%s  /  %d OF %d"%[label.to_upper(),index+1,total];title.text=step.title;body.text=step.body
++ back.visible=index>0;primary.text="Finish tour" if index==total-1 else "Next";dismiss.text="Exit tour";_show()
++func _show() -> void:
++ if _animation!=null and _animation.is_valid():_animation.kill()
++ _closing=false;primary.disabled=false;show();_fit();set_process(true)
++ panel.modulate.a=0;panel.scale=Vector2(0.97,0.97);panel.pivot_offset=panel.size*0.5
++ _animation=create_tween().set_parallel().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
++ _animation.tween_property(panel,"modulate:a",1.0,0.18)
++ _animation.tween_property(panel,"scale",Vector2.ONE,0.22).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
++ primary.grab_focus();_fit.call_deferred()
++func close(immediate: bool=false) -> void:
++ if _animation!=null and _animation.is_valid():_animation.kill()
++ _closing=true;set_process(false);_target=null
++ if immediate:_finish_close();return
++ _animation=create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
++ _animation.tween_property(panel,"modulate:a",0.0,0.15)
++ _animation.tween_callback(_finish_close)
++func _finish_close() -> void:
++ hide()
++ if _return_focus!=null:
++  var focus: Control=_return_focus.get_ref()
++  if is_instance_valid(focus) and focus.is_visible_in_tree():focus.grab_focus()
++ closed.emit()
++func _fit() -> void:
++ if panel==null:return
++ var size:=get_viewport().get_visible_rect().size
++ var width:=minf(680.0 if not _tour else 470.0,size.x-48.0)
++ panel.custom_minimum_size.x=width;panel.size.x=width;panel.reset_size();panel.size.x=width
++ panel.size.y=maxf(250.0,panel.get_combined_minimum_size().y)
++ var hole:=Rect2()
++ if _target!=null:
++  var control: Control=_target.get_ref()
++  if is_instance_valid(control) and control.is_visible_in_tree():
++   hole=control.get_global_rect().intersection(Rect2(Vector2.ZERO,size))
++   var ancestor: Node=control.get_parent()
++   while ancestor!=null:
++    if ancestor is Control and ancestor.clip_contents:hole=hole.intersection(ancestor.get_global_rect())
++    ancestor=ancestor.get_parent()
++   if hole.has_area():hole=hole.grow(6).intersection(Rect2(Vector2.ZERO,size))
++   if hole.size.y>size.y*0.45:hole.size.y=72
++ _shade.hole=hole;_shade.queue_redraw()
++ if not _tour:panel.position=(size-panel.size)*0.5;return
++ var choices: Array[Vector2]=[size-panel.size-Vector2(24,82),Vector2(24,100),Vector2(24,size.y-panel.size.y-82),Vector2(size.x-panel.size.x-24,100)]
++ panel.position=choices[0].clamp(Vector2(24,24),size-panel.size-Vector2(24,24))
++ for point: Vector2 in choices:
++  point=point.clamp(Vector2(24,24),size-panel.size-Vector2(24,24))
++  if not Rect2(point,panel.size).intersects(hole):panel.position=point;break
++func _process(_delta: float) -> void:
++ if is_open():_fit()
++func _input(event: InputEvent) -> void:
++ if not visible:return
++ if _closing:
++  get_viewport().set_input_as_handled();return
++ if event.is_action_pressed("ui_cancel"):dismissed.emit()
++ elif event.is_action_pressed("ui_focus_next") or event.is_action_pressed("ui_focus_prev") or event.is_action_pressed("ui_down") or event.is_action_pressed("ui_up"):
++  var buttons: Array[Button]=[primary,dismiss]
++  if back.visible:buttons.push_front(back)
++  var direction: int=-1 if event.is_action_pressed("ui_focus_prev") or event.is_action_pressed("ui_up") else 1
++  buttons[posmod(buttons.find(get_viewport().gui_get_focus_owner())+direction,buttons.size())].grab_focus()
++ elif event is InputEventKey or event is InputEventJoypadButton or event is InputEventJoypadMotion:
++  if event.is_action_pressed("ui_accept"):
++   var focused:=get_viewport().gui_get_focus_owner()
++   if focused is Button and not focused.disabled and focused in [back,primary,dismiss]:focused.pressed.emit()
++ else:return
++ get_viewport().set_input_as_handled()
++func _exit_tree() -> void:
++ if _animation!=null and _animation.is_valid():_animation.kill()
+--- /dev/null
++++ scripts/debug/verify_focused_onboarding.gd
+@@ -0,0 +1,42 @@
++extends SceneTree
++var checks:=0
++var failures:=0
++func expect(value: bool,label: String) -> void:
++ checks+=1;print("PASS: " if value else "FAIL: ",label)
++ if not value:failures+=1
++func _initialize() -> void:verify.call_deferred()
++func verify() -> void:
++ expect(ResourceLoader.exists("res://scripts/tutorial/focused_guidance_catalog.gd"),"Focused conditional invitation catalog exists")
++ if failures:quit(1);return
++ var catalog=load("res://scripts/tutorial/focused_guidance_catalog.gd")
++ var s={"releases":0,"public_releases":0,"bankroll_cents":100,"publishers":[],"implementation_engine":&"","skill_engine":&""}
++ expect(catalog.candidates(s).is_empty(),"Fresh Studio has no premature unlock prompts")
++ s.releases=1
++ expect(ids(catalog.candidates(s)).has(&"contracts"),"First release offers Contracts independent of cash")
++ expect(not ids(catalog.candidates(s)).has(&"employees"),"Employees waits for two releases")
++ s.releases=2;s.bankroll_cents=-1;s.public_releases=2
++ var offers: Array=catalog.candidates(s)
++ expect(offers[0].id==&"bank","Negative signed bankroll takes priority")
++ expect(ids(offers).has(&"employees") and not ids(offers).has(&"engines"),"Second release offers Employees but not premature public-engine tour")
++ s.public_releases=3
++ expect(ids(catalog.candidates(s)).has(&"engines"),"Three recorded Public releases offer Engines")
++ s.bankroll_cents=0
++ expect(not ids(catalog.candidates(s)).has(&"bank"),"Zero bankroll does not count as negative")
++ s.implementation_engine=&"owned";s.skill_engine=&"owned";s.publishers=[&"ironclad"]
++ expect(ids(catalog.candidates(s)).has(&"implementation") and ids(catalog.candidates(s)).has(&"skills") and ids(catalog.candidates(s)).has(&"publishers"),"Owned engine and earned skill/publisher unlocks have invitations")
++ var Pref=load("res://scripts/tutorial/focused_guidance_preferences.gd")
++ var path:=OS.get_environment("PN_FOCUS_TEST_DIRECTORY").path_join("preferences.cfg")
++ var prefs=Pref.new(path)
++ expect(not prefs.seen("studio-a",&"bank"),"New per-Studio acknowledgment defaults unseen")
++ expect(prefs.mark("studio-a",&"bank") and prefs.seen("studio-a",&"bank"),"Dismissed/shown invitation is remembered")
++ var reopened=Pref.new(path)
++ expect(reopened.seen("studio-a",&"bank") and not reopened.seen("studio-b",&"bank"),"Preference survives reopen without leaking to another Studio")
++ expect(not prefs.mark("studio-a",&"unknown"),"Unknown preference topic is rejected")
++ print("EXPECTED_CORRUPT_FOCUSED_PREFERENCE")
++ var f:=FileAccess.open(path,FileAccess.WRITE);f.store_string("corrupt=[");f.close()
++ expect(not Pref.new(path).seen("studio-a",&"bank"),"Corrupt preference safely falls back")
++ var failed=Pref.new(path.path_join("missing/child.cfg"))
++ expect(not failed.mark("studio-a",&"bank") and failed.seen("studio-a",&"bank"),"Failed persistence does not repeat the same invitation during this session")
++ print("FOCUSED_CATALOG checks=%d failures=%d"%[checks,failures]);quit(failures)
++func ids(items: Array) -> Array:
++ return items.map(func(item: Dictionary):return item.id)
+--- /dev/null
++++ scripts/debug/verify_focused_modal.gd
+@@ -0,0 +1,44 @@
++extends SceneTree
++var checks:=0
++var failures:=0
++func check(ok: bool,label: String) -> void:
++ checks+=1;print("PASS: " if ok else "FAIL: ",label)
++ if not ok:failures+=1
++func _initialize() -> void:go.call_deferred()
++func go() -> void:
++ check(ResourceLoader.exists("res://scripts/ui/focused_guidance_overlay.gd"),"Focused invitation/tour surface exists")
++ if failures:quit(1);return
++ var view=load("res://scripts/ui/focused_guidance_overlay.gd").new();root.add_child(view);await process_frame
++ for size in [Vector2i(1152,648),Vector2i(1280,720),Vector2i(1920,1080)]:
++  root.size=size;root.content_scale_size=size
++  view.show_notice({"id":&"bank","title":"Banking can help","body":"Your bankroll is negative. Would you like a tour of bills, loan quotes and repayments?","label":"Bank"})
++  await process_frame;await process_frame
++  check(view.is_open() and Rect2(Vector2.ZERO,Vector2(size)).encloses(view.panel.get_global_rect()),"Focused notice fits "+str(size))
++  check(view.primary.text=="Show me around" and view.dismiss.text=="Dismiss","Notice always offers tour and dismiss")
++  check(not paused,"Focused guidance never suspends gameplay/music")
++  var target:=Button.new();target.position=Vector2(24,110);target.size=Vector2(280,60);root.add_child(target)
++  view.show_step("Bank",0,3,{"title":"Read your balance","body":"Cash and overdue bills determine your signed bankroll."},target)
++  await process_frame;await process_frame
++  check(not view.back.visible and view.primary.text=="Next","First tour step cannot go backwards")
++  check(not view.panel.get_global_rect().intersects(target.get_global_rect()),"Tour instructions avoid their highlighted control")
++  view.show_step("Bank",2,3,{"title":"Finish","body":"Your money and bills have not changed."},target)
++  check(view.primary.text=="Finish tour" and view.back.visible,"Last step offers Finish and Back")
++  view.close();check(not view.is_open(),"Dismiss releases the focused surface")
++  target.queue_free();await process_frame
++ # Actual dispatched keyboard/controller input remains in the focused surface.
++ await create_timer(0.2).timeout
++ var count:={"dismiss":0,"accept":0}
++ view.dismissed.connect(func():count.dismiss+=1;view.close())
++ view.accepted.connect(func():count.accept+=1)
++ view.show_notice({"id":&"bank","title":"Input check","body":"A keyboard event must not leak to gameplay."})
++ var tab:=InputEventAction.new();tab.action=&"ui_focus_next";tab.pressed=true;Input.parse_input_event(tab);await process_frame
++ check(root.gui_get_focus_owner()==view.dismiss,"Tab stays inside focused actions")
++ view.primary.disabled=true;view.primary.grab_focus()
++ var enter:=InputEventKey.new();enter.keycode=KEY_ENTER;enter.pressed=true;view._input(enter)
++ check(count.accept==0,"Disabled route action cannot be accepted by keyboard")
++ view.primary.disabled=false;view._input(enter);check(count.accept==1,"Enter activates the focused enabled action exactly once")
++ var escape:=InputEventKey.new();escape.keycode=KEY_ESCAPE;escape.pressed=true;Input.parse_input_event(escape);await process_frame
++ check(count.dismiss==1,"Escape dismisses focused guidance")
++ await create_timer(0.2).timeout
++ check(not view.visible and not paused,"Dismiss finishes animation and restores unsuspended game")
++ print("FOCUSED_MODAL checks=%d failures=%d"%[checks,failures]);quit(failures)
+--- /dev/null
++++ scripts/debug/verify_focused_integration.gd
+@@ -0,0 +1,120 @@
++extends SceneTree
++const Replay=preload("res://scripts/simulation/development_replay.gd")
++var checks:=0
++var failures:=0
++class PrivateStore extends StudioCheckpointStore:
++ func acquire() -> bool:
++  if _writer!=null:return true
++  var port:=int(OS.get_environment("PN_CHECKPOINT_TEST_PORT"))
++  if port<49000 or port>=50000:return false
++  _writer=TCPServer.new();return _writer.listen(port,"127.0.0.1")==OK
++func check(ok: bool,label: String) -> void:
++ checks+=1;print("PASS: " if ok else "FAIL: ",label)
++ if not ok:failures+=1
++func wait_for(test: Callable,label: String,seconds: float=8.0) -> bool:
++ var deadline:=Time.get_ticks_msec()+int(seconds*1000)
++ while not test.call() and Time.get_ticks_msec()<deadline:await process_frame
++ return check_wait(test.call(),label)
++func check_wait(ok: bool,label: String) -> bool:check(ok,label);return ok
++func _initialize() -> void:go.call_deferred()
++func capture(tag: String) -> void:
++ if DisplayServer.get_name()=="headless":return
++ await create_timer(0.26).timeout
++ await process_frame
++ await RenderingServer.frame_post_draw
++ root.get_texture().get_image().save_png(OS.get_environment("PN_FOCUS_TEST_DIRECTORY").path_join(tag+".png"))
++func go() -> void:
++ var dimensions:=OS.get_environment("PN_FOCUS_SIZE").split("x")
++ root.size=Vector2i(int(dimensions[0]),int(dimensions[1]));root.content_scale_size=root.size
++ check(ResourceLoader.exists("res://scripts/tutorial/focused_guidance_controller.gd"),"Focused milestone controller exists")
++ if failures:quit(1);return
++ node_added.connect(func(node: Node):
++  if node is CheckpointCoordinator:node.store=PrivateStore.new("user://saves/studio",node._validate_payload))
++ var game=load("res://scenes/gameplay.tscn").instantiate();root.add_child(game);await process_frame
++ root.size=Vector2i(int(dimensions[0]),int(dimensions[1]));root.content_scale_size=root.size
++ game._onboarding.answer(true)
++ var pair: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(OS.get_environment("PN_CONTRACT_FIXTURE")))
++ game.checkpoints.rival_catalog=root.get_node("CardDatabase").get_development_catalog()
++ var payload: Dictionary=pair.player.duplicate(true);payload["rival_world"]=pair.world
++ var publication: Dictionary=game.checkpoints.store.save(payload)
++ check(publication.status==&"saved","Genuine preceding paired Studio publishes to private fixture store: "+str(publication))
++ if publication.status!=&"saved":quit(1);return
++ game._continue_checkpoint()
++ if not await wait_for(func():return game.guided_tutorial!=null,"Ordinary Continue invitation takes precedence",20.0):quit(1);return
++ check(not game.focused_guidance.view.is_open(),"Focused invitation never covers production-practice invitation")
++ game.guided_tutorial.choice.emit(true,false)
++ if not await wait_for(func():return game.focused_guidance.view.is_open(),"Relevant first-time invitation appears after safe Studio entry",20.0):quit(1);return
++ await capture("first-notice")
++ var focus=game.focused_guidance
++ var run: RunState=game.run_state
++ var before: Dictionary=Replay.freeze(run)
++ var topic: StringName=focus.current_topic
++ check(focus.preferences.seen(str(run._bank_run_id),topic),"Presented invitation is remembered for this Studio")
++ focus.view.dismiss.pressed.emit();await create_timer(0.3).timeout;focus.consider();await create_timer(0.5).timeout
++ check(not focus.view.is_open(),"Dismissing does not stack another popup at the same opportunity")
++ check(Replay.freeze(run)==before,"Invitation/dismissal preserve complete real state and RNG")
++ for id: StringName in [&"bank",&"engines",&"contracts",&"employees",&"implementation",&"skills",&"publishers",&"summaries",&"market"]:
++  if not focus.can_tour(id):continue
++  var frozen: Dictionary=Replay.freeze(run)
++  check(await focus.start_tour(id),"Read-only route opens "+str(id))
++  if not focus.view.is_open():continue
++  await capture("tour-"+str(id))
++  for step in range(focus.tour_steps.size()):
++   check(focus.view.is_open(),"Tour step remains focused "+str(id)+str(step))
++   focus.view.primary.pressed.emit();await create_timer(0.28).timeout
++  check(not focus.view.is_open(),"Finish restores control "+str(id))
++  var after: Dictionary=Replay.freeze(run)
++  if after!=frozen:
++   FileAccess.open(OS.get_environment("PN_FOCUS_TEST_DIRECTORY").path_join(str(id)+"-before.json"),FileAccess.WRITE).store_string(JSON.stringify(frozen))
++   FileAccess.open(OS.get_environment("PN_FOCUS_TEST_DIRECTORY").path_join(str(id)+"-after.json"),FileAccess.WRITE).store_string(JSON.stringify(after))
++  check(after==frozen,"Tour preserves all finance/history/engine/RNG fields "+str(id))
++  if game.get_node("%GameplayHUD").studio_finances.visible:game.get_node("%GameplayHUD").studio_finances.close()
++  await focus.return_to_studio_root();await create_timer(0.3).timeout
++ # Cancellation fences all intermediate navigation, not merely the final step.
++ focus.start_tour(&"engines")
++ focus.dismiss();await create_timer(0.8).timeout
++ check(not focus.view.is_open() and not focus._routing,"Dismiss cancels an in-flight route without reopening the tour")
++ await focus.return_to_studio_root()
++ var guide=game.get_node("%GameplayHUD").how_to_play
++ guide.select_folder(0);guide.select_topic(0)
++ for i in guide.sections[0].topics.size():
++  if guide.sections[0].topics[i].id=="guided_tours":guide.select_topic(i)
++ # Reopening refreshes availability, with an intentionally stale control.
++ var employee_button=guide.tour_list.get_node("Tour_employees")
++ employee_button.disabled=true;guide.open();await create_timer(0.3).timeout
++ check(not guide.tour_list.get_node("Tour_employees").disabled,"Guide replay availability refreshes on reopen")
++ var tab:=InputEventAction.new();tab.action=&"ui_focus_next";tab.pressed=true
++ var first_tour: Button=guide.tour_list.get_child(0);first_tour.grab_focus();Input.parse_input_event(tab);await process_frame
++ check(root.gui_get_focus_owner() in guide.tour_list.get_children(),"Guide keyboard traversal reaches guided tour actions")
++ guide.close();await create_timer(0.3).timeout
++ check(Replay.freeze(run)==before,"All tours, cancellation and guide replay preserve initial full Run/RNG state")
++ var phase: StudioPhase=game._active_phase
++ phase._hub_motion.busy=true
++ check(not focus._safe(),"Navigation motion defers automatic invitations")
++ phase._hub_motion.busy=false
++ game._loading_checkpoint=true;check(not focus._safe(),"Loading defers automatic invitations");game._loading_checkpoint=false
++ game.get_node("%GameplayHUD").how_to_play.open();check(not focus._safe(),"How to Play owns the screen before focused invitations");guide.close();await create_timer(0.25).timeout
++ guide.open();guide.tour_requested.emit(&"bank")
++ game.get_node("%GameplayHUD").tutorial_overlay.open(&"studio")
++ await create_timer(0.5).timeout
++ check(not focus.view.is_open() and not focus._routing,"A new modal during guide handoff cancels the delayed tour")
++ game.get_node("%GameplayHUD").tutorial_overlay.close();await create_timer(0.2).timeout
++ guide.open();guide.tour_list.get_node("Tour_market").grab_focus();await create_timer(0.3).timeout
++ var last_tour: Control=guide.tour_list.get_node("Tour_market")
++ print("GUIDE_REPLAY_BOUNDS scroll=",guide.tour_scroll.get_global_rect()," button=",last_tour.get_global_rect()," value=",guide.tour_scroll.scroll_vertical," focus=",root.gui_get_focus_owner())
++ await capture("guide-replay")
++ check(guide.tour_scroll.get_global_rect().encloses(last_tour.get_global_rect()),"Keyboard focused last tour scrolls into view")
++ guide.close();await create_timer(0.25).timeout
++ # Real accounting creates arrears at the next bill, without synthetic debt fields.
++ focus.automatic_enabled=false
++ check(run.spend_cash_cents(run.get_cash_cents(),&"other_expense",&"guidance_fixture"),"Recorded legal cash expense creates zero spendable cash")
++ var advanced:=0
++ while StudioFinanceLedger.get_unpaid(run._studio_finance)==0 and advanced<5:
++  if not run.complete_productive_action():break
++  advanced+=1
++ check(StudioFinanceLedger.get_unpaid(run._studio_finance)>0,"Real productive monthly settlement creates genuine overdue bills")
++ focus.preferences=load("res://scripts/tutorial/focused_guidance_preferences.gd").new(OS.get_environment("PN_FOCUS_TEST_DIRECTORY").path_join("negative.cfg"));focus.automatic_enabled=true;focus.last_opportunity="";focus.consider()
++ check(await wait_for(func():return focus.view.is_open(),"Negative-bankroll advice appears safely"),"Negative advice opportunity resolves")
++ check(focus.current_topic==&"bank","Overdue bills produce priority Bank recommendation while cash is zero")
++ focus.view.dismiss.pressed.emit();await create_timer(0.25).timeout
++ var result:={"checks":checks,"failures":failures,"source":Replay.source_identity()};FileAccess.open(OS.get_environment("PN_CONTRACT_REPORT"),FileAccess.WRITE).store_string(JSON.stringify(result));print("FOCUSED_INTEGRATION checks=%d failures=%d"%[checks,failures]);game.queue_free();await process_frame;quit(failures)

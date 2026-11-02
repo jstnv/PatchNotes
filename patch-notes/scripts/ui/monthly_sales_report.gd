@@ -15,7 +15,7 @@ var _detail: RichTextLabel
 
 
 func _ready() -> void:
-	theme = preload("res://resources/ui/workspace_theme.tres")
+	theme = preload("res://resources/ui/onyx_theme.tres")
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var margin := MarginContainer.new()
 	for edge in ["left", "right", "top", "bottom"]: margin.add_theme_constant_override("margin_" + edge, 20)
@@ -27,6 +27,7 @@ func _ready() -> void:
 	layout.add_child(header)
 	var title := Label.new()
 	title.text = "Monthly Sales"
+	title.theme_type_variation=&"HeadingLabel"
 	title.add_theme_font_size_override("font_size", 24)
 	header.add_child(title)
 	_titles = OptionButton.new()

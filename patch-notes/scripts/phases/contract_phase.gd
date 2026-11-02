@@ -91,6 +91,7 @@ func _build_ui() -> void:
 	margin.add_child(layout)
 	_title = Label.new()
 	_title.text = "Balanced Primitive Contract"
+	_title.theme_type_variation=&"HeadingLabel"
 	_title.add_theme_font_size_override("font_size", 25)
 	var header := PanelContainer.new()
 	header.name = "ContractHeader"
@@ -129,7 +130,7 @@ func _build_ui() -> void:
 	priority_title.add_theme_font_size_override("font_size", 24)
 	priority_content.add_child(priority_title)
 	var help := Label.new()
-	help.text = "Future draws only · 10–75% in steps of 5\nChanged priorities cost 1 cycle. Cancel is free."
+	help.text = "Future draws only · use the ranges shown in steps of 5\nChanged priorities cost 1 cycle. Cancel is free."
 	priority_content.add_child(help)
 	var priority_body := HBoxContainer.new()
 	priority_body.add_theme_constant_override("separation", 24)
@@ -202,7 +203,7 @@ func _build_ui() -> void:
 	layout.add_child(actions)
 	_play_button = Button.new()
 	_play_button.text = "Play Contract Hand"
-	_play_button.tooltip_text = "Play exactly four selected cards. A successful hand advances one cycle."
+	_play_button.tooltip_text = "Play one to four selected cards. A successful hand advances one cycle."
 	_play_button.pressed.connect(_present_action.bind("play", _play_selected_hand))
 	actions.add_child(_play_button)
 	_redraw_button = Button.new()
@@ -270,10 +271,10 @@ func _modal_content(layer: CanvasLayer, minimum: Vector2) -> VBoxContainer:
 	shade.add_child(center)
 	var panel := PanelContainer.new()
 	panel.name = "ContractModal"
-	panel.theme = preload("res://resources/ui/workspace_theme.tres")
+	panel.theme = preload("res://resources/ui/onyx_theme.tres")
 	var surface := StyleBoxFlat.new()
-	surface.bg_color = Color("#1b1b21")
-	surface.border_color = Color("#665447")
+	surface.bg_color = FolderUI.color(&"folder")
+	surface.border_color = FolderUI.color(&"indigo")
 	surface.set_border_width_all(1)
 	surface.set_corner_radius_all(6)
 	surface.content_margin_left = 18
@@ -308,6 +309,7 @@ func _build_completion_panel() -> void:
 	_completion_modal.hide()
 	var title := Label.new()
 	title.text = "Contract Complete"
+	title.theme_type_variation=&"HeadingLabel"
 	title.add_theme_font_size_override("font_size", 26)
 	content.add_child(title)
 	_completion_stats = Label.new()

@@ -51,6 +51,7 @@ var _education_payoff: Dictionary = {}
 
 func _ready() -> void:
 	layer = 40
+	add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
 	visible = false
 	var shade := ColorRect.new()
 	shade.name = "FinanceInputBlocker"
@@ -70,7 +71,7 @@ func _ready() -> void:
 	shade.add_child(backdrop)
 	dialog = PanelContainer.new()
 	dialog.name = "StudioFinancesDialog"
-	dialog.theme = preload("res://resources/ui/workspace_theme.tres")
+	dialog.theme = preload("res://resources/ui/onyx_theme.tres")
 	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dialog.offset_left = 20
 	dialog.offset_right = -20
@@ -205,7 +206,7 @@ func _ready() -> void:
 	payment_details_button.text = "Payment breakdown"
 	payment_details_button.pressed.connect(_open_payment_details)
 	pages.add_child(payment_details_button)
-	_label("Financial history", _bank_page, 18)
+	_label("Financial history", _bank_page, 18).theme_type_variation=&"SectionHeading"
 	bank_history = RichTextLabel.new()
 	bank_history.name = "BankHistory"
 	bank_history.custom_minimum_size.y=120
@@ -233,7 +234,7 @@ func _ready() -> void:
 	payment_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	payment_details.scroll_active = true
 	_payment_page.add_child(payment_details)
-	_confirm = ConfirmationDialog.new()
+	_confirm = preload("res://scripts/ui/quit_confirmation.gd").new()
 	_confirm.title = "Confirm Bank transaction"
 	_confirm.dialog_autowrap = true
 	_confirm.confirmed.connect(_confirm_transaction)
@@ -246,6 +247,7 @@ func _label(text: String, parent: Node, font_size: int = 14) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.theme_type_variation=&"HeadingLabel" if font_size>=20 else &"Label"
 	label.add_theme_font_size_override("font_size", font_size)
 	parent.add_child(label)
 	return label

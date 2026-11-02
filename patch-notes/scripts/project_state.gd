@@ -52,6 +52,7 @@ var _unimplemented_alpha_feature_ids: Array[StringName] = []
 var _required_scope: int
 var _engine_id: StringName = &"legacy_engine"
 var _engine_capacity: int = 0 # Zero only on grandfathered, unfrozen profiles.
+var _skill_pass_remainders: Dictionary = {}
 
 func set_engine_id(id: StringName,capacity: int=0) -> bool:
 	if _current_cycle != 0 or _current_scope != 0 or _has_design_bug_finalization: return false
@@ -184,6 +185,10 @@ func get_current_scope() -> int:
 
 func get_required_scope() -> int:
 	return _required_scope
+
+## Shared preflight for hand selection and the final atomic Scope write.
+func has_scope_capacity_for(amount: int) -> bool:
+	return _can_add_nonnegative(_current_scope, amount) and amount <= get_engine_max_scope() - _current_scope
 
 func get_accumulated_bug_pressure() -> float:
 	return _accumulated_bug_pressure
@@ -735,7 +740,7 @@ func add_scope(amount: int) -> bool:
 		return false
 	if amount == 0:
 		return true
-	if not _can_add_nonnegative(_current_scope, amount) or amount > get_engine_max_scope() - _current_scope: return false
+	if not has_scope_capacity_for(amount): return false
 	_current_scope += amount
 	values_changed.emit()
 	return true
@@ -748,7 +753,7 @@ func _is_valid_core_score(category: int) -> bool:
 static func _can_add_nonnegative(current: int, amount: int) -> bool:
 	return current >= 0 and amount >= 0 and amount <= MAX_SIGNED_INT - current
 func _can_add_core_and_scope(additions: Dictionary[CoreScore, int], scope_amount: int) -> bool:
-	if not _can_add_nonnegative(_current_scope, scope_amount) or scope_amount > get_engine_max_scope() - _current_scope: return false
+	if not has_scope_capacity_for(scope_amount): return false
 	for category: CoreScore in additions:
 		if not _can_add_nonnegative(_core_scores[category], additions[category]): return false
 	return true

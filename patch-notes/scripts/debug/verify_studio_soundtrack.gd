@@ -16,16 +16,21 @@ func check(ok: bool, message: String) -> void:
 		failures += 1
 		push_error("FAIL: " + message)
 
+func studio_stream_index(music: Node) -> int:
+	return [1,4,5,6,7,8][music.studio_pool.selected]
+
 func run() -> void:
 	var music := root.get_node("Soundtrack")
-	for path in [Map.MAIN_A, Map.MAIN_B, Map.STUDIO, Map.MENU, Map.MENU_OPENER]:
+	var paths: Array = [Map.MAIN_A, Map.MAIN_B, Map.MENU, Map.MENU_OPENER]
+	paths.append_array(Map.STUDIO_POOL)
+	for path in paths:
 		check(Map.compatible(load(path)), "Theme WAV matches the common frame count/rate: " + path)
 	var wrong := AudioStreamWAV.new()
 	wrong.mix_rate = 22050
 	check(not Map.compatible(wrong), "Reject incompatible future arrangement")
 	check(Map.HARMONY.size() == Map.BARS and Map.STEPS_PER_LOOP == 64 and Map.STEP == 60.0 / 140.0, "Shared harmony and card tempo contract")
-	check(music.themes.stream_count == 4, "Opener and three repeating arrangements share one playback")
-	for i in range(4):
+	check(music.themes.stream_count == 9, "Opener, menu, main and six Studio arrangements share one playback")
+	for i in range(9):
 		check(music.themes.get_sync_stream(i).loop_end == Map.FRAMES, "Exact common sample endpoint")
 	check(music.requested_theme == &"menu" and is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(3)), 1.0), "One-time opener starts audible at the shared phrase origin")
 	check(not music.request_theme(&"unknown"), "Unknown theme rejected without mutation")
@@ -80,7 +85,7 @@ func run() -> void:
 	check(music.grid.loops >= 1, "Common WAV clock unwraps on transition")
 	check(music.player.get_stream_playback() == playback, "Theme transition retains playback instance")
 	check(db_to_linear(music.themes.get_sync_stream_volume(0)) == 0.0, "Main fully silent in Studio")
-	check(is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(1)), 1.0), "Studio fully audible")
+	check(is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(studio_stream_index(music))), 1.0), "Selected Studio track fully audible")
 	music.request_theme(&"main")
 	music.set_paused(true)
 	var held: float = music.presentation_seconds()
@@ -247,7 +252,7 @@ func verify_phase_routes(music: Node) -> void:
 		check(music.blend.boundary==entry_boundary,"Studio rebind preserves fast cue")
 		await observe(music,1.0)
 		check(music.blend.weight==1.0 and music.menu_blend.weight==0.0 and music.player.get_stream_playback().get_instance_id()==identity,"Native menu-to-Studio cue completes without transport restart")
-		check(is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(1)),1.0) and db_to_linear(music.themes.get_sync_stream_volume(2))==0.0,"Studio is audible and menu is silent after quick entry")
+		check(is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(studio_stream_index(music))),1.0) and db_to_linear(music.themes.get_sync_stream_volume(2))==0.0,"Studio is audible and menu is silent after quick entry")
 		check(second.run_state.get_cash_cents()==cash and second.run_state.get_completed_run_cycles()==cycles,"Fast title cue leaves cash and calendar unchanged")
 		if not restored:
 			var title:=MainMenu.new()
@@ -255,6 +260,6 @@ func verify_phase_routes(music: Node) -> void:
 			second.get_node("%GameplayHUD").set_phase(title)
 			await observe(music,Blend.BAR+Blend.FADE+0.1)
 			check(music.requested_theme==&"menu" and music.menu_blend.weight==1.0,"Return to title completes on the shared bar map")
-			check(is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(2)),1.0) and db_to_linear(music.themes.get_sync_stream_volume(3))==0.0 and db_to_linear(music.themes.get_sync_stream_volume(1))==0.0,"Echo menu is audible, opener and Studio silent after title return")
+			check(is_equal_approx(db_to_linear(music.themes.get_sync_stream_volume(2)),1.0) and db_to_linear(music.themes.get_sync_stream_volume(3))==0.0 and db_to_linear(music.themes.get_sync_stream_volume(studio_stream_index(music)))==0.0,"Echo menu is audible, opener and Studio silent after title return")
 	second.queue_free()
 	await process_frame

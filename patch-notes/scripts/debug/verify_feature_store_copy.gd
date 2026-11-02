@@ -60,7 +60,7 @@ func _verify() -> void:
 		store._purchase()
 		await shot("admission-%d" % dimensions.x)
 		var dialog := store._admission_dialog
-		check(dialog.dialog_text.contains("Ownership begins only after research finishes") and dialog.dialog_text.contains("games you start later") and dialog.dialog_text.contains("not guaranteed"), "Admission distinguishes queue, ownership and future supply")
+		check(dialog.dialog_text.contains("Complete implementation") and dialog.dialog_text.contains("future games") and dialog.dialog_text.contains("not guaranteed"), "Admission distinguishes queue, completion and future supply")
 		check(dialog.size.x <= dimensions.x and dialog.size.y <= dimensions.y and dialog.get_label().get_line_count() == dialog.get_label().get_visible_line_count(), "Admission text fits %d" % dimensions.x)
 		check(dialog.get_cancel_button().has_focus(), "Admission defaults keyboard focus to Cancel")
 		dialog.hide()
@@ -69,14 +69,14 @@ func _verify() -> void:
 		run.add_cash(5000)
 		var old_project := PrimitivePredevelopment.prepare_project("Before ownership", &"action", &"fantasy", run)
 		check(run.admit_feature_research(run.get_feature_research_quote(&"colored_text")) and run.admit_feature_research(run.get_feature_research_quote(&"save_files")), "Two legal admissions")
-		check(store.queue_status(run.get_feature_research_quote(&"colored_text")) == "Research head" and store.queue_status(run.get_feature_research_quote(&"save_files")) == "Queued", "FIFO head and waiting labels differ")
+		check(store.queue_status(run.get_feature_research_quote(&"colored_text")) == "Implementation head" and store.queue_status(run.get_feature_research_quote(&"save_files")) == "Queued", "FIFO head and waiting labels differ")
 		var queued_project := PrimitivePredevelopment.prepare_project("Queued only", &"action", &"fantasy", run)
 		check(not queued_project.get_feature_supply_ids().has(&"colored_text"), "Queue admission grants no next-project supply")
 		check(run.research_feature(run.get_feature_research_quote(&"colored_text")), "Research completes")
 		var next_project := PrimitivePredevelopment.prepare_project("After ownership", &"action", &"fantasy", run)
 		check(not old_project.get_feature_supply_ids().has(&"colored_text") and not queued_project.get_feature_supply_ids().has(&"colored_text") and next_project.get_feature_supply_ids().has(&"colored_text"), "Ownership updates only projects begun afterwards")
 		store._select_node(&"colored_text")
-		check(store._buy.text.to_lower().contains("owned") and store._buy.disabled, "Completed research displays Owned")
+		check(store._buy.text.contains("Implemented · Available") and store._buy.disabled, "Completed implementation displays availability")
 		await create_timer(0.65).timeout
 		var tooltip: Control = store._owned_summary._make_custom_tooltip(store._owned_summary.tooltip_text)
 		var panel := PanelContainer.new()
@@ -86,7 +86,7 @@ func _verify() -> void:
 		panel.add_child(tooltip)
 		await shot("owned-tooltip-%d" % dimensions.x)
 		check(Rect2(Vector2.ZERO, Vector2(dimensions)).encloses(panel.get_global_rect()) and tooltip.get_line_count() == tooltip.get_visible_line_count(), "Actual custom tooltip wraps within %d" % dimensions.x)
-		check(tooltip.text.contains("Printed Scope") and tooltip.text.contains("Passes are free") and tooltip.text.contains("Each game keeps") and tooltip.text.contains("does not guarantee"), "Existing cost guidance and new supply guidance retained")
+		check(tooltip.text.contains("Implemented Features available") and tooltip.text.contains("Passes are free") and tooltip.text.contains("Active games retain their frozen pool"), "Engine supply guidance retained")
 		panel.queue_free()
 		store.queue_free()
 		await process_frame
@@ -94,12 +94,14 @@ func _verify() -> void:
 		var gated := RunState.new()
 		gated.initialize_cash_cents(0)
 		gated.create_studio_with_traits("Copy gates", &"action", [])
+		var created:=gated.create_proprietary_engine(gated.get_proprietary_engine_creation_quote("Copy Engine"))
+		check(created.get("ok",false) and gated.select_engine(created.engine_id),"Arrears fixture uses an owned proprietary engine")
 		store = store_for(gated)
 		await process_frame
 		await process_frame
 		await process_frame
 		quote = gated.get_feature_research_quote(&"branching_nodes")
-		check(store.queue_block_reasons(quote).has("Available after first game"), "Starter window explains first-game gate")
+		check(gated.needs_starter_selection() and not store.queue_block_reasons(quote).has("Available after first game"), "Owned-engine implementation uses engine gates instead of the legacy first-game gate")
 		reject(gated, &"branching_nodes")
 		gated.finalize_starter_selection()
 		var ledger := StudioFinanceLedger.create(0, 50000)
@@ -114,7 +116,7 @@ func _verify() -> void:
 		await shot("overdue-%d" % dimensions.x)
 		check(store._map.popup.visible and store._map.popup.modulate.a > 0.99 and store.get_global_rect().encloses(store._map.popup.get_global_rect()), "Overdue details visible and fit %d" % dimensions.x)
 		gated._studio_finance = {}
-		check(store.queue_block_reasons(gated.get_feature_research_quote(&"colored_text")).has("Feature queue unavailable; check Finances."), "Unavailable history is not mislabeled as arrears")
+		check(store.queue_block_reasons(gated.get_feature_research_quote(&"colored_text")).has("Implementation queue unavailable; check Finances."), "Unavailable history is not mislabeled as arrears")
 		reject(gated, &"colored_text")
 		store.queue_free()
 		await process_frame

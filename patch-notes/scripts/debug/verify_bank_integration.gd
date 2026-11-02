@@ -31,6 +31,12 @@ func _run() -> void:
 		menu._preview_quote()
 		check(snapshot(run) == before and not menu.accept_button.disabled,"UI preview is passive")
 		for control in [menu.amount_input,menu.term_input,menu.accept_button,menu.payoff_button,menu.quote_details,menu.bank_history]:
+			# History is scroll content. Bring it into view before checking bounds.
+			var ancestor: Node=control.get_parent()
+			while ancestor!=null:
+				if ancestor is ScrollContainer:ancestor.ensure_control_visible(control)
+				ancestor=ancestor.get_parent()
+			await process_frame
 			check(menu.dialog.get_global_rect().encloses(control.get_global_rect()),"Bank control fits %s" % resolution)
 		if "--capture" in OS.get_cmdline_user_args():
 			await process_frame

@@ -6,7 +6,7 @@ signal development_requested(source: Control, base_name: String, genre: StringNa
 var overlay: PredevelopmentOverlay
 
 func _ready() -> void:
-	theme = preload("res://resources/ui/workspace_theme.tres")
+	theme = preload("res://resources/ui/onyx_theme.tres")
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var start := Button.new()
 	start.text = "Set Up First Game"

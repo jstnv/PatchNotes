@@ -36,6 +36,7 @@ var _startup_panel: PanelContainer
 var pause_menu: PauseMenu
 var guided_tutorial: GuidedProductionTutorial
 var _onboarding := OnboardingPreferences.new()
+var focused_guidance: Node
 var developer_tools: CanvasLayer
 var annual_awards_ceremony: Control
 var _awards_layer: CanvasLayer
@@ -56,6 +57,10 @@ var _awards_focus: WeakRef
 var _awards_animate := true
 
 func _ready() -> void:
+	theme=FolderUI.THEME
+	# Apply after imported resources exist, rather than during the editor's
+	# pre-import project bootstrap. Subwindows share the same live UI authority.
+	get_window().theme=theme
 	get_node("Background").color=FolderUI.color(&"background")
 	add_child(MenuTransitions.new())
 	if run_state == null:
@@ -71,11 +76,14 @@ func _ready() -> void:
 	developer_tools=preload("res://scripts/developer/developer_tools.gd").new()
 	developer_tools.game=self;add_child(developer_tools)
 	%GameplayHUD.tutorial_overlay.practice_requested.connect(_start_guided_practice)
+	focused_guidance=preload("res://scripts/tutorial/focused_guidance_controller.gd").new()
+	add_child(focused_guidance)
+	focused_guidance.bind_game(self)
 
 func _build_pause_menu() -> void:
 	pause_menu = PauseMenu.new()
 	pause_menu.can_pause = func():
-		return not annual_awards_blocking() and guided_tutorial == null and is_instance_valid(_active_phase) and not _active_phase is MainMenu and _startup_panel == null and not _transition_in_progress and not _loading_checkpoint and not _save_navigation_pending and not _checkpoint_dialog_visible()
+		return not (is_instance_valid(focused_guidance) and focused_guidance.is_active()) and not annual_awards_blocking() and guided_tutorial == null and is_instance_valid(_active_phase) and not _active_phase is MainMenu and _startup_panel == null and not _transition_in_progress and not _loading_checkpoint and not _save_navigation_pending and not _checkpoint_dialog_visible()
 	pause_menu.settings_open = %GameplayHUD.settings_menu.is_open
 	pause_menu.guide_open = %GameplayHUD.how_to_play.is_open
 	pause_menu.settings_requested.connect(%GameplayHUD.show_settings)
@@ -176,7 +184,7 @@ func _show_startup_failure(reason: String) -> void:
 	_startup_panel.name = "StartupRecovery"
 	_startup_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var surface := StyleBoxFlat.new()
-	surface.bg_color = Color(0.07,0.027,0.04,1)
+	surface.bg_color = FolderUI.color(&"background")
 	surface.content_margin_left = 40
 	surface.content_margin_right = 40
 	surface.content_margin_top = 80
@@ -189,6 +197,7 @@ func _show_startup_failure(reason: String) -> void:
 	_startup_panel.add_child(content)
 	var title := Label.new()
 	title.text = "Game data could not be loaded"
+	title.theme_type_variation = &"HeadingLabel"
 	title.add_theme_font_size_override("font_size",26)
 	content.add_child(title)
 	var message := Label.new()
@@ -719,7 +728,7 @@ func _build_checkpoint_controls() -> void:
 	_save_notice.name = "SaveNotification"
 	layer.add_child(_save_notice)
 	_save_label = _save_notice.message
-	_save_failure_dialog = AcceptDialog.new()
+	_save_failure_dialog = preload("res://scripts/ui/quit_confirmation.gd").new()
 	_save_failure_dialog.title = "Not saved"
 	_save_failure_dialog.dialog_text = "Your last action happened, but it has not been saved.\nRetry to continue, return to your last saved Studio, or quit without saving."
 	_save_failure_dialog.dialog_hide_on_ok = false
@@ -732,8 +741,10 @@ func _build_checkpoint_controls() -> void:
 		_save_failure_dialog.hide()
 		_request_quit())
 	add_child(_save_failure_dialog)
+	_save_failure_dialog.get_cancel_button().hide()
 	_quit_dialog = preload("res://scripts/ui/quit_confirmation.gd").new()
 	_quit_dialog.title = "Quit Patch Notes?"
+	_quit_dialog.ok_button_text="Quit"
 	_quit_dialog.confirmed.connect(func(): get_tree().quit())
 	add_child(_quit_dialog)
 
@@ -800,7 +811,7 @@ func _retry_checkpoint_save() -> void:
 func _confirm_return_checkpoint() -> void:
 	_hide_checkpoint_dialogs()
 	if is_instance_valid(_return_checkpoint_dialog): _return_checkpoint_dialog.queue_free()
-	var dialog := ConfirmationDialog.new()
+	var dialog := preload("res://scripts/ui/quit_confirmation.gd").new()
 	_return_checkpoint_dialog = dialog
 	dialog.dialog_text = "Discard unsaved changes and return to the last saved Studio?"
 	add_child(dialog)
@@ -928,7 +939,15 @@ func _try_annual_awards() -> void:
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_awards_root.add_child(center)
-	FolderUI.label(center, "Saving Annual Game Awards…", &"HeadingLabel")
+	var saving_panel := FolderUI.surface(center)
+	saving_panel.custom_minimum_size.x = minf(680.0,maxf(0.0,get_viewport_rect().size.x-64.0))
+	var saving_copy := VBoxContainer.new()
+	saving_copy.add_theme_constant_override("separation",12)
+	saving_panel.add_child(saving_copy)
+	var saving_heading := FolderUI.label(saving_copy, "Saving Annual Game Awards…", &"HeadingLabel")
+	saving_heading.name = "SavingAwardsLabel"
+	saving_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	FolderUI.label(saving_copy,"Preparing this year's ceremony…").horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_awards_navigation = MenuTransitions.new()
 	_awards_navigation.automatic_entrances = false
 	_awards_navigation.animate = _awards_animate
@@ -1069,7 +1088,7 @@ func _show_checkpoint_recovery() -> void:
 	_hide_checkpoint_dialogs()
 	if is_instance_valid(_recovery_dialog): _recovery_dialog.queue_free()
 	var info := checkpoints.store.inspect()
-	var dialog := ConfirmationDialog.new()
+	var dialog := preload("res://scripts/ui/quit_confirmation.gd").new()
 	_recovery_dialog = dialog
 	dialog.title = "Saved Studio recovery"
 	var reason := checkpoints.failure if not checkpoints.failure.is_empty() else str(info.get("reason",info.status))

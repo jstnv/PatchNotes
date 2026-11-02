@@ -502,12 +502,12 @@ func _verify_selection(design_phase: Node, project_state: ProjectState) -> void:
 	for index in range(4):
 		(views[index] as CardView).input_button.pressed.emit()
 		_expect(design_phase.get("_selected_card_views").size() == index + 1, "Candidate %d selects independently" % (index + 1))
-		_expect(play_button.disabled == (index < 3), "Play state is correct with %d selections" % (index + 1))
+		_expect(not play_button.disabled, "Current one-to-four Play state is correct with %d selections" % (index + 1))
 	_expect(_selected_view_count(design_phase) == 4, "Four selection outlines are visible")
 	(views[4] as CardView).input_button.pressed.emit()
 	_expect(design_phase.get("_selected_card_views").size() == 4 and _selected_view_count(design_phase) == 4, "A fifth selection preserves the original four")
 	(views[1] as CardView).input_button.pressed.emit()
-	_expect(design_phase.get("_selected_card_views").size() == 3 and play_button.disabled, "A selected candidate can be deselected")
+	_expect(design_phase.get("_selected_card_views").size() == 3 and not play_button.disabled, "A selected candidate can be deselected and the remaining three stay playable")
 	(views[1] as CardView).input_button.pressed.emit()
 	_expect(design_phase.get("_selected_card_views").size() == 4 and not play_button.disabled, "A deselected candidate can be reselected")
 	_expect(project_state.get_current_cycle() == cycle_before, "Selection, deselection, and fifth attempt consume no time")
@@ -1148,7 +1148,7 @@ func _verify_design_finalization(design_phase: Node, database: Node) -> void:
 		_select_first(design_phase, selection_counts[case_index])
 		var play_button := design_phase.get_node("%PlayCardButton") as Button
 		_expect(not design_phase.get("_finalization_requested"), "Scope %d / 30 does not automatically finalize Design" % scope_cases[case_index])
-		_expect(play_button.disabled == (selection_counts[case_index] != 4), "Play Hand at Scope %d depends only on complete selection" % scope_cases[case_index])
+		_expect(play_button.disabled == (selection_counts[case_index] < 1 or selection_counts[case_index] > 4), "Play Hand at Scope %d follows the current one-to-four selection rule" % scope_cases[case_index])
 
 		var values_before := _values(project_state)
 		var pressure_before := project_state.get_accumulated_bug_pressure()
@@ -1396,9 +1396,20 @@ func version7_oracle_digest(trace: Dictionary, boundaries: Array = ["before", "a
 			roster_state.erase("_engine_entitlements")
 			_expect(roster_state._engine_features.is_empty(),"Historical oracle has no engine Feature registry")
 			roster_state.erase("_engine_features")
+			# Phase 3 adds an empty owned-engine ledger; these hand fixtures never
+			# create an engine or bind a Studio UI transaction guard.
+			_expect(roster_state._proprietary_engines == {"version":{"integer":"3"},"next_serial":{"integer":"1"},"engines":{}},"Historical oracle has the exact untouched proprietary engine ledger")
+			_expect(roster_state.studio_action_guard is Callable and not roster_state.studio_action_guard.is_valid(),"Historical oracle has no bound Studio action guard")
+			roster_state.erase("_proprietary_engines")
+			roster_state.erase("studio_action_guard")
 			_expect(roster_state._engine_royalty_receipts.is_empty() and roster_state._release_engine_ids.is_empty(),"Historical hand oracle has no Engine releases or royalty receipts")
 			for field in ["_engine_royalty_receipts","_release_engine_ids"]:roster_state.erase(field)
 			var budget_project_state: Dictionary=step[boundary].project
+			# This field was added after the frozen hand oracles. These explicit
+			# legacy-engine fixtures have no Skill Tree remainder state; compare
+			# every raw current field above and omit only proven empty storage.
+			_expect(budget_project_state._skill_pass_remainders == {},"Historical oracle has no Skill Tree Pass remainder state")
+			budget_project_state.erase("_skill_pass_remainders")
 			_expect(budget_project_state._engine_capacity=={"integer":"0"},"Historical oracle has no frozen engine capacity")
 			budget_project_state.erase("_engine_capacity")
 			_expect(budget_project_state._pass_budget_version.integer=="0" and budget_project_state._pass_budget_origin=="","Historical oracle explicitly uses legacy project rules")

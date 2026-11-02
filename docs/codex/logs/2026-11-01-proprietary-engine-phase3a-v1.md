@@ -1,0 +1,27 @@
+# Proprietary Engine Phase 3A — 2026-11-01
+
+Branch `main`; observed HEAD `49d769235474a880a73d996499cefa72beec63e5`. Shared worktree was already dirty, including Engine/marketplace, gameplay, checkpoint and unrelated docs. Existing edits, certified openings and `.codex-godot-temp` were preserved. No commit, push, export or release action.
+
+## Preflight checkpoint
+
+Read CURRENT_STATE, TODO, README, Engine Feature and Marketplace design, October31 Skill Tree research and recent combined acceptance. Before edits, Godot4.7.1 `verify_engine_marketplace_flow` PASS/zero failures, `verify_public_action_engine` PASS/93 checks/zero failures, and `verify_studio_checkpoint` PASS/zero failures. Waited processes used isolated APPDATA/LOCALAPPDATA under `.codex-godot-temp/AppData` and `PN_CHECKPOINT_TEST_PORT=47980`; outputs are `phase3a-pre-*`. Godot emitted existing menu-audio import errors for `crunch_time_menu_dream_groove_bass_presence_v05.wav` while these scripts exited0. Pre-edit `git hash-object` in order for `run_state.gd`, `engine_feature_state.gd`, `engine_entitlements.gd`, `engine_market_browser.gd`, `studio_checkpoint.gd`, `checkpoint_schema.gd`: `2590bd65805df782eb1f9792d41d880fda160328`, `efd427052cd537fedc86338bc27a8e4236597b1f`, `5ba8e5aea345c8cf38e1dd31b592abe637adb185`, `ca405e462ed05b605264bd898bdbdcb52ddae7c8`, `6e7f2c9868993be03f58f0b124d87ebe79fa835d`, `d94e22da94b915abf0bfbd38b7f3a18598180660`.
+
+## Implementation
+
+- `scripts/engines/proprietary_engine_state.gd` adds versioned owner-scoped monotone IDs, exact $100 creation receipts, four inert technology foundations, independent empty challenge/branch/milestone/future-effect maps, and validation against finance/entitlement/Feature registry. Names are trimmed and limited to80 characters; at most128 registry engines. The corresponding Feature cards are not granted.
+- `run_state.gd` adds quote/recheck/create transaction. It plans the $100 finance expense, then atomically commits cash, owned entitlement, empty20-Scope proprietary Feature record and technology foundation; no productive cycle. The existing Phase1 Feature implementation/configuration and Studio-wide familiarity logic remain authoritative. Public Action stays the new-Studio default.
+- `engine_feature_state.gd` accepts the new proprietary origin. `checkpoint_schema.gd` and `studio_checkpoint.gd` add an optional typed proprietary map, with missing map hydrated as empty and a map written only when a paid engine exists. Validation binds every paid engine to its owner, receipt, capacity and Feature record; old public/licensed/legacy access and releases are not rewritten.
+- `engine_market_browser.gd` adds name/Create controls, affordability gating, ownership/royalty/foundation details and a Configure Features route. `studio_phase.gd` connects that route to the existing Store. New engines are already included in the accessible predevelopment picker.
+- `verify_proprietary_engine_foundation.gd` covers affordability, two independent paid creations and unique IDs, stale quote rejection,20-Scope/zero-card foundation,80% familiarity cap, per-engine implementation and one-cycle free-addition configuration, saved selection/pools, forged foundation/missing-record rejection, frozen development identity/capacity/supply, post-implementation familiarity, zero royalty sales and UI creation/configure. [Current design](../design/proprietary-engine.md); DECISIONS, CURRENT_STATE, TODO and README updated.
+
+## Verification
+
+Godot4.7.1 waited via PowerShell `Start-Process -Wait -PassThru -WindowStyle Hidden --headless --path patch-notes --script res://scripts/debug/<name>.gd`. Isolated APPDATA/LOCALAPPDATA and writer port47982. Captured stdout/stderr in `.codex-godot-temp/phase3a-final-*`; final foundation rerun in `phase3a-final2-foundation.*`.
+
+- **PASS, exit0/zero suite failures:** `verify_proprietary_engine_foundation`, `verify_engine_marketplace_flow`, `verify_engine_world_continue`, `verify_public_action_engine` (93 checks), `verify_studio_checkpoint`, `verify_checkpoint_runtime`. Existing menu-audio import errors appeared in the environment's stderr; the passing scripts themselves reported zero failures. Focused assertions cover the requested creation, independent Feature/configuration and save boundaries.
+- **FAIL, unrelated historical fixture assumptions:** `verify_feature_store_cycle_purchase` (8 failures, including zero-cycle starter purchase and old $500 rent expectation) and `verify_feature_store` (8 failures, including old 50% discount cap and prior Studio Store navigation). These fixtures predate Public Action and current Phase1/Studio changes; their failures were observed on the final source, not classified as Phase3A passes. Their initial state was not checked in the preflight, so no claim is made that they were already failing before this work.
+- `git -c core.whitespace=cr-at-eol diff --check` on touched tracked source/docs: PASS. Native visual/device/export, clean4.4 editor import, full careers and broader balance: NOT RUN.
+
+## Phase 3B dependency
+
+Technology node purchases, challenge accumulation, branch progress, Scope milestones, Pass effects and bug-prevention effects remain inert. Phase3B must version the current empty-field validation, set actual node identities and challenge rules, and prove save migration and normal-career balance before any effects activate. October31 research prices/thresholds remain proposals.

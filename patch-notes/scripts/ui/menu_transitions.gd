@@ -55,11 +55,17 @@ func _push_offset(view: Control, focus: Control, closed: Callable, offset: Vecto
 	_moving_vertical=offset.y!=0;_moving_rest_y=rest.y
 	view.show()
 	_lock_navigation()
+	var view_ref: WeakRef=weakref(view)
+	var previous_ref: WeakRef=weakref(previous) if is_instance_valid(previous) else null
+	var focus_ref: WeakRef=weakref(focus) if is_instance_valid(focus) else null
 	var finish := func():
-		if is_instance_valid(view):view.position=rest
-		if is_instance_valid(previous):previous.hide()
+		var current_view: Control=view_ref.get_ref()
+		var prior_view: Control=previous_ref.get_ref() if previous_ref!=null else null
+		var current_focus: Control=focus_ref.get_ref() if focus_ref!=null else null
+		if is_instance_valid(current_view):current_view.position=rest
+		if is_instance_valid(prior_view):prior_view.visible=not is_instance_valid(current_view)
 		_unlock_navigation()
-		if is_instance_valid(focus) and focus.is_visible_in_tree():focus.grab_focus()
+		if is_instance_valid(current_focus) and current_focus.is_visible_in_tree():current_focus.grab_focus()
 	if not animate:finish.call();return true
 	view.position=rest+offset
 	_navigation_tween=create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -84,8 +90,10 @@ func pop() -> bool:
 		view.show()
 	_lock_navigation()
 	var focus_ref: Variant=frames[-1].focus
+	var view_ref: WeakRef=weakref(view) if is_instance_valid(view) else null
 	var finish:=func():
-		if is_instance_valid(view):view.hide();view.position=rest
+		var current_view: Control=view_ref.get_ref() if view_ref!=null else null
+		if is_instance_valid(current_view):current_view.hide();current_view.position=rest
 		_unlock_navigation()
 		if removed.closed.is_valid():removed.closed.call()
 		var focus: Control=focus_ref.get_ref() if focus_ref!=null else null

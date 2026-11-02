@@ -1,0 +1,17 @@
+# Feature Store header/input follow-up — 2026-11-01
+
+User requested the selected engine name replace Feature Implementation, removal of implemented/available counts and the Implementation Queue, and fixes for tip dismissal and implementation. This supersedes the visible queue strip in the earlier floating-layout session. FIFO remains a backend rule: users admit/complete via selected-node details.
+
+Branch `main`, HEAD `5fb0cfdf561c36cf27ffe09f1ad810b9fd5a579b`; shared dirty edits and `.codex-godot-temp` preserved. No commit, push, Drive write, EXE or ZIP rebuild. Concurrent Audio assets/credits/provenance were left to their owner.
+
+Production changes: `feature_store.gd` header/hidden former strip/fresh completion quote/refresh layout; `feature_store_map.gd` higher-layer pointer routing and actionable queued head; `rival_world_checkpoint.gd` one exact genuine preceding-editor identity in the existing strict modern group. Other gameplay/state/transaction sources are unchanged by this task. Legacy queue control handles remain hidden for historical probes, with no interactive screen footprint.
+
+Root causes: map `_input` previously claimed a tip close click before GUI dispatch unless the tip already owned keyboard focus; queued-node details tested only admission eligibility and disabled an otherwise legal completion. Both are repaired at the UI seam without weakening RunState. Header simplification preserves full-name tooltip and viewport fit.
+
+[Finding, exact commands, source copies/manifests, native images, retained failures and final audit](../findings/store-input-20261101-v2/README.md). Tests use isolated profiles and private writer leases. Full-game events cover actual Studio→Engines→tree, tip dismissal/reopen, real down-payment confirmation, completion, exact cash/cycle effects, repeated clicks and engine supply; layout/model/copy/navigation and genuine preceding-save protected-field negatives are separate receipts. Final check statuses/counts are recorded in the audit, not inferred from this source diff.
+
+Retained setup failures include production writer-port collision, an embedded-dialog coordinate mistake, a generated navigation-wrapper lifetime error, fixture sequence omission, a source-fence crossing during concurrent Audio adoption, and full-game helper startup timeout under concurrent verifier load. The native visual check also rejected an intermediate compact title-size optimization; final title uses bounded expanding layout. None required relaxed production validation, timeout or save locking.
+
+Human/controller/device, performance, broader release/export acceptance remain separate; existing ZIP is unchanged. No claim of performance improvement is made by this presentation repair.
+
+Final outcomes:404/0 headless with full-source fence;404/0 native with matching runtime sources (two generated debug UID files crossed its broad source manifest),786/0 focused layout,54/0 maintained copy, workflow/navigation0 failures,11/0 genuine previous-editor compatibility including protected-field negatives. Earlier maintained source fences pass; their current deltas are only the separately owned Audio bytes/credits/provenance and debug UIDs. Final audit verifies unchanged mechanical sources, exact three-script hashes, whitespace and HEAD. Both native resolutions were inspected; title readable, queue strip absent. Internal TODO/state and UI/Store design records updated without overwriting concurrent Audio entries.

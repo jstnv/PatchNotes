@@ -27,8 +27,9 @@ func _verify() -> void:
 	menu.call("_open_folder",&"traits");menu.call("_show_review");menu.call("_confirm_studio")
 	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	var studio: StudioPhase=game.get("_active_phase")
-	studio.get_node("%FeatureStoreButton").pressed.emit()
-	var store: FeatureStore=studio.get("_feature_store")
+	var actions:=preload("res://scripts/debug/ui_test_actions.gd")
+	var engine_id: StringName=actions.create_feature_engine(game.run_state,"Grid Engine")
+	var store: FeatureStore=await actions.open_feature_implementation(studio,engine_id)
 	var map:=store._map
 	game.get_node("%GameplayHUD").contextual_tip.dismiss()
 	for frame in 5: await process_frame

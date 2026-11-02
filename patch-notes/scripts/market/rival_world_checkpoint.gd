@@ -2,6 +2,14 @@
 ## field are published in one CheckpointStore generation. Disk input supplies
 ## no classes, resource paths, constructors or executable Variant objects.
 extends RefCounted
+## Exact published and Phase3A worlds captured before this repair; full actor,
+## history, annual ledger, finance and RNG validation still applies.
+# Exact pre-repair editor source, verified from a legal Contract/Search save pair.
+const CONTRACT_LATENCY_PREDECESSORS := [
+	"b3bca0e2764772c746b82f4c76a8e087e540714fc4892f81395dd30b9a76e47f",
+	"4f84dd8baa0d27022f04b5626629a430496d64fd2f3b84a6af45d22cda79f858", # Exact captured pre-grid UI runtime; current gameplay/finance/RNG unchanged.
+	"6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563", "b496434dc8095aefd67d498de3f9f98c2992abaa5d531bbd36ff7017ec9a2547", "5d27b061021aac5944f855395ab011b9f3de844e4145f17c857bdac88f2f01eb", "e4512254abfa3817c820f5f42923946f25ea75012aa7cb1dfa6358d18595cc75", "035345172f2253b32d3e4540f1b299bbdb389f8d4bec487862397a91465fe0c0", "e1720b670204ebb318ed54e92b68cf157b9d9466cd0a61882f92601957c2edf9", "07ce9e0e59fcd60944fc4a117890c0d9ce4a2f437fa4c3b9375693db5908455d", "dd3874909e76aa243eaa8f855230561956c7e18744cd0c2842cabb4035f8dc35", "b8c50f210b5a300f0de547d64cce1e3b4888aeea0f763ae201a4e36954ba8e9e", "a574d685e47db14036bd4ab445a688dd6166de6993026fef1ed94253b42ce3ef"]
+const AWARDS_PRESENTATION_PREDECESSORS := ["ee16630a62508df8170e15b6dbc39a874a24d977792a42e0f3b56bd8bf10254f", "89b2459915e55f7d203780d6fc0d4b73218c3e44997b3a3111e33267f31080e1"]
 const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 const AWARD_LEDGER_PREDECESSORS := ["303959a85af6268f88e1cd4b855e747838a25fad8779d85621a17f77a0b19253"]
 
@@ -198,7 +206,9 @@ static func _project_schema() -> Dictionary:
 	with_engine._engine_id = "id"
 	var frozen_engine:=with_engine.duplicate(true)
 	frozen_engine._engine_capacity="uint"
-	return CheckpointSchema.union_of([schema,with_engine,frozen_engine])
+	var with_skill:=frozen_engine.duplicate(true)
+	with_skill._skill_pass_remainders=CheckpointSchema.map_of("id","uint")
+	return CheckpointSchema.union_of([schema,with_engine,frozen_engine,with_skill])
 
 static func _hand_schema(phase: int) -> Dictionary:
 	var schema := {"priorities":CheckpointSchema.map_of("id" if phase==2 else "uint","uint"),"candidate_ids":CheckpointSchema.array_of("uint"),"candidate_cards":CheckpointSchema.array_of("id"),"next_candidate_id":"uint","revision":"uint","active":"bool"}
@@ -223,7 +233,9 @@ static func _hand_schema(phase: int) -> Dictionary:
 static func _development_schema(phase: int) -> Dictionary:
 	var legacy: Dictionary={"phase_index":"uint","sequence":"uint","awaiting_confirmation":"bool","finalized":"bool","project":_project_schema(),"hand":_hand_schema(phase)}
 	var current:=legacy.duplicate(true)
-	current.pass_budget={"version":"uint","origin":"text","printed":"uint","spent":"uint"}
+	var old_budget: Dictionary={"version":"uint","origin":"text","printed":"uint","spent":"uint"}
+	var skill_budget:=old_budget.duplicate(true);skill_budget.bonus_centi="uint"
+	current.pass_budget=CheckpointSchema.union_of([old_budget,skill_budget])
 	return CheckpointSchema.union_of([current,legacy])
 
 static func _archive_schema() -> Dictionary:
@@ -318,6 +330,7 @@ func _project_state(project: ProjectState) -> Dictionary:
 		result[field] = project.get(field)
 	result._engine_id = project.get_engine_id()
 	result._engine_capacity=project._engine_capacity
+	if not project._skill_pass_remainders.is_empty():result._skill_pass_remainders=project._skill_pass_remainders.duplicate(true)
 	return result
 
 func _hand_state(hand: RefCounted, phase: int) -> Dictionary:
@@ -382,27 +395,27 @@ func snapshot(world: RivalWorld, studio_adapter: StudioCheckpoint = null) -> Dic
 				for field: String in ["id","genre","theme"]: title[field]=StringName(title[field])
 		if not error.is_empty(): return {}
 		var row := {"id":str(id),"run":saved_run,"sequence":str(session.sequence),"development":development,"archive":archive}
-		if projected: row.offset = str(offset)
+		if projected: row["offset"] = str(offset)
 		if not world.policy_states.is_empty():
 			if not world.policy_states.has(id):error="Missing career policy state";return {}
-			row.policy=world.policy_states[id].duplicate(true)
+			row["policy"]=world.policy_states[id].duplicate(true)
 		rows.append(row)
-	var history: Variant = world.observation().live_releases
+	var history: Variant = world.detached_live_history()
 	if not error.is_empty(): return {}
 	var encoded_market: Variant = world.market_snapshot.duplicate(true)
 	if not error.is_empty(): return {}
 	var payload := {"schema_version":("3" if not world.policy_states.is_empty() else "2") if projected else "1","rng_algorithm":RunRandom.ALGORITHM,"cycle":str(world.cycle),"studios":rows,"history":history,"market":encoded_market}
 	if not world.market_origin.is_empty():
-		payload.market_origin=world.market_origin.duplicate(true)
+		payload["market_origin"]=world.market_origin.duplicate(true)
 		if not error.is_empty(): return {}
 	if not world.legacy.is_empty():
 		if not Legacy.valid(world.legacy,world): error="Invalid founder world"; return {}
-		payload.legacy=Legacy.encode(world.legacy)
+		payload["legacy"]=Legacy.encode(world.legacy)
 	# Run snapshots, encoded development/legacy and observation history already
 	# own their values. Only the live archive/market/origin containers above need
 	# copying; re-copying every detached rival ledger stalls the main thread.
 	if world.annual_awards.is_empty() or not preload("res://scripts/awards/annual_awards_ledger.gd").valid(world,world.annual_awards): error="Invalid annual award provenance";return {}
-	payload.annual_awards=world.annual_awards.duplicate(true)
+	payload["annual_awards"]=world.annual_awards.duplicate(true)
 	return payload
 
 func encode_snapshot(native: Dictionary) -> Dictionary:
@@ -463,7 +476,7 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 	var source_ok: bool = predecessor_source in CAREER_PREDECESSORS or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in GAMEPLAY_RESTORATION_PREDECESSORS or predecessor_source in TECH_ROW_PRESENTATION_PREDECESSORS or predecessor_source in AUDIO_PREDECESSOR_SOURCES or grid_predecessor or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS or predecessor_source==current_source or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ERA_PREDECESSORS or predecessor_source in MENU_VISUALIZER_PREDECESSORS or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().pre_course_revision() if predecessor_source==current_source or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS else StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_ERA_RULES)
 	if predecessor_source==current_source:paired_revision=StudioCheckpoint.new().revision()
-	if predecessor_source in STUDIO_MANAGEMENT_PREDECESSORS+RIVAL_POOL_PREDECESSORS+MARKET_HISTORY_PREDECESSORS+BUDGET_PREDECESSORS+VERSIONED_BUDGET_PREDECESSORS:
+	if predecessor_source in STUDIO_MANAGEMENT_PREDECESSORS+RIVAL_POOL_PREDECESSORS+MARKET_HISTORY_PREDECESSORS+BUDGET_PREDECESSORS+VERSIONED_BUDGET_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS:
 		source_ok=true;paired_revision=StudioCheckpoint.new().revision()
 	if predecessor_source in CAREER_PREDECESSORS:paired_revision=StudioCheckpoint.new().pre_course_revision()
 	if predecessor_source in AUDIO_PREDECESSOR_SOURCES+STORE_ROOT_PRESENTATION_PREDECESSORS: paired_revision=StudioCheckpoint.new().pre_audio_revision()
@@ -486,11 +499,11 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 	if payload.size()!=7+int(payload.has("legacy"))+int(payload.has("market_origin"))+int(payload.has("annual_awards")) or payload.get("schema_version") not in ["1","2","3"] or not source_ok or payload.get("rng_algorithm")!=RunRandom.ALGORITHM or not payload.get("studios") is Array or not payload.get("history") is Array or not payload.get("market") is Dictionary:
 		error = "INCOMPATIBLE_RIVAL_WORLD_SOURCE_OR_SCHEMA"
 		return {}
-	if (predecessor_source==current_source or predecessor_source in AWARD_LEDGER_PREDECESSORS) and captured_source_identity.is_empty() and not payload.has("annual_awards"):
+	if (predecessor_source==current_source or predecessor_source in AWARD_LEDGER_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS) and captured_source_identity.is_empty() and not payload.has("annual_awards"):
 		error="Missing current annual world ledger";return {}
 	var annual: Dictionary={}
 	if payload.has("annual_awards"):
-		if predecessor_source!=current_source and predecessor_source not in AWARD_LEDGER_PREDECESSORS:error="Legacy source cannot manufacture awards";return {}
+		if predecessor_source!=current_source and predecessor_source not in AWARD_LEDGER_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS:error="Legacy source cannot manufacture awards";return {}
 		var decoded_annual: Variant=_decode(payload.annual_awards,preload("res://scripts/awards/annual_awards_ledger.gd").schema())
 		if not error.is_empty() or not decoded_annual is Dictionary:error="Malformed annual ledger";return {}
 		annual=decoded_annual
@@ -548,10 +561,15 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 			if not row.development is Dictionary or not row.development.get("phase_index") is String: error = "Malformed active rival"; return {}
 			var phase: Variant = codec.integer(row.development.phase_index)
 			if not codec.error.is_empty() or phase>2: error = "Invalid rival phase"; return {}
+			# These exact predecessors already froze engine identity and capacity.
+			# Check before legacy schema decoding can supply default engine terms.
+			if predecessor_source==current_source or predecessor_source in AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS:
+				var frozen: Variant=row.development.get("project")
+				if not frozen is Dictionary or not frozen.has("_engine_id") or not frozen.has("_engine_capacity"):error="Missing current frozen engine state";return {}
 			dev = _decode(row.development,_development_schema(phase))
 			if not error.is_empty() or dev.is_empty(): return {}
 			if not dev.has("pass_budget"):
-				if predecessor_source==current_source or predecessor_source in VERSIONED_BUDGET_PREDECESSORS:error="Missing current Pass Budget state";return {}
+				if predecessor_source==current_source or predecessor_source in VERSIONED_BUDGET_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS:error="Missing current Pass Budget state";return {}
 				dev.pass_budget={"version":0,"origin":str(predecessor_source),"printed":0,"spent":0}
 			if budget_definitions.is_empty():
 				for entry: Dictionary in FeatureStoreCatalog.starting_features()+FeatureStoreCatalog.entries():budget_definitions[StringName(entry.id)]=entry
@@ -559,13 +577,22 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 			if not Market.valid_details(dev.project._market_details,dev.project._genre_id) or dev.project._market_details.standards!=dev.project._market_standards or dev.project._market_details.snapshot_id!=dev.project._market_snapshot_id: error="Invalid frozen rival market target"; return {}
 			if dev.project._release_id != StringName(row.run.active_project_id) or dev.project._release_id in historical_ids or dev.finalized or dev.project._has_beta_finalization: error = "Invalid active project boundary"; return {}
 			var active_native := _decode_run(adapter,row.run,true)
-			if predecessor_source==current_source and (not dev.project.has("_engine_id") or not dev.project.has("_engine_capacity")):error="Missing current frozen engine state";return {}
 			var engine_id: StringName=dev.project.get("_engine_id",&"legacy_engine")
 			var engine_capacity: int=dev.project.get("_engine_capacity",0)
 			var engine_state: Dictionary=active_native.run.get("engine_features",{})
+			var skill_state: Dictionary=active_native.run.get("proprietary_engines",{}).get("engines",{}).get(engine_id,{})
+			var remainders: Dictionary=dev.project.get("_skill_pass_remainders",{})
+			for branch: StringName in remainders:
+				if branch not in [&"graphics",&"sound"] or int(remainders[branch])<0 or int(remainders[branch])>9 or not skill_state.get("pass_effectiveness",{}).has(branch):error="Invalid Skill Tree Pass remainder";return {}
+			if int(dev.pass_budget.get("bonus_centi",0))>0 and skill_state.get("pass_efficiency",{}).is_empty():error="Unowned Skill Tree budget bonus";return {}
 			if engine_capacity==0 and engine_id!=&"legacy_engine" and preload("res://scripts/engines/engine_marketplace.gd").find(engine_id).is_empty():error="Missing proprietary capacity";return {}
 			if not engine_state.is_empty():
-				if not engine_state.engines.has(engine_id) or (engine_capacity>0 and engine_capacity!=engine_state.engines[engine_id].capacity):error="Invalid frozen engine identity/capacity";return {}
+				if not engine_state.engines.has(engine_id):error="Invalid frozen engine identity/capacity";return {}
+				var bound: Dictionary=engine_state.engines[engine_id]
+				var valid_capacity: bool=engine_capacity==bound.capacity
+				if bound.origin==preload("res://scripts/engines/proprietary_engine_state.gd").ORIGIN:
+					valid_capacity=preload("res://scripts/engines/proprietary_engine_state.gd").valid_frozen_capacity(engine_capacity,bound.capacity)
+				if engine_capacity>0 and not valid_capacity:error="Invalid frozen engine identity/capacity";return {}
 				for feature: StringName in dev.project._feature_supply_ids:
 					if feature not in engine_state.engines[engine_id].implemented:error="Unimplemented frozen engine Feature";return {}
 
@@ -800,6 +827,7 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 			var state: Dictionary = row.development
 			var project := ProjectState.new(state.project._required_scope)
 			project._engine_capacity=state.project.get("_engine_capacity",0)
+			project._skill_pass_remainders=state.project.get("_skill_pass_remainders",{}).duplicate(true)
 			project._pass_budget_version=state.pass_budget.version
 			project._pass_budget_origin=state.pass_budget.origin
 			for field: String in state.project:
@@ -828,6 +856,7 @@ func restore(payload: Dictionary, player_payload: Dictionary, player: RunState, 
 			if state.phase_index<2:
 				dev.hand._budget_printed=state.pass_budget.printed
 				dev.hand._budget_spent=state.pass_budget.spent
+				dev.hand._budget_bonus_centi=state.pass_budget.get("bonus_centi",0)
 			dev.sequence = state.sequence
 			dev.awaiting_confirmation = state.awaiting_confirmation
 			dev.finalized = state.finalized
@@ -923,6 +952,8 @@ static func _known_budget_origin(source: String) -> bool:
 
 func _valid_pass_budget(state: Dictionary,definitions: Dictionary) -> bool:
 	var budget: Dictionary=state.pass_budget
+	var bonus_centi: int=int(budget.get("bonus_centi",0))
+	if bonus_centi<0 or bonus_centi>20*int(budget.get("printed",0)):error="Invalid Skill Tree budget bonus";return false
 	if budget.version not in [0,1,2]:error="Unknown Pass Budget version";return false
 	if state.hand.candidate_ids.size()!=state.hand.candidate_cards.size():error="Mismatched candidate arrays";return false
 	var protected: Array = state.hand.get("injected_candidate_ids", [])
@@ -934,11 +965,11 @@ func _valid_pass_budget(state: Dictionary,definitions: Dictionary) -> bool:
 		if id not in [&"graphics_pass", &"sound_pass", &"technology_pass", &"design_pass"]:error="Protected candidate is not a corrective Pass";return false
 	if state.hand.candidate_cards.size()-protected.size()>7:error="Ordinary candidate pool exceeds seven";return false
 	if budget.version==0:
-		if budget.printed!=0 or budget.spent!=0 or not _known_budget_origin(budget.origin):error="Unproven legacy Pass Budget";return false
+		if budget.printed!=0 or budget.spent!=0 or bonus_centi!=0 or not _known_budget_origin(budget.origin):error="Unproven legacy Pass Budget";return false
 		return true
 	if not budget.origin.is_empty():error="Unexpected Pass Budget origin";return false
 	if state.phase_index==2:
-		if budget.printed!=0 or budget.spent!=0:error="Beta cannot carry active Pass counters";return false
+		if budget.printed!=0 or budget.spent!=0 or bonus_centi!=0:error="Beta cannot carry active Pass counters";return false
 		return true
 	var printed:=0;var held:=0
 	for id: StringName in state.hand.exhausted:
@@ -950,7 +981,7 @@ func _valid_pass_budget(state: Dictionary,definitions: Dictionary) -> bool:
 		else:printed+=int(card.get("primary_value",0))+int(card.get("secondary_value",0))
 	for id: StringName in state.hand.candidate_cards:
 		if not definitions.has(id):held+=1 # Pass definitions are outside Feature table.
-	var generated: int=preload("res://scripts/simulation/pass_budget.gd").generated(printed,budget.version)
+	var generated: int=preload("res://scripts/simulation/pass_budget.gd").generated(printed,budget.version,bonus_centi)
 	if budget.printed!=printed or budget.spent>generated or held>generated-int(budget.spent) or (int(budget.spent)+state.hand.exhausted.size())/4 + int((int(budget.spent)+state.hand.exhausted.size())%4 != 0)>int(state.project._current_cycle):error="Inconsistent Pass Budget counters/reservations";return false
 	return true
 

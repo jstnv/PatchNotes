@@ -19,11 +19,19 @@ func historical_project(snapshot: Dictionary, current: bool) -> Dictionary:
 	var result := snapshot.duplicate(true)
 	var p: Dictionary = result.project
 	if current:
+		# The archived Begin predates explicit engine selection/capacity.
+		# This fixture always starts with untouched Public Action access.
+		expect(p._engine_id == "public_action" and p._engine_capacity == {"integer":"27"},"Current Begin freezes exact Public Action identity and 27-Scope capacity")
 		var standards := [20,13,40,59] # Locked Puzzle Genre targets.
 		expect(p._market_snapshot_id == "market-0-neutral" and p._market_standards == Replay.freeze(standards),"Current Begin freezes exact neutral Puzzle standards")
 		expect(p._market_details == Replay.freeze({"snapshot_id":"market-0-neutral","cycle_start":0,"standards":standards,"base":standards,"recent_count":0,"density_lift":0,"benchmark_lifts":[0,0,0,0],"historical":false}),"Current Begin retains complete neutral provenance")
 	else:
+		expect(p._engine_id == "legacy_engine" and p._engine_capacity == {"integer":"0"},"Original Begin oracle retains its implicit uncapped legacy engine")
 		expect(p._market_snapshot_id == "" and p._market_standards.is_empty() and p._market_details.is_empty(),"Original Begin oracle predates market metadata")
+	# Project only the two independently checked engine fields in this detached
+	# historical comparison. The current live/headless check uses raw snapshots.
+	p._engine_id = "legacy_engine"
+	p._engine_capacity = {"integer":"0"}
 	p._market_snapshot_id = ""
 	p._market_standards = []
 	p._market_details = {}
@@ -67,7 +75,7 @@ func _initialize() -> void:
 				results.append(mechanics(session.run,project))
 				await process_frame
 			expect(results[1] == results[2],"Current live/headless Begin state and RNG match exactly")
-			expect(historical_project(results[0],false) == historical_project(results[1],true),"Original Begin matches except independently checked market provenance")
+			expect(historical_project(results[0],false) == historical_project(results[1],true),"Original Begin matches except independently checked market and engine provenance")
 			traces.append({"seed":seed_value,"controlled":controlled,"original":results[0],"live":results[1],"headless":results[2]})
 	var output := OS.get_environment("PN_CARD_FRAME_OUTPUT")
 	if not output.is_empty(): FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify(traces,"\t"))

@@ -3,6 +3,8 @@ extends SceneTree
 var failures := 0
 var store: FeatureStore
 var run: RunState
+var studio: StudioPhase
+var engine_id: StringName
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -36,17 +38,38 @@ func _run() -> void:
 		menu.call("_confirm_studio")
 		await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 		run = game.run_state
-		var studio: StudioPhase = game.get("_active_phase")
-		studio.get_node("%FeatureStoreButton").pressed.emit()
+		studio = game.get("_active_phase")
+		var created:=run.create_proprietary_engine(run.get_proprietary_engine_creation_quote("Navigation Engine"))
+		expect(created.get("ok",false),"Navigation fixture creates a proprietary engine")
+		if not created.get("ok",false):game.queue_free();continue
+		engine_id=created.engine_id
+		# This suite later verifies clicking an already-implemented Feature is a
+		# no-op. New proprietary engines start empty; acquire Text legally first.
+		var text_quote:=run.get_feature_research_quote(&"text",engine_id)
+		expect(text_quote.get("can_admit",false) and run.admit_feature_research(text_quote),"Navigation fixture queues Text in its engine")
+		expect(run.research_feature(run.get_feature_research_quote(&"text",engine_id)) and run.owns_feature(&"text",engine_id),"Navigation fixture completes Text implementation")
+		studio._open_management()
+		await _settle_studio(studio)
+		studio._open_engines(created.engine_id)
+		await _settle_studio(studio)
+		studio._engine_browser._configure()
+		await _settle_studio(studio)
 		store = studio.get("_feature_store")
+		expect(store!=null and store._engine_id==created.engine_id and store.is_visible_in_tree(),"Feature tree opens from the chosen engine detail")
 		game.get_node("%GameplayHUD").contextual_tip.dismiss()
 		await process_frame
 		await process_frame
+		game.get_node("%GameplayHUD").contextual_tip.dismiss()
 		await _verify_interactions(dimensions.x, game.get_node("%GameplayHUD"))
 		game.queue_free()
 		await process_frame
 	print("Feature Store navigation verification: %d failures" % failures)
 	quit(failures)
+
+func _settle_studio(studio: StudioPhase) -> void:
+	var deadline:=Time.get_ticks_msec()+5000
+	while studio._hub_motion.busy and Time.get_ticks_msec()<deadline:await process_frame
+	for frame in 3:await process_frame
 
 func _snapshot() -> Dictionary:
 	var credits := {}
@@ -211,7 +234,9 @@ func _verify_interactions(width: int, hud: GameplayHUD) -> void:
 	_motion(blank - Vector2(30, 20), -Vector2(30, 20))
 	store.hide()
 	expect(not map.dragging, "Closing Store cancels in-progress drag")
-	store.open_store()
+	await _settle_studio(studio)
+	studio._engine_browser._configure()
+	await _settle_studio(studio)
 	await process_frame
 	var reopened := _offset()
 	_motion(blank - Vector2(90, 60), -Vector2(60, 40))

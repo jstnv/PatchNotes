@@ -1,10 +1,23 @@
 extends "res://scripts/debug/verify_studio_checkpoint.gd"
 
+# Explicit historical scoring fixture, never a free current proprietary engine.
+# Keep its original founding ownership, money, calendar and RNG unchanged.
+func historical_contract_engine(run: RunState) -> bool:
+	if not run.get_released_game_ids().is_empty() or not run._release_engine_ids.is_empty():return false
+	var before:=var_to_bytes([run.get_cash_cents(),run.get_completed_run_cycles(),run._owned_features,run._studio_finance,run._calendar,run.random_streams.snapshot()])
+	run._engine_entitlements=RunState.EngineEntitlements.create(run._bank_run_id)
+	var owned: Array[StringName]=[];owned.assign(run._owned_features.keys())
+	var engines: Array[StringName]=RunState.EngineEntitlements.accessible_ids(run._engine_entitlements)
+	run._engine_features=RunState.EngineFeatures.create(owned,engines,run._bank_run_id,run._feature_offers)
+	return run.valid_engine_state() and before==var_to_bytes([run.get_cash_cents(),run.get_completed_run_cycles(),run._owned_features,run._studio_finance,run._calendar,run.random_streams.snapshot()])
+
 func trial_run() -> RunState:
 	var run := RunState.new()
 	run.initialize_cash(0)
 	run.create_studio_with_traits("Publisher fixture",&"action",[])
+	expect(historical_contract_engine(run),"Explicit historical Publisher engine preserves authored economy")
 	var project := PrimitivePredevelopment.prepare_project("Unlock fixture",&"action",&"fantasy",run)
+	expect(project.set_engine_id(run.get_selected_engine_id(),run.get_selected_engine_capacity()),"Freeze selected fixture engine before scoring")
 	project.add_core_scores_and_scope({0:90,1:90,2:90,3:90},0)
 	project.add_marketing_output(25)
 	_finish_project(project)

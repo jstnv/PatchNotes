@@ -37,7 +37,9 @@ func get_feature_research_quote(id: StringName,engine: StringName=&"") -> Dictio
 
 
 
-func get_primitive_reserve_offer(id: StringName) -> Dictionary:
+func get_primitive_reserve_offer(id: StringName,engine: StringName=&"") -> Dictionary:
+	# API bridge only: preserve this oracle's historical unscoped arithmetic.
+	if not engine.is_empty():return super.get_primitive_reserve_offer(id,engine)
 	if not _first_studio_economy or not _feature_definitions.has(id) or _feature_offers.has(id):
 		return {}
 	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
@@ -65,7 +67,9 @@ func get_primitive_reserve_offer(id: StringName) -> Dictionary:
 
 
 
-func get_feature_store_offer(id: StringName) -> Dictionary:
+func get_feature_store_offer(id: StringName,engine: StringName=&"") -> Dictionary:
+	# API bridge only: preserve this oracle's historical unscoped arithmetic.
+	if not engine.is_empty():return super.get_feature_store_offer(id,engine)
 	if not _feature_offers.has(id): return {}
 	var graph := FeatureStoreCatalog.graph(_feature_definitions, _feature_offers)
 	if graph.has("error"): return {}
@@ -191,6 +195,8 @@ func _plan_productive_cycle(direct_cash_delta_cents: int, campaign_release_id: S
 
 
 func research_feature(quote: Dictionary) -> bool:
+	# Modern engine-scoped transport, still using this class's frozen planner.
+	if quote.has("engine_id"):return super.research_feature(quote)
 	if not can_mutate_checkpoint() or _feature_purchase_in_progress or _productive_cycle_in_progress or _publishing_cycle: return false
 	if quote.is_empty() or typeof(quote.get("feature_id")) != TYPE_STRING_NAME: return false
 	if quote != get_feature_research_quote(quote.get("feature_id",&"")) or not quote.can_research: return false

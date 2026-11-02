@@ -6,6 +6,7 @@ func starwave_fixture() -> RunState:
 	var run := RunState.new()
 	run.initialize_cash(0)
 	expect(run.create_studio_with_traits("Starwave fixture",&"action",[]),"Create fixture")
+	expect(historical_contract_engine(run),"Explicit historical Starwave engine preserves authored economy")
 	run.finalize_starter_selection()
 	expect(run.register_release(finished(run,"First",25)),"First qualifying fixture")
 	expect(not run.get_unlocked_publisher_ids().has(PublisherCatalog.STARWAVE),"One release cannot unlock Starwave")

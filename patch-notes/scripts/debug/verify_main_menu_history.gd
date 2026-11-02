@@ -55,17 +55,22 @@ func _run() -> void:
 	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	var studio: StudioPhase = game.get("_active_phase")
 	expect(studio != null and run.get_studio_name() == "North Star" and run.get_completed_run_cycles() == 0 and run.get_cash_cents() == 570000 and game.project_state == null, "Studio name commits once, grants initial funding, and enters empty Studio for free")
+	expect(await game.checkpoints.wait_saved(),"Opening Studio checkpoint publishes before optional actions")
 	expect(run.finalize_starter_selection(), "History fixture closes the first-game purchase window before released projects")
 	game.get_node("%GameplayHUD").tutorial_overlay.close()
 	await _capture("new-studio")
-	expect(studio.get_node("%PostGameSummaries").disabled and studio.get_node("%StartNextGame").text == "Produce First Game", "Empty Studio offers first game without false release history")
+	expect(studio.get_node("%PostGameSummaries").disabled and studio.get_node("%StartNextGame").text == "Produce New Game", "Empty Studio offers production without false release history")
 	expect(run.consume_redraw(), "Passive Studio navigation fixture uses a partial redraw bank")
 	var prior := [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws()]
-	studio.get_node("%FeatureStoreButton").pressed.emit()
-	(studio.get("_feature_store") as FeatureStore).hide()
+	studio._open_engines()
+	await create_timer(0.45).timeout
+	studio._engine_browser._inspect(preload("res://scripts/engines/public_action_engine.gd").ID)
+	studio._engine_browser.closed.emit()
+	await create_timer(0.45).timeout
 	expect(prior == [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws()], "Empty Studio browsing preserves finance and time")
 	var first := PrimitivePredevelopment.prepare_project("First", &"action", &"fantasy", run)
 	var second := PrimitivePredevelopment.prepare_project("Second", &"puzzle", &"mystery", run)
+	expect(first.set_engine_id(run.get_selected_engine_id(),run.get_selected_engine_capacity()) and second.set_engine_id(run.get_selected_engine_id(),run.get_selected_engine_capacity()),"Synthetic histories bind the accessible Public Engine")
 	_finish_project(first)
 	_finish_project(second)
 	expect(run.register_release(first) and run.register_release(second), "Two release histories register independently")
@@ -89,12 +94,13 @@ func _run() -> void:
 	expect(review != null and review.get_node("%GraphicsLabel").text.contains(str(first.get_core_score(0))) and review.get_node("%SalesNetLabel").text.contains("Gross"), "Historical detail shows category review and grossing")
 	expect(before == [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_released_game_sales(first_id), run.get_released_game_sales(second_id)], "History browsing is passive")
 	review.get_node("%ContinueButton").pressed.emit()
+	run._market_provider=Callable() # Manually registered history uses the neutral, isolated market fixture.
 	expect(run.advance_calendar_cycle(), "One productive cycle earns both historical releases")
 	# Atomic Run signals coalesce into the next displayed UI state.
 	await process_frame
 	await process_frame
 	var earned := run.get_released_game_sales(first_id)
-	expect(earned.earned_units > 0 and rebuilt.get_node("%EarnedLabel").text.contains(CashFormatter.format_exact_cents(earned.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS)), "Selected history updates its exact earned gross after sales progress")
+	expect(earned.earned_cycles == 1 and rebuilt.get_node("%EarnedLabel").text.contains(CashFormatter.format_exact_cents(earned.earned_units * PrimitiveMonthOneSalesRevenueCalculator.PRICE_CENTS)), "Selected history updates its exact earned gross after one sales cycle")
 	history.review.final_review = 0.0
 	expect(run.get_release_metadata(first_id).review.final_review == first.get_review_result().get_final_review(), "History query returns a defensive copy")
 	var reconstruction: Control = load("res://scenes/gameplay.tscn").instantiate()

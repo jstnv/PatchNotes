@@ -148,6 +148,26 @@ static func schema() -> Dictionary:
 	var entry := {"result":Rules.schema(),"owners":CheckpointSchema.array_of(owner),"stage":"uint","complete":"bool"}
 	return {"version":"uint","started_cycle":"uint","first_year":"uint","entries":CheckpointSchema.array_of(entry)}
 
+## Only stage/complete are presentation state. Preserve every other field in
+## this detached identity; it is not authorization to change a frozen result.
+static func presentation_identity(state: Dictionary, encoded := false) -> Dictionary:
+	if not state.get("entries") is Array:return {}
+	var identity:=state.duplicate()
+	var entries: Array=[]
+	var pending:=false
+	var codec:=CheckpointCodec.new()
+	for item: Variant in state.entries:
+		if not item is Dictionary or not item.get("complete") is bool:return {}
+		var stage: Variant=codec.integer(item.get("stage")) if encoded else item.get("stage")
+		if not codec.error.is_empty() or not stage is int or stage<0 or stage>LAST_STAGE or (item.complete and (stage!=LAST_STAGE or pending)):return {}
+		if not item.complete:pending=true
+		var row: Dictionary=item.duplicate()
+		row.stage="0" if encoded else 0
+		row.complete=false
+		entries.append(row)
+	identity.entries=entries
+	return identity
+
 static func valid(world, state: Dictionary) -> bool:
 	var codec := CheckpointCodec.new()
 	codec.encode(state,schema())
@@ -158,12 +178,11 @@ static func valid(world, state: Dictionary) -> bool:
 	var expected_year := int(state.first_year)
 	var expected_receipts := {}
 	for actor: Dictionary in owners(world): expected_receipts[actor.id] = []
-	var has_pending := false
+	if presentation_identity(state).is_empty():return false
 	for entry: Dictionary in state.entries:
-		if entry.result.year != expected_year or entry.result.year > current_year or entry.result.cutoff_cycle > world.cycle or entry.stage > LAST_STAGE or (entry.complete and entry.stage != LAST_STAGE) or (has_pending and entry.complete): return false
+		if entry.result.year != expected_year or entry.result.year > current_year or entry.result.cutoff_cycle > world.cycle: return false
 		if int(entry.result.cutoff_cycle) < int(state.started_cycle) or int(entry.result.cutoff_cycle) != due_cycle(world.player,int(entry.result.year)): return false
 		if entry.owners.size() != expected_receipts.size(): return false
-		if not entry.complete: has_pending = true
 		var input := _inputs(world,entry.result.year,entry.result.cutoff_cycle,entry.owners)
 		if input.is_empty() or Rules.rank(entry.result.year,entry.result.cutoff_cycle,input.studios,input.games) != entry.result: return false
 		var by_id := {}

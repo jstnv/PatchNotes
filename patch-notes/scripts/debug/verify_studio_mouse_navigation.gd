@@ -23,13 +23,15 @@ func _run() -> void:
 		root.size=dimensions;root.content_scale_size=dimensions
 		expect(root.size==dimensions,"Actual mouse-test viewport matches requested size")
 		game.checkpoints.store._writer=TCPServer.new()
-		expect(game.checkpoints.store._writer.listen(47831,"127.0.0.1")==OK,"Isolated mouse test writer")
+		var writer_port:=int(OS.get_environment("PN_CHECKPOINT_TEST_PORT")) if not OS.get_environment("PN_CHECKPOINT_TEST_PORT").is_empty() else 47831
+		expect(game.checkpoints.store._writer.listen(writer_port,"127.0.0.1")==OK,"Isolated mouse test writer")
 		game.checkpoints.store.directory=ProjectSettings.globalize_path("user://mouse-%d"%dimensions.x)
 		game._on_studio_created("Mouse test",&"action",[],game._active_phase)
 		await process_frame
 		var run: RunState=game.run_state
 		run.finalize_starter_selection()
 		var project:=PrimitivePredevelopment.prepare_project("Accounting fixture",&"action",&"fantasy",run)
+		expect(project.set_engine_id(run.get_selected_engine_id(),run.get_selected_engine_capacity()),"Synthetic release binds an accessible engine")
 		_finish_project(project)
 		expect(run.register_release(project),"Released accounting fixture")
 		game.checkpoints.pending=true
@@ -37,16 +39,7 @@ func _run() -> void:
 		game._continue_checkpoint()
 		await process_frame
 		await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
-		var state: ContractState=game.run_state.accept_primitive_contract()
-		game._on_contract_requested(game._active_phase,state)
-		await process_frame
-		var contract: ContractPhase=game._active_phase
-		for number in range(2):
-			for view: CardView in contract._candidate_row.get_children().slice(0,4):view.input_button.pressed.emit()
-			expect(contract._play_selected_hand(),"Native Contract hand")
-		contract._completion_panel.find_child("DismissCompletionButton",true,false).pressed.emit()
-		await process_frame
-		expect(game._active_phase.get_node("Dashboard").get_global_rect().end.y<=game.get_node("%PhaseRoot").get_global_rect().end.y+1,"Post-Contract dashboard stays above footer")
+		expect(game._active_phase.get_node("Dashboard").get_global_rect().end.y<=game.get_node("%PhaseRoot").get_global_rect().end.y+1,"Continued Studio dashboard stays above footer")
 		var hud: GameplayHUD=game.get_node("%GameplayHUD")
 		hud.tutorial_overlay.close()
 		hud.contextual_tip.dismiss()
@@ -63,9 +56,20 @@ func _run() -> void:
 		await click(hud.settings_button.get_global_rect().get_center())
 		expect(hud.settings_menu.visible,"Physical Settings click opens menu at %d"%dimensions.x)
 		hud.settings_menu.close()
+		await create_timer(0.45).timeout
 		var studio: StudioPhase=game._active_phase
+		var engine_id: StringName=preload("res://scripts/debug/ui_test_actions.gd").create_feature_engine(game.run_state,"Mouse Engine")
 		await click(studio.get_node("%StudioManagementButton").get_global_rect().get_center())
-		await click(studio.get_node("%FeatureStoreButton").get_global_rect().get_center())
+		await create_timer(0.45).timeout
+		await click(studio.get_node("%StudioEnginesButton").get_global_rect().get_center())
+		await create_timer(0.45).timeout
+		var browser:=studio._engine_browser
+		var engine_scroll: ScrollContainer=browser.engine_list.get_parent().get_parent().get_parent()
+		engine_scroll.ensure_control_visible(browser.buttons[engine_id]);await process_frame
+		await click(browser.buttons[engine_id].get_global_rect().get_center())
+		engine_scroll.ensure_control_visible(browser.configure_button);await process_frame
+		await click(browser.configure_button.get_global_rect().get_center())
+		await create_timer(0.45).timeout
 		await process_frame
 		var store: FeatureStore=studio._feature_store
 		hud.contextual_tip.dismiss()

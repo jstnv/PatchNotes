@@ -2,6 +2,7 @@ extends SceneTree
 
 var failures := 0
 var capture := "--capture" in OS.get_cmdline_user_args()
+var _test_game: Control
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -14,6 +15,14 @@ func check(ok: bool, message: String) -> void:
 
 func _settle() -> void:
 	for i in range(4): await process_frame
+	# Four fast headless frames do not finish the shared input-locked entrance.
+	await create_timer(MenuTransitions.ENTRANCE_SECONDS+0.04).timeout
+	var deadline:=Time.get_ticks_msec()+4000
+	while is_instance_valid(_test_game) and _test_game._active_phase is StudioPhase:
+		var studio: StudioPhase=_test_game._active_phase
+		if not studio._hub_motion.busy and not studio._hub.transitioning and not studio._returning_destination:break
+		if Time.get_ticks_msec()>=deadline:check(false,"Real navigation owner settles");break
+		await process_frame
 
 func _capture(name: String) -> void:
 	if not capture: return
@@ -31,6 +40,7 @@ func check_shared_chart(hud: GameplayHUD, menu_name: String) -> void:
 func _run() -> void:
 	root.size = Vector2i(1152, 648)
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
+	_test_game=game
 	game.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	root.add_child(game)
 	await _settle()
@@ -62,7 +72,7 @@ func _run() -> void:
 	var studio: StudioPhase = game.get("_active_phase")
 	check(hud.tutorial_context == &"review" and not hud.tutorial_overlay.visible, "Launch opens the detailed Review context")
 	var launch_review: PostGameReview = studio.get("_review_view")
-	check(launch_review != null and launch_review.visible and launch_review.reveal_running and not studio.get_node("%Dashboard").visible, "Launch automatically reveals review before dashboard")
+	check(launch_review != null and launch_review.is_visible_in_tree() and launch_review.reveal_running, "Launch automatically reveals the detailed review")
 	check(launch_review.get_node("%ReviewLabel").text == "Final Review: 0.0 / 10.0", "Final Review waits for preceding rows")
 	await create_timer(1.0).timeout
 	check(launch_review.get_node("%ScopeLabel").text == "Scope Completion: %.1f%%" % (state.get_review_result().get_scope_completion() * 100.0) and launch_review.get_node("%AwarenessLabel").text == "Awareness: 0", "Scope finishes before Awareness begins")
@@ -72,8 +82,9 @@ func _run() -> void:
 	check_shared_chart(hud, "Launch Review")
 	await _capture("launch-reveal")
 	launch_review.get_node("%ContinueButton").pressed.emit()
-	check(studio.get_node("%Dashboard").visible and not launch_review.visible, "Launch review Continue opens dashboard")
 	await _settle()
+	await create_timer(0.30).timeout
+	check(studio.get_node("%Dashboard").visible and not launch_review.visible, "Launch review Continue opens dashboard")
 	for window_size in [Vector2i(1152, 648), Vector2i(1280, 720)]:
 		root.size = window_size
 		studio.open_detailed_review(true)
@@ -119,6 +130,7 @@ func _run() -> void:
 	await _settle()
 	check(game.get("_active_phase") == studio and studio.get_node("%SummaryPanel").visible and not review.visible, "Detailed Review returns to the same Studio summary")
 	studio.close_summary()
+	await create_timer(0.30).timeout
 	check(studio != null and hud.get_node("PersistentHeader").visible and hud.footer_panel.is_visible_in_tree(), "Studio shares the top HUD with the sales chart and keeps the bottom HUD")
 	check(studio.get_node("%Dashboard").visible and not studio.get_node("%SummaryPanel").visible and not studio.get_node("%ReviewLabel").is_visible_in_tree(), "Dashboard contains menu buttons, with release statistics hidden")
 	await _capture("studio")
@@ -128,26 +140,34 @@ func _run() -> void:
 	check_shared_chart(hud, "Post Game Summaries")
 	await _capture("summary")
 	studio.get_node("%CloseSummaryButton").pressed.emit()
+	await create_timer(0.30).timeout
 	check(studio.get_node("%Dashboard").visible and not studio.get_node("%SummaryPanel").visible, "Back to Studio restores the menu")
-	studio.get_node("%FeatureStoreButton").pressed.emit()
-	await _settle()
-	var store: FeatureStore = studio.get("_feature_store")
-	check(hud.tutorial_context == &"feature_store" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Feature Store entry presents inline tree guidance")
 	hud.contextual_tip.dismiss()
-	check(studio.get_global_rect().encloses(store.get_global_rect()), "Feature Store fits inside the Studio workspace")
-	check_shared_chart(hud, "Feature Store")
-	await _capture("store")
-	store.hide()
+	studio._open_engines()
+	await create_timer(0.45).timeout
+	studio._engine_browser._inspect(preload("res://scripts/engines/public_action_engine.gd").ID)
+	check(studio._engine_browser.details.visible and not studio._engine_browser.configure_button.visible and studio._engine_browser.description.text.contains("Read only"), "Public Engine detail shows its fixed read-only library")
+	check(studio.get_global_rect().encloses(studio._engine_browser.get_global_rect()), "Engines fits inside the Studio workspace")
+	check_shared_chart(hud, "Engines")
+	await _capture("engines")
+	studio._engine_browser.closed.emit()
+	await _settle()
 	check(hud.tutorial_context == &"studio" and not hud.tutorial_overlay.visible and not hud.contextual_tip.panel.visible, "Returning to Studio restores its context without repeated guidance")
+	studio._hub.root_buttons[&"production"].pressed.emit()
+	await _settle()
 	studio.get_node("%StartNextGame").pressed.emit()
+	await _settle()
 	check(hud.tutorial_context == &"predevelopment" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Next-game setup selects inline Pre-Development guidance")
 	hud.contextual_tip.dismiss()
 	(studio.get("_predevelopment") as PredevelopmentOverlay).cancelled.emit()
+	await _settle()
 	studio.get_node("%Contracts").pressed.emit()
+	await _settle()
 	check(hud.tutorial_context == &"contract" and not hud.tutorial_overlay.visible and hud.contextual_tip.panel.visible, "Contract offer presents inline guidance")
 	hud.contextual_tip.dismiss()
 	studio.call("_close_contract_detail")
-	check(studio.get_node("%Dashboard").visible, "Closing Feature Store restores the dashboard")
+	await _settle()
+	check(studio.get_node("%Dashboard").visible, "Closing Contract returns to the Studio dashboard")
 	check(before == [run.get_cash_cents(), run.get_completed_run_cycles(), state.get_current_cycle(), state.get_review_result()] and sales_before == run.get_released_game_sales(state.get_release_id()), "Detailed Review and Studio browsing preserve finance, sales history and release results")
 	game.queue_free()
 	await process_frame

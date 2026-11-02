@@ -79,6 +79,21 @@ func verify() -> void:
 		await create_timer(3.0,true).timeout
 		expect(not notice.visible, "Notification animation completes while the game is paused")
 		paused = false
+		notice.update_status(true,"",game.checkpoints.completed_saves+1)
+		notice.set_success_context(false)
+		notice.update_status(false,"",game.checkpoints.completed_saves+2)
+		animation = notice._animation
+		animation.pause(); animation.custom_step(1.0)
+		expect(not notice.visible, "Save completing outside Studio dismisses an existing in-flight panel")
+		notice.update_status(false,"Presentation-only failure outside Studio",game.checkpoints.completed_saves+2)
+		animation = notice._animation
+		animation.pause(); animation.custom_step(1.0)
+		expect(notice.visible and notice.message.text == "Not saved", "Failures remain visible outside Studio")
+		notice.update_status(false,"",game.checkpoints.completed_saves+3)
+		animation = notice._animation
+		animation.pause(); animation.custom_step(1.0)
+		expect(not notice.visible, "Recovery publication outside Studio dismisses an existing failure panel")
+		notice.set_success_context(true)
 		expect(game.checkpoints.last_payload == saved, "All presentation checks preserve the actual checkpoint")
 		game.queue_free(); await process_frame
 	print("Save notification: %d checks, %d failures" % [checks,failures])

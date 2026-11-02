@@ -13,7 +13,7 @@ var _effect: AudioEffectSpectrumAnalyzer
 var _instance: AudioEffectSpectrumAnalyzerInstance
 
 func _ready() -> void:
-	theme = FolderUI.THEME
+	theme = preload("res://resources/ui/onyx_theme.tres")
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	focus_mode = Control.FOCUS_NONE
 	clip_contents = true
@@ -87,40 +87,61 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func graph_rect() -> Rect2:
-	return Rect2(0,76,size.x,maxf(16.0,size.y-118.0))
+	return Rect2(24,146,maxf(16,size.x-48),maxf(16.0,size.y-176.0))
 
 func bar_rect(index: int) -> Rect2:
 	var graph := graph_rect()
 	var cell := graph.size.x/BANDS
 	var height := maxf(2.0,floorf(levels[index]*graph.size.y/4.0)*4.0)
-	return Rect2(floorf(index*cell)+1,graph.end.y-height,maxf(1.0,floorf(cell)-3),height)
+	return Rect2(graph.position.x+floorf(index*cell)+1,graph.end.y-height,maxf(1.0,floorf(cell)-3),height)
+
+func track_info() -> Dictionary:
+	var song:=get_node_or_null("/root/Soundtrack")
+	if song==null or song.themes==null:return {"title":"No track playing","bpm":0.0}
+	var index:=0
+	for i in song.themes.stream_count:
+		if song.themes.get_sync_stream_volume(i)>song.themes.get_sync_stream_volume(index):index=i
+	var constants:Dictionary=song.get_script().get_script_constant_map()
+	var metadata:Dictionary=constants.Map.get_script_constant_map()
+	var path:String=song.themes.get_sync_stream(index).resource_path
+	if path.is_empty():
+		if index==0:path=metadata.get("MAIN_B","") if ProjectSettings.get_setting("audio/soundtrack/prototype_variant","A")=="B" else metadata.get("MAIN_A","")
+		elif index==2:path=metadata.get("MENU","")
+		elif index==3:path=metadata.get("MENU_OPENER","")
+		elif metadata.has("STUDIO_POOL"):
+			var slots:Array=constants.get("STUDIO_STREAM_INDICES",[1])
+			if index in slots:path=metadata.STUDIO_POOL[slots.find(index)]
+		else:path=metadata.get("STUDIO","")
+	var title:=path.get_file().get_basename().replace("_"," ").capitalize()
+	if "dream_groove" in path:title="Dream Groove"
+	elif "echo_reverb" in path:title="Echo Reverb"
+	elif "crunch_time_A" in path:title="Crunch Time · Jazz"
+	elif "crunch_time_B" in path:title="Crunch Time · Techno"
+	return {"title":title if not title.is_empty() else "Soundtrack","bpm":metadata.get("BPM",0.0)}
 
 func _draw() -> void:
 	if levels.size() != BANDS or size.x < 120: return
-	var muted := FolderUI.color(&"muted")
-	var cyan := FolderUI.color(&"cyan")
-	var orange := FolderUI.color(&"orange")
+	var muted := Color("C2B9D6")
+	var mint := Color("5EF2C2")
+	var indigo := Color("6F42FF")
 	var mono := get_theme_font("font",&"MetadataLabel")
 	var heading := get_theme_font("font",&"HeadingLabel")
-	draw_string(mono,Vector2(0,12),"SOUNDTRACK / TEST",HORIZONTAL_ALIGNMENT_LEFT,-1,11,muted)
-	draw_string(heading,Vector2(0,43),"CRUNCH TIME",HORIZONTAL_ALIGNMENT_LEFT,-1,mini(24,int(size.x/8)),FolderUI.color(&"text"))
+	draw_style_box(get_theme_stylebox("panel",&"VisualizerPanel"),Rect2(0,24,size.x,size.y-24))
+	draw_colored_polygon(PackedVector2Array([Vector2(0,24),Vector2(20,4),Vector2(size.x*0.55,4),Vector2(size.x*0.55+20,24),Vector2(size.x-12,24),Vector2(size.x,36),Vector2(size.x,42),Vector2(0,42)]),indigo)
+	for i in 3:draw_rect(Rect2(24+i*9,24-i*7,7,7),Color("141519"))
+	draw_string(heading,Vector2(67,32),"NOW PLAYING",HORIZONTAL_ALIGNMENT_LEFT,-1,28,Color("FFF3E2"))
+	var info:=track_info()
+	var title_size:=mini(44,int((size.x-48)/maxf(1,heading.get_string_size(str(info.title),HORIZONTAL_ALIGNMENT_LEFT,-1,1).x)))
+	draw_string(heading,Vector2(26,91),str(info.title).to_upper(),HORIZONTAL_ALIGNMENT_LEFT,size.x-48,maxi(18,title_size),Color("FFF3E2"))
+	draw_string(mono,Vector2(28,119),"%.0f BPM" % info.bpm,HORIZONTAL_ALIGNMENT_LEFT,-1,16,muted)
 	var graph := graph_rect()
-	for fraction in [0.0,0.25,0.5,0.75]:
-		var y := roundf(graph.end.y-graph.size.y*fraction)
-		draw_line(Vector2(0,y),Vector2(size.x,y),Color(muted,0.13),1.0)
 	for index in BANDS:
 		var bar := bar_rect(index)
-		draw_rect(bar,Color(cyan,0.55+0.35*levels[index]))
-		if levels[index] > 0.01:
-			draw_rect(Rect2(bar.position.x,graph.end.y+4,bar.size.x,minf(10,bar.size.y*0.06)),Color(cyan,0.07))
-		if peaks[index] > 0.01:
-			draw_rect(Rect2(bar.position.x,roundf(graph.end.y-peaks[index]*graph.size.y),bar.size.x,2),Color(orange,0.9))
-	draw_string(mono,Vector2(0,graph.end.y+22),"40 Hz",HORIZONTAL_ALIGNMENT_LEFT,-1,11,muted)
-	if size.x >= 300:
-		var mid := log(1000.0/LOW_HZ)/log(HIGH_HZ/LOW_HZ)
-		draw_string(mono,Vector2(size.x*mid-18,graph.end.y+22),"1 kHz",HORIZONTAL_ALIGNMENT_LEFT,-1,11,muted)
-	draw_string(mono,Vector2(size.x-34,graph.end.y+22),"12kHz",HORIZONTAL_ALIGNMENT_LEFT,-1,11,muted)
-	draw_string(mono,Vector2(0,size.y-2),"70 BPM / "+("QUIET" if _quiet else "LIVE"),HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color(muted,0.75))
+		var segments:=int(ceil(levels[index]*16.0))
+		for step in segments:
+			var y:=graph.end.y-(step+1)*graph.size.y/16.0
+			draw_rect(Rect2(bar.position.x,y,bar.size.x,graph.size.y/16.0-2),mint if step==segments-1 else Color(indigo,0.4+0.6*float(step)/16.0))
+	draw_string(mono,Vector2(26,size.y-10),"40 Hz – 12 kHz  ·  "+("QUIET" if _quiet else "LIVE"),HORIZONTAL_ALIGNMENT_LEFT,-1,10,muted)
 
 func _exit_tree() -> void:
 	_release()

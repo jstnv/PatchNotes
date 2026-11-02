@@ -7,7 +7,7 @@ signal practice_requested
 const TOPICS := {
 	&"main_menu": [
 		{"title": "Create Your Studio", "body": "Choose Start Game, name your studio and choose one permanent Genre specialty. Preview its free starting Features, then enter Studio. The Store offers optional additions; each game can use any Genre."},
-		{"title": "Produce a Game", "body": "Name the game and choose a Genre and Theme. During Design, Alpha and Beta, set priorities, select four cards per hand and decide when to move to the next phase."},
+		{"title": "Produce a Game", "body": "Name the game and choose a Genre and Theme. During Design, Alpha and Beta, set priorities, select one to four cards per hand and decide when to move to the next phase."},
 		{"title": "After Release", "body": "Studio keeps your owned Features and released-game history. Browse reviews, sales, the Feature Store and available Contracts. The footer Tutorial button opens detailed help for your current screen."},
 	],
 	&"predevelopment": [
@@ -16,31 +16,31 @@ const TOPICS := {
 	],
 	&"design": [
 		{"title": "Design: Quality and Scope", "body": "Your four Core scores measure quality: Graphics for visuals, Sound for audio, Technology for technical systems, and Design for gameplay. Cards build these scores toward Review. Scope measures how much game you have built. Feature cards add their printed Scope toward the HUD target. A complete game still needs strong Core scores. Hover over a HUD score for a reminder."},
-		{"title": "Design: Priorities and Hands", "body": "Allocate 100 priority points in 5-point steps, with each category from 10 to 75. Higher priorities favor that category in future draws and redraws; they do not add scores. Begin Design is free. Later priority changes cost one cycle. Select exactly four cards, then Implement: a successful hand costs one cycle. Features exhaust for this project; Passes can return."},
+		{"title": "Design: Priorities and Hands", "body": "Allocate 100 priority points in 5-point steps, within the ranges shown for your Studio. Higher priorities favor that category in future draws and redraws; they do not add scores. Begin Development costs one productive cycle. Later priority changes cost one cycle. Select one to four cards, then Implement: a successful hand costs one cycle. Features exhaust for this project; Passes can return."},
 		{"title": "Design: Redraw and Synergy", "body": "Redraw selected cards for one shared redraw each and no cycle; successful production restores one. Four cards sharing a primary Core stat trigger Specialization (+50% hand Core gains). Otherwise, a hand with a Feature triggers Balanced Production when all four categories contribute and either highest minus lowest is at most 1 point, or each gain is within ±15% of the average. After playing, its Core total gets ×1.25, rounds down to whole points and is shared evenly; spare points go Graphics, Sound, Tech, Design. Scope stays printed."},
 	],
 	&"alpha": [
-		{"title": "Alpha: Expand and Test", "body": "Set Alpha priorities, then build four-card hands to expand your game. Host Playtests help you evaluate the project. Features are finite, Passes are renewable, and productive actions advance time."},
+		{"title": "Alpha: Expand and Test", "body": "Set Alpha priorities, then build one- to four-card hands to expand your game. Host Playtests help you evaluate the project. Features are finite, Passes are renewable, and productive actions advance time."},
 		{"title": "Alpha: Synergy and Beta", "body": "Four cards, including Passes, with the same primary Core stat trigger Specialization (+50% hand Core gains). Otherwise, a hand with a Feature triggers Balanced Production if all four categories contribute and either highest minus lowest is at most 1 point, or each gain is within ±15% of the average. It multiplies the hand Core total by 1.25, rounds down to whole points and redistributes evenly, with spare points going Graphics, Sound, Tech, Design. Scope and Bug Pressure stay unchanged. Check those values before moving to Beta."},
 	],
 	&"beta": [
-		{"title": "Beta: Focused Hands", "body": "Set priorities and choose four-card hands. Search reveals Hidden Bugs; Debug fixes Known Bugs. Four QA cards trigger QA Specialization: each card's value is multiplied by 1.50 before its bug formula. Four Marketing cards trigger Marketing Specialization: the summed printed Marketing value is multiplied by 1.50, then rounded down once."},
+		{"title": "Beta: Focused Hands", "body": "Set priorities and choose one- to four-card hands. Search reveals Hidden Bugs; Debug fixes Known Bugs. Four QA cards trigger QA Specialization: each card's value is multiplied by 1.50 before its bug formula. Four Marketing cards trigger Marketing Specialization: the summed printed Marketing value is multiplied by 1.50, then rounded down once."},
 		{"title": "Beta: Balance and Launch", "body": "Insider cards and their priorities are temporarily disabled. Beta uses QA and Marketing. Balanced Operations is unavailable during this hold; four QA or four Marketing cards still specialize. Launch freezes the release results and enters Studio for free."},
 	],
 	&"studio": [
-		{"title": "Studio: Between Games", "body": "Entering Studio refills your redraws to four, including after a release or completed Contract. Browse release summaries, the Feature Store and available Contracts. Browsing costs no cycles or cash."},
-		{"title": "Studio: Productive Time", "body": "Productive actions use the shared run calendar, where historical sales earn and settle. Later Feature Store branch and Primitive reserve purchases each take one cycle. Produce Next Game creates a fresh project while preserving the run."},
+		{"title": "Studio: Between Games", "body": "Entering Studio refills your redraws to four, including after a release or completed Contract. Use Studio Info for reports and Bank, Studio Management for Employees and Engines, Market Info for market reports and publishers, and Start Production for games and Contracts. Browsing costs no cycles or cash."},
+		{"title": "Studio: Productive Time", "body": "Productive actions use the shared run calendar, where historical sales earn and settle. Implementation in an owned engine uses a free-time down payment and a one-cycle completion action. Produce Next Game creates a fresh project while preserving the run."},
 	],
 	&"review": [
 		{"title": "Review: Inspect Your Release", "body": "Use the five tabs to inspect the frozen release results. Back to Summary returns to Studio for free; viewing results never rerolls or pays them again."},
 	],
 	&"contract": [
-		{"title": "Contracts: Production Hands", "body": "Each offer shows its hand count: Starwave has three four-card hands; other publishers have two. Four cards sharing a primary Core stat trigger Contract Specialization: primary and secondary Core gains are multiplied by 1.50 while Scope stays printed. There is no Balanced Production bonus here. Eligible Design and Alpha Features are finite; Core Passes renew."},
+		{"title": "Contracts: Production Hands", "body": "Each offer shows its hand count: Starwave has three hands; other publishers have two. Each hand can contain one to four cards. Four cards sharing a primary Core stat trigger Contract Specialization: primary and secondary Core gains are multiplied by 1.50 while Scope stays printed. There is no Balanced Production bonus here. Eligible Design and Alpha Features are finite; Core Passes renew."},
 		{"title": "Contracts: Shared Resources", "body": "Contracts share your run calendar and redraw budget. Acceptance is free, but an accepted contract cannot be abandoned. Completion pays the cash reward once."},
 	],
 	&"feature_store": [
-		{"title": "Feature Store: Follow the Tree", "body": "Select a node to inspect its prerequisites, down payment and next installment. Familiarity reduces research installments when they are paid. Only completed Features carry into future projects."},
-		{"title": "Feature Store: Purchase Carefully", "body": "Browsing is free. Initial Primitive purchases stay instant at zero cycles. Later acquisitions enter a FIFO queue: half the base price now, with no cancellation or reordering. Research pays the remaining installment and advances one productive cycle. Only the queue head can progress; ownership begins on completion."},
+		{"title": "Feature Store: Follow the Tree", "body": "Select a node to inspect its prerequisites, down payment and next installment. Shared familiarity reduces implementation prices up to 80%. Only completed Features carry into future projects."},
+		{"title": "Feature Store: Purchase Carefully", "body": "Browsing is free. Choose an owned engine in Studio Management → Engines, then Feature Implementation Tree. Pay half of the discounted quote upfront to join its FIFO queue. There is no cancellation or reordering. Implement completes the head for its remaining quoted price and one productive cycle; the Feature becomes available to future games using this engine. Fixed public/licensed libraries are read only."},
 	],
 }
 
@@ -65,14 +65,14 @@ func _ready() -> void:
 	visible = false
 	shade = ColorRect.new()
 	shade.name = "TutorialBlocker"
-	shade.color = Color("#080409")
+	shade.color = FolderUI.color(&"background")
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shade.offset_bottom = -46.0
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(shade)
 	dialog = PanelContainer.new()
 	dialog.name = "TutorialDialog"
-	dialog.theme = preload("res://resources/ui/workspace_theme.tres")
+	dialog.theme = preload("res://resources/ui/onyx_theme.tres")
 	dialog.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	dialog.offset_left = -340
 	dialog.offset_right = 340
@@ -83,11 +83,12 @@ func _ready() -> void:
 	content.add_theme_constant_override("separation", 16)
 	dialog.add_child(content)
 	step_label = Label.new()
-	step_label.add_theme_color_override("font_color", Color("#79d4da"))
+	step_label.add_theme_color_override("font_color", FolderUI.color(&"mint"))
 	content.add_child(step_label)
 	title_label = Label.new()
+	title_label.theme_type_variation=&"HeadingLabel"
 	title_label.add_theme_font_size_override("font_size", 28)
-	title_label.add_theme_color_override("font_color", Color("#f5bd59"))
+	title_label.add_theme_color_override("font_color", FolderUI.color(&"mint"))
 	content.add_child(title_label)
 	body_label = Label.new()
 	body_label.custom_minimum_size = Vector2(620, 220)

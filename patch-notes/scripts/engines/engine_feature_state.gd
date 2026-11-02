@@ -1,7 +1,7 @@
 ## Phase1 data only. Definitions, familiarity, finance and project physics live
 ## in their existing authoritative systems; this registry contains IDs/receipts.
 extends RefCounted
-const VERSION:=1
+const VERSION:=2
 const KINDS: Array[StringName]=[&"public",&"rival_licensed",&"proprietary"]
 const LEGACY:=&"legacy_engine"
 const Public:=preload("res://scripts/engines/public_action_engine.gd")
@@ -35,15 +35,6 @@ static func unique_ids(ids: Array) -> bool:
 static func has_feature(state: Dictionary,engine: StringName,id: StringName) -> bool:
 	return state.engines.has(engine) and id in state.engines[engine].implemented
 
-static func stage(state: Dictionary,engine: StringName,ids: Array[StringName],definitions: Dictionary,offers: Dictionary) -> bool:
-	if not state.engines.has(engine) or not unique_ids(ids):return false
-	var record: Dictionary=state.engines[engine]
-	if record.kind!=&"proprietary":return false
-	for id: StringName in ids:
-		if id not in record.implemented or id in record.committed or not definitions.has(id) or not FeatureStoreCatalog.is_active(id):return false
-	record.staged=ids.duplicate()
-	return true
-
 static func supply(state: Dictionary,engine: StringName,offers: Dictionary) -> Array[StringName]:
 	if not state.engines.has(engine):return []
 	var ids: Array[StringName]=[];ids.assign(state.engines[engine].committed)
@@ -59,14 +50,14 @@ static func base_price(id: StringName,definitions: Dictionary,offers: Dictionary
 	return int(offers[id].base_price_cents) if offers.has(id) else (int(definitions[id].scope)+1)*15000
 
 static func valid(state: Dictionary,definitions: Dictionary,offers: Dictionary,ledger: Dictionary={},cycle: int=-1,studio: StringName=&"") -> bool:
-	if state.size()!=4 or state.get("version")!=VERSION or not state.get("engines") is Dictionary or state.engines.is_empty() or state.engines.size()>128 or not state.get("entries") is Array or not state.get("configurations") is Array:return false
+	if state.size()!=4 or state.get("version") not in [1,VERSION] or not state.get("engines") is Dictionary or state.engines.is_empty() or state.engines.size()>128 or not state.get("entries") is Array or not state.get("configurations") is Array:return false
 	var implemented: Dictionary={};var configured: Dictionary={};var revisions: Dictionary={}
 	var graph:=FeatureStoreCatalog.graph(definitions,offers)
 	if graph.has("error"):return false
 	var available_at: Dictionary={}
 	for id: Variant in state.engines:
 		var row: Variant=state.engines[id]
-		if not id is StringName or id.is_empty() or not row is Dictionary or row.size()!=9 or row.get("kind") not in KINDS or not row.get("name") is String or row.name.is_empty() or row.name.length()>80 or not row.get("capacity") is int or row.capacity<1 or not row.get("revision") is int or row.revision<0 or row.get("origin") not in ["legacy-access-v1","declared-v1",Public.ORIGIN,preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN]:return false
+		if not id is StringName or id.is_empty() or not row is Dictionary or row.size()!=9 or row.get("kind") not in KINDS or not row.get("name") is String or row.name.is_empty() or row.name.length()>80 or not row.get("capacity") is int or row.capacity<1 or not row.get("revision") is int or row.revision<0 or row.get("origin") not in ["legacy-access-v1","declared-v1",Public.ORIGIN,preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN,preload("res://scripts/engines/proprietary_engine_state.gd").ORIGIN]:return false
 		if id==Public.ID and (row.kind!=&"public" or row.name!=Public.definition().name or row.capacity!=27 or row.origin!=Public.ORIGIN or row.initial!=Public.LIBRARY):return false
 		if id!=Public.ID and row.origin==Public.ORIGIN:return false
 		if row.origin==preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN:
@@ -80,7 +71,7 @@ static func valid(state: Dictionary,definitions: Dictionary,offers: Dictionary,l
 		for feature: StringName in row.committed+row.staged:
 			if feature not in row.implemented:return false
 		for feature: StringName in row.staged:
-			if feature in row.committed or not FeatureStoreCatalog.is_active(feature):return false
+			if (state.version==1 and feature in row.committed) or not FeatureStoreCatalog.is_active(feature):return false
 		implemented[id]=row.initial.duplicate();configured[id]=normalize(row.initial,offers);revisions[id]=0
 		available_at[id]={}
 		for feature: StringName in row.initial:available_at[id][feature]=0
@@ -109,7 +100,7 @@ static func valid(state: Dictionary,definitions: Dictionary,offers: Dictionary,l
 		if not ledger.is_empty() and not receipt(receipts,StringName(str(entry.id)+":complete"),payment.cycle,-int(payment.paid_cents),true):return false
 		implemented[entry.engine_id].append(entry.feature_id)
 		available_at[entry.engine_id][entry.feature_id]=payment.cycle
-	var configuration_cycles: Dictionary={}
+	var configuration_cycles: Dictionary={};var historical_removed: Dictionary={}
 	for event: Variant in state.configurations:
 		if not event is Dictionary or event.size()!=9 or not state.engines.has(event.get("engine_id")) or state.engines[event.engine_id].kind!=&"proprietary":return false
 		var engine: StringName=event.engine_id;var previous: Array[StringName]=[];previous.assign(configured[engine])
@@ -127,11 +118,49 @@ static func valid(state: Dictionary,definitions: Dictionary,offers: Dictionary,l
 		var base:=0
 		for feature: StringName in removed:base+=base_price(feature,definitions,offers)
 		if removed!=event.removed or added!=event.added or event.base_cents!=base or event.cost_cents!=(base/10+int(base%10!=0)) or (removed.is_empty() and added.is_empty()):return false
+		if not historical_removed.has(engine):historical_removed[engine]={}
+		for feature: StringName in removed:historical_removed[engine][feature]=true
 		if not ledger.is_empty() and not receipt(receipts,event.id,event.cycle,-int(event.cost_cents),true):return false
 		configured[engine]=event.target.duplicate();revisions[engine]=event.revision
 	for engine: StringName in state.engines:
-		if state.engines[engine].implemented!=implemented[engine] or state.engines[engine].committed!=configured[engine] or state.engines[engine].revision!=revisions[engine]:return false
+		if state.engines[engine].implemented!=implemented[engine] or state.engines[engine].revision!=revisions[engine]:return false
+		var expected: Array[StringName]=configured[engine]
+		if state.version==VERSION and state.engines[engine].kind==&"proprietary":
+			expected=automatic_supply(expected,state.engines[engine],historical_removed.get(engine,{}),offers)
+		if state.engines[engine].committed!=expected:return false
 	return true
+
+## Old configuration receipts remain immutable. V2 adds paid and staged Features
+## to future supply without charging or consuming another development cycle.
+static func automatic_supply(configured: Array[StringName],record: Dictionary,removed: Dictionary,offers: Dictionary) -> Array[StringName]:
+	var ids: Array[StringName]=configured.duplicate()
+	for id: StringName in record.staged:
+		if id not in ids:ids.append(id)
+	for id: StringName in record.implemented:
+		if id not in ids and not removed.has(id):ids.append(id)
+	return normalize(ids,offers)
+
+static func migrate(state: Dictionary,offers: Dictionary) -> Dictionary:
+	if state.get("version")!=1:return state.duplicate(true)
+	var migrated: Dictionary=state.duplicate(true)
+	var removed: Dictionary={}
+	for event: Dictionary in migrated.configurations:
+		if not removed.has(event.engine_id):removed[event.engine_id]={}
+		for id: StringName in event.removed:removed[event.engine_id][id]=true
+	for engine: StringName in migrated.engines:
+		var row: Dictionary=migrated.engines[engine]
+		if row.kind!=&"proprietary":continue
+		var configured: Array[StringName]=[];configured.assign(row.committed)
+		row.committed=automatic_supply(configured,row,removed.get(engine,{}),offers)
+	migrated.version=VERSION
+	return migrated
+
+static func needs_migration(state: Dictionary,offers: Dictionary) -> bool:
+	if state.get("version")!=1:return false
+	var upgraded:=migrate(state,offers)
+	for engine: StringName in state.engines:
+		if state.engines[engine].committed!=upgraded.engines[engine].committed:return true
+	return false
 
 static func receipt(proofs: Dictionary,id: StringName,cycle: int,delta: int,productive: bool) -> bool:
 	var rows: Array=proofs.get(id,[])
@@ -163,5 +192,7 @@ static func bindings_valid(state: Dictionary,entitlements: Dictionary,owned: Dic
 		var listing:=preload("res://scripts/engines/engine_marketplace.gd").find(id)
 		var terms: Dictionary=preload("res://scripts/engines/engine_marketplace.gd").terms_for_record(id,row)
 		var capacity: int=ProjectState.MAX_SIGNED_INT if id==LEGACY else int(terms.get("max_scope",listing.get("max_scope",20)))
-		if row.capacity!=capacity:return false
+		if row.origin==preload("res://scripts/engines/proprietary_engine_state.gd").ORIGIN:
+			if row.capacity not in [20,25,30,35]:return false
+		elif row.capacity!=capacity:return false
 	return true

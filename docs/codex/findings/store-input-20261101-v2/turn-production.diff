@@ -1,0 +1,136 @@
+--- intake/scripts/ui/feature_store.gd
++++ current/scripts/ui/feature_store.gd
+@@ -48,7 +48,6 @@
+ var _implementation_controls: VBoxContainer
+ var _map_host: Control
+ var _refresh_queued := false
+-var _engine_note: Label
+ 
+ class DebugButton extends Button:
+ 	func _make_custom_tooltip(for_text: String) -> Object:
+@@ -129,6 +128,10 @@
+ 	_header.add_child(_close)
+ 	FolderUI.standard_back(_close)
+ 	_cash = Label.new()
++	_cash.name = "EngineTitle"
++	_cash.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++	_cash.clip_text = true
++	_cash.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+ 	_cash.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+ 	_cash.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+ 	_header.add_child(_cash)
+@@ -148,17 +151,13 @@
+ 	_implementation_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	_implementation_controls.add_theme_constant_override("separation", 6)
+ 	_map_host.add_child(_implementation_controls)
+-	_engine_note = Label.new()
+-	_engine_note.name = "EngineImplementationSummary"
+-	_engine_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+-	_implementation_controls.add_child(_engine_note)
++	# Retain the legacy control handles for existing presentation probes, but
++	# expose actions only on the selected Feature. FIFO remains model-owned.
++	_implementation_controls.hide()
+ 	var actions := HBoxContainer.new()
+ 	actions.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	actions.add_theme_constant_override("separation", 8)
+ 	_implementation_controls.add_child(actions)
+-	var queue_heading := Label.new()
+-	queue_heading.text = "Implementation Queue"
+-	actions.add_child(queue_heading)
+ 	_research_list = OptionButton.new()
+ 	_research_list.name = "ImplementationQueue"
+ 	_research_list.fit_to_longest_item = false
+@@ -174,8 +173,7 @@
+ 	_research_button.name = "ImplementFeature"
+ 	_research_button.text = "Implement"
+ 	_research_button.pressed.connect(func():
+-		var quote := _research_quote.duplicate(true)
+-		if _run.research_feature(quote): _refresh())
++		if not _research_quote.is_empty(): _implement(_research_quote.feature_id))
+ 	actions.add_child(_research_button)
+ 	_toolbar = VBoxContainer.new()
+ 	_toolbar.name = "StoreToolbar"
+@@ -258,11 +256,11 @@
+ 	_map_offers=view.offers.duplicate()
+ 	for id: StringName in view.reserves:
+ 		if _map_offers[id].is_empty(): _map_offers[id]=view.reserves[id]
+-	_cash.text = "Feature Implementation"
+ 	var engine_state:=_run.get_engine_feature_state()
+ 	var selected_record: Dictionary=engine_state.engines[_engine_id]
++	_cash.text = selected_record.name
++	_cash.tooltip_text = selected_record.name
+ 	var starter_gate := _starter_gate_applies()
+-	_refresh_engine_controls(engine_state)
+ 	_research_list.clear()
+ 	_research_quote = {}
+ 	var pending := _run.get_feature_research_queue()
+@@ -323,6 +321,7 @@
+ 			button.add_theme_stylebox_override(style_name, style)
+ 	_tree.queue_redraw()
+ 	_show_details()
++	_layout_store_chrome.call_deferred()
+ 
+ 
+ func _starter_gate_applies() -> bool:
+@@ -542,6 +541,9 @@
+ 		_run.purchase_starter_feature(_selected)
+ 		return
+ 	var quote := _run.get_feature_research_quote(_selected,_engine_id)
++	if not quote.is_empty() and quote.queued:
++		_implement(_selected)
++		return
+ 	if quote.is_empty() or not quote.can_admit: return
+ 	if is_instance_valid(_admission_dialog): _admission_dialog.queue_free()
+ 	_admission_dialog = preload("res://scripts/ui/quit_confirmation.gd").new()
+@@ -561,6 +563,9 @@
+ 	_admission_dialog.popup_centered(Vector2i(680, 480))
+ 	_admission_dialog.get_cancel_button().grab_focus()
+ 
+-func _refresh_engine_controls(state: Dictionary) -> void:
+-	var row: Dictionary=state.engines[_engine_id]
+-	_engine_note.text="%s · %d implemented · %d available for future games"%[row.name,row.implemented.size(),row.committed.size()]
++func _implement(feature: StringName) -> void:
++	# Both the selected Feature and top action use a fresh, engine-scoped quote.
++	# RunState retains FIFO, affordability and atomic exactly-once settlement.
++	var quote := _run.get_feature_research_quote(feature, _engine_id)
++	if not quote.is_empty() and quote.can_research and _run.research_feature(quote):
++		_refresh()
+--- intake/scripts/ui/feature_store_map.gd
++++ current/scripts/ui/feature_store_map.gd
+@@ -546,11 +546,11 @@
+ 	else:
+ 		var quote := store._run.get_feature_research_quote(store._selected,store._engine_id)
+ 		if quote.queued: _missing_targets.clear()
+-		store._buy.disabled = not quote.can_admit
++		store._buy.disabled = not (quote.can_research if quote.queued else quote.can_admit)
+ 		blockers = store.queue_block_reasons(quote)
+-		store._buy.text = "Implementation head" if quote.head else "Queued" if quote.queued else "Implement" if quote.can_admit else store.queue_status(quote)
++		store._buy.text = "Implement" if quote.head else "Queued" if quote.queued else "Implement" if quote.can_admit else store.queue_status(quote)
+ 		store._buy.text += " · " + CashFormatter.format_exact_cents(quote.due_cents if quote.queued else quote.down_cents)
+-		if not quote.queued: store._buy.text += " down"
++		store._buy.text += " - 1 cycle" if quote.queued else " down"
+ 	if not _missing_targets.is_empty():
+ 		var names: Array[String] = []
+ 		for id: StringName in _missing_targets: names.append(store._run._feature_definitions[id].name)
+@@ -910,6 +910,10 @@
+ 			if not clicked.is_empty(): _focus_node(clicked)
+ 			get_viewport().set_input_as_handled()
+ 			return
++		# _input runs before GUI dispatch. A tip's close button can be hovered
++		# while the map still owns keyboard focus; its higher layer must win.
++		var hovered := get_viewport().gui_get_hovered_control()
++		if hovered != null and _input_layer(hovered) > _input_layer(self): return
+ 		# _input precedes GUI dispatch: never steal a toolbar button's gesture.
+ 		if _over_toolbar_control(event.position): return
+ 		var over_menu := (popup.visible and popup.modulate.a > 0.05 and popup.get_global_rect().has_point(event.position)) or (parent_links.is_visible_in_tree() and parent_links.get_global_rect().grow(MenuTransitions.ENTRANCE_DISTANCE).has_point(event.position))
+--- intake/scripts/market/rival_world_checkpoint.gd
++++ current/scripts/market/rival_world_checkpoint.gd
+@@ -5,7 +5,7 @@
+ ## Exact published and Phase3A worlds captured before this repair; full actor,
+ ## history, annual ledger, finance and RNG validation still applies.
+ # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
+-const CONTRACT_LATENCY_PREDECESSORS := ["6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563", "b496434dc8095aefd67d498de3f9f98c2992abaa5d531bbd36ff7017ec9a2547", "5d27b061021aac5944f855395ab011b9f3de844e4145f17c857bdac88f2f01eb"]
++const CONTRACT_LATENCY_PREDECESSORS := ["6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563", "b496434dc8095aefd67d498de3f9f98c2992abaa5d531bbd36ff7017ec9a2547", "5d27b061021aac5944f855395ab011b9f3de844e4145f17c857bdac88f2f01eb", "e4512254abfa3817c820f5f42923946f25ea75012aa7cb1dfa6358d18595cc75"]
+ const AWARDS_PRESENTATION_PREDECESSORS := ["ee16630a62508df8170e15b6dbc39a874a24d977792a42e0f3b56bd8bf10254f", "89b2459915e55f7d203780d6fc0d4b73218c3e44997b3a3111e33267f31080e1"]
+ const Clock := preload("res://scripts/calendar/calendar_clock.gd")
+ const AWARD_LEDGER_PREDECESSORS := ["303959a85af6268f88e1cd4b855e747838a25fad8779d85621a17f77a0b19253"]

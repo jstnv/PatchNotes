@@ -25,12 +25,13 @@ var active := false
 var finalization_requested := false
 var _executing := false
 var _budget_printed := 0
+var _budget_bonus_centi := 0
 var _budget_spent := 0
 var _budget_projection := -1
 var _budget_reserved := 0
 
 func pass_budget_available() -> int:
-	return PassBudget.generated(_budget_printed, _project_state._pass_budget_version if _project_state != null else 2) - _budget_spent if pass_budget_active() else CANDIDATE_POOL_SIZE
+	return PassBudget.generated(_budget_printed, _project_state._pass_budget_version if _project_state != null else 2,_budget_bonus_centi) - _budget_spent if pass_budget_active() else CANDIDATE_POOL_SIZE
 
 func pass_budget_active() -> bool:
 	return _project_state==null or _project_state._pass_budget_version in [1,2]
@@ -38,16 +39,20 @@ func pass_budget_active() -> bool:
 func can_play_pass_budget(cards: Array[CardData]) -> bool:
 	if not pass_budget_active():return true
 	var change:=_selected_budget_delta(cards)
-	return int(change.passes)<=PassBudget.generated(_budget_printed+int(change.printed), _project_state._pass_budget_version if _project_state != null else 2)-_budget_spent
+	return int(change.passes)<=PassBudget.generated(_budget_printed+int(change.printed), _project_state._pass_budget_version if _project_state != null else 2,_budget_bonus_centi+int(change.bonus_centi))-_budget_spent
 
 func _selected_budget_delta(cards: Array[CardData]) -> Dictionary:
 	var printed := 0
 	var passes := 0
+	var bonus_centi := 0
+	var row: Dictionary=_run_state.get_proprietary_engine_row(_project_state.get_engine_id()) if _run_state!=null and _project_state!=null else {}
 	for card in cards:
 		if card.card_type == &"pass": passes += 1
 		else:
-			for entry in card.core_contributions(): printed += int(entry.value)
-	return {"printed": printed, "passes": passes}
+			for entry in card.core_contributions():
+				printed += int(entry.value)
+				bonus_centi += int(entry.value)*int(row.get("pass_efficiency",{}).get(entry.stat,0))
+	return {"printed": printed, "passes": passes,"bonus_centi":bonus_centi}
 
 func get_priority_distribution() -> Dictionary:
 	return priorities.duplicate()
@@ -114,6 +119,8 @@ func _execute(request: Dictionary) -> Dictionary:
 	for card in selected: records.append({&"primary_stat":card.primary_stat})
 	var engine_bonus: Dictionary = preload("res://scripts/engines/engine_marketplace.gd").production_bonus(_project_state.get_engine_id())
 	var final_action := ProductionHand.calculate(records, base_hand.score_additions, base_hand.has_feature, engine_bonus)
+	var skill_result:=preload("res://scripts/engines/engine_skill_effects.gd").pass_effect(selected,base_hand.score_additions,final_action,engine_bonus,_run_state.get_proprietary_engine_row(_project_state.get_engine_id()) if _run_state!=null else {},_project_state._skill_pass_remainders)
+	final_action.score_additions=skill_result.additions
 	if not final_action.specialization_stat.is_empty():
 		for category in ProjectState.CoreScore.values():
 			if not final_action.score_additions.has(category): final_action.score_additions[category] = 0
@@ -125,7 +132,7 @@ func _execute(request: Dictionary) -> Dictionary:
 		if candidate_ids[index] not in ids:
 			retained.append(_candidate_cards[index])
 			retained_ids.append(candidate_ids[index])
-	_budget_projection = PassBudget.generated(_budget_printed + int(budget_delta.printed), _project_state._pass_budget_version if _project_state != null else 2) - _budget_spent - int(budget_delta.passes) if pass_budget_active() else CANDIDATE_POOL_SIZE
+	_budget_projection = PassBudget.generated(_budget_printed + int(budget_delta.printed), _project_state._pass_budget_version if _project_state != null else 2,_budget_bonus_centi+int(budget_delta.bonus_centi)) - _budget_spent - int(budget_delta.passes) if pass_budget_active() else CANDIDATE_POOL_SIZE
 	_budget_reserved = retained.filter(func(card: CardData): return card.card_type == &"pass").size()
 	var tutorial := _get_first_game_tutorial()
 	var refill_count := maxi(0, CANDIDATE_POOL_SIZE - retained.size())
@@ -147,8 +154,10 @@ func _execute(request: Dictionary) -> Dictionary:
 	var commit := func() -> bool:
 		if _run_state != null and (not _run_state.can_commit_employee_hand(employee_plan) or int(_run_state.get_lean_savings().get(_project_state.get_release_id(), 0)) != lean_before): return false
 		if not _project_state.add_core_scores_and_scope(additions, base_hand.scope, base_hand.bug_pressure): return false
+		_project_state._skill_pass_remainders=skill_result.remainders
 		if pass_budget_active():
 			_budget_printed += int(budget_delta.printed)
+			_budget_bonus_centi += int(budget_delta.bonus_centi)
 			_budget_spent += int(budget_delta.passes)
 		events.append({"type":"production", "scores":additions.duplicate(), "scope":base_hand.scope, "bug_pressure":base_hand.bug_pressure})
 		if not employee_priorities.is_empty(): priorities = employee_priorities.duplicate()
@@ -156,6 +165,7 @@ func _execute(request: Dictionary) -> Dictionary:
 			_run_state.commit_employee_hand(employee_plan)
 			_run_state.commit_lean_saving(_project_state.get_release_id(), lean_before, lean_saving)
 		for card in selected:
+			if card.card_type == &"feature" and _run_state != null:_run_state.credit_engine_skill_feature(_project_state,card)
 			if card.card_type == &"feature" and not card.renewable:
 				_exhausted_card_ids[card.id] = true
 				if _run_state != null: _run_state.record_resolved_feature(_project_state, card.id, CardData.PHASE_DESIGN)
@@ -216,6 +226,8 @@ func calculate_base(cards: Array[CardData]) -> Dictionary:
 		contributions.append(contribution)
 		if card.card_type == &"feature":
 			action_bug_pressure += _calculate_feature_bug_pressure(card)
+	if _project_state != null and not _project_state.has_scope_capacity_for(total_scope):
+		return _invalid_base_hand("Engine Scope capacity exceeded")
 
 	return {
 		&"valid": true,
@@ -339,7 +351,10 @@ func _get_weighted_definition_validation_error(card: CardData, expected_type: St
 
 func _calculate_feature_bug_pressure(card: CardData) -> float:
 	var total_printed_raw_score := card.printed_core_total()
-	return (float(total_printed_raw_score) * float(card.scope)) / BUG_PRESSURE_DENOMINATOR
+	var reduction:=0.0
+	var row: Dictionary=_run_state.get_proprietary_engine_row(_project_state.get_engine_id()) if _run_state!=null and _project_state!=null else {}
+	for entry: Dictionary in card.core_contributions():reduction+=float(entry.value)*float(row.get("bug_prevention",{}).get(entry.stat,0))/100.0
+	return (float(total_printed_raw_score)-reduction) * float(card.scope) / BUG_PRESSURE_DENOMINATOR
 
 
 func _get_card_validation_error(card: CardData) -> String:

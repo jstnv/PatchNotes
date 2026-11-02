@@ -67,19 +67,29 @@ func encode(value: Variant, schema: Variant, depth: int = 0) -> Variant:
 	if schema.has("array"):
 		if not value is Array: return fail("Expected array")
 		var out: Array = []
-		for item: Variant in value: out.append(encode(item,schema.array,depth+1))
+		for item: Variant in value:
+			out.append(encode(item,schema.array,depth+1))
+			if not error.is_empty():return null
 		return out
 	if not value is Dictionary: return fail("Expected record")
 	if schema.has("map"):
 		var entries: Array = []
 		for key: Variant in value:
-			entries.append({"key":encode(key,schema.map[0],depth+1),"value":encode(value[key],schema.map[1],depth+1)})
+			var encoded_key: Variant=encode(key,schema.map[0],depth+1)
+			if not error.is_empty():return null
+			var encoded_value: Variant=encode(value[key],schema.map[1],depth+1)
+			if not error.is_empty():return null
+			entries.append({"key":encoded_key,"value":encoded_value})
 		return entries
 	if value.size() != schema.size(): return fail("Record field count: expected %s; got %s" % [schema.keys(),value.keys()])
+	# Closed unions can differ only in a late field. Reject their shape before
+	# recursively walking the same large histories for each older alternative.
+	for key: String in schema:
+		if not value.has(key):return fail("Missing field: "+key)
 	var out := {}
 	for key: String in schema:
-		if not value.has(key): return fail("Missing field: " + key)
 		out[key] = encode(value[key],schema[key],depth+1)
+		if not error.is_empty():return null
 	return out
 
 func decode(value: Variant, schema: Variant, depth: int = 0) -> Variant:
@@ -116,7 +126,9 @@ func decode(value: Variant, schema: Variant, depth: int = 0) -> Variant:
 	if schema.has("array"):
 		if not value is Array: return fail("Expected array")
 		var out: Array = []
-		for item: Variant in value: out.append(decode(item,schema.array,depth+1))
+		for item: Variant in value:
+			out.append(decode(item,schema.array,depth+1))
+			if not error.is_empty():return null
 		return out
 	if schema.has("map"):
 		if not value is Array: return fail("Expected map entries")
@@ -127,12 +139,15 @@ func decode(value: Variant, schema: Variant, depth: int = 0) -> Variant:
 			if not error.is_empty(): return null
 			if out.has(key): return fail("Duplicate map key")
 			out[key] = decode(entry.value,schema.map[1],depth+1)
+			if not error.is_empty():return null
 		return out
 	if not value is Dictionary or value.size()!=schema.size(): return fail("Record field count")
+	for key: String in schema:
+		if not value.has(key):return fail("Missing field: "+key)
 	var out := {}
 	for key: String in schema:
-		if not value.has(key): return fail("Missing field: " + key)
 		out[key] = decode(value[key],schema[key],depth+1)
+		if not error.is_empty():return null
 	return out
 
 func envelope(payload: Dictionary) -> String:

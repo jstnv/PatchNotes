@@ -5,6 +5,8 @@ signal presentation_resumed(skipped_beats: int)
 const Grid := preload("res://scripts/audio/music_grid.gd")
 const Map := preload("res://scripts/audio/theme_map.gd")
 const Blend := preload("res://scripts/audio/theme_blend.gd")
+const StudioPool := preload("res://scripts/audio/studio_pool.gd")
+const STUDIO_STREAM_INDICES := [1, 4, 5, 6, 7, 8]
 const A := Map.MAIN_A
 const B := Map.MAIN_B
 const PAUSE_FADE := 0.9
@@ -15,6 +17,8 @@ var themes: AudioStreamSynchronized
 var grid := Grid.new()
 var blend := Blend.new()
 var menu_blend := Blend.new()
+var studio_pool := StudioPool.new()
+var studio_pool_active := false
 var requested_theme: StringName = &"menu"
 var output_latency := 0.0
 var manually_paused := false
@@ -22,6 +26,7 @@ var last_sample_usec := 0
 var _applied_weight := -1.0
 var _applied_menu_weight := -1.0
 var _applied_opener_weight := -1.0
+var _applied_studio_index := -1
 var opener_retired := false
 var pause_reverb: AudioEffectReverb
 var pause_weight := 0.0
@@ -42,16 +47,21 @@ func _ready() -> void:
 	add_child(player)
 	var path := B if ProjectSettings.get_setting("audio/soundtrack/prototype_variant", "A") == "B" else A
 	var main := _loop(path)
-	var studio := _loop(Map.STUDIO)
+	var studio_streams: Array[AudioStreamWAV] = []
+	for studio_path: String in Map.STUDIO_POOL:
+		var studio_stream := _loop(studio_path)
+		if studio_stream == null: return
+		studio_streams.append(studio_stream)
 	var menu := _loop(Map.MENU)
 	var opener := _loop(Map.MENU_OPENER)
-	if main == null or studio == null or menu == null or opener == null: return
+	if main == null or menu == null or opener == null: return
 	# One audio playback owns all WAVs. Even the inaudible arrangements keep
 	# running at the identical sample/bar offset; transitions never seek/restart.
 	themes = AudioStreamSynchronized.new()
-	themes.stream_count = 4
+	themes.stream_count = 9
 	themes.set_sync_stream(0, main)
-	themes.set_sync_stream(1, studio)
+	for i in studio_streams.size():
+		themes.set_sync_stream(STUDIO_STREAM_INDICES[i], studio_streams[i])
 	themes.set_sync_stream(2, menu)
 	themes.set_sync_stream(3, opener)
 	menu_blend.requested = 1.0
@@ -75,11 +85,12 @@ func _loop(path: String) -> AudioStreamWAV:
 	stream.loop_end = Map.FRAMES
 	return stream
 
-func request_theme(theme: StringName, quick_entry: bool = false) -> bool:
+func request_theme(theme: StringName, quick_entry: bool = false, pool_active: bool = true) -> bool:
 	if theme not in [&"menu", &"main", &"studio"] or themes == null: return false
 	presentation_seconds()
 	var leaving_menu := requested_theme == &"menu" and theme == &"studio"
 	requested_theme = theme
+	studio_pool_active = theme == &"studio" and pool_active
 	# Schedule against the mix cursor, not the already-heard cursor; output
 	# latency must not make the music change one buffer late on purpose.
 	blend.request(theme == &"studio", grid.mix_seconds, quick_entry and theme == &"studio")
@@ -97,12 +108,15 @@ func _opener_weight() -> float:
 func _apply_blend(weight: float, menu_weight: float = -1.0, opener_weight: float = -1.0) -> void:
 	if menu_weight < 0.0: menu_weight = menu_blend.weight
 	if opener_weight < 0.0: opener_weight = _opener_weight()
-	if themes == null or (weight == _applied_weight and menu_weight == _applied_menu_weight and opener_weight == _applied_opener_weight): return
+	if themes == null or (weight == _applied_weight and menu_weight == _applied_menu_weight and opener_weight == _applied_opener_weight and studio_pool.selected == _applied_studio_index): return
 	_applied_weight = weight
 	_applied_menu_weight = menu_weight
 	_applied_opener_weight = opener_weight
+	_applied_studio_index = studio_pool.selected
 	themes.set_sync_stream_volume(0, linear_to_db((1.0 - menu_weight) * (1.0 - weight)))
-	themes.set_sync_stream_volume(1, linear_to_db((1.0 - menu_weight) * weight))
+	var studio_gain := (1.0 - menu_weight) * weight
+	for i in STUDIO_STREAM_INDICES.size():
+		themes.set_sync_stream_volume(STUDIO_STREAM_INDICES[i], linear_to_db(studio_gain if i == studio_pool.selected else 0.0))
 	themes.set_sync_stream_volume(2, linear_to_db(menu_weight * (1.0 - opener_weight)))
 	themes.set_sync_stream_volume(3, linear_to_db(menu_weight * opener_weight))
 
@@ -164,7 +178,10 @@ func _process(_delta: float) -> void:
 	if weight != pause_weight:
 		pause_weight = weight
 		_apply_pause_effects()
-	_apply_blend(blend.sample(grid.mix_seconds), menu_blend.sample(grid.mix_seconds), _opener_weight())
+	var studio_weight: float = blend.sample(grid.mix_seconds)
+	var menu_weight: float = menu_blend.sample(grid.mix_seconds)
+	studio_pool.on_loop(grid.loops, studio_pool_active and studio_weight == 1.0 and menu_weight == 0.0)
+	_apply_blend(studio_weight, menu_weight, _opener_weight())
 
 func set_paused(value: bool) -> void:
 	# Sample the stopped state before resuming so time spent with no audio

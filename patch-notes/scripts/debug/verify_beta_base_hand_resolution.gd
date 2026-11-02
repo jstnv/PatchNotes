@@ -86,11 +86,17 @@ func _verify_availability_and_empty_qa() -> void:
 	_expect(not planning.play_selected_hand(), "Planning rejects Play Hand with zero effects")
 	planning.begin_beta([0.05, 0.15, 0.40, 0.50, 0.80, 0.85, 0.90], [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
 	_expect(not planning.play_selected_hand(), "Zero selections reject")
-	var pool := planning.get("_candidate_views") as Array
-	for index in range(3): planning.call("_on_card_pressed", pool[index])
-	_expect(not planning.play_selected_hand(), "One through three selections reject")
 	planning.queue_free()
 	await process_frame
+	# Current rule permits one through four cards; only four can earn synergy.
+	for count in range(1,4):
+		var short := await _make_beta([&"search_for_bugs", &"search_for_bugs", &"search_for_bugs", &"search_for_bugs"])
+		var views: Array = short.beta.get("_candidate_views")
+		for index in range(count,4): short.beta.call("_on_card_pressed",views[index])
+		_expect(short.beta.play_selected_hand(), "%d selected cards resolve under the current one-to-four rule" % count)
+		_expect(short.state.get_current_cycle()==1 and short.run.get_completed_run_cycles()==1, "Short QA hand advances exactly one productive cycle")
+		short.beta.queue_free()
+		await process_frame
 
 	var fixture := await _make_beta([&"search_for_bugs", &"debug", &"sign_flippers", &"posters"])
 	var beta: BetaPhase = fixture.beta

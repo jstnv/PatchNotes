@@ -19,9 +19,11 @@ func _run() -> void:
 	for resolution: Vector2i in [Vector2i(1152,648), Vector2i(1280,720)]:
 		root.size = resolution
 		root.content_scale_size = resolution
-		for id: StringName in [&"inventory_system", &"16_bit_sound"]:
-			var run := fresh()
-			if not run.owns_feature(&"8_bit_sound"):
+		for id: StringName in [&"text", &"16_bit_sound"]:
+			var run:=preload("res://scripts/debug/employee_test_actions.gd").fresh_two_releases(root.get_node("CardDatabase").get_development_catalog())
+			var engine:=preload("res://scripts/debug/ui_test_actions.gd").create_feature_engine(run,"Confirmation Engine")
+			check(run.select_engine(engine),"Editable owned engine selected")
+			if id==&"16_bit_sound":
 				check(run.admit_feature_research(run.get_feature_research_quote(&"8_bit_sound")) and run.research_feature(run.get_feature_research_quote(&"8_bit_sound")), "Upgrade parent acquired legally")
 			var store := FeatureStore.new()
 			root.add_child(store)
@@ -32,7 +34,9 @@ func _run() -> void:
 			await create_timer(0.8).timeout
 			var before := snapshot(run)
 			var quote := run.get_feature_research_quote(id)
-			check(quote.can_admit, "Legal selected Feature can enter queue")
+			check(quote.can_admit, "Legal selected Feature can enter queue: "+str(quote))
+			if not quote.can_admit:
+				store.queue_free();await process_frame;continue
 			for action: String in ["cancel", "escape", "close"]:
 				store._purchase()
 				var dialog := store._admission_dialog

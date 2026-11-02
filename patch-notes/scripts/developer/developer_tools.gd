@@ -35,7 +35,7 @@ func _ready() -> void:
 	unlimited=CheckButton.new();unlimited.text="Unlimited money";unlimited.custom_minimum_size.y=44;body.add_child(unlimited)
 	unlimited.toggled.connect(_money_toggled)
 	unlock=FolderUI.button(body,"Unlock all current Features",_unlock_features,&"PrimaryButton")
-	FolderUI.label(body,"Features are owned immediately for games you start next. Existing project pools and Research history stay as recorded. Retired cards remain retired.")
+	FolderUI.label(body,"Unlock applies to the selected owned engine for games you start next. Existing project pools and Implementation history stay as recorded. Retired cards remain retired.")
 	status=FolderUI.label(body,"");status.custom_minimum_size.y=40
 	badge=Label.new();badge.text="DEBUG · unsaved · F8";badge.position=Vector2(24,2);badge.add_theme_font_size_override("font_size",13);badge.add_theme_color_override("font_color",Color("f68b5d"));badge.mouse_filter=Control.MOUSE_FILTER_IGNORE;add_child(badge);badge.hide()
 	panel.hide();hide()
@@ -82,13 +82,19 @@ func _money_toggled(value: bool) -> void:
 	_refresh()
 
 func _unlock_features() -> void:
+	var reason: String=sandbox.feature_unlock_reason()
+	if not reason.is_empty():status.text=reason;_refresh();return
 	if _busy or not await _ensure_active():return
-	status.text="All current Features are owned. Start your next game to use the expanded pool." if sandbox.unlock_features() else "Unlock Features from Studio. Your begun project keeps its frozen pool."
+	status.text="All current Features are owned. Start your next game to use the expanded pool." if sandbox.unlock_features() else "Feature unlock is temporarily unavailable while another action is publishing. Existing project pools stay frozen."
 	_refresh()
 
 func _refresh() -> void:
 	unlimited.disabled=_busy or not (_safe_studio() or sandbox!=null and sandbox.active())
-	unlock.disabled=_busy or not _safe_studio()
+	var unlock_reason: String=sandbox.feature_unlock_reason() if sandbox!=null else "Create or load a Studio first."
+	unlock.disabled=_busy or not _safe_studio() or not unlock_reason.is_empty()
+	unlock.tooltip_text=unlock_reason
+	if not unlock_reason.is_empty() and not _busy and not status.text.contains(unlock_reason):
+		status.text=(status.text+"\n" if not status.text.is_empty() else "")+unlock_reason
 	if sandbox!=null:unlimited.set_pressed_no_signal(sandbox.unlimited)
 
 func _input(event: InputEvent) -> void:

@@ -1,5 +1,8 @@
 class_name GameplayHUD
 extends Control
+
+var focused_guidance_active:=false
+signal phase_changed
 const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 var project: ProjectState
@@ -35,7 +38,7 @@ var _score_pulses: Array[Label] = []
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	theme = preload("res://resources/ui/workspace_theme.tres")
+	theme = preload("res://resources/ui/onyx_theme.tres")
 	var header := ProductionScoreboard.new()
 	header.name = "PersistentHeader"
 	header.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
@@ -106,11 +109,13 @@ func _ready() -> void:
 	_cash_feedback=preload("res://scripts/ui/cash_feedback.gd").new()
 	add_child(_cash_feedback)
 	_cash_feedback.configure(cash_button)
-	fans_dialog = AcceptDialog.new()
+	fans_dialog = preload("res://scripts/ui/quit_confirmation.gd").new()
 	fans_dialog.name = "FanHistory"
 	fans_dialog.title = "Studio Fans"
 	fans_dialog.dialog_autowrap = true
 	add_child(fans_dialog)
+	fans_dialog.ok_button_text="OK"
+	fans_dialog.get_cancel_button().hide()
 	studio_finances = StudioFinances.new()
 	studio_finances.name = "StudioFinances"
 	add_child(studio_finances)
@@ -168,7 +173,7 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 		var studio_music := controller is StudioPhase or controller is PostGameReview or controller is FirstProjectSetup
 		var from_title := is_instance_valid(phase) and phase is MainMenu
 		var theme: StringName = &"menu" if controller is MainMenu else &"studio" if studio_music else &"main"
-		soundtrack.request_theme(theme, studio_music and from_title)
+		soundtrack.request_theme(theme, studio_music and from_title, controller is StudioPhase)
 	settings_menu.close()
 	studio_finances.close()
 	fans_dialog.hide()
@@ -193,6 +198,16 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 	if is_instance_valid(phase) and phase.has_signal("guidance_changed") and phase.guidance_changed.is_connected(_refresh_guidance):
 		phase.guidance_changed.disconnect(_refresh_guidance)
 	phase = controller
+	var save_notice := get_parent().get_node_or_null("SavePresentation/SaveNotification")
+	if save_notice != null: save_notice.set_success_context(phase is StudioPhase)
+	theme=preload("res://resources/ui/onyx_theme.tres") if phase is StudioPhase else FolderUI.THEME
+	var background:=get_parent().get_node_or_null("Background") as ColorRect
+	if background!=null:background.color=theme.get_color("background",&"PatchNotes")
+	scoreboard.theme_type_variation=&"StudioBar" if phase is StudioPhase else &""
+	footer_panel.theme_type_variation=&"StudioBar" if phase is StudioPhase else &""
+	header_title.theme_type_variation=&"HeadingLabel" if phase is StudioPhase else &"HeadingLabel"
+	header_title.add_theme_font_size_override("font_size",30 if phase is StudioPhase else 22)
+	header_title.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
 	_update_studio_glow()
 	var release_menu := phase is StudioPhase or phase is PostGameReview or phase is ContractPhase or phase is FirstProjectSetup or phase is MainMenu
 	get_node("PersistentFooter").visible = not (phase is MainMenu)
@@ -201,7 +216,8 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 	for item: Label in stats: item.visible = not release_menu
 	change_priorities.visible = not release_menu
 	if header_title.visible and run != null:
-		header_title.text = "%s · %d" % [run.get_studio_name(), run.get_current_year()]
+		header_title.text = _studio_header_text()
+		header_title.tooltip_text=header_title.text
 	if phase is MainMenu: contextual_tip.dismiss()
 	sales_hud.set_context(not phase is MainMenu)
 	_layout_sales_hud()
@@ -228,6 +244,7 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 	elif phase is ContractPhase: context = &"contract"
 	elif phase is MainMenu: context = &"main_menu"
 	set_tutorial_context(context)
+	phase_changed.emit()
 
 func _update_studio_glow() -> void:
 	if is_instance_valid(studio_glow):
@@ -294,8 +311,12 @@ func _show_synergy_help(title: String, body: String) -> void:
 
 
 func _refresh_guidance() -> void:
+	if focused_guidance_active:return
 	if not _guidance_ready or run == null or contextual_tip == null: return
-	contextual_tip.dock_below_menu_controls(phase is StudioPhase and tutorial_context==&"contract")
+	# The overview desk has free space below the value cards; full destinations
+	# retain their upper hint dock so hints cannot cover their lower actions.
+	var hub_view: bool = phase is StudioPhase and phase.get("_hub_motion") != null and phase._hub_motion.depth()==1
+	contextual_tip.dock_below_menu_controls(hub_view or (phase is StudioPhase and tutorial_context==&"contract"))
 	var tip := _guidance_for_current_state()
 	if tip.is_empty():
 		tip_button.disabled = true
@@ -326,11 +347,11 @@ func _guidance_for_current_state() -> Dictionary:
 		&"studio":
 			if run != null and run.needs_starter_selection():
 				return {}
-			return {"key": "studio_between_games", "title": "Choose your next step", "body": "Browse release summaries, the Feature Store or Contracts for free. Produce Next Game starts a fresh project with your owned Features."}
+			return {"key": "studio_between_games", "title": "Choose your next step", "body": "Browse release summaries, Engines or Contracts for free. Open a proprietary engine's Feature Implementation Tree to expand its future game library."}
 		&"feature_store":
 			if run != null and run.needs_starter_selection():
-				return {"key": "store_starter", "title": "Compare starter Features", "body": "Select a node to see its price and Scope. Starter purchases cost zero cycles; you can return to Studio at any time."}
-			return {"key": "store_branches", "title": "Follow the branches", "body": "Queue an eligible Feature with a zero-cycle down payment, then Research the queue head for one productive cycle. Only completed research grants ownership."}
+				return {"key": "store_starter", "title": "Compare starter Features", "body": "Select a node to see its price and Scope. Starter purchases cost zero cycles; you can return to your engine at any time."}
+			return {"key": "store_branches", "title": "Follow the branches", "body": "Queue an eligible Feature with a zero-cycle down payment, then Implement the queue head for one productive cycle. Completion makes it available to future games using that engine."}
 		&"review":
 			return {"key": "review_categories", "title": "Explore your release", "body": "Open each category for the frozen Review and sales results. Browsing or returning to Studio costs nothing."}
 		&"contract":
@@ -349,7 +370,7 @@ func _guidance_for_current_state() -> Dictionary:
 					if remaining == 1:
 						return {"key": "contract_final_hand", "title": "One hand left", "body": "Choose four cards for the final hand. Matching all four primary Core labels gives ×1.5 Core gains. Completion cash and any challenge bonus are paid after this hand."}
 					return {"key": "contract_progress", "title": "%d hands left" % remaining, "body": "Keep building toward the targets and challenge. Completion cash is paid only after the final required hand."}
-				return {"key": "contract_choose", "title": "Build a contract hand", "body": "Select four of seven cards. Matching all four primary Core labels gives a ×1.5 Core synergy. Priorities weight later draws; redraws use the shared budget."}
+				return {"key": "contract_choose", "title": "Build a contract hand", "body": "Select one to four available cards. Matching all four primary Core labels gives a ×1.5 Core synergy. Priorities weight later draws; redraws use the shared budget."}
 			if run.get_pending_contract_choices().is_empty():
 				return {"key":"contract_search","title":"Find work","body":"Choose a work type, then search for one lasting offer. A successful search costs one productive cycle; browsing is free. Rent and other bills continue."}
 			return {"key": "contract_offer", "title": "Inspect the offer", "body": "Review its targets and reward before accepting. Opening details and accepting cost no cycles or cash."}
@@ -360,11 +381,11 @@ func _guidance_for_current_state() -> Dictionary:
 
 func _production_guidance() -> Dictionary:
 	if not is_instance_valid(phase) or not phase.has_method("get_workspace"):
-		return {"key": String(tutorial_context) + "_overview", "title": "Build your game", "body": "Set priorities and select four cards per hand. Open Tutorial for the full phase reference."}
+		return {"key": String(tutorial_context) + "_overview", "title": "Build your game", "body": "Set priorities and select one to four cards per hand. Open Tutorial for the full phase reference."}
 	var workspace: PhaseWorkspace = phase.get_workspace()
 	var name := String(tutorial_context)
 	if (tutorial_context == &"design" and not (phase is DesignPhase)) or (tutorial_context == &"alpha" and not (phase is AlphaPhase)) or (tutorial_context == &"beta" and not (phase is BetaPhase)):
-		return {"key": name + "_overview", "title": name.capitalize() + " guidance", "body": "Set priorities and select four cards per hand. Open Tutorial for the full phase reference."}
+		return {"key": name + "_overview", "title": name.capitalize() + " guidance", "body": "Set priorities and select one to four cards per hand. Open Tutorial for the full phase reference."}
 	if workspace.overlay.visible:
 		return {} # PriorityOverlay already presents its own help above the game.
 	if phase is DesignPhase:
@@ -407,8 +428,8 @@ func _production_guidance() -> Dictionary:
 		if tutorial_context == &"alpha": body += " Match four primary Core labels for a ×1.5 synergy; use Synergy ? for the other pattern."
 		return {"key": name + "_progress", "title": "Watch the project", "body": body}
 	if tutorial_context == &"design":
-		return {"key": "design_choose", "title": "Select four cards", "body": "Choose four cards. A synergy is a bonus for a matching hand. The first score on each card is its primary Core label; match all four for ×1.5 Core gains. Use Synergy ? for other combos."}
-	return {"key": name + "_choose", "title": "Select four cards", "body": "Choose four cards. Matching all four primary Core labels gives ×1.5 Core gains; the Synergy ? button explains other bonuses. Features exhaust; Passes return."}
+		return {"key": "design_choose", "title": "Select one to four cards", "body": "Choose one to four cards. A four-card synergy is a bonus for a matching hand. The first score on each card is its primary Core label; match all four for ×1.5 Core gains. Use Synergy ? for other combos."}
+	return {"key": name + "_choose", "title": "Select one to four cards", "body": "Choose four cards. Matching all four primary Core labels gives ×1.5 Core gains; the Synergy ? button explains other bonuses. Features exhaust; Passes return."}
 
 func _queue_refresh() -> void:
 	if _refresh_pending or not is_inside_tree(): return
@@ -430,7 +451,8 @@ func refresh() -> void:
 		footer.text = "Date: —     |     Cycle: —     |     Next Bill: —"
 		return
 	if header_title.visible:
-		header_title.text = "%s · %d" % [run.get_studio_name(), run.get_current_year()]
+		header_title.text = _studio_header_text()
+		header_title.tooltip_text=header_title.text
 	if project == null:
 		change_priorities.disabled = true
 		_refresh_footer()
@@ -489,4 +511,9 @@ func show_settings(navigation_host: MenuTransitions = null) -> void:
 func show_bank_from_studio() -> bool:
 	if run==null or not phase is StudioPhase:return false
 	contextual_tip.dismiss();tutorial_overlay.close()
-	return studio_finances.open("Back to Studio Management",&"bank")
+	return studio_finances.open("Back to Studio Info",&"bank")
+
+func _studio_header_text() -> String:
+	if phase is StudioPhase:
+		return "%s  |  %d · MONTH %d"%[run.get_studio_name(),run.get_current_year(),Clock.month_of_year(run.get_completed_run_cycles(),run.get_calendar_profile())]
+	return "%s · %d"%[run.get_studio_name(),run.get_current_year()]

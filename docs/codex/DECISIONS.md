@@ -1,5 +1,13 @@
 # Cross-system decisions
 
+## 2026-11-01 — Proprietary Scope enforcement and starting Feature roots
+
+The user confirmed that proprietary capacity starts at 20 Scope and rises automatically by 5 with the existing purchased Skill Tree milestones. Each project freezes its selected engine's capacity; Design/Alpha hands must fit the remaining capacity in aggregate, including one-to-four-card hands, before activation. A rejected hand spends no Scope or Feature. The project requirement stays 30 Scope, so a 20-Scope engine can release below target with the existing Scope-completion Review penalty. Text, 4-Color Palette and 8-Bit Sound begin available for paid, engine-specific Feature implementation without prerequisites; the four free technology foundations do not grant those cards or change their printed values. [Current Engine Feature workflow](design/engine-features.md) · [focused check record](logs/2026-11-01-proprietary-scope-roots-v1.md).
+
+## 2026-11-01 — Engine Skill Tree effects and Pass Budget versions
+
+The user authorized the October 31 Generation I/II Skill Tree candidate values for ACTIVE/TRIAL implementation and clarified that new/legacy projects retain their versioned 10/2 initial Pass allowance. The +20% printed matching Feature Core effect accumulates in the phase's Pass Budget numerator after purchase; it does not rewrite ordinary printed Core or retroactively reweight prior activations. Generation II Graphics/Sound Pass marginal carries a per-project fractional score remainder, while Technology/Design Feature bug prevention applies only to matching printed portions. Four purchased branch nodes advance proprietary capacity by 5 Scope; started projects preserve their frozen engine capacity/supply. Generations III/IV have no production thresholds or effects. [Design](design/engine-skill-tree.md).
+
 ## 2026-11-01 — Flexible hands and prospective10/K8 Pass allowance
 
 User authorized1–4-card actions, +2 starting Passes per category per phase, and immediate one-cycle Playtest injection/overflow. Shared four-category allowance therefore gains8: new project v2 uses10/K8 independently in Design/Alpha; v1/legacy active project counters/terms remain. Empty/stale/duplicate/overlarge hands reject, costs/exhaustion/familiarity remain, and Specialization/Balanced/Beta bonuses plus QA/Manager specialization tracking still require4. Alpha corrections reserve existing quota; Beta keeps$500, both one cycle. Overflow is protected corrections only; no ordinary draw or deal RNG until fewer than7 remain, then fill only the gap. Existing Studio-only Continue/certified inputs and previous Awards/splash edits remain. [Evidence and exact scope](findings/flex-hands-20261101-v1/README.md).
@@ -25,6 +33,10 @@ The authorized Phase2A brief approves only the public subset of the October31 re
 ## 2026-10-31 — Pass Budget prospective projects, persistence and passive rival clock
 
 Under the user's authorized2/K8 career-check/repair request, new Design/Alpha projects share authoritative quota/counters across live/headless commands. Unversioned saved active rivals finish that project under explicit legacy version0 with an admitted generation origin and no fabricated past spend; subsequent projects use version1. Preserve all actual historical state and the Studio-only player Continue boundary. A1977-founder-only zero-delta/no-callback passive calendar may service real sales/debt in arrears; player productive gates, debt, funding, prices and roster values remain. Stable simulator identities also rekey Engine ownership. These are functional/persistence repairs;2/K8 and other values remain ACTIVE/TRIAL and no new balance/package is approved. [Source/evidence/limits](logs/2026-10-31-pass-budget-career-acceptance-v1.md).
+
+## 2026-11-01 — Proprietary Engine Phase 3A foundation
+
+The user authorized $100 named, owner-scoped proprietary Engine creation with20 initial Scope,zero royalty,independent per-engine Feature implementation/configuration and four free technology foundations (Text,4-Color Palette,Keyboard & Mouse,8-Bit Sound). Foundations do not grant the corresponding Feature cards, Core or Scope. Persist separate inert challenge,branch,milestone and future-effect fields; no Skill Tree evaluation/purchases or bonuses until Phase3B. Public Action stays the new-Studio default and rival terms are unchanged. [Design](design/proprietary-engine.md) · [checks](logs/2026-11-01-proprietary-engine-phase3a-v1.md).
 
 ## 2026-11-01 — Rival Marketplace supersession
 
@@ -358,3 +370,28 @@ User request in the implementation chat authorizes the three Studio folders, sha
 ## 2026-10-31 — Engine-scoped Features, shared familiarity and explicit configuration
 
 User confirmed preservation of existing engine access and deferral of proposed27-Scope libraries. Permanent implementation belongs to an engine; familiarity belongs to the Studio. Keep the existing parent-credit rule, apply up to80% to the whole new implementation price, then charge half upfront; already-paid queues retain old terms. User confirmed respec charges10% of removed Features' base values only; additions are free to stage and a batch commit costs one real productive cycle. Configurations never rewrite active project/Contract supply. Existing Marketplace terms remain unchanged; no creation economy or Skill Tree is approved by these transactions. [Authority and migration](design/engine-features.md) · [exact checks/open gates](logs/2026-10-31-engine-features-phase1-implementation-v1.md).
+
+## 2026-11-01 — Annual Awards presentation persistence
+
+Implementation decision, no gameplay/balance delta: keep every ceremony page durable before reveal. A process-local successful snapshot pair and exact semantic proof may normalize only independently valid stage/complete; all other state, ranks, rewards, RNG, catalog, rules and source identities stay in the key. Cold/unknown/changed state retains full validation. The cache is bounded and is not evidence of durability. Exact published ee16630a…254f and captured Phase3A89b245…80e1 worlds are admitted with modern frozen engine, Pass Budget and annual-ledger requirements plus all existing validation; no wildcard source admission. [Evidence and limits](findings/awards-presentation-20261101-v2/README.md).
+
+## 2026-11-01 — Engine Feature Implementation replaces Stage and Commit
+
+The user's Engine Feature Store Migration brief supersedes the 2026-10-31 separate Stage/Commit decision for new actions. The existing discounted down payment and FIFO implementation queue stay authoritative; completing a paid Feature takes its existing one productive cycle and immediately adds it to that proprietary engine's future draw supply. Existing projects and Contracts keep their frozen pools. Public and licensed libraries stay fixed. Historical configuration/respec receipts are retained and validated, and version 1 saves migrate paid staged or uncommitted Features without a second charge. Explicitly removed historical Features remain owned but held unless later staged or configured again. Studio Management now routes through Engines; only a proprietary engine detail opens the Feature Implementation Tree. The former global Store entry and Commit controls are retired. [Current design and migration](design/engine-features.md).
+
+
+## 2026-11-02 — Launch existing Engine Skill Tree and revise proprietary Scope base
+
+Direct user implementation brief: paid proprietary engines start at25 maximum Scope; the existing automatic+5 milestones yield30/35 for completed Generations I/II. Future III40/IV45 remain visibly unavailable, with no new nodes/purchases/mechanics. Keep the30 required project Scope, existing trial thresholds/prices/effects, Pass Budget baseline, Feature values and marketplace economics. The existing ledger/effect implementation is reused, not replaced.
+
+Expose Skill Tree through Studio Management → Engines → selected proprietary engine in the current folder style. Challenges remain automatic/free and engine-specific, counting accepted printed primary/secondary Feature Core only; no Pass/synergy credit, whole-generation branch gate, reset or duplicate milestone charge/cycle. Preserve nodes, partial progress and financial provenance. Validate saved old20-based terms before version3 capacity migration; update future engine capacity only, preserving frozen projects and all historical/license/public terms. [Current authority](design/engine-skill-tree.md) · [source-pinned checks](logs/2026-11-02-engine-progression-launch-v1.md).
+
+
+## 2026-11-02 — Focused onboarding remains outside gameplay checkpoints
+
+Direct user request authorizes first-time conditional feature/system invitations, dismissals and optional tours without further input. Keep immutable per-Studio acknowledgments in a tiny separate local preference file, not Run/DTO state or a world autosave. Use actual current unlock gates and registered Public-engine release identities; negative bankroll includes overdue obligations. Coalesce to one safe opportunity, prioritize Bank and defer other owners/hand motion. Read-only tours share current menu identity and route through current controls with explicit nonactivating Employees/Contracts previews. Never perform a purchase, payment, hire, engine choice, cycle or RNG draw; suspend passive-tip visitation during the tour. Replay belongs in How to Play. Existing gameplay, finance, balance and Studio-only Continue remain authoritative. [Conditions and implementation](design/focused-onboarding.md).
+
+
+## 2026-11-02 — Shared central progression maps preserve existing transactions
+
+User clarifies Employee Courses and asks it plus Engine upgrades to follow the Feature Store central/outward grid. Share presentation/projection only, preserving existing Engine and employee models and action authorities. QA courses are independent siblings; Production/Manager and Engine Skill branches retain their actual sequential requirements. Inspecting/panning never buys or enrolls. Fresh quotes, existing course confirmation, clicked-generation intent and input/focus ownership remain mandatory; no new course/upgrade balance or checkpoint fields. [Current design and evidence](design/progression-grid.md).

@@ -139,7 +139,7 @@ func go() -> void:
 				var labels: Array = ceremony.score_labels
 				var nominees: Array = frozen.awards[stage-2].nominees
 				for index in labels.size():
-					if labels[index] != null: check(labels[index].text == ceremony.format_score(nominees[index].score, frozen.awards[stage-2].metric_kind), "Exact frozen score endpoint")
+					if labels[index] != null: check(labels[index].text == ceremony.format_score(nominees[index].score, frozen.awards[stage-2].metric_kind,str(frozen.awards[stage-2].id)), "Exact frozen score endpoint")
 			if stage == 3: check(ceremony.podium.find_child("EmptyPlace",true,false) != null, "Sparse podium keeps empty third place")
 			if stage == 9:
 				check(ceremony.next_button.text == "Exit" and ceremony.skip_checkbox.visible, "Final Exit and future preference available")
@@ -149,7 +149,7 @@ func go() -> void:
 				for award in frozen.awards:
 					check(all_copy.contains(award.name), "Final results retain award " + str(award.name))
 					for row in award.nominees:
-						check(all_copy.contains("#%d · %s — %s · %s" % [int(row.rank), row.studio_name, row.title, ceremony.format_score(int(row.score), award.metric_kind)]), "Final results retain exact frozen nominee")
+						check(all_copy.contains("#%d · %s — %s · %s" % [int(row.rank), row.studio_name, row.title, ceremony.format_score(int(row.score), award.metric_kind,str(award.id))]), "Final results retain exact frozen nominee")
 				check(all_copy.contains("7 nominations · 7 wins · +350 Fans · +35 banked Awareness"), "Final results show exact recorded rewards")
 			await shot("stage-%d-%d" % [stage,size.x])
 			if stage == 9:
@@ -173,8 +173,9 @@ func go() -> void:
 	check(ceremony.score_labels[0].text == "8.7 / 10", "Animation bypass uses exact Review tenths")
 	ceremony.animate_counters = true
 	ceremony.set_stage(2)
-	await create_timer(0.95).timeout
-	check(ceremony.score_labels[0].text == "1234567 Core", "Natural counter completion reaches exact target")
+	var reveal_deadline:=Time.get_ticks_msec()+8000
+	while ceremony._counter_running and Time.get_ticks_msec()<reveal_deadline:await process_frame
+	check(not ceremony._counter_running and ceremony.score_labels[0].text == "1234567 Graphics", "Natural counter completion reaches exact target")
 	var sparse := sample()
 	sparse.awards[0].nominees = []
 	ceremony.configure(sparse, 2, true, false)
@@ -186,7 +187,7 @@ func go() -> void:
 	ceremony.configure(sparse, 2, true, false)
 	await settle()
 	ceremony.finish_counters()
-	check(ceremony.score_labels.size() == 1 and ceremony.score_labels[0].text == "9007199254740993 Core", "Single nominee and large integer endpoint stay exact")
+	check(ceremony.score_labels.size() == 1 and ceremony.score_labels[0].text == "9007199254740993 Graphics", "Single nominee and large integer endpoint stay exact")
 	check(not ceremony.tie_note.visible, "No tie explanation for a sole nominee")
 	await shot("single-nominee")
 	var cancel := InputEventKey.new()

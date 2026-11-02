@@ -37,8 +37,14 @@ func _initialize() -> void:
 	await process_frame
 	expect(gameplay.rival_world!=null and gameplay.rival_world.studios.size()==8,"normal new game activates trial rivals")
 	expect(gameplay._active_phase is StudioPhase,"normal Studio entered")
-	var status: Label = gameplay._active_phase.get_node_or_null("Dashboard/Layout/RivalTrialStatus")
-	expect(status!=null and status.text.contains("Rivals (trial)"),"Studio shows labeled rival status")
+	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(gameplay)
+	var studio: StudioPhase=gameplay._active_phase
+	studio._open_rival_info()
+	await create_timer(MenuTransitions.ENTRANCE_SECONDS+0.08).timeout
+	var info: Control=studio._rival_info
+	expect(info!=null and info.is_visible_in_tree() and info.entries.size()==8 and info.table.get_column_title(0)=="Studio" and info.table.get_column_title(3)=="Bankroll","Market Info exposes all eight labeled rival facts")
+	info.close()
+	await create_timer(MenuTransitions.ENTRANCE_SECONDS+0.08).timeout
 	expect(gameplay.checkpoints.store.inspect().status==&"valid","initial player and rival world checkpoint valid")
 	var old_cycle: int = gameplay.rival_world.cycle
 	expect(gameplay.run_state.complete_productive_action(Callable(),0,old_cycle),"normal player calendar commits")

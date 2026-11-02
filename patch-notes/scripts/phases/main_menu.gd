@@ -48,12 +48,12 @@ const Visualizer := preload("res://scripts/ui/menu_audio_visualizer.gd")
 const FOLDERS := {&"genre": "Genre Specializations", &"traits": "Traits", &"overview": "Overview"}
 
 func _ready() -> void:
-	theme = FolderUI.THEME
+	FolderUI.enable_menu_gamepad()
+	theme = preload("res://resources/ui/onyx_theme.tres")
 	set_meta("folder_navigation_managed",true)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	clip_contents = true
-	var background := ColorRect.new()
-	background.color = FolderUI.color(&"background")
+	var background := preload("res://scripts/ui/arcade_backdrop.gd").new()
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(background)
@@ -63,17 +63,17 @@ func _ready() -> void:
 	add_child(root)
 	_title_screen = VBoxContainer.new()
 	_title_screen.name = "MenuLayout"
-	_title_screen.add_theme_constant_override("separation",8)
+	_title_screen.add_theme_constant_override("separation",10)
 	root.add_child(_title_screen)
 	var logo := TextureRect.new()
 	logo.name = "PatchNotesLogo"
 	var artwork := AtlasTexture.new()
-	artwork.atlas = preload("res://assets/branding/patch_notes_logo.png")
-	artwork.region = Rect2(40,300,1200,620)
+	artwork.atlas = preload("res://assets/branding/patch_notes_logo_onyx_mint.png")
+	artwork.region = Rect2(38,293,1180,610)
 	logo.texture = artwork
 	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	logo.custom_minimum_size = Vector2(0,190)
+	logo.custom_minimum_size = Vector2(0,180)
 	_title_screen.add_child(logo)
 	FolderUI.label(_title_screen,"Build your studio. Shape your next game.")
 	for entry in [["StartGame","Start Game"],["Continue","Continue"],["HowToPlay","How to Play"],["Settings","Settings"],["Quit","Quit"]]:
@@ -81,10 +81,19 @@ func _ready() -> void:
 		var button := FolderUI.button(_title_screen,entry[1],_activate_action.bind(id),&"TitleMenuButton")
 		button.name = id
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.custom_minimum_size = Vector2(320,44)
-		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		button.custom_minimum_size = Vector2(300,50)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		if id=="StartGame":button.theme_type_variation=&"ArcadePrimary"
+		var icon_path:String={"StartGame":"arrows","HowToPlay":"controller","Settings":"settings","Quit":"quit"}.get(id,"")
+		if id=="Continue" and checkpoint_info.status!=&"valid":icon_path="lock"
+		if not icon_path.is_empty():
+			button.icon=load("res://assets/ui/arcade/"+icon_path+".svg")
+			button.add_theme_constant_override("icon_max_width",26)
+			button.add_theme_constant_override("h_separation",18)
+			button.icon_alignment=HORIZONTAL_ALIGNMENT_RIGHT if id in ["StartGame","Continue"] else HORIZONTAL_ALIGNMENT_LEFT
 		_actions[id] = button
 	_actions.Continue.disabled = checkpoint_info.status != &"valid"
+	_actions.Continue.focus_mode=Control.FOCUS_NONE if _actions.Continue.disabled else Control.FOCUS_ALL
 	if checkpoint_info.status != &"empty": _actions.StartGame.text = "New Run"
 	if checkpoint_info.status == &"valid":
 		var saved: Dictionary = checkpoint_info.payload.run
@@ -176,15 +185,16 @@ func _ready() -> void:
 
 func _layout_title() -> void:
 	if not is_instance_valid(_title_screen): return
-	_title_screen.size.x=minf(520,size.x-80)
+	_title_screen.size.x=clampf(size.x*0.32,300,440)
 	_title_screen.size.y=_title_screen.get_combined_minimum_size().y
-	_title_screen.position=Vector2(48,maxf(12,(size.y-_title_screen.size.y)/2))
+	_title_screen.position=Vector2(maxf(24,size.x*0.045),maxf(12,(size.y-_title_screen.size.y)/2))
 	if is_instance_valid(_visualizer):
 		var left := _title_screen.position.x+_title_screen.size.x+40.0
 		var available := maxf(0.0,size.x-left-48.0)
-		var width := minf(560.0,available)
-		_visualizer.position=Vector2(left+(available-width)/2.0,maxf(48.0,(size.y-340.0)/2.0))
-		_visualizer.size=Vector2(width,minf(340.0,maxf(180.0,size.y-96.0)))
+		var width := available
+		var height:=minf(440.0,size.y*0.59)
+		_visualizer.position=Vector2(left,maxf(48.0,(size.y-height)/2.0+10))
+		_visualizer.size=Vector2(width,height)
 
 func _process(_delta: float) -> void:
 	if not is_instance_valid(_visualizer) or navigation == null: return
@@ -419,7 +429,7 @@ func _build_traits(layout: Node) -> void:
 		_label(roster, roster.name).theme_type_variation=&"FolderHeading"
 		var content := _trait_scroll(roster)
 		for positive: bool in [true,false]:
-			_label(content, "Positive" if positive else "Negative").add_theme_color_override("font_color",FolderUI.color(&"cyan") if positive else FolderUI.color(&"orange"))
+			_label(content, "Positive" if positive else "Negative").add_theme_color_override("font_color",FolderUI.color(&"cyan") if positive else FolderUI.color(&"negative"))
 			var list := VBoxContainer.new()
 			content.add_child(list)
 			_trait_lists[Vector2i(int(selected),int(positive))] = list

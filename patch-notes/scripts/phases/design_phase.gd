@@ -39,6 +39,7 @@ var _run_state: RunState
 var _available_features: Array[CardData] = []
 var _pass_definitions: Array[CardData] = []
 var _budget_printed := 0
+var _budget_bonus_centi := 0
 var _budget_spent := 0
 var _candidate_cards: Array[CardData] = []
 var _selected_card_views: Array[CardView] = []
@@ -263,6 +264,7 @@ func _refresh_display() -> void:
 func _initialize_design_lifecycle() -> bool:
 	_clear_candidate_pool()
 	_budget_printed = 0
+	_budget_bonus_centi = 0
 	_budget_spent = 0
 	_available_features.clear()
 	_pass_definitions.clear()
@@ -377,7 +379,7 @@ func _on_redraw_pressed() -> void:
 func _refresh_redraw_controls() -> void:
 	if not is_node_ready(): return
 	for view: CardView in %HandContainer.card_views():
-		view.set_shared_pass_budget(_capture_design_command().pass_budget_available(), posmod(_budget_printed, 8))
+		view.set_shared_pass_budget(_capture_design_command().pass_budget_available(), preload("res://scripts/simulation/pass_budget.gd").effective_progress(_budget_printed,_budget_bonus_centi))
 	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
 	%RedrawButton.disabled = not _can_redraw_selection()
 	if not %RedrawButton.disabled:
@@ -463,6 +465,7 @@ func _on_play_card_pressed() -> void:
 		return
 	_exhausted_card_ids.assign(resolver._exhausted_card_ids)
 	_budget_printed = resolver._budget_printed
+	_budget_bonus_centi = resolver._budget_bonus_centi
 	_budget_spent = resolver._budget_spent
 	_available_features.assign(resolver._available_features)
 	_priority_allocation.set_distribution(resolver.priorities)
@@ -552,6 +555,7 @@ func _can_play_selected_hand() -> bool:
 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _finalization_requested or _project_state == null or not _project_state.can_advance_cycle() or (_run_state != null and not _run_state.can_advance_calendar_cycle()) or (_selected_card_views.is_empty() or _selected_card_views.size() > SELECTED_HAND_SIZE):
 		return false
 	var seen_views: Dictionary[int, bool] = {}
+	var selected_scope := 0
 	for card_view in _selected_card_views:
 		if not _is_current_candidate_view(card_view):
 			return false
@@ -559,7 +563,8 @@ func _can_play_selected_hand() -> bool:
 		if seen_views.has(instance_id):
 			return false
 		seen_views[instance_id] = true
-	return true
+		selected_scope += card_view.card_data.scope
+	return _project_state.has_scope_capacity_for(selected_scope)
 
 
 func _is_current_candidate_view(card_view: CardView) -> bool:
@@ -699,7 +704,7 @@ func get_first_game_guidance() -> Dictionary:
 			"body": "At least four cards share %s as their primary Core (the first score). Look across the fan to find them. Choose any four matching cards and press Implement for ×1.5 hand Core gains. Printed Scope stays the same; Passes add no Scope. Playing still uses one cycle and the shown Feature cost." % core}
 	if tutorial.stage == FirstGameTutorial.Stage.REDRAW_HAND and matching.size() == 3 and not other_slots.is_empty():
 		if _run_state.get_available_redraws() == 0:
-			return {"key": "first_game_redraw_empty", "title": "No redraws left", "hint": "First game · Play a hand to restore one redraw.", "body": "This pool is one %s card short of Specialization. Your redraw bank is empty. You can play any affordable four-card hand normally; a successful hand restores one redraw." % core}
+			return {"key": "first_game_redraw_empty", "title": "No redraws left", "hint": "First game · Play a hand to restore one redraw.", "body": "This pool is one %s card short of Specialization. Your redraw bank is empty. You can play any affordable one- to four-card hand normally; a successful hand restores one redraw." % core}
 		var ready := _selected_card_views.size() == 1 and _selected_card_views[0].card_data.primary_stat != stat
 		var wrong_selection := not ready and not _selected_card_views.is_empty()
 		var selection_help := "Click selected cards again to deselect them. " if wrong_selection else ""
@@ -770,6 +775,7 @@ func play_hand_with_employee_plan(distribution: Dictionary) -> bool:
 func _capture_design_command() -> RefCounted:
 	var state := DesignHandCommand.new()
 	state._budget_printed = _budget_printed
+	state._budget_bonus_centi = _budget_bonus_centi
 	state._budget_spent = _budget_spent
 	state._project_state = _project_state
 	state._run_state = _run_state
@@ -810,6 +816,7 @@ func _redraw_slots() -> Array[int]:
 
 func _sync_command_tokens(state: RefCounted) -> void:
 	_budget_printed = state._budget_printed
+	_budget_bonus_centi = state._budget_bonus_centi
 	_budget_spent = state._budget_spent
 	_command_revision=state.revision
 	_command_next_id=state.next_candidate_id

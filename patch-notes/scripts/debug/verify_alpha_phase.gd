@@ -13,6 +13,7 @@ const CATEGORIES: Array[ProjectState.CoreScore] = [
 ]
 
 var _failures := 0
+var _checks := 0
 
 
 func _verify_project_state_alpha_transactions() -> void:
@@ -228,7 +229,7 @@ func _verify_weighted_alpha_boundary(alpha: AlphaPhase, state: ProjectState, sta
 	for index in range(4):
 		(views[index] as CardView).card_pressed.emit(views[index])
 		if index < 3:
-			_expect((alpha.get_node("%PlayAlphaHandButton") as Button).disabled, "Play Alpha Hand remains disabled with %d selections" % (index + 1))
+			_expect(not (alpha.get_node("%PlayAlphaHandButton") as Button).disabled, "Current legal partial Alpha hand enables with %d selections" % (index + 1))
 	_expect(alpha.get_selected_candidate_count() == 4 and views.slice(0, 4).all(func(view: CardView) -> bool: return view.is_selected()), "Four Alpha candidate instances select independently with existing visuals")
 	_expect(not (alpha.get_node("%PlayAlphaHandButton") as Button).disabled, "Play Alpha Hand enables with exactly four valid instances")
 	_expect((views[2] as CardView).card_data == (views[3] as CardView).card_data and views[2] != views[3] and (views[2] as CardView).is_selected() and (views[3] as CardView).is_selected(), "Duplicate Pass draws create independently selectable CardViews")
@@ -236,7 +237,7 @@ func _verify_weighted_alpha_boundary(alpha: AlphaPhase, state: ProjectState, sta
 	_expect(alpha.get_selected_candidate_count() == 4 and not (views[4] as CardView).is_selected(), "A fifth Alpha selection preserves the original four")
 	(views[0] as CardView).card_pressed.emit(views[0])
 	_expect(alpha.get_selected_candidate_count() == 3 and not (views[0] as CardView).is_selected(), "Selected Alpha candidate toggles off independently")
-	_expect((alpha.get_node("%PlayAlphaHandButton") as Button).disabled, "Deselecting one candidate disables Play Alpha Hand")
+	_expect(not (alpha.get_node("%PlayAlphaHandButton") as Button).disabled, "Three selected Alpha instances remain legal")
 	(views[0] as CardView).card_pressed.emit(views[0])
 	var selection_before: Array = alpha.get("_selected_card_views").duplicate()
 	alpha.set_priority(ProjectState.CoreScore.SOUND, 5)
@@ -548,7 +549,7 @@ func _verify_host_playtest() -> void:
 	_expect(not alpha.host_playtest(), "Host Playtest rejects Planning activation")
 	_expect(_state_snapshot(state) == planning_state and alpha.get_pending_playtest_categories().is_empty(), "Rejected Planning Playtest consumes no cycle and queues nothing")
 
-	_expect(state.add_alpha_production({graphics: 10, sound: 5, technology: 7, design: 5}, 0, 0.0), "Playtest fixture seeds authoritative cumulative Design carryover scores")
+	_expect(state.add_alpha_production({graphics: 2*PrimitiveReviewCalculator.get_project_profile(state).get_standard(graphics), sound: PrimitiveReviewCalculator.get_project_profile(state).get_standard(sound), technology: 2*PrimitiveReviewCalculator.get_project_profile(state).get_standard(technology), design: PrimitiveReviewCalculator.get_project_profile(state).get_standard(design)}, 0, 0.0), "Playtest fixture seeds authoritative cumulative Design carryover scores")
 	for category: ProjectState.CoreScore in CATEGORIES:
 		alpha.set_priority(category, 5)
 	alpha.set_priority(graphics, 20)
@@ -570,51 +571,51 @@ func _verify_host_playtest() -> void:
 	_expect(alpha.host_playtest(), "Host Playtest succeeds during valid Active Development without requiring a separate hand")
 	_expect(state.get_current_cycle() == cycle_before + 1, "Successful Host Playtest advances exactly one authoritative cycle")
 	_expect(_production_state_snapshot(state) == production_before, "Host Playtest produces no scores, Scope, Bug Pressure, Hidden Bugs, or finalization changes")
-	_expect(alpha.get_pending_playtest_categories() == [design, sound], "Two lowest scores use higher Alpha priority to queue Design then Sound")
-	_expect(_instance_ids(alpha.get_node("%HandContainer").get_children()) == candidate_ids_before and alpha.get("_candidate_cards") == candidate_cards_before, "Host Playtest preserves visible candidate identity and order")
-	_expect(alpha.get("_selected_card_views") == selections_before and not (alpha.get_node("%PlayAlphaHandButton") as Button).disabled == play_enabled_before, "Host Playtest preserves selection and Play Hand availability")
-	_expect(alpha.get("_exhausted_feature_ids") == exhaustion_before and alpha.get_priority_distribution() == priorities_at_playtest, "Host Playtest preserves Feature lifecycle and priorities")
-	_expect(alpha.get_node("%HostPlaytestButton").disabled and alpha.get_node("%HostPlaytestButton").text == "Playtest Pending", "Pending Playtest state is exposed through the existing action-button boundary")
-	_expect(alpha.call("_format_corrective_pass_names", alpha.get_pending_playtest_categories()) == "Design Pass, Sound Pass", "Host Playtest feedback names queued Passes deterministically")
-
-	alpha.set_priority(design, 5)
-	alpha.set_priority(sound, 50)
-	state.add_alpha_production({graphics: 20, sound: 30}, 0, 0.0)
-	_expect(alpha.get_pending_playtest_categories() == [design, sound], "Queued corrective categories are snapshots unaffected by later priority and score changes")
-	var pending_cycle := state.get_current_cycle()
-	_expect(not alpha.host_playtest() and state.get_current_cycle() == pending_cycle and alpha.get_pending_playtest_categories() == [design, sound], "A pending Playtest rejects stacking without spending a cycle or replacing its snapshot")
-	(views[0] as CardView).card_pressed.emit(views[0])
-	var incomplete_state := _state_snapshot(state)
-	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
-	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
-	_expect(_state_snapshot(state) == incomplete_state and alpha.get_pending_playtest_categories() == [design, sound], "Incomplete Alpha production does not consume a pending Playtest")
-	(views[0] as CardView).card_pressed.emit(views[0])
-
-	var saved_features: Array = alpha.get("_available_features").duplicate()
-	alpha.set("_available_features", [] as Array[CardData])
-	var five_rolls: Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
-	var weighted_five: Dictionary = alpha.call("_build_weighted_candidate_definitions", alpha.get_priority_distribution(), five_rolls, 5)
-	var corrective_build: Dictionary = alpha.call("_build_corrective_candidate_definitions", alpha.get_priority_distribution(), five_rolls)
-	alpha.set("_available_features", saved_features)
 	var design_pass: CardData = alpha.call("_get_pass_for_category", design)
 	var sound_pass: CardData = alpha.call("_get_pass_for_category", sound)
-	_expect(corrective_build.valid and corrective_build.cards.size() == 7 and corrective_build.cards[0] == design_pass and corrective_build.cards[1] == sound_pass, "Corrective construction prepends the two queued public Pass definitions")
-	_expect(corrective_build.cards.slice(2) == weighted_five.cards, "Corrective construction fills exactly five remaining slots in existing weighted draw order")
-	_expect(corrective_build.cards.slice(2).has(design_pass), "A guaranteed Pass definition remains eligible for an ordinary weighted duplicate")
-
-	var production_cycle_before := state.get_current_cycle()
-	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
-	alpha.get_workspace().hand_motion.cancel() # Timing is covered by verify_card_motion; this suite checks transactions.
-	_expect(state.get_current_cycle() == production_cycle_before + 1, "The successful production hand advances one additional cycle while injection advances none")
-	_expect(alpha.get("_candidate_cards").size() == 7 and alpha.get_node("%HandContainer").get_child_count() == 7, "The corrective replacement publishes exactly seven candidates")
-	_expect(alpha.get("_candidate_cards")[3] == design_pass and alpha.get("_candidate_cards")[4] == sound_pass, "Corrective Passes follow the three retained candidates")
 	var replacement_views := alpha.get_node("%HandContainer").get_children()
-	_expect(replacement_views[3] != replacement_views[4] and (replacement_views[3] as CardView).card_data == design_pass and (replacement_views[4] as CardView).card_data == sound_pass, "Injected Passes are distinct CardView candidate instances")
-	_expect(design_pass.renewable and sound_pass.renewable and design_pass.primary_value == 2 and sound_pass.primary_value == 2 and design_pass.scope == 0 and sound_pass.scope == 0, "Injected Passes retain ordinary renewable +2, zero-Scope definitions")
-	_expect(alpha.get_pending_playtest_categories().is_empty() and not alpha.get_node("%HostPlaytestButton").disabled and alpha.get_node("%HostPlaytestButton").text == "Host Playtest", "Successful complete corrective deal consumes pending state and re-enables Playtest")
+	var protected_views:=replacement_views.slice(7)
+	_expect(alpha.get_pending_playtest_categories().is_empty(), "Current Playtest has no deferred pending state")
+	_expect(alpha.get("_candidate_cards").size() == 9 and replacement_views.size() == 9, "Immediate Playtest appends two candidates above seven")
+	_expect(_instance_ids(replacement_views.slice(0,7)) == candidate_ids_before and alpha.get("_candidate_cards").slice(0,7) == candidate_cards_before, "Immediate append preserves all seven existing identities/order")
+	_expect(alpha.get("_candidate_cards")[7] == design_pass and alpha.get("_candidate_cards")[8] == sound_pass, "Lowest normalized scores then Alpha priority append Design and Sound")
+	_expect(alpha.get("_selected_card_views") == selections_before and not (alpha.get_node("%PlayAlphaHandButton") as Button).disabled == play_enabled_before, "Playtest preserves selected instances and legal hand action")
+	_expect(alpha.get("_exhausted_feature_ids") == exhaustion_before and alpha.get_priority_distribution() == priorities_at_playtest, "Playtest preserves lifecycle and priorities")
+	_expect(not alpha.get_node("%HostPlaytestButton").disabled and alpha.get_node("%HostPlaytestButton").text == "Host Playtest", "Unlimited historical-budget fixture may playtest again immediately")
+	_expect(alpha.call("_format_corrective_pass_names", [design,sound]) == "Design Pass, Sound Pass", "Corrective feedback names remain deterministic")
+	alpha.set_priority(design, 5)
+	alpha.set_priority(sound, 50)
+	state.add_alpha_production({graphics:20,sound:30},0,0.0)
+	_expect(alpha.get("_candidate_cards")[7] == design_pass and alpha.get("_candidate_cards")[8] == sound_pass, "Injected definitions remain snapshots after scores/priorities change")
+	for view: CardView in selections_before:view.card_pressed.emit(view)
+	var empty_state:=_state_snapshot(state)
+	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel()
+	_expect(_state_snapshot(state)==empty_state and alpha.get("_candidate_cards").size()==9, "Zero-selection production rejects without consuming protected Passes")
+	for view: CardView in selections_before:view.card_pressed.emit(view)
+	var production_cycle_before:=state.get_current_cycle()
+	(alpha.get_node("%PlayAlphaHandButton") as Button).pressed.emit()
+	alpha.get_workspace().hand_motion.cancel()
+	_expect(state.get_current_cycle()==production_cycle_before+1, "Successful selected production advances exactly one further cycle")
+	_expect(alpha.get("_candidate_cards").size()==7, "Ordinary refill fills only the gap below seven after overflow consumption")
+	replacement_views=alpha.get_node("%HandContainer").get_children()
+	_expect(replacement_views[3]==protected_views[0] and replacement_views[4]==protected_views[1], "Retained overflow remains live")
+	_expect(alpha.get("_candidate_cards")[3]==design_pass and alpha.get("_candidate_cards")[4]==sound_pass, "Protected appended Passes survive unrelated selected production")
+	_expect(design_pass.renewable and sound_pass.renewable and design_pass.primary_value==2 and sound_pass.primary_value==2 and design_pass.scope==0 and sound_pass.scope==0, "Injected Passes retain exact ordinary definitions")
 	(replacement_views[3] as CardView).card_pressed.emit(replacement_views[3])
 	(replacement_views[4] as CardView).card_pressed.emit(replacement_views[4])
-	_expect(alpha.get_selected_candidate_count() == 2 and (replacement_views[3] as CardView).is_selected() and (replacement_views[4] as CardView).is_selected(), "Injected Pass candidate instances select independently through normal CardView behavior")
+	_expect(alpha.get_selected_candidate_count()==2, "Immediate injected Passes remain independently selectable")
+	# Retained historical pending-correction builder oracle, explicitly component-only.
+	alpha.set("_pending_playtest_categories",[design,sound] as Array[ProjectState.CoreScore])
+	var saved_features: Array=alpha.get("_available_features").duplicate()
+	alpha.set("_available_features",[] as Array[CardData])
+	var five_rolls: Array[float]=[0.0,0.0,0.0,0.0,0.0]
+	var weighted_five: Dictionary=alpha.call("_build_weighted_candidate_definitions",alpha.get_priority_distribution(),five_rolls,5)
+	var corrective_build: Dictionary=alpha.call("_build_corrective_candidate_definitions",alpha.get_priority_distribution(),five_rolls)
+	alpha.set("_available_features",saved_features)
+	_expect(corrective_build.valid and corrective_build.cards.size()==7 and corrective_build.cards[0]==design_pass and corrective_build.cards[1]==sound_pass, "Historical pending builder retains two exact corrective prefix definitions")
+	_expect(corrective_build.cards.slice(2)==weighted_five.cards and corrective_build.cards.slice(2).has(design_pass), "Historical pending builder retains weighted duplicate/order oracle")
+	alpha.set("_pending_playtest_categories",[] as Array[ProjectState.CoreScore])
 	var injected_specialization: Dictionary = alpha.call("_calculate_final_action_production", {
 		&"cards": [design_pass, design_pass, design_pass, design_pass] as Array[CardData],
 		&"score_additions": {design: 8},
@@ -656,7 +657,13 @@ func _verify_host_playtest_replacement_failure() -> void:
 	for index in range(4):
 		var view := alpha.get_node("%HandContainer").get_child(index) as CardView
 		view.card_pressed.emit(view)
-	_expect(alpha.host_playtest() and alpha.get_pending_playtest_categories() == [ProjectState.CoreScore.GRAPHICS, ProjectState.CoreScore.SOUND], "Equal score and priority ties queue Graphics then Sound through fixed Core order")
+	_expect(alpha.call("_select_corrective_categories")==[ProjectState.CoreScore.GRAPHICS,ProjectState.CoreScore.SOUND], "Equal normalized score and priority ties use fixed Core order")
+	var actions: RefCounted=alpha.call("_capture_development_actions")
+	var before_reject:=_state_snapshot(state)
+	_expect(not actions.host_playtest(func(_cards):return false) and _state_snapshot(state)==before_reject, "Immediate Playtest view-readiness failure rejects before cycle/state")
+	# Persisted historical pending correction fixture: retain old refill failure oracle.
+	alpha.set("_pending_playtest_categories",[ProjectState.CoreScore.GRAPHICS,ProjectState.CoreScore.SOUND] as Array[ProjectState.CoreScore])
+	state.advance_cycle()
 	alpha.set("_pass_definitions", passes.slice(0, 3))
 	var old_views := alpha.get_node("%HandContainer").get_children()
 	var rng_before: int = alpha.get("_deal_rng").state
@@ -787,6 +794,7 @@ func _approximately_equal(a: float, b: float) -> bool:
 
 
 func _expect(condition: bool, description: String) -> void:
+	_checks += 1
 	if condition:
 		print("PASS: %s" % description)
 		return

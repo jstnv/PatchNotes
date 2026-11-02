@@ -129,7 +129,9 @@ static func valid_source(id: String, cycle: int, historical: bool) -> bool:
 	if historical:
 		if cycle!=0 or not id.begins_with("pre-market-neutral:"): return false
 		id=id.trim_prefix("pre-market-neutral:").trim_prefix("content:")
-	elif cycle==0 and not calendar_source(id): return id=="market-0-neutral"
+	# A retained legacy standard book can have its first live snapshot at0.
+	# Validate its dated prefix/hash below, just like its later snapshots.
+	elif cycle==0 and not calendar_source(id) and not id.begins_with("market-book-v1-"): return id=="market-0-neutral"
 	else:
 		var prefix: String
 		if id.begins_with("market-book-v2-"):prefix="market-book-v2-%d-"%cycle

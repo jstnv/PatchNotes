@@ -12,6 +12,8 @@ func _verify() -> void:
 	var catalog: RefCounted=root.get_node("CardDatabase").get_development_catalog()
 	var session: RefCounted=factory.create_fresh_session({"schema_version":1,"studio_id":"debug_test","studio_name":"Debug Test","specialty":"action","traits":[],"seed":"4417"},catalog)
 	var run: RunState=session.run
+	var created:=run.create_proprietary_engine(run.get_proprietary_engine_creation_quote("Debug test owned engine"))
+	test(created.get("ok",false) and run.select_engine(created.engine_id),"Real paid proprietary fixture keeps fixed Public access unchanged")
 	var checkpoint:=CheckpointCoordinator.new();root.add_child(checkpoint);checkpoint.attach(run);checkpoint.entered_studio()
 	test(checkpoint.flush(),"Normal Studio checkpoint is saved before debug activation")
 	var normal: Dictionary=checkpoint.store.inspect().payload

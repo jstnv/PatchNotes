@@ -28,6 +28,7 @@ var zoom := 1.0
 var bounds := Vector2.ZERO
 var origins: Dictionary = {}
 var center := Vector2.ZERO
+var center_square:=Rect2()
 var category_regions: Dictionary = {}
 var category_headers: Dictionary = {}
 var category_paths: Array[PackedVector2Array] = []
@@ -63,11 +64,12 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer, map_host: Contr
 		var button := Button.new()
 		button.text = caption
 		toolbar.add_child(button)
-		FeatureStore.transparent_button(button)
 		if caption == "Show all": button.pressed.connect(fit_map)
 		elif caption == "+": button.pressed.connect(func(): set_zoom(zoom * 1.25))
 		else: button.pressed.connect(func(): set_zoom(zoom / 1.25))
+	store._debug.reparent(toolbar)
 	zoom_label = Label.new()
+	FeatureStore.backed_text(zoom_label)
 	toolbar.add_child(zoom_label)
 	var help := Label.new()
 	help.text = "Drag: pan · Wheel: zoom · Arrow keys: browse · Click: inspect"
@@ -118,8 +120,8 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer, map_host: Contr
 	add_child(popup)
 	popup.resized.connect(position_details)
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color("1b1c24")
-	style.border_color = Color("d7b679")
+	style.bg_color = FolderUI.color(&"secondary")
+	style.border_color = FolderUI.color(&"border")
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(6)
 	style.set_content_margin_all(16)
@@ -221,6 +223,7 @@ func decorate(button: Button, card: CardData) -> void:
 	title.name = "FeatureName"
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.theme_type_variation=&"HeadingLabel"
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_constant_override("line_spacing", -2)
 	title.text = card.card_name
@@ -249,9 +252,9 @@ func decorate_and_gate(button: Button, parents: Array) -> void:
 	badge.size = Vector2(116, 25)
 	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	badge.add_theme_font_size_override("font_size", 13)
-	badge.add_theme_color_override("font_color", Color("ffe1a0"))
+	badge.add_theme_color_override("font_color", FolderUI.color(&"text"))
 	var background := StyleBoxFlat.new()
-	background.bg_color = Color("1b1c24")
+	background.bg_color = FolderUI.color(&"secondary")
 	badge.add_theme_stylebox_override("normal", background)
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(badge)
@@ -325,6 +328,7 @@ func layout_map(_children: Dictionary) -> void:
 		heading.name = "Category" + str(store.LANE_ORDER.find(lane))
 		heading.text = str(lane)
 		heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		heading.theme_type_variation=&"HeadingLabel"
 		heading.add_theme_font_size_override("font_size", 36)
 		if lane == &"Technology & Tools":
 			var row_center := node_footprint(store._nodes[&"keyboard_and_mouse"]).get_center().x
@@ -341,36 +345,45 @@ func layout_map(_children: Dictionary) -> void:
 		tree.add_child(heading)
 		category_headers[lane] = heading
 		origins[lane] = area.get_center()
-	# Five category trees share four connecting paths, with no center root.
-	# These neutral lines organize categories; arrows alone denote prerequisites.
-	# Shared central corridor between the inward-facing category headings.
-	var spine_x: float=(category_regions[&"Visuals"].end.x+category_regions[&"Audio"].position.x)/2.0
-	center = Vector2(spine_x,0)
-	var crown_end := Vector2(spine_x, category_regions[&"Technology & Tools"].end.y)
-	for pair: Array in [[&"Visuals", &"Gameplay"], [&"Audio", &"Story & World"]]:
-		var upper: Rect2 = category_regions[pair[0]]
-		var lower: Rect2 = category_regions[pair[1]]
-		var side := -1.0 if pair[0] == &"Visuals" else 1.0
-		var a := Vector2(upper.end.x if side<0 else upper.position.x, upper.get_center().y)
-		var b := Vector2(lower.end.x if side<0 else lower.position.x, lower.get_center().y)
-		category_paths.append(PackedVector2Array([crown_end, Vector2(spine_x, a.y), a]))
-		category_paths.append(PackedVector2Array([a, Vector2(spine_x+side*42, a.y), Vector2(spine_x+side*42, b.y), b]))
+	# An empty organizing square is presentation, never a purchasable root.
+	center_square=GridLayout.center_square()
+	center=center_square.get_center()
+	category_paths.clear()
+	var top:=Vector2(center.x,center_square.position.y)
+	var technology_end:=Vector2(center.x,node_footprint(store._nodes[&"keyboard_and_mouse"]).end.y+8.0)
+	category_paths.append(PackedVector2Array([top,technology_end]))
+	for lane: StringName in [&"Visuals",&"Audio"]:
+		var area: Rect2=category_regions[lane]
+		var left: bool=lane==&"Visuals"
+		var port:=Vector2(center_square.position.x if left else center_square.end.x,center.y-GridLayout.PITCH)
+		var anchor:=Vector2(area.end.x if left else area.position.x,header_rect(category_headers[lane]).get_center().y)
+		var corridor: float=(port.x+anchor.x)*0.5
+		category_paths.append(PackedVector2Array([port,Vector2(corridor,port.y),Vector2(corridor,anchor.y),anchor]))
+	for lane: StringName in [&"Gameplay",&"Story & World"]:
+		var area: Rect2=category_regions[lane]
+		var left: bool=lane==&"Gameplay"
+		var port:=Vector2(center.x+(-1.0 if left else 1.0)*center_square.size.x*0.25,center_square.end.y)
+		var anchor:=Vector2(area.end.x if left else area.position.x,header_rect(category_headers[lane]).get_center().y)
+		var corridor: float=anchor.x+(16.0 if left else -16.0)
+		var exit_y: float=center_square.end.y+8.0
+		category_paths.append(PackedVector2Array([port,Vector2(port.x,exit_y),Vector2(corridor,exit_y),Vector2(corridor,anchor.y),anchor]))
 	var extent: Rect2 = category_regions[&"Technology & Tools"]
 	for area: Rect2 in category_regions.values(): extent = extent.merge(area)
-	extent = extent.grow(32.0)
+	extent = extent.merge(center_square).grow(32.0)
 	var half_width := maxf(absf(extent.position.x), absf(extent.end.x))
 	extent.position.x = -half_width
 	extent.size.x = half_width * 2.0
 	var offset := -extent.position
 	for lane: StringName in store.LANE_ORDER: _move_category(lane, offset)
 	center += offset
+	center_square.position+=offset
 	for i in range(category_paths.size()):
 		for j in range(category_paths[i].size()): category_paths[i][j] += offset
 	var footprints := {}
 	for id: StringName in store._nodes: footprints[id]=node_footprint(store._nodes[id])
 	var headers: Array[Rect2]=[]
 	for header: Label in category_headers.values(): headers.append(header_rect(header))
-	var routed := GridLayout.routes(layout.cells,footprints,store._edges,offset,headers)
+	var routed := GridLayout.routes(layout.cells,footprints,store._edges,offset,headers,center_square)
 	assert(not routed.has("error"),str(routed.get("error","")))
 	if routed.has("error"): return
 	edge_routes=routed.routes
@@ -384,7 +397,22 @@ func _initial_overview() -> void:
 	var revision := _view_revision
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if revision == _view_revision: fit_map()
+	if revision == _view_revision:
+		# Frame the organizing square plus the nearest actual root in each tree.
+		var frame: Rect2=center_square
+		var graph:=FeatureStoreCatalog.graph(store._run._feature_definitions,store._run._feature_offers)
+		for lane: StringName in store.LANE_ORDER:
+			var closest:=Rect2();var distance:=INF
+			for id: StringName in store.LANE_MEMBERS[lane]:
+				if not graph.parents[id].is_empty():continue
+				var footprint:=node_footprint(store._nodes[id])
+				var next: float=footprint.get_center().distance_squared_to(center)
+				if next<distance:closest=footprint;distance=next
+			if closest.has_area():frame=frame.merge(closest)
+		frame=frame.grow(40.0)
+		var available:=(_map_rect().size-Vector2(56,210)).max(Vector2(100,100))
+		set_zoom(minf(0.74,minf(available.x/frame.size.x,available.y/frame.size.y)))
+		center_after_layout(frame.get_center()-Vector2(0,45.0/zoom), _view_revision)
 
 func _center_canvas() -> void:
 	if tree != null:
@@ -392,15 +420,14 @@ func _center_canvas() -> void:
 		tree.position = inset + _focus_padding + (canvas.size - inset - bounds * zoom - _focus_padding * 2.0).max(Vector2.ZERO) / 2.0
 
 func _toolbar_height() -> float:
-	return store._toolbar.size.y + 12.0
+	return 0.0 # Floating controls do not reserve graph space.
 
 func _camera_center() -> Vector2:
 	return (_map_rect().size + Vector2(0, _toolbar_height())) / 2.0
 
 func _over_toolbar_control(point: Vector2) -> bool:
-	for control in store._toolbar.find_children("*", "BaseButton", true, false):
-		if control.is_visible_in_tree() and control.get_global_rect().has_point(point): return true
-	return false
+	return store._over_floating_control(point)
+
 
 func _move_category(lane: StringName, offset: Vector2) -> void:
 	for id: StringName in store.LANE_MEMBERS[lane]: store._nodes[id].position += offset
@@ -414,6 +441,9 @@ func _across(lane: StringName) -> Vector2:
 	return Vector2.UP * ROW_STEP if lane in [&"Visuals", &"Audio"] else Vector2.DOWN * ROW_STEP
 
 func draw_core() -> void:
+	# Keep all four edges visible even when the overview scales below one pixel.
+	var corners:=PackedVector2Array([center_square.position,Vector2(center_square.end.x,center_square.position.y),center_square.end,Vector2(center_square.position.x,center_square.end.y),center_square.position])
+	tree.draw_polyline(corners,Color("667688"),maxf(4.0,1.5/zoom),true)
 	# The layout regions reserve space only. Nodes and connecting lines are the
 	# visual tree; no enclosing cone fill or category border obscures them.
 	for path: PackedVector2Array in category_paths:
@@ -463,6 +493,7 @@ func set_zoom(value: float, anchor: Vector2 = Vector2(-1, -1)) -> void:
 	zoom = clampf(value, 0.025, 2.0)
 	var offset := Vector2(scroll.scroll_horizontal, scroll.scroll_vertical)
 	tree.scale = Vector2.ONE * zoom
+	tree.queue_redraw()
 	canvas.custom_minimum_size = bounds * zoom + _focus_padding * 2.0 + Vector2(0, _toolbar_height())
 	canvas.size = canvas.custom_minimum_size.max(_map_rect().size)
 	_center_canvas()
@@ -520,42 +551,41 @@ func show_details() -> void:
 	store._details.text += "\nPlay cost: " + play_cost
 	if catalog_entry.has("replaces_id"):
 		store._details.text += "\nReplaces 8-Bit Sound in future project draws."
-	var offer := store._run.get_feature_store_offer(store._selected)
+	var offer := store._run.get_feature_store_offer(store._selected,store._engine_id)
 	var parent_text := _parent_details(offer)
-	var reserve := store._run.get_primitive_reserve_offer(store._selected)
+	var reserve := store._run.get_primitive_reserve_offer(store._selected,store._engine_id)
 	if not reserve.is_empty():
 		_missing_targets.assign(reserve.missing_parents)
 	else:
 		for parent: Dictionary in offer.get("parent_contributions",[]):
 			if not parent.owned: _missing_targets.append(parent.id)
-	var engine_row: Dictionary=store._run.get_engine_feature_state().engines[store._run.get_selected_engine_id()]
+	var engine_row: Dictionary=store._run.get_engine_feature_state().engines[store._engine_id]
 	if engine_row.kind!=&"proprietary":
 		_missing_targets.clear();store._buy.disabled=true
-		store._buy.text="In fixed library" if store._run.owns_feature(store._selected) else "Not in this fixed library"
-	elif store._run.owns_feature(store._selected):
+		store._buy.text="In fixed library" if store._run.owns_feature(store._selected,store._engine_id) else "Not in this fixed library"
+	elif store._run.owns_feature(store._selected,store._engine_id):
 		_missing_targets.clear()
-		var row: Dictionary=store._run.get_engine_feature_state().engines[store._run.get_selected_engine_id()]
-		store._buy.disabled=row.kind!=&"proprietary" or (store._selected in row.committed and store._run.needs_starter_selection())
-		store._buy.text="Fixed library" if row.kind!=&"proprietary" else "Remove · Respec" if store._selected in row.committed else "Unstage" if store._selected in row.staged else "Stage · Free"
-	elif offer.is_empty() and store._run.needs_starter_selection():
+		store._buy.disabled=true
+		store._buy.text="Implemented · Available" if store._selected in engine_row.committed else "Implemented · Held from old configuration"
+	elif offer.is_empty() and reserve.get("initial",false):
 		store._buy.disabled = not reserve.can_purchase
 		if not reserve.unlocked: blockers.append("Locked — " + str(reserve.prerequisite))
 		if not reserve.affordable: blockers.append("Insufficient cash")
 		store._buy.text = ("Purchase" if reserve.can_purchase else "Locked" if not reserve.unlocked else "Insufficient cash") + " · " + CashFormatter.format_exact_cents(reserve.price_cents)
 	else:
-		var quote := store._run.get_feature_research_quote(store._selected)
+		var quote := store._run.get_feature_research_quote(store._selected,store._engine_id)
 		if quote.queued: _missing_targets.clear()
-		store._buy.disabled = not quote.can_admit
+		store._buy.disabled = not (quote.can_research if quote.queued else quote.can_admit)
 		blockers = store.queue_block_reasons(quote)
-		store._buy.text = "Research head" if quote.head else "Queued" if quote.queued else "Implement" if quote.can_admit else store.queue_status(quote)
+		store._buy.text = "Implement" if quote.head else "Queued" if quote.queued else "Implement" if quote.can_admit else store.queue_status(quote)
 		store._buy.text += " · " + CashFormatter.format_exact_cents(quote.due_cents if quote.queued else quote.down_cents)
-		if not quote.queued: store._buy.text += " down"
+		store._buy.text += " - 1 cycle" if quote.queued else " down"
 	if not _missing_targets.is_empty():
 		var names: Array[String] = []
 		for id: StringName in _missing_targets: names.append(store._run._feature_definitions[id].name)
 		store._buy.text = "Missing: " + ", ".join(names)
 		store._buy.disabled = false
-	if not store._run.owns_feature(store._selected):
+	if not store._run.owns_feature(store._selected,store._engine_id):
 		for reason in blockers:
 			if offer.has("min_year") and ("Available in" in reason or "qualifying" in reason): store._details.text += "\n" + reason
 	store._buy.tooltip_text = parent_text + ("\n" if not parent_text.is_empty() else "") + "\n".join(blockers)
@@ -812,6 +842,7 @@ func _finish_focus_menu(id: StringName, revision: int) -> void:
 func _camera_frame(value: float, world_center: Vector2) -> void:
 	zoom = value
 	tree.scale = Vector2.ONE * zoom
+	tree.queue_redraw()
 	canvas.custom_minimum_size = bounds * zoom + _focus_padding * 2.0 + Vector2(0, _toolbar_height())
 	canvas.size = canvas.custom_minimum_size.max(_map_rect().size)
 	_center_canvas()
@@ -909,6 +940,10 @@ func _input(event: InputEvent) -> void:
 			if not clicked.is_empty(): _focus_node(clicked)
 			get_viewport().set_input_as_handled()
 			return
+		# _input runs before GUI dispatch. A tip's close button can be hovered
+		# while the map still owns keyboard focus; its higher layer must win.
+		var hovered := get_viewport().gui_get_hovered_control()
+		if hovered != null and _input_layer(hovered) > _input_layer(self): return
 		# _input precedes GUI dispatch: never steal a toolbar button's gesture.
 		if _over_toolbar_control(event.position): return
 		var over_menu := (popup.visible and popup.modulate.a > 0.05 and popup.get_global_rect().has_point(event.position)) or (parent_links.is_visible_in_tree() and parent_links.get_global_rect().grow(MenuTransitions.ENTRANCE_DISTANCE).has_point(event.position))

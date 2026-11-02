@@ -46,10 +46,15 @@ func _verify() -> void:
 		await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 		var run: RunState = game.run_state
 		var studio: StudioPhase = game.get("_active_phase")
-		studio.get_node("%FeatureStoreButton").pressed.emit()
-		var store: FeatureStore = studio.get("_feature_store")
+		var actions:=preload("res://scripts/debug/ui_test_actions.gd")
+		var engine_id: StringName=actions.create_feature_engine(run,"Radial Engine")
+		var store: FeatureStore=await actions.open_feature_implementation(studio,engine_id)
 		var map := store._map
 		await process_frame
+		await process_frame
+		await process_frame
+		expect(map.zoom>0 and map.zoom<=0.74 and map.center_square.size==Vector2.ONE*5*map.GridLayout.PITCH, "Initial view frames the five-cell center and nearby roots")
+		map.fit_map()
 		await process_frame
 		await process_frame
 		game.get_node("%GameplayHUD").contextual_tip.dismiss()
@@ -93,7 +98,7 @@ func _verify() -> void:
 			for parent: StringName in graph.parents[id]:
 				if store._lane_by_id.has(id) and store._lane_by_id.has(parent) and store._lane_by_id[parent]==store._lane_by_id[id]: expected_edges.append([parent,id])
 		expect(outward and store._edges==expected_edges, "Every same-category prerequisite is shown and grows outward; cross-category arrows omitted")
-		expect(visible and map.bounds.x * map.zoom <= map._map_rect().size.x and map.bounds.y * map.zoom <= map._map_rect().size.y, "Initial overview shows all50 Features and their names")
+		expect(visible and map.bounds.x * map.zoom <= map._map_rect().size.x and map.bounds.y * map.zoom <= map._map_rect().size.y, "Show all displays all50 Features and their names")
 		print("Map geometry: ", JSON.stringify({"bounds": str(map.bounds), "viewport": str(map.scroll.size), "zoom": map.zoom}))
 		await _capture("overview", dimensions.x)
 		store._select_node(&"16_bit_sound")
@@ -161,7 +166,7 @@ func _verify() -> void:
 
 func _verify_category_layout(store: FeatureStore) -> void:
 	var map := store._map
-	expect(map.category_regions.size()==5 and map.category_headers.size()==5 and map.category_paths.size()==4 and map.tree.get_node_or_null("FeatureLibraryRoot")==null, "Five trees connected directly with no center hub")
+	expect(map.category_regions.size()==5 and map.category_headers.size()==5 and map.category_paths.size()==5 and map.tree.get_node_or_null("FeatureLibraryRoot")==null, "Five trees stem from a noninteractive empty square")
 	var tech_row_bottom := map.node_footprint(store._nodes[&"keyboard_and_mouse"]).end.y
 	for id: StringName in [&"menu_system", &"save_files", &"controller", &"split_screen"]:
 		tech_row_bottom = maxf(tech_row_bottom, map.node_footprint(store._nodes[id]).end.y)
@@ -186,22 +191,15 @@ func _verify_category_layout(store: FeatureStore) -> void:
 		expect(is_zero_approx(header.rotation) if lane==&"Technology & Tools" else is_equal_approx(absf(header.rotation),PI/2), "Sideways heading except Technology & Tools: "+str(lane))
 	expect(complete,"Five bounded categories with clear cards and headers")
 	var routes_clear := true
-	var connected := {}
 	for path: PackedVector2Array in map.category_paths:
-		for point: Vector2 in [path[0],path[-1]]:
-			var on_category := false
-			for lane: StringName in store.LANE_ORDER:
-				if _on_border(map.category_regions[lane],point):
-					on_category=true
-					connected[lane]=true
-			routes_clear = routes_clear and on_category
+		routes_clear=routes_clear and _on_border(map.center_square,path[0])
 		for index in range(1,path.size()):
 			var a := path[index-1]
 			var b := path[index]
-			routes_clear = routes_clear and (is_equal_approx(a.x,b.x) or is_equal_approx(a.y,b.y))
+			routes_clear = routes_clear and (is_equal_approx(a.x,b.x) or is_equal_approx(a.y,b.y)) and not _segment_crosses_interior(a,b,map.center_square)
 			for node: Control in store._nodes.values(): routes_clear = routes_clear and not _segment_crosses_interior(a,b,map.node_footprint(node))
 			for header: Label in map.category_headers.values(): routes_clear = routes_clear and not _segment_crosses_interior(a,b,map.header_rect(header))
-	expect(routes_clear and connected.size()==5,"Four orthogonal connectors join all five category borders without crossing cards or headings")
+	expect(routes_clear,"Five orthogonal stems leave the square without crossing its interior, cards or headings")
 
 func _passive_snapshot(run: RunState) -> Array:
 	return [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.get_studio_finance_snapshot()]

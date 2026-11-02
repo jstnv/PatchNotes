@@ -1,5 +1,5 @@
 class_name EmployeePlanningDialog
-extends ConfirmationDialog
+extends "res://scripts/ui/quit_confirmation.gd"
 var phase: Control
 var inputs: Array[VSlider] = []
 var budget_feedback: PriorityBudgetFeedback
@@ -10,11 +10,12 @@ var previous: Dictionary = {}
 
 func _ready() -> void:
 	title = "Plan this hand with your Specialist"
+	super._ready()
 	exclusive = true
 	get_ok_button().text = "Play hand with plan"
 	get_cancel_button().text = "Keep use for later"
 	var body := VBoxContainer.new()
-	add_child(body)
+	add_content(body)
 	explanation = Label.new()
 	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explanation.custom_minimum_size.x = 550

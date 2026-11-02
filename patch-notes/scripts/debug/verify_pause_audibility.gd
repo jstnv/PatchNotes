@@ -18,7 +18,15 @@ func _initialize() -> void:
 	var bus := AudioServer.get_bus_index(&"Music")
 	var original_volume := AudioServer.get_bus_volume_db(bus)
 	var original_player_volume: float = music.player.volume_db
-	expect(AudioServer.get_bus_effect_count(bus) == 1 and AudioServer.get_bus_effect(bus, 0) == music.pause_reverb, "Pause uses only reverb, without a low-pass filter")
+	var reverb_count:=0
+	var analyzer_count:=0
+	var approved_chain:=true
+	for slot in AudioServer.get_bus_effect_count(bus):
+		var effect:=AudioServer.get_bus_effect(bus,slot)
+		if effect==music.pause_reverb:reverb_count+=1
+		elif effect is AudioEffectSpectrumAnalyzer:analyzer_count+=1
+		else:approved_chain=false
+	expect(approved_chain and reverb_count==1 and analyzer_count<=1,"Pause uses its exact reverb plus optional passive visualizer analyzer; no low-pass or other processing")
 	var pre := AudioEffectCapture.new()
 	var post := AudioEffectCapture.new()
 	var output := AudioEffectCapture.new()

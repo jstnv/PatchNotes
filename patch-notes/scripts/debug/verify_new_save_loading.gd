@@ -76,7 +76,7 @@ func _run() -> void:
 	var studio: StudioPhase=game._active_phase
 	var hud: GameplayHUD=game.get_node("%GameplayHUD")
 	expect(studio.get_node_or_null("%StoreHint")==null and not hud.contextual_tip.panel.visible,"First Studio has no unsolicited Store-shopping tip")
-	expect(not studio.get_node("%StartNextGame").disabled and not studio.get_node("%FeatureStoreButton").disabled,"Production and optional Store browsing remain available")
+	expect(not studio.get_node("%StartNextGame").disabled and not studio.get_node("%StudioManagementButton").disabled and not studio.get_node("%FeatureStoreButton").visible,"Production and Engines browsing remain available without a global Store button")
 	expect(StudioCheckpoint.new().capture(game.run_state)==before,"Skipping the invitation changes no Studio values or RNG")
 	await capture("new-save-studio-1280")
 	game.queue_free();await process_frame

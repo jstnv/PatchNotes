@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3]
 [ext_resource type="Script" path="res://scripts/phases/studio_phase.gd" id="1"]
-[ext_resource type="Theme" path="res://resources/ui/workspace_theme.tres" id="2"]
+[ext_resource type="Theme" path="res://resources/ui/onyx_theme.tres" id="2"]
 
 [node name="StudioPhase" type="Control"]
 layout_mode = 1
@@ -34,6 +34,7 @@ layout_mode = 2
 visible = false
 
 [node name="Title" type="Label" parent="Dashboard/Layout/Heading"]
+theme_type_variation = &"HeadingLabel"
 layout_mode = 2
 text = "Studio Phase"
 theme_override_font_sizes/font_size = 28
@@ -136,6 +137,7 @@ custom_minimum_size = Vector2(0, 112)
 select_mode = 0
 
 [node name="SummaryTitle" type="Label" parent="SummaryPanel/Margin/Layout/Header"]
+theme_type_variation = &"HeadingLabel"
 unique_name_in_owner = true
 autowrap_mode = 3
 layout_mode = 2
@@ -180,6 +182,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
 [node name="Performance" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+theme_type_variation = &"SectionHeading"
 layout_mode = 2
 text = "Performance"
 theme_override_font_sizes/font_size = 21
@@ -200,6 +203,7 @@ unique_name_in_owner = true
 autowrap_mode = 3
 
 [node name="Month1Forecast" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+theme_type_variation = &"SectionHeading"
 layout_mode = 2
 text = "Month 1 Forecast"
 theme_override_font_sizes/font_size = 21
@@ -215,6 +219,7 @@ unique_name_in_owner = true
 autowrap_mode = 3
 
 [node name="Sales&Revenue" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+theme_type_variation = &"SectionHeading"
 layout_mode = 2
 text = "Sales & Revenue"
 theme_override_font_sizes/font_size = 21
@@ -245,6 +250,7 @@ unique_name_in_owner = true
 autowrap_mode = 3
 
 [node name="LaterSalesHeading" type="Label" parent="SummaryPanel/Margin/Layout/Scroll/Stats"]
+theme_type_variation = &"HeadingLabel"
 layout_mode = 2
 text = "Post-Launch Sales & Campaign"
 theme_override_font_sizes/font_size = 21

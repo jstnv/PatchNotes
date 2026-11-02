@@ -99,15 +99,22 @@ func _button_text(node:Node,text:String) -> Button:
 	return null
 
 func _verify_studio_menus(game:Control,studio:StudioPhase,run:RunState,project:ProjectState) -> void:
+	var actions:=preload("res://scripts/debug/ui_test_actions.gd")
+	var engine_id: StringName=actions.create_feature_engine(run,"Menu Engine")
 	var before:=run_snapshot(run,project)
 	studio.get_node("%StudioManagementButton").pressed.emit()
-	studio.get_node("%FeatureStoreButton").pressed.emit()
+	studio.get_node("%StudioEnginesButton").pressed.emit()
+	await create_timer(0.45).timeout
+	studio._engine_browser._inspect(engine_id)
+	studio._engine_browser.configure_button.pressed.emit()
 	await create_timer(0.35).timeout
 	var back: Button=studio._feature_store._close
 	_check_button(back,studio,"Store Close")
 	await _capture_menu("store",root.size)
 	_click_button(back)
-	await create_timer(0.35).timeout
+	await create_timer(0.45).timeout
+	studio._engine_browser.closed.emit()
+	await create_timer(0.45).timeout
 	studio._close_management()
 	await create_timer(0.35).timeout
 	studio._open_menu(&"market");await create_timer(0.6).timeout

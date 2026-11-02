@@ -1,0 +1,111 @@
+## Phase 3A focused transaction, independence, persistence and UI checks.
+extends SceneTree
+
+var failures := 0
+func check(ok: bool,label: String) -> void:
+	if not ok:failures+=1;push_error(label)
+
+func _initialize() -> void:_verify.call_deferred()
+
+func _studio(name: String) -> RunState:
+	var run:=RunState.new()
+	check(run.initialize_cash(0) and run.create_studio_with_traits(name,&"action",[]),"Studio fixture creates")
+	return run
+
+func _verify() -> void:
+	var run:=_studio("Engine founder")
+	check(run.get_selected_engine_id()==&"public_action" and run.get_proprietary_engine_state().engines.is_empty(),"New Studio has Public Action and no proprietary engine")
+	var poor:=_studio("Cash-poor founder")
+	check(poor.spend_cash_cents(poor.get_cash_cents()-9999),"Cash-poor fixture spends funds")
+	check(poor.get_proprietary_engine_creation_quote("Budget Engine").is_empty() and poor.get_proprietary_engine_state().engines.is_empty(),"Creation rejects funds below $100")
+	var familiar:=_studio("Familiar founder")
+	familiar._familiarity[&"text"]=99
+	check(RunState.EngineFeatureActions.discount(familiar,{"parents":[&"text"]})==80,"Studio-wide implementation discount remains capped at 80 percent")
+	var cash_before:=run.get_cash_cents();var cycle_before:=run.get_completed_run_cycles()
+	var first_quote:=run.get_proprietary_engine_creation_quote("  First Engine  ")
+	var first:=run.create_proprietary_engine(first_quote)
+	check(first.get("ok",false) and run.get_cash_cents()==cash_before-10000 and run.get_completed_run_cycles()==cycle_before,"First engine costs exactly $100 and no cycle")
+	check(not run.create_proprietary_engine(first_quote).get("ok",false) and run.get_cash_cents()==cash_before-10000,"Stale creation quote cannot double charge")
+	var second:=run.create_proprietary_engine(run.get_proprietary_engine_creation_quote("Second Engine"))
+	check(second.get("ok",false) and first.get("engine_id")!=second.get("engine_id") and run.get_cash_cents()==cash_before-20000,"Two named engines have distinct IDs and two exact fees")
+	if not first.get("ok",false) or not second.get("ok",false):quit(1);return
+	var id1: StringName=first.engine_id;var id2: StringName=second.engine_id
+	var foundation:=run.get_proprietary_engine_state()
+	var features:=run.get_engine_feature_state()
+	for id in [id1,id2]:
+		check(foundation.engines[id].owner_id==run._bank_run_id and foundation.engines[id].technology_nodes==run.ProprietaryEngines.FOUNDATIONS,"Foundation technologies belong to each engine")
+		check(foundation.engines[id].challenge_progress.is_empty() and foundation.engines[id].branch_progress.is_empty() and foundation.engines[id].scope_milestones.is_empty(),"Skill Tree progress starts empty and inert")
+		check(features.engines[id].kind==&"proprietary" and features.engines[id].capacity==25 and features.engines[id].implemented.is_empty() and features.engines[id].committed.is_empty(),"Each engine starts at 25 Scope without Feature cards")
+	check(run.valid_engine_state(),"New engine creation has valid entitlement, finance and Feature provenance")
+	check(run.select_engine(id1) and run.get_selected_engine_capacity()==25 and run.get_future_project_feature_ids().is_empty(),"First engine is selectable with empty configured pool")
+	for root_id in [&"text", &"4_color_palette", &"8_bit_sound"]:
+		var root_quote:=run.get_feature_research_quote(root_id,id1)
+		check(root_quote.get("unlocked",false) and root_quote.get("can_admit",false),"New engine can immediately queue root Feature %s"%root_id)
+	check(not run.get_feature_research_quote(&"sprites",id1).get("unlocked",false),"Descendant still requires its root Feature implementation")
+	check(run.get_engine_feature_state().engines[id1].implemented.is_empty(),"Available roots are not automatically implemented")
+	var feature_store:=FeatureStore.new()
+	root.add_child(feature_store)
+	feature_store.setup(run)
+	feature_store.open_store(id1)
+	check(feature_store._research_list.visible and feature_store._research_button.visible,"Owned engine exposes the implementation queue during first-game setup")
+	check(feature_store.queue_block_reasons(run.get_feature_research_quote(&"text",id1)).is_empty(),"Root Feature UI has no first-game blocker")
+	feature_store.queue_free()
+	var research:=run.get_feature_research_quote(&"text",id1)
+	check(research.get("can_admit",false) and run.admit_feature_research(research),"First engine admits Text implementation before first-game starter finalization")
+	var completion:=run.get_feature_research_quote(&"text",id1)
+	check(completion.get("can_research",false) and run.research_feature(completion),"First engine implements Text with one productive cycle before first-game starter finalization")
+	check(run.finalize_starter_selection(),"First-game setup can finish after an owned root Feature is implemented")
+	check(run.get_engine_feature_state().engines[id1].implemented.has(&"text") and not run.get_engine_feature_state().engines[id2].implemented.has(&"text"),"Implementation is specific to its engine")
+	check(not run.stage_engine_features([&"text"] as Array[StringName],id1) and run.get_engine_configuration_quote(id1).is_empty(),"Legacy Stage and Commit actions are retired")
+	check(run.get_future_project_feature_ids()==[&"text"] and run.get_engine_feature_state().engines[id2].committed.is_empty(),"Completed implementation enters only its engine's future draw pool")
+	var adapter:=StudioCheckpoint.new()
+	var payload:=adapter.capture(run)
+	check(not payload.is_empty(),"Proprietary Studio checkpoint captures: "+adapter.error)
+	var restored: RunState=adapter.hydrate(payload) if not payload.is_empty() else null
+	check(restored!=null and restored.get_selected_engine_id()==id1 and restored.get_proprietary_engine_state().engines.size()==2,"Both independent engines survive checkpoint hydration: "+adapter.error)
+	if restored!=null:
+		var forged: Dictionary=restored.get_proprietary_engine_state()
+		forged.engines[id1].technology_nodes.append(&"unearned_node")
+		check(not RunState.ProprietaryEngines.valid(forged,restored._bank_run_id,restored.get_engine_entitlements(),restored.get_engine_feature_state(),restored._studio_finance,restored.get_completed_run_cycles()),"Validation rejects forged technology ownership")
+		var missing: Dictionary=restored.get_proprietary_engine_state()
+		missing.engines.erase(id1)
+		check(not RunState.ProprietaryEngines.valid(missing,restored._bank_run_id,restored.get_engine_entitlements(),restored.get_engine_feature_state(),restored._studio_finance,restored.get_completed_run_cycles()),"Validation rejects missing paid engine record")
+		check(restored.get_future_project_feature_ids()==[&"text"] and restored.get_engine_feature_state().engines[id2].committed.is_empty(),"Configured pool survives save without granting cards to the other engine")
+		var snapshots:=PrimitiveSnapshotDatabase.new();snapshots.load_ledgers()
+		var begun: Dictionary=preload("res://scripts/simulation/begin_project.gd").execute(restored,snapshots,"Owned engine game",&"action",&"fantasy")
+		check(begun.get("ok",false) and begun.project.get_engine_id()==id1 and begun.project.get_engine_max_scope()==25 and begun.project.get_feature_supply_ids()==[&"text"],"Development freezes owned engine,25 Scope and configured supply")
+		if begun.get("ok",false):
+			var before_familiarity:=restored.get_feature_familiarity(&"text")
+			check(restored.record_resolved_feature(begun.project,&"text",CardData.PHASE_DESIGN) and restored.get_feature_familiarity(&"text")==before_familiarity+1,"Feature use still earns Studio-wide familiarity after implementation")
+			check(begun.project.add_scope(25) and not begun.project.add_scope(1),"Proprietary engine enforces 25 Scope against the unchanged 30-Scope requirement")
+		var sale:=ProjectState.new(30)
+		check(sale.set_engine_id(id1,25),"Owned release binds proprietary identity")
+		sale.initialize_snapshots(&"fast_follower",&"stable_market")
+		sale.finalize_design_bugs(false,0,[&"text"],[])
+		sale.finalize_alpha(0,[],[]);sale.finalize_beta()
+		sale.commit_review_result(ReviewResult.new(PrimitiveReviewCalculator.get_baseline_profile(),{},0.0,0.0,0.0,7.0,1.0,0,0.0,1.0,50,0.0,7.0,7.0))
+		sale.commit_awareness_result(PrimitiveAwarenessCalculator.calculate(sale,restored))
+		sale.commit_launch_market_context_result(PrimitiveLaunchMarketContextCalculator.calculate(sale,snapshots))
+		sale.set("_units_sold_result",UnitsSoldResult.new(&"primitive_units_sold_v1",&"month_1",500,70,70,100,200,300,10000,10000,751,1,751.0,751))
+		sale.commit_month_one_sales_revenue_result(PrimitiveMonthOneSalesRevenueCalculator.calculate(sale))
+		check(restored.register_release(sale),"Proprietary release registers")
+		var sales_plan: Dictionary=restored._plan_sales_cycle(&"",preload("res://scripts/market/market_transaction_trial.gd").neutral())
+		check(not sales_plan.is_empty() and sales_plan.payable==sales_plan.records[sale.get_release_id()].settled_cents,"Owned release keeps all post-platform sales without engine royalty")
+		var browser:=preload("res://scripts/ui/engine_market_browser.gd").new()
+		root.add_child(browser)
+		browser.open(restored,null)
+		check(browser.overview.visible and browser.develop_button.visible and not browser.details.visible,"Engines overview separates development from details")
+		browser._show_page(&"create")
+		browser.create_input.text="Third Engine"
+		browser._refresh_create()
+		check(not browser.create_button.disabled,"Engines page enables affordable creation")
+		browser._create()
+		var third_id: StringName=restored.get_proprietary_engine_state().engines.keys().back()
+		check(browser.buttons.has(third_id) and browser.selected_id==third_id and browser.details.visible and not browser.creation.visible and browser.configure_button.visible and browser.description.text.contains("Foundation technologies"),"Engine detail opens after creation without creation controls")
+		var requested: Array[bool]=[false]
+		browser.configure_requested.connect(func():requested[0]=true)
+		browser._configure()
+		check(requested[0] and restored.get_selected_engine_id()==id1,"Engine detail opens its Feature Implementation Tree without changing project engine selection")
+		browser.queue_free()
+	print("Proprietary foundation: %d failures"%failures)
+	quit(1 if failures else 0)

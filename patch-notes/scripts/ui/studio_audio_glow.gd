@@ -49,7 +49,7 @@ func draw_beams(canvas: Control) -> void:
 	# The reusable texture contains the cone, avoiding distorted UVs on a tapered quad.
 	for group in 3:
 		var center := canvas.size.x * (0.18 + group * 0.32)
-		var color := FolderUI.color(&"orange" if group == 1 else &"cyan")
+		var color := get_theme_color(&"indigo" if group == 1 else &"mint",&"PatchNotes")
 		color.a = alphas[group]
 		var bottom_width := canvas.size.x * 0.19
 		canvas.draw_texture_rect(_beam,Rect2(center-bottom_width,0,bottom_width*2.0,height),false,color)
@@ -94,6 +94,6 @@ func _draw() -> void:
 	var alphas := light_alphas()
 	for group in 3:
 		var center := 0.18 + group * 0.32
-		var color := FolderUI.color(&"orange" if group == 1 else &"cyan")
+		var color := get_theme_color(&"indigo" if group == 1 else &"mint",&"PatchNotes")
 		color.a = alphas[group]
 		draw_texture_rect(_light, Rect2(size.x*(center-0.36), -size.y*0.45, size.x*0.72, size.y*2.0), false, color)

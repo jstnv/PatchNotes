@@ -17,10 +17,15 @@ func fixture(seed_value: int, scenario: int) -> Dictionary:
 	run._employees = EmployeeRoster.create(&"launch_parity")
 	run._contract_search = RunState.ContractSearch.create(&"launch_parity")
 	run._publisher_relationships = RunState.RelationshipLedger.create(&"launch_parity")
+	# The sealed 30-Scope, zero-royalty oracle is an explicit historical engine.
+	run._engine_entitlements=RunState.EngineEntitlements.create(run._bank_run_id)
+	var owned: Array[StringName]=[];owned.assign(run._owned_features.keys())
+	run._engine_features=RunState.EngineFeatures.create(owned,RunState.EngineEntitlements.accessible_ids(run._engine_entitlements),run._bank_run_id,run._feature_offers)
 	run._fanbase = StudioFanbase.create(597 if scenario == 2 else 93)
 	if scenario == 2: run._promotion_awards[&"prior_offer"] = 8
 	for id in RunRandom.STREAMS: run.random_streams.stream(id).seed = seed_value + RunRandom.STREAMS.find(id)
 	var project := PrimitivePredevelopment.prepare_project("Repeated title",&"action",&"fantasy",run)
+	expect(project.set_engine_id(run.get_selected_engine_id(),run.get_selected_engine_capacity()),"Historical launch engine frozen")
 	project._release_id = &"launch_parity:project:1"
 	project.initialize_snapshots(&"fast_follower",&"stable_market" if scenario == 0 else &"market_surge")
 	project.add_core_scores_and_scope({0:40,1:26,2:40,3:26},30 if scenario == 0 else 21)

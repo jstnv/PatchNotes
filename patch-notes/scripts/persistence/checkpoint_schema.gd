@@ -225,6 +225,11 @@ static func root(education_enabled: bool = true, active_rival: bool = false, sto
 	var versioned_feature_engine_run: Dictionary=feature_engine_run.duplicate(true)
 	versioned_feature_engine_run.founding_roster_version="uint"
 	var alternatives: Array=[run,versioned_run,engine_run,versioned_engine_run,feature_engine_run,versioned_feature_engine_run]
+	var proprietary_run: Dictionary=feature_engine_run.duplicate(true)
+	proprietary_run.proprietary_engines=proprietary_engine_state()
+	var versioned_proprietary_run: Dictionary=proprietary_run.duplicate(true)
+	versioned_proprietary_run.founding_roster_version="uint"
+	alternatives.append(proprietary_run);alternatives.append(versioned_proprietary_run)
 	for variant: Dictionary in alternatives.duplicate():alternatives.append(dict_with_calendar(variant))
 	var result := {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":union_of(alternatives),"rng":map_of("id",{"seed":"int","state":"int"})}
 	if active_rival: result.active_project_id = "id"
@@ -240,3 +245,7 @@ static func engine_feature_state() -> Dictionary:
 	configuration.merge(fields("id engine_id","id"))
 	for key: String in ["added","removed","target"]:configuration[key]=array_of("id")
 	return {"version":"uint","engines":map_of("id",record),"entries":array_of(entry),"configurations":array_of(configuration)}
+
+static func proprietary_engine_state() -> Dictionary:
+	var record: Dictionary={"owner_id":"id","name":"text","created_cycle":"uint","receipt_id":"id","technology_nodes":array_of("id"),"challenge_progress":map_of("id","uint"),"branch_progress":map_of("id","uint"),"scope_milestones":array_of("id"),"pass_efficiency":map_of("id","uint"),"pass_effectiveness":map_of("id","uint"),"bug_prevention":map_of("id","uint")}
+	return {"version":"uint","next_serial":"uint","engines":map_of("id",record)}

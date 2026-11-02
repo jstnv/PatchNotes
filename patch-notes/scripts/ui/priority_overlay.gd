@@ -28,7 +28,7 @@ func configure(controller: Control, priority_panel: Control, commit: Button) -> 
 	add_child(shade)
 	dialog = PanelContainer.new()
 	dialog.name = "PriorityDialog"
-	dialog.theme = preload("res://resources/ui/workspace_theme.tres")
+	dialog.theme = preload("res://resources/ui/onyx_theme.tres")
 	dialog.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	dialog.offset_left = -320
 	dialog.offset_right = 320
@@ -41,6 +41,7 @@ func configure(controller: Control, priority_panel: Control, commit: Button) -> 
 	dialog.add_child(content)
 	title_label = Label.new()
 	title_label.text = "Change Priorities"
+	title_label.theme_type_variation=&"HeadingLabel"
 	title_label.add_theme_font_size_override("font_size", 24)
 	content.add_child(title_label)
 	help = Label.new()
@@ -115,7 +116,7 @@ func open() -> bool:
 	initial_setup = phase.has_method("is_initial_priority_planning") and phase.is_initial_priority_planning()
 	if not initial_setup and not phase.can_edit_priorities(): return false
 	var phase_name: String = phase.get_workspace().phase_name
-	shade.color = Color("#080409") if initial_setup else Color(0.015, 0.01, 0.015, 0.82)
+	shade.color = FolderUI.color(&"background") if initial_setup else Color(0.015, 0.01, 0.015, 0.82)
 	shade.offset_bottom = -INITIAL_FOOTER_REVEAL if initial_setup else 0.0
 	title_label.text = "Initialize Priorities" if initial_setup else "Change Priorities"
 	help.text = _help_text(phase_name).replace("10–75",_range_text())

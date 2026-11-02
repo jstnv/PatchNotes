@@ -1,4 +1,5 @@
 extends SceneTree
+const Owned=preload("res://scripts/debug/owned_engine_test_setup.gd")
 const Factory := preload("res://scripts/simulation/run_factory.gd")
 const Fixture := preload("res://scripts/simulation/finite_fixture_policy.gd")
 const Replay := preload("res://scripts/simulation/development_replay.gd")
@@ -12,7 +13,10 @@ func fresh(unfunded: bool = false) -> RefCounted:
  var s: RefCounted=Factory.create_fresh_session({"schema_version":1,"studio_id":"audio-campaign","studio_name":"Audio mechanics fixture","specialty":"action","traits":[],"seed":"4417"},root.get_node("CardDatabase").get_development_catalog())
  s.run.finalize_starter_selection()
  # Deliberately funded; does not establish normal new-game solvency/balance.
- if not unfunded:s.run.add_cash_cents(5000000,&"other_income",&"audio_fixture_funding")
+ if not unfunded:
+  check(s.run.add_cash_cents(5000000,&"other_income",&"audio_fixture_funding"),"Recorded funded mechanics fixture")
+  check(Owned.create_owned(s.run,"Audio campaign owned"),"Paid real owned engine before exact tape")
+  check(Owned.acquire(s.run,&"8_bit_sound"),"Paid root before exact tape")
  return s
 func command(s: RefCounted,tape: Dictionary,kind: StringName,payload: Dictionary={}) -> Dictionary:
  var result:=Replay.record(s,tape,s.command(kind,payload))
@@ -46,7 +50,7 @@ func run() -> void:
  var exhausted: Array[StringName]=[]
  for step in 120:
   var view: Dictionary=s.observation()
-  var choice: Dictionary=chooser.call(view)
+  var choice: Dictionary=Owned.current_choice(s,chooser.call(view),IDS)
   var result:=command(s,tape,StringName(choice.type),choice.get("payload",{}))
   if not result.ok:break
   for event: Dictionary in result.get("events",[]):

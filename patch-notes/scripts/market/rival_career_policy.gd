@@ -145,8 +145,6 @@ func choose(session: RefCounted,view: Dictionary) -> Dictionary:
 	_search=0;_marketing=0
 	var run: RunState=session.run
 	if view.phase==&"studio":
-		var configuration: Dictionary=preload("res://scripts/simulation/decision_policy.gd").engine_configuration_choice(view)
-		if not configuration.is_empty():return configuration
 		if run.needs_starter_selection() and scope(run)<30:
 			var shopping:=_shop(run,true,30)
 			if not shopping.is_empty():return shopping

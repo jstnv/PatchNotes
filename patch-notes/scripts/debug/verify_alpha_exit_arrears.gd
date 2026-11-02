@@ -38,8 +38,13 @@ func verify_case(with_income: bool) -> void:
 	ProjectSettings.set_setting("gameplay/beta/insider_enabled",with_income)
 	var run := RunState.new()
 	check(run.initialize_cash_cents(0) and run.set_studio_name("Arrears regression", &"adventure"), "Create actual $5500 finance ledger")
-	# Synthetic accounting fixture: exactly $6858.39 available for 14 $500 dues.
-	check(run.add_cash_cents(135839, &"other_income", &"synthetic_regression_receipt"), "Account for fixture receipt through authoritative cash path")
+	# Keep the exact unpaid-bill boundary under the authoritative current clock
+	# and this account's actual rent; no historical 2-cycle/$500 assumption.
+	var clock:=preload("res://scripts/calendar/calendar_clock.gd")
+	var months: int=clock.position(28,run.get_calendar_profile()).month_index
+	var target: int=months*int(run.get_studio_finance_report().monthly_rent_cents)-14161
+	var difference: int=target-run.get_cash_cents()
+	check(run.add_cash_cents(difference,&"other_income",&"synthetic_regression_receipt") if difference>=0 else run.spend_cash_cents(-difference,&"other_expense",&"synthetic_regression_expense"),"Account for current-calendar fixture funds through authoritative cash path")
 	for i in 28:
 		check(run.complete_productive_action(), "Fixture productive boundary %d" % (i + 1))
 	check(run.get_completed_run_cycles() == 28 and run.get_cash_cents() == 0 and run.get_studio_finance_report().unpaid_rent_cents == 14161, "Exact cycle28 / cash0 / $141.61 genuine outstanding bill")

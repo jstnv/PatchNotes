@@ -1,0 +1,9 @@
+# Engine Phase 2B brief reconciliation — 2026-11-01
+
+Branch `main`; observed HEAD `49d769235474a880a73d996499cefa72beec63e5`. The shared worktree had extensive pre-existing tracked and untracked edits, including gameplay, RunState, rival world, checkpoint, TODO, and current-state files. No existing edit was changed, and `.codex-godot-temp` was preserved.
+
+The newly supplied Engine System thread brief requests Puzzle/Adventure at 27 Scope, $4,000 licenses and 15% royalties. Current `DECISIONS.md` and `design/engine-marketplace.md` instead record the user's later selected Action/Puzzle starting marketplace at 25 Scope, $7,500 and 20% platform-net royalties, with real rival owners. `CURRENT_STATE.md`, `TODO.md`, the implementation log, and `scripts/engines/engine_marketplace.gd` confirm that this later catalog and its purchase, settlement, selection, save and UI paths are implemented locally. The Adventure listing and requested terms are therefore a superseded proposal, not a remaining implementation task. The later Public Action Phase 2A decision separately changed new-Studio defaults and must be preserved.
+
+Check: Godot 4.7.1 `--headless --path patch-notes --script res://scripts/debug/verify_engine_marketplace_flow.gd` with APPDATA and LOCALAPPDATA in `.codex-godot-temp/AppData`: **PASS**, exit 0, no stdout/stderr. This is a focused check, not full Phase 2B acceptance. Prior exact checks and retained failures are in `2026-10-31-engine-marketplace-implementation-v1.md` and `2026-10-31-engine-browser-selection-v1.md`.
+
+Remaining OPEN: full publisher/support Engine careers, cross-owner failure recovery and creator overflow/arrears, broad career balance, device/export, and clean Godot 4.4 editor import. Current marketplace implementation is under the single overlapping gameplay slot; reconcile with that owner before further canonical code changes. No commit, push, export or release claim.

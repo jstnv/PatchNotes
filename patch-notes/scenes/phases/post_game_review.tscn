@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3]
 [ext_resource type="Script" path="res://scripts/phases/post_game_review.gd" id="1"]
-[ext_resource type="Theme" path="res://resources/ui/workspace_theme.tres" id="2"]
+[ext_resource type="Theme" path="res://resources/ui/onyx_theme.tres" id="2"]
 
 [node name="PostGameReview" type="Control"]
 layout_mode = 1
@@ -29,6 +29,7 @@ layout_mode = 2
 theme_override_constants/separation = 14
 
 [node name="Title" type="Label" parent="Margin/Layout"]
+theme_type_variation = &"HeadingLabel"
 layout_mode = 2
 text = "Post Game Review"
 theme_override_font_sizes/font_size = 28
@@ -61,6 +62,7 @@ layout_mode = 2
 theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="Margin/Layout/Categories/Overview/Margin/Rows"]
+theme_type_variation = &"HeadingLabel"
 layout_mode = 2
 text = "Overview"
 theme_override_font_sizes/font_size = 24
@@ -112,6 +114,7 @@ layout_mode = 2
 theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="Margin/Layout/Categories/Core Performance/Margin/Rows"]
+theme_type_variation = &"HeadingLabel"
 layout_mode = 2
 text = "Core Performance"
 theme_override_font_sizes/font_size = 24
@@ -163,6 +166,7 @@ layout_mode = 2
 theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="Margin/Layout/Categories/Scope/Margin/Rows"]
+theme_type_variation = &"HeadingLabel"
 layout_mode = 2
 text = "Scope"
 theme_override_font_sizes/font_size = 24
@@ -196,6 +200,7 @@ layout_mode = 2
 theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="Margin/Layout/Categories/Marketing/Margin/Rows"]
+theme_type_variation = &"HeadingLabel"
 layout_mode = 2
 text = "Marketing"
 theme_override_font_sizes/font_size = 24
@@ -229,6 +234,7 @@ layout_mode = 2
 theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="Margin/Layout/Categories/Sales/Margin/Rows"]
+theme_type_variation = &"HeadingLabel"
 layout_mode = 2
 text = "Sales"
 theme_override_font_sizes/font_size = 24

@@ -64,10 +64,13 @@ func pre_grid_revision() -> String:
 ## Bounded proofs for the pure current-format validator, shared by detached
 ## adapters. Keys retain every exact Variant type/value and current data hashes;
 ## only a separately checked positive generation number is normalized. No Run,
-## decoded mutable DTO, failed validation, or historical migration is cached.
+## failed validation, or historical migration is cached. Successful proofs retain
+## a detached native DTO; callers receive deep copies, never its mutable storage.
 const VALIDATION_PROOF_LIMIT := 27
 const VALIDATION_PROOF_BYTES := 32 * 1024 * 1024
-static var _validation_proofs: Array[PackedByteArray] = []
+static var _validation_proofs: Array[Dictionary] = []
+var _last_decode_input:=PackedByteArray()
+var _last_decode_value: Dictionary={}
 static var _validation_proof_bytes := 0
 static var _proof_lock := Mutex.new()
 
@@ -140,6 +143,7 @@ func snapshot(run: RunState, active_project_id: StringName = &"") -> Dictionary:
 	state.calendar=run.get_calendar_profile()
 	state.engine_entitlements = run.get_engine_entitlements()
 	state.engine_features = run.get_engine_feature_state()
+	if not run._proprietary_engines.engines.is_empty():state.proprietary_engines = run.get_proprietary_engine_state()
 	state.release_engine_ids = run._release_engine_ids.duplicate(true)
 	state.engine_royalty_receipts = run._engine_royalty_receipts.duplicate(true)
 	# Keep original v1 provenance absent when re-saving old Studios, preserving
@@ -202,6 +206,28 @@ func validate(payload: Dictionary) -> String:
 func validate_active_rival(payload: Dictionary) -> String:
 	return _validate(payload,true)
 
+func _validation_key(payload: Dictionary,active_rival: bool) -> PackedByteArray:
+	if payload.get("content_revision","")!=revision():return []
+	var codec:=CheckpointCodec.new()
+	var sequence: Variant=codec.integer(payload.get("sequence"))
+	if not codec.error.is_empty() or sequence<1:return []
+	var data_revision:=_rules_revision(RULES)
+	if data_revision!=payload.content_revision:return []
+	var identity:=payload.duplicate();identity["sequence"]="1"
+	var context: Array=[]
+	var script: Script=get_script()
+	while script!=null:
+		context.append([script.get_instance_id(),script.get_source_code().sha256_text()])
+		script=script.get_base_script()
+	for dependency: Script in [codec.get_script(),preload("res://scripts/persistence/checkpoint_schema.gd")]:
+		context.append([dependency.get_instance_id(),dependency.get_source_code().sha256_text()])
+	return var_to_bytes([context,data_revision,active_rival,identity])
+
+func _proof_index(key: PackedByteArray) -> int:
+	for index in _validation_proofs.size():
+		if _validation_proofs[index].key==key:return index
+	return -1
+
 func _validate(payload: Dictionary, active_rival: bool) -> String:
 	if _pre_calendar(payload):
 		var upgraded:=upgrade_pre_calendar(payload,active_rival)
@@ -212,35 +238,34 @@ func _validate(payload: Dictionary, active_rival: bool) -> String:
 		var upgraded:=upgrade_course_predecessor(payload,active_rival)
 		return error if upgraded.is_empty() else _validate(upgraded,active_rival)
 	if payload.get("content_revision", "") != revision(): return _validate_uncached(payload,active_rival)
-	var sequence_codec := CheckpointCodec.new()
-	var sequence: Variant = sequence_codec.integer(payload.get("sequence"))
-	if not sequence_codec.error.is_empty() or sequence < 1: return _validate_uncached(payload,active_rival)
 	# Re-read data hashes even on hits: a file edited in this process must not
 	# inherit a proof made against another catalog. Loaded validator scripts are
 	# separated too, including instrumented subclasses and source hot reloads.
-	var data_revision := _rules_revision(RULES)
-	if data_revision != payload.content_revision: return _validate_uncached(payload,active_rival)
-	var identity := payload.duplicate()
-	identity["sequence"] = "1"
-	var script: Script = get_script()
-	var key := var_to_bytes([script.get_instance_id(),script.get_source_code().sha256_text(),data_revision,active_rival,identity])
+	var key:=_validation_key(payload,active_rival)
+	if key.is_empty():return _validate_uncached(payload,active_rival)
 	_proof_lock.lock()
-	var index := _validation_proofs.find(key)
+	var index := _proof_index(key)
 	if index >= 0:
+		var item: Dictionary=_validation_proofs[index]
 		_validation_proofs.remove_at(index)
-		_validation_proofs.append(key)
+		_validation_proofs.append(item)
 		_proof_lock.unlock()
 		error = ""
 		return ""
 	_proof_lock.unlock()
+	_last_decode_input.clear();_last_decode_value.clear()
 	var reason := _validate_uncached(payload,active_rival)
-	if not reason.is_empty() or key.size() > VALIDATION_PROOF_BYTES: return reason
+	var native: Dictionary={}
+	if reason.is_empty() and _last_decode_input==var_to_bytes([payload,active_rival]):native=_last_decode_value.duplicate(true)
+	_last_decode_input.clear();_last_decode_value.clear()
+	var cost:=key.size()+var_to_bytes(native).size()
+	if not reason.is_empty() or cost > VALIDATION_PROOF_BYTES: return reason
 	_proof_lock.lock()
-	if not _validation_proofs.has(key):
-		_validation_proofs.append(key)
-		_validation_proof_bytes += key.size()
+	if _proof_index(key)<0:
+		_validation_proofs.append({"key":key,"native":native,"cost":cost})
+		_validation_proof_bytes += cost
 	while _validation_proofs.size()>VALIDATION_PROOF_LIMIT or _validation_proof_bytes>VALIDATION_PROOF_BYTES:
-		_validation_proof_bytes -= _validation_proofs.pop_front().size()
+		_validation_proof_bytes -= int(_validation_proofs.pop_front().cost)
 	_proof_lock.unlock()
 	return ""
 
@@ -307,6 +332,7 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 		for item: Dictionary in FeatureStoreCatalog.entries():offers[StringName(item.id)]=item
 		if not RunState.EngineFeatures.valid(r.engine_features,definitions,offers,r.studio_finance,r.completed_run_cycles,r.bank_run_id):return "Invalid engine Feature provenance"
 		if not RunState.EngineFeatures.bindings_valid(r.engine_features,r.engine_entitlements,r.owned_features,r.bank_run_id):return "Invalid engine Feature ownership/capacity"
+		if not RunState.ProprietaryEngines.valid(r.get("proprietary_engines",RunState.ProprietaryEngines.empty()),r.bank_run_id,r.engine_entitlements,r.engine_features,r.studio_finance,r.completed_run_cycles):return "Invalid proprietary engine state"
 		var accessible:=RunState.EngineEntitlements.accessible_ids(r.engine_entitlements)
 		for id: StringName in r.release_engine_ids:
 			if not r.released_games.has(id) or r.release_engine_ids[id] not in accessible:return "Invalid release engine identity"
@@ -665,6 +691,9 @@ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
 		else: run.set(field,r[field.trim_prefix("_")])
 	run._engine_entitlements = r.get("engine_entitlements", RunState.EngineEntitlements.create(run._bank_run_id))
 	run._engine_features = r.get("engine_features",{}).duplicate(true)
+	if not run._engine_features.is_empty() and RunState.EngineFeatures.needs_migration(run._engine_features,run._feature_offers):
+		run._engine_features=RunState.EngineFeatures.migrate(run._engine_features,run._feature_offers)
+	run._proprietary_engines = RunState.ProprietaryEngines.migrate(r.get("proprietary_engines",RunState.ProprietaryEngines.empty()),run._engine_features)
 	run._release_engine_ids = r.get("release_engine_ids", {}).duplicate(true)
 	run._engine_royalty_receipts = r.get("engine_royalty_receipts", {}).duplicate(true)
 	if not RunState.EngineEntitlements.valid(run._engine_entitlements,run._registered_engine_ids()) or run._engine_entitlements.studio_id != run._bank_run_id:
@@ -807,9 +836,23 @@ func _decode_payload(payload: Dictionary, active_rival: bool = false) -> Diction
 	# Current payloads need no legacy catalog/finance conversion. Preserve strict
 	# decoding without repeating historical file hashes for every saved owner.
 	if payload.get("content_revision", "") == revision():
+		# Reuse only the detached DTO retained by a successful full predicate.
+		# The generation is independently canonical-checked by the same key.
+		var key:=_validation_key(payload,active_rival)
+		if not key.is_empty():
+			_proof_lock.lock()
+			var index:=_proof_index(key)
+			if index>=0 and not _validation_proofs[index].native.is_empty():
+				var copy: Dictionary=_validation_proofs[index].native.duplicate(true)
+				_proof_lock.unlock()
+				copy.sequence=CheckpointCodec.new().integer(payload.sequence)
+				error="";return copy
+			_proof_lock.unlock()
 		var current_codec := CheckpointCodec.new()
 		var current: Variant = current_codec.decode(payload,CheckpointSchema.root(true,active_rival))
 		if not current_codec.error.is_empty(): error=current_codec.error; return {}
+		_last_decode_input=var_to_bytes([payload,active_rival])
+		_last_decode_value=current.duplicate(true)
 		return current
 	var prior: bool = payload.get("content_revision", "") in _legacy_revisions(PRE_EDUCATION_RULES)
 	var codec := CheckpointCodec.new()

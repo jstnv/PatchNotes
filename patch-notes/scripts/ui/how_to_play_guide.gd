@@ -1,6 +1,11 @@
 class_name HowToPlayGuide
 extends CanvasLayer
 
+signal tour_requested(id: StringName)
+var tour_availability: Callable
+var tour_scroll: ScrollContainer
+var tour_list: VBoxContainer
+
 signal closed
 
 var sections: Array = []
@@ -33,7 +38,7 @@ func _ready() -> void:
 	add_child(shade)
 	panel = PanelContainer.new()
 	panel.name = "GuidePanel"
-	panel.theme = preload("res://resources/ui/workspace_theme.tres")
+	panel.theme = preload("res://resources/ui/onyx_theme.tres")
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.offset_left = 24
 	panel.offset_right = -24
@@ -49,6 +54,7 @@ func _ready() -> void:
 	var heading := Label.new()
 	heading.theme_type_variation=&"HeadingLabel"
 	heading.text = "How to Play"
+	heading.theme_type_variation=&"HeadingLabel"
 	heading.add_theme_font_size_override("font_size",30)
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(heading)
@@ -56,6 +62,7 @@ func _ready() -> void:
 	header.move_child(close_button,0)
 	close_button.custom_minimum_size = Vector2(144,42)
 	sections = HowToPlayContent.sections()
+	sections[0].topics.append({"id":"guided_tours","title":"Guided system tours","summary":"Focused tours point out real controls without purchases or productive actions.","body":"Open a Studio to replay tours. Locked systems become available as you progress."})
 	var folders := HBoxContainer.new()
 	folders.name = "Folders"
 	folders.add_theme_constant_override("separation",3)
@@ -106,13 +113,14 @@ func _ready() -> void:
 	page.add_child(breadcrumb)
 	page_title = Label.new()
 	page_title.theme_type_variation=&"HeadingLabel"
+	page_title.theme_type_variation=&"HeadingLabel"
 	page_title.add_theme_font_size_override("font_size",28)
 	page_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	page.add_child(page_title)
 	summary = Label.new()
 	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	summary.add_theme_font_size_override("font_size",18)
-	summary.add_theme_color_override("font_color",FolderUI.color(&"orange"))
+	summary.add_theme_color_override("font_color",FolderUI.color(&"mint"))
 	page.add_child(summary)
 	reader = RichTextLabel.new()
 	reader.name = "GuideArticle"
@@ -124,6 +132,8 @@ func _ready() -> void:
 	reader.add_theme_font_size_override("bold_font_size",18)
 	reader.add_theme_constant_override("line_separation",6)
 	page.add_child(reader)
+	tour_scroll=ScrollContainer.new();tour_scroll.follow_focus=true;tour_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;tour_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;page.add_child(tour_scroll)
+	tour_list=VBoxContainer.new();tour_list.size_flags_horizontal=Control.SIZE_EXPAND_FILL;tour_list.add_theme_constant_override("separation",8);tour_scroll.add_child(tour_list)
 	var navigation := HBoxContainer.new()
 	navigation.add_theme_constant_override("separation",8)
 	page.add_child(navigation)
@@ -154,6 +164,7 @@ func is_open() -> bool:
 	return visible
 
 func open(navigation_host: MenuTransitions = null) -> void:
+	if tour_scroll!=null and tour_scroll.visible:select_topic(topic_index)
 	if visible or (navigation_host != null and navigation_host.busy): return
 	_navigation=navigation_host
 	_return_focus = get_viewport().gui_get_focus_owner()
@@ -212,12 +223,26 @@ func select_topic(index: int) -> void:
 	page_title.text = article.title
 	summary.text = article.summary
 	reader.text = article.body
+	var guided: bool=article.id=="guided_tours"
+	reader.visible=not guided;tour_scroll.visible=guided
+	for child in tour_list.get_children():tour_list.remove_child(child);child.queue_free()
+	if guided:
+		var catalog=preload("res://scripts/tutorial/focused_guidance_catalog.gd")
+		for id: StringName in catalog.IDS:
+			var button:=FolderUI.button(tour_list,str(catalog.LABELS[id]),func():tour_requested.emit(id))
+			button.name="Tour_"+str(id);button.custom_minimum_size.y=44
+			button.focus_entered.connect(_focus_tour.bind(button))
+			button.disabled=not tour_availability.is_valid() or not tour_availability.call(id)
+			button.tooltip_text="Open an eligible game context or unlock this system first." if button.disabled else "Read-only guided tour"
 	reader.get_v_scroll_bar().value = 0
 	previous_button.disabled = index == 0
 	next_button.disabled = index == section.topics.size()-1
 	# If Next/Previous became disabled, keep keyboard focus inside the article.
 	var focus := get_viewport().gui_get_focus_owner()
 	if focus is BaseButton and focus.disabled: reader.grab_focus()
+
+func _focus_tour(button: Control) -> void:
+	tour_scroll.ensure_control_visible.call_deferred(button)
 
 func _input(event: InputEvent) -> void:
 	if not visible: return
@@ -230,20 +255,23 @@ func _input(event: InputEvent) -> void:
 		var controls: Array = []
 		controls.append_array(folder_buttons)
 		controls.append_array(topic_buttons)
-		controls.append(reader)
+		if tour_scroll.visible:
+			for button in tour_list.get_children():
+				if button is Button and not button.disabled:controls.append(button)
+		else:controls.append(reader)
 		for button in [previous_button,next_button,close_button]:
 			if not button.disabled: controls.append(button)
 		var direction := -1 if event.is_action_pressed("ui_focus_prev") else 1
 		var index := controls.find(get_viewport().gui_get_focus_owner())
 		controls[posmod(index+direction,controls.size())].grab_focus()
 	elif event.is_action_pressed("ui_page_down") or event.is_action_pressed("ui_page_up"):
-		reader.get_v_scroll_bar().value += reader.size.y * 0.8 * (-1 if event.is_action_pressed("ui_page_up") else 1)
+		(tour_scroll.get_v_scroll_bar() if tour_scroll.visible else reader.get_v_scroll_bar()).value += reader.size.y * 0.8 * (-1 if event.is_action_pressed("ui_page_up") else 1)
 	else:
 		var focus := get_viewport().gui_get_focus_owner()
-		if focus in folder_buttons and (event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right")):
+		if focus is Button and focus in folder_buttons and (event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right")):
 			select_folder(posmod(folder_index+(-1 if event.is_action_pressed("ui_left") else 1),sections.size()))
 			folder_buttons[folder_index].grab_focus()
-		elif focus in topic_buttons and (event.is_action_pressed("ui_up") or event.is_action_pressed("ui_down")):
+		elif focus is Button and focus in topic_buttons and (event.is_action_pressed("ui_up") or event.is_action_pressed("ui_down")):
 			select_topic(posmod(topic_buttons.find(focus)+(-1 if event.is_action_pressed("ui_up") else 1),topic_buttons.size()))
 			topic_buttons[topic_index].grab_focus()
 		else: return

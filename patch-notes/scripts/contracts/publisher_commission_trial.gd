@@ -134,17 +134,31 @@ static func valid_save(d: Dictionary, active_project_id: StringName = &"") -> bo
 		if d.commission_deals.has(id):
 			if not d.released_games[id].campaign_months.is_empty(): return false
 			continue
+		var title_earned: Dictionary={};var title_settled: Dictionary={}
 		if d.get("support_deals",{}).has(id):
 			var history := preload("res://scripts/contracts/publisher_support.gd").title_history(d.support_deals[id],d.released_games[id],meta.release_cycle)
 			if history.is_empty(): return false
-			for cycle: int in history.earned: earned[cycle] = int(earned.get(cycle,0))+int(history.earned[cycle])
-			for cycle: int in history.settled: settled[cycle] = int(settled.get(cycle,0))+int(history.settled[cycle])
-			continue
-		for row: Dictionary in report.rows:
-			for slice: Dictionary in row.slices: earned[slice.run_cycle] = int(earned.get(slice.run_cycle,0))+int(slice.net_cents)
-			for payment: Dictionary in row.payments: settled[payment.run_cycle] = int(settled.get(payment.run_cycle,0))+int(payment.cents)
+			title_earned=history.earned;title_settled=history.settled
+		else:
+			for row: Dictionary in report.rows:
+				for slice: Dictionary in row.slices:
+					if not _add_sales_amount(title_earned,slice.run_cycle,slice.net_cents):return false
+				for payment: Dictionary in row.payments:
+					if not _add_sales_amount(title_settled,payment.run_cycle,payment.cents):return false
+		var rate:=_release_royalty_rate(d,id)
+		if rate<0 or report.release_id!=id:return false
+		var retained:=preload("res://scripts/engines/engine_royalty.gd").retained_series(title_earned,title_settled,rate)
+		if retained.is_empty():return false
+		for cycle: int in retained.earned:
+			if not _add_sales_amount(earned,cycle,retained.earned[cycle]):return false
+		for cycle: int in retained.settled:
+			if not _add_sales_amount(settled,cycle,retained.settled[cycle]):return false
+	var seen_cycles: Dictionary={}
 	for action: Dictionary in d.studio_finance.actions:
+		if not action.get("productive") is bool:return false
 		if not action.productive: continue
+		if not action.get("cycle") is int or action.cycle<1 or seen_cycles.has(action.cycle) or not action.get("sales_earned") is int or not action.get("settled") is int:return false
+		seen_cycles[action.cycle]=true
 		if action.sales_earned != earned.get(action.cycle,0) or action.settled != settled.get(action.cycle,0): return false
 		earned.erase(action.cycle)
 		settled.erase(action.cycle)
@@ -178,3 +192,43 @@ static func _valid_search_binding(t: Dictionary,d: Dictionary,id: StringName) ->
 	if t.get("version")==1:return not t.has("search_offer_id") and d.get("contract_search",{}).get("legacy_offers",{}).get(t.get("quote_id"))==&"commission"
 	var source:=preload("res://scripts/contracts/contract_search.gd").source(d,t.get("search_offer_id",&""),&"commission")
 	return not source.is_empty() and source.cycle<=t.accept_cycle and d.contract_search.offers[t.search_offer_id].project_id==id
+
+## Binding/rate projection only. Same frozen terms resolver as RunState billing.
+static func _release_royalty_rate(d: Dictionary, release_id: StringName) -> int:
+	var access: Variant=d.get("engine_entitlements",{})
+	var bindings: Variant=d.get("release_engine_ids",{})
+	var state: Variant=d.get("engine_features",{})
+	if not access is Dictionary or not bindings is Dictionary or not state is Dictionary:return -1
+	if access.is_empty():return 0 if bindings.is_empty() and state.is_empty() else -1
+	if not access.get("version") is int or access.version not in [1,2]:return -1
+	var records: Variant=state.get("engines",{})
+	if not records is Dictionary:return -1
+	var registered: Array[StringName]=[]
+	for id: Variant in records:
+		if not id is StringName:return -1
+		if id!=&"legacy_engine" and preload("res://scripts/engines/engine_marketplace.gd").find(id).is_empty():registered.append(id)
+	if not preload("res://scripts/engines/engine_entitlements.gd").valid(access,registered):return -1
+	var engine: StringName=&"legacy_engine"
+	if bindings.has(release_id):
+		if not bindings[release_id] is StringName:return -1
+		engine=bindings[release_id]
+	elif access.version==2:return -1
+	# v1 unbound historical releases predate engine bindings: existing zero cut.
+	if engine==&"legacy_engine":return 0 if engine in access.owned_ids else -1
+	if not records.get(engine) is Dictionary:return -1
+	var record: Dictionary=records[engine]
+	if record.size()!=9 or record.get("origin") not in ["legacy-access-v1","declared-v1",preload("res://scripts/engines/public_action_engine.gd").ORIGIN,preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN,preload("res://scripts/engines/proprietary_engine_state.gd").ORIGIN]:return -1
+	if engine==&"public_action" and record.origin!=preload("res://scripts/engines/public_action_engine.gd").ORIGIN:return -1
+	if engine==&"public_action" or engine in access.licensed_ids:
+		if (engine==&"public_action" and record.get("kind")!=&"public") or (engine!=&"public_action" and record.get("kind")!=&"rival_licensed"):return -1
+		var terms:=preload("res://scripts/engines/engine_marketplace.gd").terms_for_record(engine,record)
+		if terms.is_empty() or not terms.get("royalty_basis_points") is int or terms.royalty_basis_points<0 or terms.royalty_basis_points>10000:return -1
+		return terms.royalty_basis_points
+	return 0 if engine in access.owned_ids and record.get("kind")==&"proprietary" else -1
+
+static func _add_sales_amount(series: Dictionary, cycle: Variant, amount: Variant) -> bool:
+	if not cycle is int or cycle<1 or not amount is int or amount<0:return false
+	var prior: int=series.get(cycle,0)
+	if amount>9223372036854775807-prior:return false
+	series[cycle]=prior+amount
+	return true

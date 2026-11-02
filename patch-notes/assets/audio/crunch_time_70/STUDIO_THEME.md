@@ -1,5 +1,7 @@
 # Studio theme integration — 2026-10-11
 
+**2026-11-01 supersession:** the six-track [Studio pool](studio_pool/STUDIO_POOL.md) is now the active Studio arrangement. The D-minor Studio Smooth asset and the original single-arrangement contract below are historical. The six tracks retain the same 70 BPM/eight-bar frame map; their differing harmonies are handled by a no-overlap hard switch within Studio, as directed by the user.
+
 The user selected `crunch_time_studio_smooth_70bpm.mp3` and requested a shared key/time map for dynamic resequencing. That preview exactly matches the original music project's Studio_Smooth MP3. Its authoritative WAV/MIDI source is a C-minor arrangement, two semitones below the main theme.
 
 `crunch_time_studio_smooth_D_minor.wav` resynthesizes the same arrangement in **D minor**. Every pitched note moves up two semitones; drum notes, onsets, durations and velocities remain unchanged. The separate original music project and preview are preserved. This is not a sped-up recording or an MP3-to-WAV conversion.

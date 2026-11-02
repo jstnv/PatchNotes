@@ -29,6 +29,7 @@ func _ready() -> void:
 	var title := Label.new()
 	title.text = "Publisher List"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.theme_type_variation=&"HeadingLabel"
 	title.add_theme_font_size_override("font_size", 26)
 	heading.add_child(title)
 	var back := Button.new()

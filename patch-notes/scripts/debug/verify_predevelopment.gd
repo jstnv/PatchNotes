@@ -89,10 +89,9 @@ func _verify_flow() -> void:
 	# standards now require a stable owner ID even without a rival world.
 	run._bank_run_id = &"predevelopment-fixture"
 	ResearchTestActions.acquire(run,&"save_files")
-	var configured: Array[StringName]=[&"save_files"]
-	expect(run.stage_engine_features(configured) and run.commit_engine_configuration(run.get_engine_configuration_quote()),"Purchased Save Files explicitly configured for next project")
+	expect(&"save_files" in run.get_future_project_feature_ids(),"Purchased Save Files enters future project supply")
 	run.spend_cash_cents(1)
-	for i in range(21): run.advance_calendar_cycle() # Store node purchase already spent the first cycle.
+	for i in range(22): run.advance_calendar_cycle() # Retired Commit no longer supplies the second setup cycle.
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
 	game.project_state = ProjectState.new(30) # Existing-project fixture; first-run setup is tested separately.
 	game.run_state = run

@@ -42,7 +42,7 @@ func _build() -> void:
 	add_child(host)
 	panel = PanelContainer.new()
 	panel.name = "SettingsPanel"
-	panel.theme = preload("res://resources/ui/workspace_theme.tres")
+	panel.theme = preload("res://resources/ui/onyx_theme.tres")
 	panel.theme_type_variation=&"FolderPanel"
 	panel.set_meta("bounded_folder",true)
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -63,6 +63,7 @@ func _build() -> void:
 	var title := Label.new()
 	title.text = "Settings"
 	title.hide()
+	title.theme_type_variation=&"HeadingLabel"
 	title.add_theme_font_size_override("font_size", 28)
 	box.add_child(title)
 	var guide := Label.new()

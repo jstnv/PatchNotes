@@ -12,7 +12,7 @@ var _selected: bool = false
 var third_score: Label
 var pass_budget_label: Label
 var pass_budget_remaining := -1
-var pass_budget_progress := 0
+var pass_budget_progress := 0.0
 
 @onready var artwork_fallback: TextureRect = %Background
 @onready var artwork: TextureRect = %Artwork
@@ -32,6 +32,7 @@ var pass_budget_progress := 0
 
 
 func _ready() -> void:
+	card_name_label.add_theme_font_override("font",FolderUI.THEME.get_font("font",&"HeadingLabel"))
 	pass_budget_label = Label.new()
 	pass_budget_label.name = "SharedPassBudget"
 	pass_budget_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -64,7 +65,7 @@ func set_card(card: CardData) -> void:
 	if is_node_ready():
 		refresh()
 
-func set_shared_pass_budget(remaining: int, progress: int) -> void:
+func set_shared_pass_budget(remaining: int, progress: float) -> void:
 	pass_budget_remaining = remaining
 	pass_budget_progress = progress
 	if is_node_ready(): refresh()
@@ -151,7 +152,8 @@ func _refresh_renewability() -> void:
 		renewability_icon.hide()
 		pass_budget_label.show()
 		pass_budget_label.text = "Pass %d" % pass_budget_remaining
-		pass_budget_label.tooltip_text = "Shared Pass Budget: %d remaining · %d/8 printed Feature Core toward the next Pass." % [pass_budget_remaining, pass_budget_progress]
+		var progress_text := "%d"%roundi(pass_budget_progress) if is_equal_approx(pass_budget_progress,float(roundi(pass_budget_progress))) else "%.2f"%pass_budget_progress
+		pass_budget_label.tooltip_text = "Shared Pass Budget: %d remaining · %s/8 effective Feature Core toward the next Pass." % [pass_budget_remaining, progress_text]
 		return
 	pass_budget_label.hide()
 	renewability_icon.show()
@@ -163,7 +165,8 @@ func _refresh_renewability() -> void:
 func _refresh_card_tooltip() -> void:
 	var lifecycle := "Renewable: may return in later draws." if card_data.renewable else "Finite: exhausts after a successful play in this project."
 	if card_data.card_type == &"pass" and card_data.phase != CardData.PHASE_BETA and pass_budget_remaining >= 0:
-		lifecycle = "Shared Pass Budget: %d remaining. Printed Feature Core: %d/8 toward the next Pass. This Pass definition can return; successful play spends one." % [pass_budget_remaining, pass_budget_progress]
+		var progress_text := "%d"%roundi(pass_budget_progress) if is_equal_approx(pass_budget_progress,float(roundi(pass_budget_progress))) else "%.2f"%pass_budget_progress
+		lifecycle = "Shared Pass Budget: %d remaining. Effective Feature Core: %s/8 toward the next Pass. This Pass definition can return; successful play spends one." % [pass_budget_remaining, progress_text]
 	var detail := ""
 	var synergy := ""
 	if card_data.phase == CardData.PHASE_BETA:

@@ -6,6 +6,7 @@ const GAMEPLAY_SCENE := preload("res://scenes/gameplay.tscn")
 
 var _snapshots: PrimitiveSnapshotDatabase
 var _failures := 0
+var _checks := 0
 
 
 func _initialize() -> void:
@@ -20,6 +21,7 @@ func _initialize() -> void:
 	await _verify_gameplay_transition()
 	if _failures == 0:
 		print("Beta finalization and Launch-boundary verification passed.")
+	print("BETA_FINALIZATION checks=%d failures=%d"%[_checks,_failures])
 	quit(_failures)
 
 
@@ -144,9 +146,15 @@ func _verify_gameplay_transition() -> void:
 	_expect(state.has_units_sold_result() and state.get_units_sold_result().get_sales_period() == &"month_1", "Gameplay commits Month 1 units sold exactly once from prior launch results")
 	_expect(state.has_month_one_sales_revenue_result() and state.get_month_one_sales_revenue_result().get_earned_sales_cycle_count() == 0, "Gameplay commits the projected Month 1 sales/revenue foundation without earning sales at Launch")
 	_expect(not active.get_node("%SummaryPanel").visible and active.get_node_or_null("%ContinueButton") == null, "Studio needs no continuation confirmation and starts with release stats hidden")
-	_expect(run.get_released_game_ids().size()==1 and not active.get_node("%PostGameSummaries").disabled and active.get_node("%StartNextGame").text=="Produce Next Game", "First committed launch immediately enables history and labels the next game correctly")
-	_expect(run.is_primitive_contract_offer_available() and not active.get_node("%Contracts").disabled, "First committed launch immediately enables the legally available Contract offer")
-	active.open_summary()
+	_expect(run.get_released_game_ids().size()==1,"First committed launch registers exactly one historical title")
+	(active.get_node("%StartProductionButton") as Button).pressed.emit()
+	active._hub.settle_motion()
+	_expect(active.get_node("%StartNextGame").is_visible_in_tree() and not active.get_node("%StartNextGame").disabled and active.get_node("%StartNextGame").text=="Produce New Game","Current Start Production exposes enabled Produce New Game action")
+	_expect(run.is_primitive_contract_offer_available() and active.get_node("%Contracts").is_visible_in_tree() and not active.get_node("%Contracts").disabled,"Current Start Production exposes the legally available Contract offer")
+	(active.get_node("%StudioInfoMenuButton") as Button).pressed.emit()
+	active._hub.settle_motion()
+	_expect(active.get_node("%PostGameSummaries").is_visible_in_tree() and not active.get_node("%PostGameSummaries").disabled,"Current Studio Info exposes enabled release history after first launch")
+	(active.get_node("%PostGameSummaries") as Button).pressed.emit()
 	var text := (active.get_node("%ReviewLabel") as Label).text + (active.get_node("%EarnedLabel") as Label).text
 	_expect(not text.contains("Hidden") and not text.contains("Remaining") and text.contains("Final Review:") and text.contains("Earned: 0"), "Post Game Summaries opens the committed results")
 	gameplay.queue_free()
@@ -169,6 +177,7 @@ func _snapshot(fixture: Dictionary) -> Array:
 
 
 func _expect(condition: bool, description: String) -> void:
+	_checks += 1
 	if condition:
 		print("PASS: %s" % description)
 	else:

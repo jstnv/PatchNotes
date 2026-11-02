@@ -26,6 +26,8 @@ var _write_job: RefCounted
 var _change_revision := 0
 var _write_catalog: RefCounted
 var _exiting := false
+var _last_write_player: Dictionary={}
+var _last_write_world: Dictionary={}
 
 func _notify_status() -> void:
 	# UI children may already be gone during scene teardown. The writer still
@@ -71,7 +73,9 @@ func _request_save() -> void:
 	job.catalog=_write_catalog
 	job.replacing=replace_on_save
 	job.revision=_change_revision
-	job.previous_payload=last_payload.duplicate(true)
+	job.previous_payload=last_payload
+	job.previous_player=_last_write_player
+	job.previous_world=_last_write_world
 	_write_job=job
 	var error:=job.start()
 	if error!=OK:
@@ -84,13 +88,21 @@ func _request_save() -> void:
 func _finish_write() -> void:
 	if _write_job==null: return
 	var revision: int=_write_job.revision
-	var result: Dictionary=_write_job.join()
+	var completed_job: RefCounted=_write_job
+	var result: Dictionary=completed_job.join()
 	_write_job=null
 	store.validator=_validate_payload
+	if result.status==&"superseded":
+		# No publication occurred; keep all durable receipts and replacement intent.
+		pending=true
+		_notify_status()
+		return
 	if result.status not in [&"saved",&"unchanged"]:
 		_failed(str(result.get("reason",result.status)))
 		return
 	last_payload=result.payload
+	_last_write_player=completed_job.player
+	_last_write_world=completed_job.world
 	replace_on_save=false
 	pending=revision!=_change_revision
 	failure=""
@@ -153,6 +165,7 @@ func _market_compatible_payload(payload: Dictionary) -> Dictionary:
 
 func attach_rivals(world: RivalWorld, definitions: RefCounted) -> bool:
 	if world == null or definitions == null or world.player != run or world.cycle != run.get_completed_run_cycles(): return false
+	_last_write_player={};_last_write_world={}
 	rival_world = world
 	rival_catalog = definitions
 	# Give the worker its own definition values;
@@ -172,6 +185,7 @@ func attach_rivals(world: RivalWorld, definitions: RefCounted) -> bool:
 
 func attach(value: RunState) -> void:
 	if _write_job!=null: flush()
+	_last_write_player={};_last_write_world={}
 	# Bind/load pays the catalog hash once; autosaves reuse this current identity.
 	# Worker validation still rechecks the executable data before publication.
 	adapter.revision()
@@ -179,9 +193,11 @@ func attach(value: RunState) -> void:
 		for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"engines_changed",&"publisher_relationships_changed"]:
 			if run.is_connected(name,_changed): run.disconnect(name,_changed)
 		run.studio_departure_guard = Callable()
+		run.studio_action_guard = Callable()
 		run.checkpoint_before_mutation = Callable()
 	run = value
 	run.studio_departure_guard = before_departure
+	run.studio_action_guard = before_studio_action
 	run.checkpoint_before_mutation = before_mutation
 	for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"engines_changed",&"publisher_relationships_changed"]:
 		run.connect(name,_changed)
@@ -191,6 +207,7 @@ func _changed() -> void:
 	if not in_studio: return
 	_change_revision+=1
 	pending = true
+	if _write_job!=null:_write_job.supersede()
 	_request_save.call_deferred()
 
 func entered_studio(restored: bool = false) -> void:
@@ -199,12 +216,18 @@ func entered_studio(restored: bool = false) -> void:
 	pending = not restored
 	if pending:
 		_change_revision+=1
-		_request_save()
+		# Batch same-frame return/menu actions into the newest detached snapshot.
+		if background_saves:_request_save.call_deferred()
+		else:_request_save()
 	else: _notify_status()
 
 func before_departure() -> bool:
 	if not in_studio: return false
 	return flush()
+
+func before_studio_action() -> bool:
+	if not in_studio or run==null:return false
+	return before_mutation()
 
 func before_mutation() -> bool:
 	if debug_session:return true
@@ -241,6 +264,7 @@ func flush() -> bool:
 	_publishing_source_identity = ""
 	if result.status!=&"saved": return _failed(str(result.get("reason",result.status)))
 	last_payload = payload
+	_last_write_player={};_last_write_world={}
 	replace_on_save = false
 	pending = false
 	failure = ""

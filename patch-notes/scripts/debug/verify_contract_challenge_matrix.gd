@@ -15,6 +15,9 @@ func _run() -> void:
 	var evidence:=[]
 	for key:String in HANDS:
 		var run:=starwave_fixture() if key.begins_with("star") or key.begins_with("side") else trial_run()
+		# Authored scoring is an explicit historical legacy scenario. Its fixed
+		# hands/grades/economy are not a fresh Public/proprietary career claim.
+		expect(run.get_engine_entitlements().version==1 and run.get_selected_engine_id()==&"legacy_engine" and run.valid_engine_state(),"Coherent explicit historical challenge engine")
 		# Authored outcome fixtures predate the twelve-Scope starter. Buy every
 		# missing root/parent legally before accepting an owned-pool offer.
 		for ids: Array in HANDS[key]:

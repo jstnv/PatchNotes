@@ -2,6 +2,7 @@ extends "res://scripts/debug/verify_publisher_trial_offers.gd"
 
 func finished(run: RunState, title: String, marketing: int) -> ProjectState:
 	var p := PrimitivePredevelopment.prepare_project(title,&"action",&"fantasy",run)
+	expect(p.set_engine_id(run.get_selected_engine_id(),run.get_selected_engine_capacity()),"Freeze selected fixture engine before scoring")
 	p.add_core_scores_and_scope({0:90,1:90,2:90,3:90},30)
 	p.add_marketing_output(marketing)
 	p.initialize_snapshots(&"fast_follower",&"stable_market")
@@ -31,6 +32,7 @@ func _run() -> void:
 	var run := RunState.new()
 	run.initialize_cash(0)
 	run.create_studio_with_traits("Promotion fixture",&"action",[&"studio_buzz",&"unknown_name"])
+	expect(historical_contract_engine(run),"Explicit historical Promotion engine preserves authored economy")
 	var first := finished(run,"First",25)
 	expect(first.get_awareness_result().get_total_awareness()==118 and run.register_release(first),"First-launch Buzz and Unknown Name freeze together")
 	expect(not run.get_unlocked_publisher_ids().has(PublisherCatalog.NEON_CIRCUIT),"First release below Neon threshold")

@@ -1,5 +1,7 @@
 # Publishers and Contracts
 
+**2026-11-01 Search/checkpoint guard:** Search remains exactly one productive Studio action using its existing quote, finance and RNG authority. It may coalesce behind an outstanding Studio save, but rejects outside Studio and after save failure. Accepting work still waits for the newest durable Studio checkpoint and revalidates offer/engine selection. Contract hands do not publish mid-Contract checkpoints. [Implementation, parity and limits](../findings/contract-latency-20261101-v1/README.md).
+
 **2026-10-26 Crown feedback — approved private implementation complete.** Exact selected-hand provisional/final grade and cap credit, a final-hand-only current-card zero warning, and a quiet reminder after two consecutive zero-requested Brief awards are implemented and verified in an isolated current-source candidate. Positive requested/cap-zero credit resets the derived count; incomplete history is unavailable; R100 suppresses proactive advice. No durable streak field or reward change. Normal catalog exposure and named canonical migration remain separate adoption gates. [Implementation, tests and source](../logs/2026-10-26-crown-feedback-v1.md).
 
 ## Contract presentation correction — 2026-10-24

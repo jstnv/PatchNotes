@@ -17,7 +17,7 @@ func _ready() -> void:
 	layer = 10
 	banner = PanelContainer.new()
 	banner.name = "SynergyBanner"
-	banner.theme = preload("res://resources/ui/workspace_theme.tres")
+	banner.theme = preload("res://resources/ui/onyx_theme.tres")
 	banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(banner)
 	banner.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
@@ -30,12 +30,13 @@ func _ready() -> void:
 	banner.add_child(content)
 	title_label = Label.new()
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_label.add_theme_color_override("font_color", Color("#f5bd59"))
+	title_label.add_theme_color_override("font_color", FolderUI.color(&"mint"))
+	title_label.theme_type_variation=&"HeadingLabel"
 	title_label.add_theme_font_size_override("font_size", 22)
 	content.add_child(title_label)
 	detail_label = Label.new()
 	detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	detail_label.add_theme_color_override("font_color", Color("#79d4da"))
+	detail_label.add_theme_color_override("font_color", FolderUI.color(&"mint"))
 	content.add_child(detail_label)
 	timer = Timer.new()
 	timer.one_shot = true

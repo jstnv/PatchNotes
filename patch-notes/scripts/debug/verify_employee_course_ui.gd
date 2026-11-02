@@ -49,15 +49,17 @@ func _verify() -> void:
 		await key(manager);await create_timer(0.3).timeout;await key(panel.confirmation.get_ok_button())
 		test(run.get_employees().employees.size()==2 and run.get_cash_cents()==before[0]-20000,"Scrollable Manager hire is keyboard reachable")
 		await click(panel.tabs[&"courses"])
-		var course: Button=panel.content.find_child("Enroll_production_planning",true,false)
+		panel.course_grid.inspect(&"production_planning");await frames()
+		var course: Button=panel.course_grid.action_button
 		test(course!=null and not course.disabled,"Production first course is available")
 		if course!=null:
-			panel.content.get_parent().ensure_control_visible(course);await frames();await key(course);await create_timer(0.3).timeout
+			await frames();await key(course);await create_timer(0.3).timeout
 			await shot("course-confirm-%d"%dimensions.x);await key(panel.confirmation.get_ok_button())
-		course=panel.content.find_child("Enroll_manager_1",true,false)
+		panel.course_grid.inspect(&"manager_1");await frames()
+		course=panel.course_grid.action_button
 		test(course!=null and not course.disabled,"Manager first course is available")
 		if course!=null:
-			panel.content.get_parent().ensure_control_visible(course);await frames();await key(course);await create_timer(0.3).timeout;await key(panel.confirmation.get_ok_button())
+			await frames();await key(course);await create_timer(0.3).timeout;await key(panel.confirmation.get_ok_button())
 		test(run.get_cash_cents()==before[0]-50000 and run.get_completed_run_cycles()==before[1],"Two hires and two courses charge exact $500 with no cycles")
 		test(EmployeeRoster.Career.level(run._employees)==0 and not EmployeeRoster.Career.alignment_available(run._employees),"Enrollment gives no immediate range or alignment buff")
 		await click(panel.tabs[&"progress"]);await shot("progress-%d"%dimensions.x)

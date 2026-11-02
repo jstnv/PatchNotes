@@ -133,17 +133,6 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 	if kind==&"select_engine":
 		if payload.size()!=1 or (not payload.get("engine_id") is String and not payload.get("engine_id") is StringName) or not run.select_engine(StringName(payload.engine_id)):return reject("Engine selection rejected")
 		return {"ok":true,"events":[{"type":"engine_selected","engine_id":run.get_selected_engine_id()}]}
-	if kind==&"stage_engine_features":
-		if payload.size()!=1 or not payload.get("feature_ids") is Array:return reject("Missing staging IDs")
-		var ids: Array[StringName]=[]
-		for id: Variant in payload.feature_ids:
-			if not id is String and not id is StringName:return reject("Invalid staging ID")
-			ids.append(StringName(id))
-		if not run.stage_engine_features(ids):return reject("Engine staging rejected")
-		return {"ok":true,"events":[{"type":"engine_features_staged","feature_ids":ids}]}
-	if kind==&"commit_engine_configuration":
-		if payload.size()!=2 or not payload.get("quote") is Dictionary or not payload.get("respec") is bool or not run.commit_engine_configuration(payload.quote,payload.respec):return reject("Engine configuration rejected")
-		return {"ok":true,"events":[{"type":"engine_configuration_committed","engine_id":payload.quote.engine_id},{"type":"productive_cycle"}]}
 	if kind in [&"admit_research",&"research"]:
 		if payload.size() != 1 or not payload.get("quote") is Dictionary: return reject("Missing research quote")
 		var ok := run.admit_feature_research(payload.quote) if kind == &"admit_research" else run.research_feature(payload.quote)
@@ -172,7 +161,7 @@ func observation() -> Dictionary:
 		for id in ids:
 			var quote := run.get_feature_research_quote(id)
 			if not quote.is_empty(): quotes.append(quote)
-	return {"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"engine_available_features":FeatureStoreCatalog.future_supply(run.get_owned_feature_ids(),run._feature_offers),"engine_configuration":run.get_engine_configuration_quote(),"engine_features":run.get_engine_feature_state(),"selected_engine_id":run.get_selected_engine_id(),"owned_features":run.get_owned_feature_ids(),"research_queue":run.get_feature_research_queue(),"research_quotes":quotes,"releases":releases,"studio_actions":StudioActions.observation(run),"publisher_relationships":run.get_publisher_relationships(),"commission_quote":commission_quote,"support_quote":support_quote,"support_history":run.get_support_history(),"commission_deals":run.get_commission_deals(),"contract":{} if contract == null else contract.observation(),"development":{} if in_studio or contract != null else development.observation()}
+	return {"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"engine_available_features":FeatureStoreCatalog.future_supply(run.get_owned_feature_ids(),run._feature_offers),"engine_features":run.get_engine_feature_state(),"selected_engine_id":run.get_selected_engine_id(),"owned_features":run.get_owned_feature_ids(),"research_queue":run.get_feature_research_queue(),"research_quotes":quotes,"releases":releases,"studio_actions":StudioActions.observation(run),"publisher_relationships":run.get_publisher_relationships(),"commission_quote":commission_quote,"support_quote":support_quote,"support_history":run.get_support_history(),"commission_deals":run.get_commission_deals(),"contract":{} if contract == null else contract.observation(),"development":{} if in_studio or contract != null else development.observation()}
 
 func quote_bank(principal_cents: Variant,months: Variant) -> Dictionary:
 	return run.get_bank_quote(principal_cents,months) if run != null else {}

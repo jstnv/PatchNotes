@@ -14,23 +14,30 @@ var _companion: PanelContainer
 var _contents: VBoxContainer
 var _heading: Label
 var _disabled: Dictionary={}
+var overview: Control
 
 func _init() -> void:
 	name="StudioHub"
+	theme=preload("res://resources/ui/onyx_theme.tres")
 	set_meta("folder_navigation_managed",true)
 	_root_panel=FolderUI.surface(self)
-	_root_choices=VBoxContainer.new();_root_choices.add_theme_constant_override("separation",12);_root_panel.add_child(_root_choices)
-	FolderUI.label(_root_choices,"Studio",&"HeadingLabel")
+	_root_choices=VBoxContainer.new();_root_choices.add_theme_constant_override("separation",14);_root_panel.add_child(_root_choices)
+	FolderUI.label(_root_choices,"STUDIO",&"HeadingLabel").add_theme_font_size_override("font_size",38)
 	_clip=Control.new();_clip.name="CompanionClip";_clip.clip_contents=true;add_child(_clip)
+	overview=preload("res://scripts/ui/studio_overview.gd").new();overview.name="StudioOverview";_clip.add_child(overview)
 	_companion=FolderUI.surface(_clip);_companion.name="CompanionPanel";_companion.add_to_group(PauseMenu.CANCEL_OWNER_GROUP);_companion.hide()
 	_contents=VBoxContainer.new();_contents.add_theme_constant_override("separation",14);_companion.add_child(_contents)
-	_heading=FolderUI.label(_contents,"",&"SectionHeading")
+	_heading=FolderUI.label(_contents,"",&"HeadingLabel")
 	resized.connect(_fit)
 	_root_panel.minimum_size_changed.connect(_queue_fit)
 	_companion.minimum_size_changed.connect(_queue_fit)
 
 func add_group(id: StringName,title: String) -> VBoxContainer:
+	if id==&"production":
+		var divider:=HSeparator.new();divider.custom_minimum_size.y=26;_root_choices.add_child(divider)
+		var line:=StyleBoxLine.new();line.color=Color("6F42FF");line.thickness=2;divider.add_theme_stylebox_override("separator",line)
 	var button:=FolderUI.button(_root_choices,title,select_group.bind(id,null));button.custom_minimum_size=Vector2(260,54);button.toggle_mode=true;root_buttons[id]=button
+	button.theme_type_variation=&"ArcadePrimary" if id==&"production" else &"HubButton"
 	var choices:=VBoxContainer.new();choices.name=String(id).capitalize()+"Choices";choices.add_theme_constant_override("separation",10);_contents.add_child(choices);choices.hide();groups[id]=choices
 	return choices
 
@@ -38,6 +45,7 @@ func select_group(id: StringName,focus: Control=null) -> void:
 	if not groups.has(id):return
 	requested=id
 	for key: StringName in root_buttons:root_buttons[key].set_pressed_no_signal(key==id)
+	_style_roots()
 	selection_changed.emit(id)
 	if not transitioning and selected==id:
 		if is_instance_valid(focus) and focus.is_visible_in_tree():focus.grab_focus()
@@ -74,12 +82,19 @@ func _restore_choices() -> void:
 
 func _fit() -> void:
 	if not is_inside_tree():return
-	var root_height:=_root_panel.get_combined_minimum_size().y
-	_root_panel.position=Vector2(0,maxf(0,(size.y-root_height)/2));_root_panel.size=Vector2(292,root_height)
-	var width:=maxf(0,minf(470,size.x-310));var height:=minf(size.y,maxf(100,_companion.get_combined_minimum_size().y))
-	_clip.position=Vector2(308,maxf(0,(size.y-height)/2));_clip.size=Vector2(width,height)
+	var root_width:=maxf(330,_root_panel.get_combined_minimum_size().x)
+	_root_panel.position=Vector2.ZERO;_root_panel.size=Vector2(root_width,size.y)
+	_clip.position=Vector2(root_width+24,0);_clip.size=Vector2(maxf(0,size.x-root_width-24),size.y)
 	_companion.size=_clip.size
+	overview.position=Vector2.ZERO;overview.size=_clip.size
 	if not transitioning:_companion.position=Vector2.ZERO
+
+func _process(_delta: float) -> void:
+	overview.visible=requested.is_empty() and selected.is_empty() and not transitioning
+
+func _style_roots() -> void:
+	for key: StringName in root_buttons:
+		root_buttons[key].theme_type_variation=&"ArcadePrimary" if key==&"production" else &"SelectedButton" if key==requested else &"HubButton"
 
 func settle_motion() -> void:
 	for _step in range(4):
@@ -96,6 +111,7 @@ func close_group() -> void:
 		groups[selected].hide();selected=&"";_companion.hide();transitioning=false;_restore_choices()
 		if not requested.is_empty():_advance())
 	for button: Button in root_buttons.values():button.set_pressed_no_signal(false)
+	_style_roots()
 
 func _queue_fit() -> void:
 	if not is_inside_tree():return

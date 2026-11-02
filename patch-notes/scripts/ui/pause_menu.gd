@@ -33,7 +33,7 @@ func _ready() -> void:
 	panel = Control.new()
 	panel.name = "PauseOverlay"
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	panel.theme = preload("res://resources/ui/workspace_theme.tres")
+	panel.theme = preload("res://resources/ui/onyx_theme.tres")
 	add_child(panel)
 	var dim := ColorRect.new()
 	dim.color = Color(0.015, 0.01, 0.02, 0.8)
@@ -55,6 +55,7 @@ func _ready() -> void:
 	margin.add_child(box)
 	title = Label.new()
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.theme_type_variation=&"HeadingLabel"
 	title.add_theme_font_size_override("font_size", 28)
 	box.add_child(title)
 	message = Label.new()

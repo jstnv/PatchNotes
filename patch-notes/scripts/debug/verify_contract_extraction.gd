@@ -57,6 +57,17 @@ func compare_all(runs: Array,states: Array,views: Array,engine: RefCounted,signa
 	var expected := state_of(runs[0],states[0],views[0].get_candidate_cards(),signals[0])
 	var current := state_of(runs[1],states[1],views[1].get_candidate_cards(),signals[1])
 	var headless := state_of(runs[2],states[2],engine.cards,signals[2])
+	# Only adapt the old oracle's Contract income label in this detached copy.
+	# Current traces, amounts, other receipts, state and RNG remain unmodified.
+	var offer_id:=str(states[0].get_offer_id())
+	var payout_cycles: Dictionary={}
+	for row: Dictionary in expected[0]._studio_finance.actions:
+		if row.source_id==offer_id and row.kind=="publisher_receipt" and row.productive:
+			payout_cycles[str(row.cycle.integer)]=true
+			row.kind="contract_receipt"
+	for row: Dictionary in expected[0]._studio_finance.transactions:
+		if row.source_id==offer_id and row.kind=="publisher_receipt" and payout_cycles.has(str(row.cycle.integer)):row.kind="contract_receipt"
+	expect(current==headless,"Current live/headless raw complete parity: "+label)
 	expect(expected == current and expected == headless,"Original/live/headless exact Run, Contract, pool, RNG and signals: "+label)
 	comparisons += 1
 	if expected != current or expected != headless:
@@ -75,7 +86,9 @@ func _run() -> void:
 				base = RunState.new()
 				base.initialize_cash(0)
 				base.create_studio_with_traits("SideStreet fixture",&"action",[])
+				expect(historical_contract_engine(base),"Explicit historical extraction engine preserves authored economy")
 				var project := PrimitivePredevelopment.prepare_project("Qualified",&"action",&"fantasy",base)
+				expect(project.set_engine_id(base.get_selected_engine_id(),base.get_selected_engine_capacity()),"Freeze historical extraction engine before scoring")
 				project.add_scope(project.get_required_scope())
 				_finish_project(project)
 				expect(base.register_release(project),"Constructed Scope-qualified SideStreet release")
@@ -86,7 +99,10 @@ func _run() -> void:
 			if publisher==&"sidestreet":expect(base.search_contracts(base.get_contract_search_quote(&"sidestreet",&"cash")),"Paid Search finds SideStreet comparison work")
 			base.refresh_redraws()
 			for id in RunRandom.STREAMS: base.random_streams.stream(id).seed = seed_value+RunRandom.STREAMS.find(id)
-			var dto := StudioCheckpoint.new().capture(base)
+			var adapter:=StudioCheckpoint.new()
+			var dto := adapter.capture(base)
+			expect(not dto.is_empty(),"Valid extraction input: "+adapter.error)
+			if dto.is_empty():continue
 			if seed_value == 51: campaign_case(dto,publisher)
 			var runs: Array = []
 			var states: Array = []

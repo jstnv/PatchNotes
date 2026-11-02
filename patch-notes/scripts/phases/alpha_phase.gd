@@ -53,6 +53,7 @@ var _syncing_priority_controls := false
 var _available_features: Array[CardData] = []
 var _pass_definitions: Array[CardData] = []
 var _budget_printed := 0
+var _budget_bonus_centi := 0
 var _budget_spent := 0
 var _candidate_cards: Array[CardData] = []
 var _selected_card_views: Array[CardView] = []
@@ -404,6 +405,7 @@ func _update_host_playtest_action() -> void:
 
 func _load_source_definitions() -> bool:
 	_budget_printed = 0
+	_budget_bonus_centi = 0
 	_budget_spent = 0
 	var card_database := get_node_or_null("/root/CardDatabase")
 	if card_database == null:
@@ -511,7 +513,7 @@ func _on_redraw_pressed() -> void:
 func _refresh_redraw_controls() -> void:
 	if not is_node_ready(): return
 	for view: CardView in %HandContainer.card_views():
-		view.set_shared_pass_budget(_capture_alpha_command().pass_budget_available(), posmod(_budget_printed, 8))
+		view.set_shared_pass_budget(_capture_alpha_command().pass_budget_available(), preload("res://scripts/simulation/pass_budget.gd").effective_progress(_budget_printed,_budget_bonus_centi))
 	%RedrawButton.text = "Redraw (%d/4)" % (_run_state.get_available_redraws() if _run_state != null else 0)
 	%RedrawButton.disabled = not _can_redraw_selection()
 	if not %RedrawButton.disabled:
@@ -609,11 +611,13 @@ func _can_play_selected_instances() -> bool:
 	if _phase_state != PhaseState.ACTIVE_DEVELOPMENT or _project_state == null or not _project_state.can_advance_cycle() or (_run_state != null and not _run_state.can_advance_calendar_cycle()) or (_selected_card_views.is_empty() or _selected_card_views.size() > SELECTED_HAND_SIZE):
 		return false
 	var seen: Dictionary[int, bool] = {}
+	var selected_scope := 0
 	for card_view: CardView in _selected_card_views:
 		if not _is_current_candidate_view(card_view) or seen.has(card_view.get_instance_id()):
 			return false
 		seen[card_view.get_instance_id()] = true
-	return true
+		selected_scope += card_view.card_data.scope
+	return _project_state.has_scope_capacity_for(selected_scope)
 
 
 func _on_play_alpha_hand_pressed() -> void:
@@ -628,6 +632,7 @@ func _on_play_alpha_hand_pressed() -> void:
 		return
 	_available_features.assign(resolver._available_features)
 	_budget_printed = resolver._budget_printed
+	_budget_bonus_centi = resolver._budget_bonus_centi
 	_budget_spent = resolver._budget_spent
 	_exhausted_feature_ids.assign(resolver._exhausted_feature_ids)
 	_pending_playtest_categories.assign(resolver._pending_playtest_categories)
@@ -865,6 +870,7 @@ func _finalize_with_run_rng() -> bool:
 func _capture_alpha_command() -> RefCounted:
 	var state := AlphaHandCommand.new()
 	state._budget_printed = _budget_printed
+	state._budget_bonus_centi = _budget_bonus_centi
 	state._budget_spent = _budget_spent
 	state._project_state = _project_state
 	state._run_state = _run_state
@@ -906,6 +912,7 @@ func _redraw_slots() -> Array[int]:
 
 func _sync_command_tokens(state: RefCounted) -> void:
 	_budget_printed = state._budget_printed
+	_budget_bonus_centi = state._budget_bonus_centi
 	_budget_spent = state._budget_spent
 	_command_injected_ids.assign(state.injected_candidate_ids)
 	_command_revision=state.revision

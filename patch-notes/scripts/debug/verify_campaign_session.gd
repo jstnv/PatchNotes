@@ -88,20 +88,10 @@ func _initialize() -> void:
 		var checkpoint := StudioCheckpoint.new()
 		expect(not checkpoint.capture(session.run).is_empty(),"Completed route remains representable by existing Studio checkpoint")
 		if game_index == 0:
-			# Exactly one admission and one completion. Quote is recorded, never
-			# silently regenerated while executing a submitted research command.
-			var quote: Dictionary = session.run.get_feature_research_quote(&"colored_text")
-			expect(quote.get("can_admit",false),"Store node legal after first project")
-			if quote.get("can_admit",false):
-				act(session,&"admit_research",{"quote":quote})
-				act(session,&"admit_research",{"quote":quote},false)
-				act(session,&"research",{"quote":quote},false)
-				act(session,&"research",{"quote":session.run.get_feature_research_quote(&"colored_text")})
-				act(session,&"stage_engine_features",{"feature_ids":[&"colored_text"]})
-				act(session,&"commit_engine_configuration",{"quote":session.run.get_engine_configuration_quote(),"respec":false})
-				expect(session.run.owns_feature(&"colored_text") and &"colored_text" not in session.development.project.get_feature_supply_ids(),"Research ownership does not rewrite released supply")
-		if game_index == 1:
-			expect(&"colored_text" in session.development.project.get_feature_supply_ids(),"Following project freezes completed research into supply")
+			# The fresh campaign uses a fixed Public engine. Proprietary Feature
+			# admission/queue/replay is covered by verify_engine_feature_workflow.
+			act(session,&"stage_engine_features",{"feature_ids":[&"colored_text"]},false)
+			act(session,&"commit_engine_configuration",{"quote":{},"respec":false},false)
 		# Buy a campaign only if the current real release-age window allows it.
 		for id in session.run.get_released_game_ids():
 			if session.run.get_post_launch_campaign_offer(id).get("can_purchase",false):

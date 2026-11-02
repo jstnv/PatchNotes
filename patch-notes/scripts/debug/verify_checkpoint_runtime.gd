@@ -58,7 +58,9 @@ func _run() -> void:
 	expect(not coordinator.failure.is_empty() and run.get_cash_cents()==cash+123,"Save failure preserves committed memory")
 	expect(not run.add_cash_cents(7),"Failed save blocks further mutations")
 	expect(not game._begin_next_project(game._active_phase,"Blocked",&"action",&"fantasy"),"Failed save blocks departure")
-	expect(coordinator.store.inspect().payload==before,"Interrupted publication preserves previous generation")
+	var interrupted:=coordinator.store.inspect()
+	if interrupted.get("status")!=&"valid":print("CHECKPOINT_INSPECT_DIAGNOSTIC ",interrupted)
+	expect(interrupted.get("status")==&"valid" and interrupted.get("payload",{})==before,"Interrupted publication preserves previous generation")
 	coordinator.store.fault = &""
 	expect(coordinator.retry(),"Retry saves without replaying action")
 	expect(run.get_cash_cents()==cash+123 and run.checkpoint_mutations_allowed,"Retry restores action access without extra cash")

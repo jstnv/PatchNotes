@@ -1,0 +1,31 @@
+--- intake/feature_store.gd
++++ patch-notes\scripts\ui\feature_store.gd
+@@ -151,8 +151,8 @@
+ 	_implementation_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	_implementation_controls.add_theme_constant_override("separation", 6)
+ 	_map_host.add_child(_implementation_controls)
+-	# Keep the completion action visible without restoring the queue dropdown.
+-	# Selected Feature details also retain admission and completion actions.
++	# Queue and completion use the former Research row, with engine-scoped
++	# implementation terms. Selected Feature details keep their actions too.
+ 	var actions := HBoxContainer.new()
+ 	actions.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	actions.add_theme_constant_override("separation", 8)
+@@ -164,7 +164,7 @@
+ 	_research_list.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+ 	_research_list.custom_minimum_size.x = 220
+ 	_research_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+-	_research_list.hide()
++	_research_list.show()
+ 	_research_list.item_selected.connect(func(index: int):
+ 		var id: Variant = _research_list.get_item_metadata(index)
+ 		if id is StringName: _select_node(id))
+@@ -264,7 +264,7 @@
+ 	_research_list.clear()
+ 	_research_quote = {}
+ 	var pending := _run.get_feature_research_queue()
+-	_research_list.hide()
++	_research_list.visible = not starter_gate
+ 	_research_button.visible = not starter_gate
+ 	for entry: Dictionary in pending:
+ 		if entry.engine_id!=_engine_id:continue

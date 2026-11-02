@@ -85,7 +85,7 @@ func _ready() -> void:
 	genre_input.item_selected.connect(func(_index: int): _refresh_genre_targets())
 	_refresh_genre_targets()
 	_add_label(priorities, "Initial Design priorities", 20)
-	_add_label(priorities, "Priorities weight future draws, not scores.\nAllocate 100 total, 10-75 each in steps of 5.", 14)
+	_add_label(priorities, "Priorities weight future draws, not scores.\nAllocate 100 total in steps of 5, within the ranges shown.", 14)
 	priorities.tooltip_text = "Graphics: visuals. Sound: audio. Tech: systems. Design: gameplay. Core scores measure quality; Scope measures how much game you build."
 	var priority_body := HBoxContainer.new()
 	priority_body.add_theme_constant_override("separation", 16)
@@ -147,6 +147,7 @@ func _add_label(parent: Node, text: String, font_size: int) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.theme_type_variation=&"HeadingLabel" if font_size>=20 else &"Label"
 	label.add_theme_font_size_override("font_size", font_size)
 	parent.add_child(label)
 	return label
@@ -235,19 +236,19 @@ func _review_support() -> void:
 		error_label.text = "Support unavailable. Need Investment 15, a released game and a resolved prior support assessment with a new qualifying success."
 		return
 	if _support_confirmation == null:
-		_support_confirmation = ConfirmationDialog.new()
+		_support_confirmation = preload("res://scripts/ui/quit_confirmation.gd").new()
 		_support_confirmation.name = "SupportConfirmation"
 		_support_confirmation.title = "Confirm SideStreet support"
 		_support_confirmation.ok_button_text = "Accept and begin (1 cycle)"
 		_support_confirmation.cancel_button_text = "Keep editing"
-		_support_confirmation.theme = preload("res://resources/ui/workspace_theme.tres")
+		_support_confirmation.theme = preload("res://resources/ui/onyx_theme.tres")
 		add_child(_support_confirmation)
 		_support_terms = RichTextLabel.new()
 		_support_terms.name = "SupportTerms"
 		_support_terms.custom_minimum_size = Vector2(0,350)
 		_support_terms.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		_support_terms.add_theme_font_size_override("normal_font_size",16)
-		_support_confirmation.add_child(_support_terms)
+		_support_confirmation.add_content(_support_terms)
 		_support_confirmation.canceled.connect(func(): _support_quote = {})
 		_support_confirmation.confirmed.connect(func():
 			if market_run == null or _support_quote.is_empty() or _support_quote != market_run.get_support_quote(name_input.text,genre_input.get_selected_metadata(),theme_input.get_selected_metadata()):
@@ -266,12 +267,12 @@ func _review_commission() -> void:
 		error_label.text = "Commission unavailable. Need SideStreet Reputation 20, a released game, a found commission invitation and no active work or commission."
 		return
 	if _commission_confirmation == null:
-		_commission_confirmation = ConfirmationDialog.new()
+		_commission_confirmation = preload("res://scripts/ui/quit_confirmation.gd").new()
 		_commission_confirmation.name = "CommissionConfirmation"
 		_commission_confirmation.title = "Confirm SideStreet commission"
 		_commission_confirmation.ok_button_text = "Accept and begin (1 cycle)"
 		_commission_confirmation.cancel_button_text = "Keep editing"
-		_commission_confirmation.theme = preload("res://resources/ui/workspace_theme.tres")
+		_commission_confirmation.theme = preload("res://resources/ui/onyx_theme.tres")
 		add_child(_commission_confirmation)
 		# A scrolling body bounds the Window minimum at the supported small size.
 		# A wrapped dialog_text Label can otherwise force its buttons off screen.
@@ -281,7 +282,7 @@ func _review_commission() -> void:
 		_commission_terms.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		_commission_terms.add_theme_font_size_override("normal_font_size",16)
 		_commission_terms.focus_mode = Control.FOCUS_ALL
-		_commission_confirmation.add_child(_commission_terms)
+		_commission_confirmation.add_content(_commission_terms)
 		_commission_confirmation.canceled.connect(func(): _commission_quote = {})
 		_commission_confirmation.confirmed.connect(_begin_commission)
 	var quote := _commission_quote

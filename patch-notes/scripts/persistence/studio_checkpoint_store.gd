@@ -9,9 +9,43 @@ var _writer: TCPServer
 var _scan_error := ""
 var fault := &"" # Injected by focused verification; never loaded from a save.
 const PARSED_CACHE_LIMIT := 3
-const PARSED_CACHE_BYTES := 8 * 1024 * 1024
+# Current, backup and newly written generations must coexist during publication.
+# A real eight-rival ceremony generation costs about7.8MB including its DTO;
+# the previous8MB bound evicted every other proof and repeatedly reparsed it.
+const PARSED_CACHE_BYTES := 32 * 1024 * 1024
 var _parsed_envelopes: Array[Dictionary] = []
 var _parsed_bytes := 0
+const VALIDATED_GENERATION_LIMIT:=3
+const VALIDATED_GENERATION_BYTES:=32*1024*1024
+var _validated_generations: Array[Dictionary]=[]
+var _validated_bytes:=0
+
+func _validation_context() -> PackedByteArray:
+	if not validator.is_valid():return []
+	var target: Object=validator.get_object()
+	if target==null or target.get_script()!=preload("res://scripts/persistence/checkpoint_write_validator.gd"):return []
+	# Exact Callable equality includes bind/unbind wrappers; the reported bound
+	# count alone does not expose every unbound transformation.
+	if validator!=Callable(target,&"_validate_payload"):return []
+	var checked: PackedByteArray=target.store_proof_context()
+	if checked.is_empty():return []
+	var catalog_script: Script=target.rival_catalog.get_script()
+	return var_to_bytes([checked,_parse_context(CheckpointCodec.new()),catalog_script.get_instance_id(),catalog_script.get_source_code().sha256_text()])
+
+func _remember_validated(source: String,payload: Dictionary,context: PackedByteArray) -> void:
+	if context.is_empty():return
+	for item: Dictionary in _validated_generations:
+		if item.source==source and item.context==context:return
+	var native:=var_to_bytes(payload)
+	# The strict parser or audited serializer already proved ordinary wire data.
+	# An overridden/unknown decoder must earn that predicate before retention.
+	if not _known_plain_native(source,native) and _wire_nodes(payload)<0:return
+	var cost:=source.to_utf8_buffer().size()+native.size()+context.size()
+	if cost>VALIDATED_GENERATION_BYTES:return
+	_validated_generations.append({"source":source,"native":native,"context":context,"cost":cost})
+	_validated_bytes+=cost
+	while _validated_generations.size()>VALIDATED_GENERATION_LIMIT or _validated_bytes>VALIDATED_GENERATION_BYTES:
+		_validated_bytes-=int(_validated_generations.pop_front().cost)
 
 func _init(path: String = "user://saves/studio", validate_payload: Callable = Callable()) -> void:
 	directory = ProjectSettings.globalize_path(path).simplify_path()
@@ -66,11 +100,23 @@ func _read_path(path: String, sequence: int, validation_scope: Variant = null) -
 	# this local proof table; match the full envelope AND exact DTO field types.
 	# A later inspect cannot inherit a proof or a changed validator. JSON erases
 	# StringName/container types, so plain Dictionary equality is insufficient.
-	var proven: bool = validation_scope != null and validation_scope.has(source) and _same_typed_payload(validation_scope[source],payload)
+	var native:=var_to_bytes(payload)
+	var proven: bool = validation_scope != null and validation_scope.has(source) and _proof_matches(validation_scope[source],payload,native)
+	var context: PackedByteArray=[]
+	if not proven:
+		context=_validation_context()
+		if not context.is_empty():
+			for item: Dictionary in _validated_generations:
+				if item.source==source and item.context==context and _proof_matches(_scope_proof(item.native) if item.get("native") is PackedByteArray else item.payload,payload,native):proven=true;break
 	var reason: String = "" if proven else validator.call(payload)
 	if not reason.is_empty(): return {"status":&"incompatible" if reason.begins_with("INCOMPATIBLE") else &"invalid","reason":reason,"path":path}
+	# Generic successful callbacks may transform the returned DTO. Scope proofs
+	# must retain that post-callback value, exactly like the original deep copy.
+	if not proven:native=var_to_bytes(payload)
+	if context.is_empty():context=_validation_context()
+	_remember_validated(source,payload,context)
 	if validation_scope != null and (validation_scope.size() < 2 or validation_scope.has(source)):
-		validation_scope[source] = payload.duplicate(true)
+		validation_scope[source] = _scope_proof(native) if _known_plain_native(source,native) else payload.duplicate(true)
 	return {"status":&"valid","payload":payload,"sequence":sequence,"path":path}
 
 static func _same_typed_payload(a: Variant, b: Variant) -> bool:
@@ -89,31 +135,73 @@ static func _same_typed_payload(a: Variant, b: Variant) -> bool:
 
 func _parse_context(codec: CheckpointCodec) -> Array:
 	var parser: Script=codec.get_script()
-	return [parser.get_instance_id(),parser.get_source_code().sha256_text(),get_script().get_source_code().sha256_text()]
+	var owner: Script=get_script()
+	return [parser.get_instance_id(),parser.get_source_code().sha256_text(),owner.get_instance_id(),owner.get_source_code().sha256_text()]
 
-func _remember_parsed(source: String, payload: Dictionary, context: Array) -> void:
-	var cost:=source.to_utf8_buffer().size()+var_to_bytes(payload).size()
-	if cost>PARSED_CACHE_BYTES: return
+func _remember_parsed(source: String,payload: Dictionary,context: Array) -> void:
+	# Generic additions retain the original representation/fallback if they have
+	# not proved the exact ordinary wire subset. Never decode object bytes.
+	if _wire_nodes(payload)>=0:
+		_remember_parsed_native(source,var_to_bytes(payload),context)
+		return
+	_remember_parsed_fallback(source,payload,context)
+
+func _remember_parsed_fallback(source: String,payload: Dictionary,context: Array) -> void:
+	var cost:=source.to_utf8_buffer().size()+var_to_bytes(payload).size()+var_to_bytes(context).size()
+	if cost>PARSED_CACHE_BYTES:return
 	for item: Dictionary in _parsed_envelopes:
-		if item.source==source and item.context==context: return
+		if item.source==source and item.context==context:return
 	_parsed_envelopes.append({"source":source,"payload":payload.duplicate(true),"context":context,"cost":cost})
 	_parsed_bytes+=cost
-	# FIFO matches the monotonically published generations, including the oldest
-	# generation being pruned. Reads do not promote deleted history into the cache.
+	_trim_parsed()
+
+func _remember_parsed_native(source: String,native: PackedByteArray,context: Array) -> void:
+	# Only code-owned positive strict parsing or fresh audited serialization calls
+	# this helper. Native data is produced by var_to_bytes, never read from disk.
+	var cost:=source.to_utf8_buffer().size()+native.size()+var_to_bytes(context).size()
+	if cost>PARSED_CACHE_BYTES:return
+	for item: Dictionary in _parsed_envelopes:
+		if item.source==source and item.context==context:return
+	_parsed_envelopes.append({"source":source,"native":native,"context":context,"cost":cost})
+	_parsed_bytes+=cost
+	_trim_parsed()
+
+func _trim_parsed() -> void:
 	while _parsed_envelopes.size()>PARSED_CACHE_LIMIT or _parsed_bytes>PARSED_CACHE_BYTES:
 		_parsed_bytes-=int(_parsed_envelopes.pop_front().cost)
 
-func _open_envelope(source: String, codec: CheckpointCodec) -> Dictionary:
+func _known_plain_native(source: String,native: PackedByteArray) -> bool:
+	var context:=_parse_context(CheckpointCodec.new())
+	for item: Dictionary in _parsed_envelopes:
+		if item.source==source and item.context==context and item.get("native") is PackedByteArray and item.native==native:return true
+	return false
+
+func _scope_proof(native: PackedByteArray) -> Dictionary:
+	# A disk DTO cannot contain this live owner witness. Only this publication
+	# scope constructs it from a positively proven plain-wire value.
+	return {"owner":self,"native":native}
+
+func _proof_matches(proof: Variant,payload: Variant,native: PackedByteArray=[]) -> bool:
+	if proof is Dictionary and proof.size()==2 and proof.get("owner") is RefCounted and proof.owner==self and proof.get("native") is PackedByteArray:
+		if native.is_empty():native=var_to_bytes(payload)
+		if proof.native==native:return true
+		# Different insertion order must keep the original recursive semantics.
+		# These bytes are private var_to_bytes output for proven plain data.
+		return _same_typed_payload(bytes_to_var(proof.native),payload)
+	return _same_typed_payload(proof,payload)
+
+func _open_envelope(source: String,codec: CheckpointCodec) -> Dictionary:
 	var context:=_parse_context(codec)
 	for item: Dictionary in _parsed_envelopes:
-		if item.source==source and item.context==context: return item.payload.duplicate(true)
+		if item.source==source and item.context==context:
+			if item.get("native") is PackedByteArray:return bytes_to_var(item.native)
+			return item.payload.duplicate(true)
 	var payload:=codec.open_envelope(source)
-	if codec.error.is_empty(): _remember_parsed(source,payload,context)
+	if codec.error.is_empty():
+		if codec.get_script()==preload("res://scripts/persistence/checkpoint_codec.gd") and _wire_nodes(payload)>=0:_remember_parsed_native(source,var_to_bytes(payload),context)
+		else:_remember_parsed_fallback(source,payload,context)
 	return payload
 
-## The trusted serializer is also a parse proof, but only for this exact strict
-## JSON subset, UTF-8, depth and node budget. Unsupported types take the normal
-## disk parser path; this never relaxes a validator or caches its rejection.
 static func _wire_nodes(value: Variant, depth: int = 0) -> int:
 	if depth>CheckpointCodec.MAX_DEPTH: return -1
 	if typeof(value) in [TYPE_NIL,TYPE_BOOL]: return 1
@@ -206,9 +294,15 @@ func _publish(payload: Dictionary, explicit_recovery: bool) -> Dictionary:
 	var codec := CheckpointCodec.new()
 	var source := codec.envelope(candidate)
 	if not codec.error.is_empty(): return {"status":&"invalid","reason":codec.error}
+	var audited_native:=PackedByteArray()
 	if _wire_nodes(candidate)>=0:
-		_remember_parsed(source,_wire_copy(candidate),_parse_context(codec))
-	validation_scope[source] = candidate.duplicate(true)
+		# Native JSON touches only this just-generated envelope after the complete
+		# wire/UTF8/depth/node predicate. Cold/untrusted files keep the strict parser.
+		var outer: Dictionary=JSON.parse_string(source)
+		var plain: Dictionary=JSON.parse_string(outer.payload_utf8)
+		audited_native=var_to_bytes(plain)
+		_remember_parsed_native(source,audited_native,_parse_context(codec))
+	validation_scope[source] = _scope_proof(audited_native) if not audited_native.is_empty() else candidate.duplicate(true)
 	if fault == &"before_write": return {"status":&"io_error","reason":"Injected before write"}
 	if DirAccess.make_dir_recursive_absolute(directory) != OK: return {"status":&"io_error","reason":"Create save directory"}
 	var temporary := directory.path_join("checkpoint.%d.%s.tmp" % [sequence,Crypto.new().generate_random_bytes(12).hex_encode()])

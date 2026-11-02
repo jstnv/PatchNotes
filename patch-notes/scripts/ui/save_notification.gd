@@ -11,6 +11,7 @@ var _animation: Tween
 var _last_publication := 0
 var _kind: StringName = &"idle"
 var _failure := ""
+var _success_context := true
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -47,10 +48,20 @@ func update_status(saving: bool, failure: String, publications: int) -> void:
 		_last_publication = publications
 		_kind = &"saved"
 		_failure = ""
-		_present(true)
+		if _success_context: _present(true)
+		else: _dismiss()
 	elif _kind in [&"saving", &"failure"]:
 		_kind = &"idle"
 		_dismiss()
+
+func set_success_context(value: bool) -> void:
+	_success_context = value
+	# This receipt describes the Studio checkpoint, not unsaved development.
+	# Keep saving/failure feedback available; only the completed toast is scoped.
+	if not value and _kind == &"saved":
+		if _animation != null and _animation.is_valid(): _animation.kill()
+		modulate.a = 0.0
+		hide()
 
 func _present(transient: bool) -> void:
 	if _animation != null and _animation.is_valid(): _animation.kill()

@@ -4,14 +4,14 @@ extends RefCounted
 
 const PITCH := 212.0
 const CELLS := {
-	&"4_color_palette":Vector2i(-1,-1), &"text":Vector2i(-1,0),
-	&"sprites":Vector2i(-2,-1), &"animated_sprites":Vector2i(-3,-1),
-	&"colored_text":Vector2i(-2,0), &"8_color_palette":Vector2i(-2,-2),
-	&"scrolling":Vector2i(-2,1), &"multi_directional_scrolling":Vector2i(-4,-1),
-	&"8_bit_sound":Vector2i(2,-1), &"16_bit_sound":Vector2i(3,-2),
-	&"main_theme":Vector2i(3,-1), &"recorded_sounds":Vector2i(3,0),
-	&"multiple_soundtracks":Vector2i(4,-1), &"instrumental_sounds":Vector2i(4,0),
-	&"dynamic_sequencing":Vector2i(5,-1),
+	&"4_color_palette":Vector2i(-4,-1), &"text":Vector2i(-4,0),
+	&"sprites":Vector2i(-5,-1), &"animated_sprites":Vector2i(-6,-1),
+	&"colored_text":Vector2i(-5,0), &"8_color_palette":Vector2i(-5,-2),
+	&"scrolling":Vector2i(-5,1), &"multi_directional_scrolling":Vector2i(-7,-1),
+	&"8_bit_sound":Vector2i(4,-1), &"16_bit_sound":Vector2i(5,-2),
+	&"main_theme":Vector2i(5,-1), &"recorded_sounds":Vector2i(5,0),
+	&"multiple_soundtracks":Vector2i(6,-1), &"instrumental_sounds":Vector2i(6,0),
+	&"dynamic_sequencing":Vector2i(7,-1),
 	&"menu_system":Vector2i(-1,-3), &"keyboard_and_mouse":Vector2i(0,-3),
 	&"controller":Vector2i(1,-3), &"save_files":Vector2i(-1,-4),
 	&"branching_nodes":Vector2i(-1,-5), &"split_screen":Vector2i(-2,-6),
@@ -33,6 +33,10 @@ const CELLS := {
 	&"character_skill_checks":Vector2i(6,8),
 }
 
+static func center_square() -> Rect2:
+	# Five empty cells on each axis, centered on the existing cell lattice.
+	return Rect2(Vector2(64,86)-Vector2.ONE*PITCH*2.5,Vector2.ONE*PITCH*5.0)
+
 static func cells(ids: Array) -> Dictionary:
 	if ids.size()!=CELLS.size(): return {"error":"Store grid coverage differs from catalog"}
 	var used := {}
@@ -48,7 +52,7 @@ static func cells(ids: Array) -> Dictionary:
 ## A half-cell corridor separates every 144x172 card/name footprint. Compute
 ## routes once when the map is built, never during drawing or Research refresh.
 ## One shared A* grid with fixed insertion order makes every path repeatable.
-static func routes(cells_by_id: Dictionary, footprints: Dictionary, edges: Array, origin: Vector2, headers: Array[Rect2]) -> Dictionary:
+static func routes(cells_by_id: Dictionary, footprints: Dictionary, edges: Array, origin: Vector2, headers: Array[Rect2], reserved: Rect2=Rect2()) -> Dictionary:
 	var low:=Vector2i(0,0)
 	var high:=Vector2i(0,0)
 	for cell: Vector2i in cells_by_id.values():
@@ -69,6 +73,7 @@ static func routes(cells_by_id: Dictionary, footprints: Dictionary, edges: Array
 		for y in range(grid.region.position.y,grid.region.end.y):
 			var cell:=Vector2i(x,y)
 			var point:=grid.get_point_position(cell)
+			if reserved.has_area() and reserved.has_point(point):grid.set_point_solid(cell,true)
 			for header: Rect2 in headers:
 				if header.grow(60).has_point(point): grid.set_point_solid(cell,true)
 	var result := {}

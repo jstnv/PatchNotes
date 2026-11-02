@@ -28,8 +28,6 @@ static func valid_config(config: Dictionary) -> bool:
 
 func choose(view: Dictionary) -> Dictionary:
 	if view.phase == &"studio":
-		var configuration: Dictionary=preload("res://scripts/simulation/decision_policy.gd").engine_configuration_choice(view)
-		if not configuration.is_empty():return configuration
 		return {"type":&"begin_development","payload":{"name":"%s %d" % [_config.name_prefix,view.releases.size()+1],"genre":_config.genre,"theme":_config.theme}}
 	if view.phase == &"contract": return {"type":&"unsupported_fixture_contract"}
 	var current: Dictionary = view.development

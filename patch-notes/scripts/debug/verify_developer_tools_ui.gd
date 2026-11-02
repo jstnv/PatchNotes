@@ -32,6 +32,12 @@ func _verify() -> void:
 			if game.checkpoints.debug_session and not tools._busy:break
 			await process_frame
 		test(game.checkpoints.debug_session and tools.sandbox.unlimited and tools.badge.is_visible_in_tree(),"Pointer activates unlimited cash and persistent unsaved badge")
+		test(tools.unlock.disabled and tools.unlock.tooltip_text.contains("owned"),"Public library exposes clear disabled Unlock eligibility")
+		await key(KEY_ESCAPE)
+		var created: Dictionary=game.run_state.create_proprietary_engine(game.run_state.get_proprietary_engine_creation_quote("Debug UI owned engine"))
+		test(created.get("ok",false) and game.run_state.select_engine(created.engine_id),"Current debug UI fixture pays for an owned engine")
+		await key(KEY_F8);await create_timer(0.3).timeout
+		test(not tools.unlock.disabled,"Selected proprietary library enables actual Unlock button")
 		await click(tools.unlock)
 		test(game.run_state.owns_feature(&"dynamic_sequencing") and game.run_state.owns_feature(&"player_level_editor"),"Unlock button grants current late Features")
 		if DisplayServer.get_name()!="headless":

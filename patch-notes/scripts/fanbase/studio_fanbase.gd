@@ -8,6 +8,50 @@ const CONVERSION_PERCENT := 8
 const LOSS_PERCENT_PER_REVIEW_POINT := 15
 const FAN_AWARENESS_LIMIT := 150
 const MAX_INT := 9223372036854775807
+## Calculation checkpoints, never validation verdicts. Every call still checks
+## its records/receipts and compares the entire rebuilt ledger with supplied data.
+const REPLAY_LIMIT:=18
+const REPLAY_BYTES:=32*1024*1024
+static var _replays: Array[Dictionary]=[]
+static var _replay_bytes:=0
+static var _replay_lock:=Mutex.new()
+
+static func _replay_context() -> Array:
+	var result: Array=[]
+	for script: Script in [load("res://scripts/fanbase/studio_fanbase.gd"),ReleasedGameSales,LaterMonthSalesCalculator,PrimitiveMonthOneSalesRevenueCalculator,PrimitiveUnitsSoldCalculator,ProjectState,Clock,AwardReceipts,ReleasedGameSales.Market]:
+		result.append([script.get_instance_id(),script.get_source_code().sha256_text()])
+	return result
+
+static func _replay_key(state: Dictionary,records: Dictionary,metadata: Dictionary,cutoff: int,starting: int,closed: Dictionary,close: int,context: Array) -> PackedByteArray:
+	var terms: Dictionary={}
+	var launches: Dictionary={}
+	for id: StringName in records:
+		if metadata[id].release_cycle>cutoff:continue
+		var record: Dictionary=records[id].duplicate(true)
+		for field: String in ["earned_cycles","total_earned_cycles","earned_units","entitlement_cents","settled_cents","exhausted","last_processed_run_cycle","last_settlement_run_cycle","campaign_count","organic_awareness_scaled","active_awareness_scaled","monthly_units"]:record.erase(field)
+		var end: int=mini(cutoff,close) if close>=0 and closed.has(id) else cutoff
+		var age: int=maxi(0,end-int(metadata[id].release_cycle))
+		if not record.later_enabled:age=mini(age,Clock.month_end(1,record.get("calendar",{})))
+		var month: int=Clock.action_month(age,true,record.get("calendar",{})) if age>0 else 0
+		for field: String in ["campaign_months","market_factors"]:
+			for key: Variant in record[field].keys():
+				if key>month:record[field].erase(key)
+		terms[id]=record;launches[id]=metadata[id]
+	var awards: Array=[]
+	for row: Dictionary in state.get("annual_awards",[]):
+		if row.cycle<=cutoff:awards.append(row)
+	return var_to_bytes([context,cutoff,starting,state.get("calendar",{}),closed,close,terms,launches,awards])
+
+static func _remember_replay(key: PackedByteArray,cycle: int,rebuilt: Dictionary,current: Dictionary) -> void:
+	var cost:=key.size()+var_to_bytes([rebuilt,current]).size()
+	if cost>REPLAY_BYTES:return
+	_replay_lock.lock()
+	for entry: Dictionary in _replays:
+		if entry.key==key:_replay_lock.unlock();return
+	_replays.append({"key":key,"cycle":cycle,"rebuilt":rebuilt.duplicate(true),"current":current.duplicate(true),"cost":cost})
+	_replay_bytes+=cost
+	while _replays.size()>REPLAY_LIMIT or _replay_bytes>REPLAY_BYTES:_replay_bytes-=int(_replays.pop_front().cost)
+	_replay_lock.unlock()
 
 static func create(starting_fans: int = 0, calendar: Dictionary = {}) -> Dictionary:
 	var state := {"fans": starting_fans, "releases": {}, "months": [], "last_cycle": 0}
@@ -155,9 +199,17 @@ static func validate(state: Dictionary, records: Dictionary, metadata: Dictionar
 		launches[meta.release_cycle].append(id)
 	var rebuilt := create(starting_fans,calendar)
 	var current := {}
+	var context:=_replay_context()
+	var first:=0
+	_replay_lock.lock();var candidates:=_replays.duplicate();_replay_lock.unlock()
+	for index in range(candidates.size()-1,-1,-1):
+		var entry: Dictionary=candidates[index]
+		if entry.cycle>cycle:continue
+		if _replay_key(state,records,metadata,entry.cycle,starting_fans,closed_historical_ids,historical_close_cycle,context)!=entry.key:continue
+		rebuilt=entry.rebuilt.duplicate(true);current=entry.current.duplicate(true);first=int(entry.cycle)+1;break
 	var awards := {}
 	for row: Dictionary in state.get("annual_awards",[]): awards[row.cycle]=row
-	for boundary in range(cycle + 1):
+	for boundary in range(first,cycle + 1):
 		if boundary > 0:
 			var next := {}
 			for id: StringName in current:
@@ -197,4 +249,6 @@ static func validate(state: Dictionary, records: Dictionary, metadata: Dictionar
 			rebuilt = register_release(rebuilt, initial, metadata[id].review.launch_fans)
 			if rebuilt.is_empty(): return false
 			current[id] = initial
-	return rebuilt == state
+	if rebuilt!=state:return false
+	_remember_replay(_replay_key(state,records,metadata,cycle,starting_fans,closed_historical_ids,historical_close_cycle,context),cycle,rebuilt,current)
+	return true

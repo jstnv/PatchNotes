@@ -62,12 +62,13 @@ func _initialize() -> void:
 	var start:=Time.get_ticks_usec()
 	observing=true
 	owner.entered_studio()
+	owner._request_save() # Explicitly exercise superseding an outstanding preparation.
 	var kickoff: float=(Time.get_ticks_usec()-start)/1000.0
 	kickoff_ms=kickoff
 	expect(kickoff<100.0,"96-cycle save kickoff does not block a gameplay frame")
 	expect(owner.is_saving(),"Saving remains distinct from durable Saved")
 	# Worker owns the first immutable snapshot; subsequent actions must be legal,
-	# detached and coalesced without superseding an in-flight publication.
+	# detached and coalesced by discarding preparation before publication starts.
 	expect(run.add_cash(1),"A legal newer Studio mutation can occur while saving")
 	expect(run.add_cash(1),"Another mutation coalesces behind one writer")
 	paused=true
@@ -86,8 +87,8 @@ func _initialize() -> void:
 	saved.erase("rival_world")
 	saved.sequence="1"
 	expect(saved==StudioCheckpoint.new().capture(run),"Newest detached player/RNG state is durable")
-	expect(current.sequence==2,"Intervening signals coalesce to exactly one follow-up generation")
-	expect(owner.completed_saves==2,"Only the two durable publications advance notification state")
+	expect(current.sequence==1,"Intervening signals discard obsolete preparation and publish only the newest generation")
+	expect(owner.completed_saves==1,"Only the durable publication advances notification state")
 	var prior_sequence: int=current.sequence
 	run.cash_changed.emit()
 	await process_frame

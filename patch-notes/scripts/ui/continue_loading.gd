@@ -17,11 +17,11 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_surface = ColorRect.new()
 	_surface.name = "Surface"
-	_surface.color = Color("10090e")
+	_surface.color = FolderUI.color(&"background")
 	_surface.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_surface.mouse_filter = Control.MOUSE_FILTER_STOP
 	_surface.focus_mode = Control.FOCUS_ALL
-	_surface.theme = preload("res://resources/ui/workspace_theme.tres")
+	_surface.theme = preload("res://resources/ui/onyx_theme.tres")
 	add_child(_surface)
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -31,15 +31,18 @@ func _ready() -> void:
 	content.add_theme_constant_override("separation", 16)
 	center.add_child(content)
 	heading_label = _label(content, "Loading saved Studio", 22)
-	heading_label.modulate = Color("b8aaa7")
+	heading_label.modulate = FolderUI.color(&"muted")
 	studio_label = _label(content, "Saved Studio", 32)
 	studio_label.custom_minimum_size.x = 640
 	studio_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	studio_label.modulate = Color("f3cb7b")
+	studio_label.modulate = FolderUI.color(&"mint")
 	date_label = _label(content, "", 22)
+	date_label.theme_type_variation = &"MetadataLabel"
 	_indicator = _label(content, "●  ·  ·", 24)
-	_indicator.modulate = Color("f3cb7b")
+	_indicator.modulate = FolderUI.color(&"mint")
+	_indicator.theme_type_variation = &"MetadataLabel"
 	stage_label = _label(content, "Checking saved Studio…", 20)
+	stage_label.theme_type_variation = &"Label"
 	_surface.grab_focus()
 	_surface.modulate.a = 0.0
 	_fade = create_tween().set_ignore_time_scale(true)
@@ -49,6 +52,7 @@ func _label(parent: Control, text: String, font_size: int) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.theme_type_variation=&"HeadingLabel" if font_size>=20 else &"Label"
 	label.add_theme_font_size_override("font_size", font_size)
 	parent.add_child(label)
 	return label

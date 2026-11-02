@@ -67,6 +67,8 @@ func _verify_year_labels() -> void:
 	check(run.add_cash_cents(3000000, &"financing_in"), "Calendar fixture funds its actual rent obligations")
 	var studio: StudioPhase = game.get("_active_phase")
 	var hud := game.get_node("%GameplayHUD") as GameplayHUD
+	var actions:=preload("res://scripts/debug/ui_test_actions.gd")
+	var engine_id: StringName=actions.create_feature_engine(run,"Calendar Engine")
 	for cycle in [0, 47, 48, 191, 192]:
 		while run.get_completed_run_cycles() < cycle:
 			var advanced := run.complete_productive_action()
@@ -77,8 +79,9 @@ func _verify_year_labels() -> void:
 		var year: int = 1980 + cycle / 48
 		check(run.get_current_year() == year and hud.footer.text.contains(str(year)) and hud.header_title.text.contains(str(year)), "Cycle %d shows year %d in Studio and shared HUD" % [cycle, year])
 		var before := snapshot(run, [])
-		studio.get_node("%FeatureStoreButton").pressed.emit()
-		(studio.get("_feature_store") as FeatureStore).hide()
+		var store: FeatureStore=await actions.open_feature_implementation(studio,engine_id)
+		store.hide()
+		await create_timer(0.45).timeout
 		check(snapshot(run, []) == before and hud.footer.text.contains(str(year)), "Passive browsing does not advance year")
 	for resolution in [Vector2i(1152, 648), Vector2i(900, 600)]:
 		root.size = resolution

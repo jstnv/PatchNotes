@@ -14,6 +14,12 @@ Code establishes what runs; approved design establishes intended behavior. A mis
 
 ## System documents
 
+- [Central Engine Skill and Employee Course progression grids](design/progression-grid.md)
+
+- [First-time focused invitations and read-only system tours](design/focused-onboarding.md)
+
+- [Proprietary Engine Skill Tree Generations I–II](design/engine-skill-tree.md)
+- [Proprietary Engine Phase3A foundation, creation and persistence](design/proprietary-engine.md)
 - [Annual Game Awards: deterministic yearly results, shared ceremony and durable rewards](design/annual-game-awards.md)
 - [Public Action Engine Phase2A: fixed27-Scope starting access and external royalties](design/public-action-engine.md)
 - [Pass Budget v2 10/K8, versioned legacy rules and intermediate counts](design/pass-budget.md)

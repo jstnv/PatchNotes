@@ -56,9 +56,9 @@ func _replace_store(node: Node) -> void:
 func _run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--out="): output=arg.trim_prefix("--out=")
-	var palette := {"background":"20252b","secondary":"252c33","folder":"303943","active":"354852","text":"f5eedf","muted":"a7b1ba","cyan":"40c9cf","orange":"f28a62","border":"46515b"}
+	var palette := {"background":"141519","secondary":"211b38","folder":"211b38","active":"6f42ff","text":"fff3e2","muted":"c2b9d6","cyan":"5ef2c2","orange":"6f42ff","border":"6f42ff"}
 	expect(palette.keys().all(func(token): return FolderUI.color(token).to_html(false)==palette[token]),"Shared Theme contains the nine approved identity colors")
-	expect(FolderUI.THEME.get_font("font","HeadingLabel").resource_path.ends_with("ChakraPetch-Bold.ttf") and FolderUI.THEME.get_font("font","MetadataLabel").resource_path.ends_with("IBMPlexMono-Regular.ttf") and FolderUI.THEME.default_font.resource_path.contains("IBMPlexSans"),"Authentic heading, numerical and body font roles resolve")
+	expect(FolderUI.THEME.get_font("font","HeadingLabel").resource_path.ends_with("RussoOne-Regular.ttf") and FolderUI.THEME.get_font("font","MetadataLabel").resource_path.ends_with("IBMPlexMono-Regular.ttf") and FolderUI.THEME.default_font.resource_path.contains("IBMPlexSans"),"Authentic heading, numerical and body font roles resolve")
 	var licenses: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/fonts/LICENSES.json"))
 	expect(not licenses.is_empty(),"Bundled font license and provenance manifest loads")
 	for dimensions in [Vector2i(1152,648),Vector2i(1280,720)]:
@@ -211,8 +211,10 @@ func integration() -> void:
 	menu._name_input.text="Reference Studio"
 	for index in range(1,menu._specialty.item_count):
 		menu._specialty.select(index); menu._specialty.item_selected.emit(index)
-		var roster := StudioSpecialties.preview(menu._specialty.get_item_metadata(index))
-		expect(roster.names.all(func(name): return menu._preview.text.contains(name)),"Every unchanged specialty roster is fully bound to its preview")
+		var definitions: Dictionary={}
+		for entry: Dictionary in FeatureStoreCatalog.starting_features()+FeatureStoreCatalog.entries():definitions[StringName(entry.id)]=entry
+		var fixed: Dictionary=preload("res://scripts/engines/public_action_engine.gd").definition()
+		expect(fixed.library.all(func(id): return menu._preview.text.contains(str(definitions[id].name))) and menu._emphasis.text.contains("Public Action Engine"),"Every specialty preview binds the current fixed Public Action library")
 	menu._trait_checks[&"studio_buzz"].button_pressed=true
 	menu._open_folder(&"traits"); menu._show_review()
 	game._onboarding.answer(true)

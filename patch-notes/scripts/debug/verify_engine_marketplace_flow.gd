@@ -115,7 +115,16 @@ func _verify() -> void:
 	phase._open_management()
 	check(phase.get_node_or_null("%StudioEnginesButton") != null,"Studio Management exposes the Engines page")
 	phase._open_engines()
-	check(phase._menu_panels[&"engines"].visible and phase._engine_browser.buttons.size() == 3,"Engine page shows built-in selection and both listings")
+	check(phase._menu_panels[&"engines"].visible and phase._engine_browser.buttons.size() == 3 and phase._engine_browser.overview.visible and phase._engine_browser.develop_button.visible,"Engine overview shows Public and both rival listings with development action")
+	check(not phase.get_node("%FeatureStoreButton").visible,"Standalone Feature Store navigation is retired")
+	var ui_engine:=ui_run.create_proprietary_engine(ui_run.get_proprietary_engine_creation_quote("UI Engine"))
+	check(ui_engine.get("ok",false),"UI fixture creates proprietary engine")
+	if ui_engine.get("ok",false):
+		phase._open_engines(ui_engine.engine_id)
+		check(phase._engine_browser.details.visible and not phase._engine_browser.creation.visible and not phase._engine_browser.develop_button.is_visible_in_tree(),"Individual engine detail has no creation action")
+		phase._engine_browser._configure()
+		check(phase._feature_store!=null and phase._feature_store._engine_id==ui_engine.engine_id and ui_run.get_selected_engine_id()!=ui_engine.engine_id,"Feature Implementation Tree binds its engine without changing project selection")
+		if phase._feature_store!=null:check(phase._feature_store.find_child("EngineSelector",true,false)==null and phase._feature_store.find_child("CommitEngineConfiguration",true,false)==null,"Engine Feature view has no global selector or Commit action")
 	var setup := PredevelopmentOverlay.new()
 	root.add_child(setup)
 	setup.market_run = buyer

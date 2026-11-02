@@ -43,7 +43,7 @@ func configure(controller: Control, title: String) -> void:
 	phase_name = title
 	name = "Workspace"
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	theme = preload("res://resources/ui/workspace_theme.tres")
+	theme = preload("res://resources/ui/onyx_theme.tres")
 	var layout := VBoxContainer.new()
 	layout.name = "Regions"
 	layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -54,7 +54,7 @@ func configure(controller: Control, title: String) -> void:
 	layout.add_child(selected_panel)
 	var selected_row := HBoxContainer.new()
 	selected_panel.add_child(selected_row)
-	label("Played Hand  ", selected_row).add_theme_color_override("font_color", Color("#f5bd59"))
+	label("Played Hand  ", selected_row).add_theme_color_override("font_color", FolderUI.color(&"mint"))
 	played_hand = label("Select up to four cards from the backlog.", selected_row, "SelectionSummary")
 	played_hand.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	played_hand.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -90,7 +90,7 @@ func configure(controller: Control, title: String) -> void:
 		organize_button.tooltip_text = "Group QA, then Marketing cards; corrective Core Passes follow. Insider cards are temporarily disabled. No cash, cycle or redraw cost."
 	backlog_title = pool_title
 	backlog_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	pool_title.add_theme_color_override("font_color", Color("#79d4da"))
+	pool_title.add_theme_color_override("font_color", FolderUI.color(&"mint"))
 	var scroll := phase.get_node("PhaseLayout/CandidateScroll") as ScrollContainer
 	scroll.reparent(layout)
 	scroll.custom_minimum_size = Vector2(0, 352)
@@ -120,6 +120,8 @@ func configure(controller: Control, title: String) -> void:
 	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	phase_row.add_child(info)
 	phase_title = label(title, info, "PhaseTitle")
+	phase_title.theme_type_variation = &"HeadingLabel"
+	phase_title.add_theme_font_size_override("font_size",16)
 	progress = label("", info, "PhaseProgress")
 	progress.add_theme_font_size_override("font_size", 12)
 	progress.tooltip_text = {"Design": "Implement Features to build required Scope.", "Alpha": "Develop the project toward its required Scope.", "Beta": "Address Known Bugs and prepare to launch."}[title]

@@ -335,17 +335,25 @@ func _choice(policy: Callable, session: RefCounted) -> Dictionary:
 	if kind == &"blocked":
 		var reason: Variant = raw.payload.get("reason","")
 		return {"type":kind,"payload":{"reason":reason}} if reason is String and not reason.is_empty() else {}
-	if kind not in [&"begin_development",&"development",&"launch",&"admit_research",&"research",&"starter_purchase",&"bank_borrow",&"acknowledge_publishers",&"rival_wait",&"stage_engine_features",&"commit_engine_configuration",&"select_engine"]: return {}
+	if kind not in [&"begin_development",&"development",&"launch",&"admit_research",&"research",&"starter_purchase",&"bank_borrow",&"acknowledge_publishers",&"rival_wait",&"select_engine"]: return {}
 	return {"type":kind,"payload":raw.get("payload",{}).duplicate(true)}
 func _productive_choice(choice: Dictionary, session: RefCounted) -> bool:
 	match choice.type:
-		&"begin_development",&"research",&"rival_wait",&"commit_engine_configuration": return true
+		&"begin_development",&"research",&"rival_wait": return true
 		&"development":
 			var request: Variant = choice.payload.get("request",{})
 			if not request is Dictionary: return true
 			var kind := StringName(request.get("type",&""))
 			return kind in [&"play",&"host_playtest"] or (kind == &"priorities" and session.development != null and session.development.hand.active)
 	return false
+func detached_live_history() -> Array:
+	var history: Array = live_releases.values().map(func(row: Variant) -> Variant: return row.duplicate(true))
+	history.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
+		if a.release_cycle != b.release_cycle: return a.release_cycle < b.release_cycle
+		if a.studio_id != b.studio_id: return str(a.studio_id) < str(b.studio_id)
+		return str(a.release_id) < str(b.release_id))
+	return history
+
 func observation() -> Dictionary:
 	var rows: Array = []
 	var ids: Array = studios.keys()
@@ -353,12 +361,8 @@ func observation() -> Dictionary:
 	for id: StringName in ids:
 		var session: RefCounted = studios[id]
 		rows.append({"studio_id":id,"name":session.run.get_studio_name(),"specialty":session.run.get_studio_specialty(),"phase":session.phase(),"cycle":session.run.get_completed_run_cycles(),"cash_cents":session.run.get_cash_cents(),"fans":session.run.get_fans(),"release_count":session.run.get_released_game_ids().size()})
-	var history: Array = live_releases.values().map(func(row: Variant) -> Variant: return row.duplicate(true))
-	history.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
-		if a.release_cycle != b.release_cycle: return a.release_cycle < b.release_cycle
-		if a.studio_id != b.studio_id: return str(a.studio_id) < str(b.studio_id)
-		return str(a.release_id) < str(b.release_id))
-	return {"cycle":cycle,"studios":rows,"live_releases":history,"historical_archive":historical_archive.duplicate(true)}
+
+	return {"cycle":cycle,"studios":rows,"live_releases":detached_live_history(),"historical_archive":historical_archive.duplicate(true)}
 
 ## Only the fixed detached Career policy can run independently. No arbitrary
 ## closures, legacy rules, scene listeners or checkpoint callbacks cross threads.

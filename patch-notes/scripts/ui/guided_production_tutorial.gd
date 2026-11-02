@@ -55,10 +55,10 @@ func _ready() -> void:
 	add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
 	root_control = Control.new()
 	root_control.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	root_control.theme = preload("res://resources/ui/workspace_theme.tres")
+	root_control.theme = preload("res://resources/ui/onyx_theme.tres")
 	add_child(root_control)
 	var shade := ColorRect.new()
-	shade.color = Color("10070a")
+	shade.color = FolderUI.color(&"background")
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root_control.add_child(shade)
 	var margin := MarginContainer.new()
@@ -73,6 +73,7 @@ func _ready() -> void:
 	layout.add_child(top)
 	heading = _label(top,"Guided production · Practice",26)
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.theme_type_variation = &"HeadingLabel"
 	exit_button = _button(top,"Exit tutorial",_exit)
 	progress = _label(layout,"",15)
 	var guide := PanelContainer.new()
@@ -83,7 +84,7 @@ func _ready() -> void:
 	instruction.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	result_label = _label(invitation_rows,"Your Studio's cash, calendar, rivals and releases stay unchanged.",15)
 	result_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	result_label.add_theme_color_override("font_color",Color("79d4da"))
+	result_label.add_theme_color_override("font_color",FolderUI.color(&"mint"))
 	prompt = VBoxContainer.new()
 	prompt.add_theme_constant_override("separation",12)
 	layout.add_child(prompt)
@@ -121,7 +122,7 @@ func _build_practice() -> void:
 	var selection := PanelContainer.new()
 	practice.add_child(selection)
 	_label(selection,"Played Hand · Select four cards",16)
-	_label(practice,"Backlog / Draw Pool",16).add_theme_color_override("font_color",Color("79d4da"))
+	_label(practice,"Backlog / Draw Pool",16).add_theme_color_override("font_color",FolderUI.color(&"mint"))
 	# This holder stays in layout while HandPresentation hides the actual fan.
 	var arena := Control.new()
 	arena.name = "Playfield"
@@ -238,6 +239,7 @@ func start_practice() -> bool:
 	asking = false
 	invitation.hide()
 	heading.reparent(guide_rows)
+	heading.theme_type_variation=&"HeadingLabel"
 	heading.add_theme_font_size_override("font_size",22)
 	heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	progress.reparent(guide_rows)

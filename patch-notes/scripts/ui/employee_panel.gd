@@ -6,6 +6,8 @@ signal confirmed
 var run: RunState
 var quote: Dictionary={}
 var panel: PanelContainer
+var course_grid: Control
+var _content_scroll: ScrollContainer
 var content: VBoxContainer
 var footer: Label
 var back_button: Button
@@ -28,8 +30,10 @@ func _ready() -> void:
 	for key in [&"roster",&"courses",&"progress"]:
 		tabs[key]=FolderUI.button(row,str(key).capitalize(),func():show_section(key),&"FolderTab")
 	status=FolderUI.label(box,"");status.hide()
-	var scroll:=ScrollContainer.new();scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;scroll.follow_focus=true;scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;box.add_child(scroll)
+	var scroll:=ScrollContainer.new();scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;scroll.follow_focus=true;scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;box.add_child(scroll);_content_scroll=scroll
 	content=VBoxContainer.new();content.add_theme_constant_override("separation",14);content.size_flags_horizontal=Control.SIZE_EXPAND_FILL;scroll.add_child(content)
+	course_grid=preload("res://scripts/ui/progression_tree_view.gd").new();course_grid.name="CourseTree";course_grid.size_flags_vertical=Control.SIZE_EXPAND_FILL;box.add_child(course_grid);course_grid.hide()
+	course_grid.inspected.connect(_inspect_course_node);course_grid.action_requested.connect(_enroll_course_node)
 	footer=FolderUI.label(box,"",&"SecondaryLabel")
 	confirmation=preload("res://scripts/ui/quit_confirmation.gd").new();confirmation.wrap_controls=false;confirmation.min_size=Vector2i(680,300);confirmation.exclusive=true;add_child(confirmation)
 	confirmation.confirmed.connect(_commit_pending);confirmation.canceled.connect(func():pending={})
@@ -49,6 +53,7 @@ func close() -> void:
 	if is_instance_valid(_return_focus):_return_focus.grab_focus()
 func show_section(value: StringName) -> void:
 	section=value;_refresh()
+	if section==&"courses":course_grid.focus_root.call_deferred()
 func _refresh() -> void:
 	if run==null or not visible:return
 	for child in content.get_children():content.remove_child(child);child.queue_free()
@@ -61,6 +66,9 @@ func _refresh() -> void:
 		total+=StudioFinanceLedger.payroll_wage(pay,StudioFinanceLedger.MAX_INT,run.get_calendar_profile())
 		current+=StudioFinanceLedger.payroll_wage(pay,run.get_completed_run_cycles(),run.get_calendar_profile())
 	footer.text="Monthly payroll: current %s · scheduled %s · Cash %s"%[CashFormatter.format_exact_cents(current),CashFormatter.format_exact_cents(total),CashFormatter.format_exact_cents(run.get_cash_cents())]
+	course_grid.visible=section==&"courses";_content_scroll.visible=section!=&"courses"
+	if section==&"courses":
+		course_grid.set_rows(preload("res://scripts/ui/progression_tree_data.gd").courses(run));return
 	if section==&"roster":
 		FolderUI.label(content,"One specialist per role · Hiring unlocks after your second release",&"SubheadingLabel")
 		for role in [&"production",&"qa",&"project_manager"]:
@@ -77,15 +85,6 @@ func _refresh() -> void:
 				button.disabled=offer.is_empty() or not run.uses_employee_trial();_hire_buttons[role]=button
 			else:
 				FolderUI.label(body,"Hired · "+("Courses completed: %d"%EmployeeRoster.Career.completed(e) if e.has("career") else ("Training complete" if e.trained else "Enroll in a course to train")));_payroll_copy(body,e,payroll)
-	elif section==&"courses":
-		if roster.employees.is_empty():FolderUI.label(content,"Hire a Specialist after your second release to enroll in courses.")
-		for e: Dictionary in roster.employees.values():
-			FolderUI.label(content,_role_name(e.type),&"SubheadingLabel")
-			if e.type==&"qa":
-				for course in [&"mixed",&"pure"]:_qa_course_card(e,course)
-			else:
-				_career_summary(content,e)
-				for course: StringName in EmployeeRoster.Career.course_ids(e.type):_career_course_card(e,course)
 	else:
 		if roster.employees.is_empty():FolderUI.label(content,"Your hired specialists and their permanent progress will appear here.")
 		for e: Dictionary in roster.employees.values():
@@ -99,6 +98,24 @@ func _refresh() -> void:
 				_career_summary(content,e)
 				for course: StringName in EmployeeRoster.Career.course_ids(e.type):
 					FolderUI.label(content,_career_name(course)+" · "+_career_progress(e,course))
+
+func _inspect_course_node(id: StringName) -> void:
+	var node: Dictionary=course_grid.rows.get(id,{})
+	if node.get("kind")!=&"course":return
+	var employee: Dictionary=run.get_employees().employees.get(node.employee_id,{})
+	var text: String=_criterion(node.course)+"\n\n"+_benefit(node.course) if node.role==&"qa" else _career_criterion(node.course)
+	text+="\n\n"+(node.status if employee.is_empty() or node.role==&"qa" else _career_progress(employee,node.course))
+	if not employee.is_empty() and node.role==&"qa" and node.course==&"pure" and employee.courses.has(&"pure"):text+="\nSearch %d/3 · Debug %d/3"%[employee.search_count,employee.debug_count]
+	if node.role!=&"qa":text+="\n\nCompletion adds $100.00/month prospectively; enrollment gives no immediate benefit."
+	var offer: Dictionary=run.get_employee_course_quote(node.employee_id,node.course) if node.state=="ready" else {}
+	if node.state=="ready" and offer.is_empty():text+="\n\nEnrollment unavailable: check available cash, overdue bills or the current save/action warning."
+	course_grid.set_description(text)
+	course_grid.action_button.name="Enroll_"+str(node.course)
+	course_grid.configure_action("Completed" if node.state=="complete" else "Enrolled" if node.state=="active" else node.action,not offer.is_empty())
+
+func _enroll_course_node(id: StringName) -> void:
+	var node: Dictionary=course_grid.rows.get(id,{})
+	if node.get("kind")==&"course":request_purchase(&"course",run.get_employee_course_quote(node.employee_id,node.course))
 
 static func _role_name(role: StringName) -> String:
 	return {&"production":"Production Specialist",&"qa":"QA Specialist",&"project_manager":"Project Manager"}.get(role,str(role).capitalize())
@@ -178,6 +195,8 @@ func _commit_pending() -> void:
 func _input(event: InputEvent) -> void:
 	if is_visible_in_tree() and MenuTransitions.navigation_input_blocked(self):get_viewport().set_input_as_handled();return
 	if visible and MenuTransitions.cancel_pressed(event):
-		close();get_viewport().set_input_as_handled()
+		if course_grid.visible and course_grid.popup.visible:course_grid.close_details()
+		else:close()
+		get_viewport().set_input_as_handled()
 
 func get_menu_transition_content() -> Control: return panel.get_child(0)

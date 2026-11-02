@@ -59,7 +59,9 @@ func _verify() -> void:
 		await _store(dimensions.x)
 	await _paid_hand()
 	await _contract()
-	var out := FileAccess.open("res://design-logs/candidate-pool-repair-v1/card-motion/animation-traces.json", FileAccess.WRITE)
+	var trace_path:=OS.get_environment("PN_CARD_FRAME_OUTPUT")
+	if trace_path.is_empty():trace_path="res://design-logs/candidate-pool-repair-v1/card-motion/animation-traces.json"
+	var out := FileAccess.open(trace_path, FileAccess.WRITE)
 	out.store_string(JSON.stringify(traces, "\t"))
 	print("Card motion verification: %d failures" % failures)
 	quit(failures)
@@ -263,8 +265,9 @@ func _store(width: int) -> void:
 	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)
 	var run: RunState = game.run_state
 	var studio: StudioPhase = game.get("_active_phase")
-	studio.get_node("%FeatureStoreButton").pressed.emit()
-	var store: FeatureStore = studio.get("_feature_store")
+	var actions:=preload("res://scripts/debug/ui_test_actions.gd")
+	var engine_id: StringName=actions.create_feature_engine(run,"Motion Engine")
+	var store: FeatureStore=await actions.open_feature_implementation(studio,engine_id)
 	game.get_node("%GameplayHUD").contextual_tip.dismiss()
 	await settle()
 	store._map.fit_map()

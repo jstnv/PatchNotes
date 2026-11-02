@@ -2,7 +2,23 @@ class_name FolderUI
 extends RefCounted
 
 ## Shared presentation primitives. All identity values live in the Godot Theme.
-const THEME := preload("res://resources/ui/workspace_theme.tres")
+const THEME := preload("res://resources/ui/onyx_theme.tres")
+
+static func enable_menu_gamepad() -> void:
+	for action in {&"ui_accept":JOY_BUTTON_A,&"ui_cancel":JOY_BUTTON_B}:
+		if InputMap.action_get_events(action).any(func(event):return event is InputEventJoypadButton or event is InputEventJoypadMotion):continue
+		var event:=InputEventJoypadButton.new()
+		event.button_index=JOY_BUTTON_A if action==&"ui_accept" else JOY_BUTTON_B
+		InputMap.action_add_event(action,event)
+
+static func _inherit_theme(panel: Control,parent: Node) -> void:
+	var ancestor:=parent
+	while ancestor!=null:
+		if ancestor is Control and ancestor.theme!=null:
+			panel.theme=ancestor.theme
+			return
+		ancestor=ancestor.get_parent()
+
 class SurfaceHost extends Container:
 	# A viewport-sized host must shrink after an autowrapped child's initial
 	# minimum settles. Plain Control anchors retain the earlier expanded offsets.
@@ -20,6 +36,9 @@ static func color(token: StringName) -> Color:
 static func surface(parent: Node, document := false) -> PanelContainer:
 	var panel := PanelContainer.new()
 	panel.theme = THEME
+	_inherit_theme(panel,parent)
+	# Constructors build some destinations before attachment to their Studio.
+	panel.tree_entered.connect(func():_inherit_theme(panel,parent),CONNECT_ONE_SHOT)
 	panel.theme_type_variation = &"DocumentPanel" if document else &"FolderPanel"
 	parent.add_child(panel)
 	return panel

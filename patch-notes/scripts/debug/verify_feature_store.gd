@@ -36,9 +36,9 @@ func _verify() -> void:
 	expect(run.get_feature_store_offer(&"colored_text").price_cents == 58500, "One project credit gives exact 10 percent discount")
 	for i in range(6):
 		run.record_resolved_feature(ProjectState.new(30), &"text", &"design")
-	expect(run.get_feature_familiarity(&"text") == 7 and run.get_feature_store_offer(&"colored_text").price_cents == 32500, "Seven projects retain credits but discount caps at 50 percent")
+	expect(run.get_feature_familiarity(&"text") == 7 and run.get_feature_store_offer(&"colored_text").price_cents == 19500, "Seven projects retain credits and earn the current 70 percent discount")
 	before = run.get_cash_cents()
-	expect(ResearchTestActions.acquire(run,&"colored_text") and run.get_cash_cents() == before - 48750 and run.get_completed_run_cycles() == 2, "Purchase uses current discounted price and one cycle")
+	expect(ResearchTestActions.acquire(run,&"colored_text") and run.get_cash_cents() == before - 19500 and run.get_completed_run_cycles() == 2, "Implementation uses current discounted price and one cycle")
 	expect(run.get_feature_store_offer(&"save_files").discount_percent == 0 and run.get_feature_store_offer(&"difficulty_levels").discount_percent == 0 and not run.get_feature_store_offer(&"difficulty_levels").unlocked, "Roots have no discount; Difficulty needs its two named parents")
 	var eligible: Array = db.get_owned_features_for_phase(run, &"design")
 	expect(eligible.size() == 15 and db.get_card(&"colored_text").primary_value == 2 and db.get_card(&"save_files").scope == 2, "Narrow supply API includes purchased authentic ledger definitions")
@@ -114,10 +114,11 @@ func _resolve_fixture(phase: Control, ids: Array[StringName], action: StringName
 		view.card_pressed.connect(Callable(phase, "_on_card_pressed"))
 		phase.get_node("%HandContainer").add_child(view)
 	expect(run.get_feature_familiarity(ids[0]) == 0, "Dealing grants no familiarity")
+	phase.call(action)
+	expect(run.get_feature_familiarity(ids[0]) == 0, "Rejected empty hand grants no familiarity")
 	var views := phase.get_node("%HandContainer").get_children()
 	for i in range(3): views[i].input_button.pressed.emit()
-	phase.call(action)
-	expect(run.get_feature_familiarity(ids[0]) == 0, "Selection and incomplete rejected hand grant no familiarity")
+	expect(run.get_feature_familiarity(ids[0]) == 0, "Selection alone grants no familiarity")
 	views[3].input_button.pressed.emit()
 	phase.call(action)
 	await process_frame
@@ -125,13 +126,12 @@ func _resolve_fixture(phase: Control, ids: Array[StringName], action: StringName
 func _verify_tree_ui() -> void:
 	var run := RunState.new()
 	run.initialize_cash_cents(32499)
-	var studio: StudioPhase = load("res://scenes/phases/studio_phase.tscn").instantiate()
-	root.add_child(studio)
-	studio.set("_run_state", run)
-	studio.get_node("%FeatureStoreButton").pressed.emit()
-	var store: FeatureStore = studio.get("_feature_store")
+	var store:=FeatureStore.new()
+	root.add_child(store)
+	store.setup(run)
+	store.open_store(&"legacy_engine")
 	await process_frame
-	expect(store.visible and not studio.get_node("%Dashboard").visible, "Studio button opens tree")
+	expect(store.visible and store._engine_id==&"legacy_engine", "Engine-scoped Feature view opens tree")
 	var nodes: Dictionary = store.get("_nodes")
 	var edges: Array = store.get("_edges")
 	expect(nodes.size() == 50 and edges.size() == 43, "Active ledger has50 nodes and43 same-category arrows; cross-category gates stay in details")
@@ -162,7 +162,7 @@ func _verify_tree_ui() -> void:
 	store._admission_dialog.hide()
 	store._admission_dialog.confirmed.emit()
 	store._research_button.pressed.emit()
-	expect(nodes[&"save_files"].text.contains("Owned") and nodes[&"branching_nodes"].text.contains("Queue available"), "Purchase updates root and reveals available child")
+	expect(nodes[&"save_files"].text.contains("Available") and nodes[&"branching_nodes"].text.contains("Queue available"), "Implementation updates root and reveals available child")
 	expect(not nodes[&"save_files"].text.contains("$") and not nodes[&"save_files"].tooltip_text.contains("$") and not store.get("_details").text.contains("price"), "Owned node, tooltip and detail hide acquisition prices immediately")
 	expect(store._map.price.text.is_empty(), "Owned popup has no acquisition price")
 	expect(not nodes[&"branching_nodes"].text.contains("$") and not nodes[&"branching_nodes"].tooltip_text.contains("Base:") and nodes[&"branching_nodes"].tooltip_text.contains("Play cost"), "Map stays acquisition-price-free; node hover shows play cost")
@@ -176,7 +176,7 @@ func _verify_tree_ui() -> void:
 	store.call("_select_node", &"save_files")
 	var before := run.get_cash_cents()
 	store.hide()
-	studio.get_node("%FeatureStoreButton").pressed.emit()
+	store.open_store(&"legacy_engine")
 	expect(store.get("_selected") == &"" and not store._map.popup.visible and run.get_cash_cents() == before and run.get_completed_run_cycles() == 1, "Reopening dismisses old popup and preserves cash and cycles")
 	expect(not store.get("_cash").text.contains("Cash:"), "Store header omits duplicate cash balance")
 	store._map.fit_map()
@@ -226,7 +226,7 @@ func _verify_tree_ui() -> void:
 			await process_frame
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png("res://design-logs/feature-node-map-v1/whole-map-%d.png" % dimensions.x)
-	studio.queue_free()
+	store.queue_free()
 	await process_frame
 
 func _child_is_outward(store: FeatureStore, parent: Control, child: Control, lane: StringName) -> bool:

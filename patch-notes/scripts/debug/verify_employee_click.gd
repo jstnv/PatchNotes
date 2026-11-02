@@ -82,7 +82,8 @@ func _run() -> void:
 		await capture("employees-%d"%dimensions.x)
 		await click(panel.back_button); await settle()
 		expect(not panel.visible,"Pointer Back closes Employees")
-		expect(not studio.get_node("%Dashboard").visible and button.is_visible_in_tree() and button.has_focus(),"Back restores Studio Management and Employees focus")
+		expect(studio.get_node("%Dashboard").is_visible_in_tree() and studio._hub.selected==&"management" and button.is_visible_in_tree(),"Back restores Management beside persistent Studio roots")
+		expect(button.has_focus(),"Back independently restores Employees focus")
 		# A failed-save guard may block activation, but it must not silently block
 		# inspection of the employee menu or create a roster/payroll mutation.
 		panel.free(); studio._employees_panel = null

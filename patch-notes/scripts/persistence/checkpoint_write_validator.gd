@@ -6,6 +6,17 @@ var rival_catalog: RefCounted
 var _publishing_source_identity := ""
 var _migration_input := ""
 var _migration_output: Dictionary = {}
+var _catalog_identity_cache: PackedByteArray=[]
+var _store_proof_context_cache: PackedByteArray=[]
+
+## Only the worker's detached, immutable catalog qualifies. Store proofs also
+## match the exact envelope bytes and typed decoded DTO before reuse.
+func store_proof_context() -> PackedByteArray:
+	if rival_catalog==null or rival_catalog.get_script()!=BaseCatalog or adapter.get_script()!=preload("res://scripts/persistence/studio_checkpoint.gd") or _publishing_source_identity.is_empty():return []
+	if not _store_proof_context_cache.is_empty():return _store_proof_context_cache
+	var script: Script=get_script()
+	_store_proof_context_cache=var_to_bytes([script.get_instance_id(),script.get_source_code().sha256_text(),adapter._rules_revision(adapter.RULES),_publishing_source_identity,_catalog_content()])
+	return _store_proof_context_cache
 
 func _validate_uncached(payload: Dictionary) -> String:
 	var candidate := _market_compatible_payload(payload)
@@ -62,6 +73,11 @@ func _validate_payload(payload: Dictionary) -> String:
 	var sequence: Variant=generation.integer(payload.get("sequence"))
 	if not generation.error.is_empty() or sequence<1 or sequence>RunState.MAX_SIGNED_INT:return _validate_uncached(payload)
 	var identity: Dictionary=payload.duplicate();identity.sequence="1"
+	if payload.rival_world.get("annual_awards") is Dictionary:
+		var presentation: Dictionary=preload("res://scripts/awards/annual_awards_ledger.gd").presentation_identity(payload.rival_world.annual_awards,true)
+		if presentation.is_empty():return _validate_uncached(payload)
+		identity.rival_world=payload.rival_world.duplicate()
+		identity.rival_world.annual_awards=presentation
 	var catalog_identity:=_catalog_content()
 	var script: Script=get_script()
 	var key:=var_to_bytes([script.get_instance_id(),script.get_source_code().sha256_text(),source,data_revision,_publishing_source_identity,catalog_identity,identity])
@@ -77,6 +93,9 @@ func _validate_payload(payload: Dictionary) -> String:
 	_proof_mutex.unlock();return ""
 
 func _catalog_content() -> PackedByteArray:
+	# CheckpointWrite owns one detached, immutable catalog per worker. Its proof
+	# identity is identical across the current, candidate and prune validations.
+	if not _catalog_identity_cache.is_empty():return _catalog_identity_cache
 	var definitions: Dictionary={}
 	for id: StringName in rival_catalog.cards:
 		var card: CardData=rival_catalog.cards[id];var fields: Dictionary={}
@@ -85,4 +104,5 @@ func _catalog_content() -> PackedByteArray:
 		definitions[id]=fields
 	var primitive: Array=[]
 	for card: CardData in rival_catalog.primitive:primitive.append(card.id)
-	return var_to_bytes([definitions,primitive])
+	_catalog_identity_cache=var_to_bytes([definitions,primitive])
+	return _catalog_identity_cache

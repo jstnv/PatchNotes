@@ -7,6 +7,7 @@ const CARD_VIEW_SCENE := preload("res://scenes/cards/card_view.tscn")
 var _database: Node
 var _snapshots: PrimitiveSnapshotDatabase
 var _failures := 0
+var _checks := 0
 
 
 func _initialize() -> void:
@@ -22,6 +23,10 @@ func _initialize() -> void:
 	await _verify_single_corrective_pass_resolution()
 	if _failures == 0:
 		print("Beta Host Playtest verification passed.")
+	_finish()
+
+func _finish() -> void:
+	print("BETA_PLAYTEST checks=%d failures=%d"%[_checks,_failures])
 	quit(_failures)
 
 
@@ -113,57 +118,76 @@ func _verify_selection_preservation() -> void:
 		var priorities: Dictionary = fixture.beta.get_priority_distribution()
 		var bugs := [fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_remaining_bugs()]
 		_expect(fixture.beta.host_playtest(), "Active Host Playtest accepts %d selected cards" % count)
-		_expect(_pool_identity(fixture.beta) == pool_before and _selection_identity(fixture.beta) == selection_before, "Host Playtest preserves pool and selection order with %d selections" % count)
+		var pool_after:=_pool_identity(fixture.beta)
+		_expect(pool_after[0].size()==9 and pool_after[0].slice(0,7)==pool_before[0] and pool_after[1].slice(0,7)==pool_before[1] and _selection_identity(fixture.beta)==selection_before,"Immediate Host Playtest preserves all original identities/selection and appends two with %d selected"%count)
+		_expect(fixture.beta.get("_injected_corrective_views").size()==2 and fixture.beta.get_pending_corrective_pass_ids().is_empty(),"Immediate Passes are protected instances with no deferred pending IDs")
 		_expect(fixture.beta.get_priority_distribution() == priorities and [fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_remaining_bugs()] == bugs, "Host Playtest preserves priorities and Bugs with %d selections" % count)
 		_expect(fixture.run.get_cash() == 500 and fixture.state.get_current_cycle() == 1, "Host Playtest costs exactly $500 and one cycle with %d selections" % count)
 		fixture.beta.queue_free()
 		await process_frame
 
 
+func _seed_sound_technology_tie(state: ProjectState) -> void:
+	var profile:=PrimitiveReviewCalculator.get_project_profile(state)
+	for category in ProjectState.CoreScore.values():
+		state.add_core_score(category,profile.get_standard(category)*(1 if category in [ProjectState.CoreScore.SOUND,ProjectState.CoreScore.TECHNOLOGY] else 2))
+
 func _verify_pending_and_injection() -> void:
 	var fixture := await _make_beta(1000)
-	fixture.state.add_core_score(ProjectState.CoreScore.GRAPHICS, 5)
-	fixture.state.add_core_score(ProjectState.CoreScore.SOUND, 1)
-	fixture.state.add_core_score(ProjectState.CoreScore.TECHNOLOGY, 1)
-	fixture.state.add_core_score(ProjectState.CoreScore.DESIGN, 3)
-	_select_count(fixture.beta, 4)
-	var values_before := [fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_marketing_output(), fixture.state.is_competitor_snapshot_revealed(), fixture.state.is_market_forecast_snapshot_revealed(), fixture.state.get_exhausted_beta_card_ids()]
-	_expect(fixture.beta.host_playtest(), "Valid Active Development Host Playtest succeeds")
-	_expect(fixture.beta.get_pending_corrective_pass_ids() == ([&"sound_pass", &"technology_pass"] as Array[StringName]), "Weakness ranking snapshots Sound then Technology using enum tie order")
-	_expect([fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_marketing_output(), fixture.state.is_competitor_snapshot_revealed(), fixture.state.is_market_forecast_snapshot_revealed(), fixture.state.get_exhausted_beta_card_ids()] == values_before, "Activation changes no Bugs, Marketing, snapshots, or lifecycle")
-	var pending: Array[StringName] = fixture.beta.get_pending_corrective_pass_ids()
-	_expect(fixture.beta.set_priority_distribution({&"qa": 75, &"marketing": 25, &"insider": 0}), "Changed committed priorities succeed")
-	_expect(fixture.state.get_current_cycle() == 2, "Host and priority commit each consume one cycle")
-	fixture.state.add_core_score(ProjectState.CoreScore.SOUND, 100)
-	fixture.beta.setup(fixture.state, fixture.run, _snapshots)
-	_expect(fixture.beta.get_pending_corrective_pass_ids() == pending, "Priority, score changes, and UI reconstruction cannot alter pending IDs")
-	_expect(not fixture.beta.host_playtest() and fixture.run.get_cash() == 500 and fixture.state.get_current_cycle() == 2, "Second callback while pending cannot double-charge or advance")
-	_expect(fixture.beta.play_selected_hand([] as Array[int], [0.05, 0.15] as Array[float], [0.1, 0.2] as Array[float]), "Next successful hand prepares two ordinary candidates alongside two corrective Passes")
-	var cards: Array[CardData] = fixture.beta.get("_candidate_cards")
-	_expect(cards.size() == 7 and cards[3].id == &"sound_pass" and cards[4].id == &"technology_pass", "Replacement preserves three cards, then publishes queued Passes and two ordinary cards")
-	for index in range(5, 7):
-		_expect(cards[index].phase == CardData.PHASE_BETA and cards[index].card_type == &"beta", "Replacement ordinary slot %d remains a weighted Beta definition" % index)
-	_expect(fixture.beta.get_pending_corrective_pass_ids().is_empty(), "Pending correction clears only after complete pool publication")
-	_expect(fixture.state.get_current_cycle() == 3, "Host, priority commit, and production advance exactly three cycles")
-	_expect(fixture.beta.get_node("%ActionFeedbackLabel").text.contains("Beta Host Playtest corrective Passes injected: Sound Pass, Technology Pass"), "Consumption feedback identifies both injected Passes")
-	fixture.beta.set("_pending_corrective_pass_ids", [&"graphics_pass", &"design_pass"] as Array[StringName])
-	var pending_before: Array[StringName] = fixture.beta.get_pending_corrective_pass_ids()
+	_seed_sound_technology_tie(fixture.state)
+	_select_count(fixture.beta,4)
+	var values_before:=[fixture.state.get_hidden_bugs(),fixture.state.get_known_bugs(),fixture.state.get_marketing_output(),fixture.state.is_competitor_snapshot_revealed(),fixture.state.is_market_forecast_snapshot_revealed(),fixture.state.get_exhausted_beta_card_ids()]
+	var rng_before: int=fixture.beta.get("_deal_rng").state
+	_expect(fixture.beta.host_playtest(),"Valid current Host Playtest immediately appends two")
+	var cards: Array[CardData]=fixture.beta.get("_candidate_cards")
+	var injected: Array=fixture.beta.get("_injected_corrective_views").duplicate()
+	_expect(cards.size()==9 and cards[7].id==&"sound_pass" and cards[8].id==&"technology_pass","Equal normalized percentages use Sound then Technology enum order")
+	_expect(fixture.beta.get_pending_corrective_pass_ids().is_empty() and fixture.beta.get("_deal_rng").state==rng_before,"Immediate append has no pending state and consumes no draw RNG")
+	_expect([fixture.state.get_hidden_bugs(),fixture.state.get_known_bugs(),fixture.state.get_marketing_output(),fixture.state.is_competitor_snapshot_revealed(),fixture.state.is_market_forecast_snapshot_revealed(),fixture.state.get_exhausted_beta_card_ids()]==values_before,"Playtest changes no Bugs, Marketing, snapshots, or lifecycle")
+	_expect(fixture.beta.get_node("%ActionFeedbackLabel").text.contains("Corrective Passes added to the pool"),"Immediate feedback reports current addition")
+	var before_invalid:=[fixture.state.get_current_cycle(),fixture.run.get_cash(),fixture.beta.get_priority_distribution()]
+	_expect(not fixture.beta.set_priority_distribution({&"qa":75,&"marketing":25,&"insider":0}) and [fixture.state.get_current_cycle(),fixture.run.get_cash(),fixture.beta.get_priority_distribution()]==before_invalid,"Untrained out-of-range priority edit is atomic")
+	_expect(fixture.beta.set_priority_distribution({&"qa":60,&"marketing":40,&"insider":0}),"Current legal untrained priorities commit")
+	_expect(fixture.state.get_current_cycle()==2,"Host and legal priority commit each consume one cycle")
+	fixture.state.add_core_score(ProjectState.CoreScore.SOUND,100)
+	fixture.beta.setup(fixture.state,fixture.run,_snapshots)
+	_expect(fixture.beta.get("_injected_corrective_views")==injected and cards[7].id==&"sound_pass" and cards[8].id==&"technology_pass","Score/priority changes and UI rebinding preserve existing corrective identities")
+	_expect(fixture.beta.host_playtest(),"A second affordable immediate Playtest is a separate legal purchase")
+	cards=fixture.beta.get("_candidate_cards")
+	_expect(cards.size()==11 and cards[9].id==&"technology_pass" and cards[10].id==&"graphics_pass" and fixture.run.get_cash()==0 and fixture.state.get_current_cycle()==3,"Second Playtest charges $500/one cycle and uses newly weakest normalized categories")
+	var before_poor:=[fixture.state.get_current_cycle(),fixture.run.get_cash(),_pool_identity(fixture.beta),_selection_identity(fixture.beta)]
+	_expect(not fixture.beta.host_playtest() and [fixture.state.get_current_cycle(),fixture.run.get_cash(),_pool_identity(fixture.beta),_selection_identity(fixture.beta)]==before_poor,"Further unaffordable callback cannot charge, append or advance")
+	_expect(fixture.beta.play_selected_hand(),"Ordinary selected hand consumes four slots without an unnecessary refill")
+	_expect(fixture.beta.get("_candidate_cards").size()==7 and fixture.state.get_current_cycle()==4 and fixture.beta.get("_injected_corrective_views").size()==4,"Overflow retains all four unplayed protected instances while production advances once")
+	_expect(fixture.beta.get("_candidate_views").has(injected[0]) and fixture.beta.get("_candidate_views").has(injected[1]),"Original appended corrective Passes retain exact views after unrelated production")
+	fixture.beta.queue_free()
+	await process_frame
+	await _verify_historical_pending_builder()
+
+## Persisted historical pending-correction component, not a current Host route.
+func _verify_historical_pending_builder() -> void:
+	var fixture:=await _make_beta(1000)
+	var command: RefCounted=fixture.beta.call("_capture_beta_command")
+	command._pending_corrective_pass_ids.assign([&"sound_pass",&"technology_pass"])
+	var legacy: Dictionary=command._build_replacement_candidate_definitions(command._beta_definitions,command.get_priority_distribution(),[0.05,0.15] as Array[float],[0.1,0.2] as Array[float],[] as Array[StringName],4)
+	_expect(legacy.valid and legacy.cards.size()==4 and legacy.cards[0].id==&"sound_pass" and legacy.cards[1].id==&"technology_pass" and legacy.injected_count==2,"Historical pending builder keeps exact corrective prefix/count")
+	for index in [2,3]:_expect(legacy.cards[index].phase==CardData.PHASE_BETA and legacy.cards[index].card_type==&"beta","Historical pending ordinary slots retain weighted Beta definitions")
+	_expect(legacy.consumed_pending_ids==[&"sound_pass",&"technology_pass"],"Historical pending builder reports exact consumption IDs")
+	command._pending_corrective_pass_ids.assign([&"sound_pass",&"sound_pass"])
+	_expect(not command._build_replacement_candidate_definitions(command._beta_definitions,command.get_priority_distribution(),[] as Array[float],[] as Array[float],[] as Array[StringName],4).valid,"Malformed duplicate historical pending IDs reject")
+	fixture.beta.set("_pending_corrective_pass_ids",[&"graphics_pass",&"design_pass"] as Array[StringName])
+	var pending_before: Array[StringName]=fixture.beta.get_pending_corrective_pass_ids()
+	_select_count(fixture.beta,4)
 	fixture.beta.force_card_view_preparation_failure_for_verification()
-	var state_before := [fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_current_cycle(), fixture.run.get_cash(), _pool_identity(fixture.beta), _selection_identity(fixture.beta)]
-	_select_count(fixture.beta, 4)
-	state_before = [fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_current_cycle(), fixture.run.get_cash(), _pool_identity(fixture.beta), _selection_identity(fixture.beta)]
-	_expect(not fixture.beta.play_selected_hand(), "Forced corrective replacement failure rejects the production hand")
-	_expect(fixture.beta.get_pending_corrective_pass_ids() == pending_before and [fixture.state.get_hidden_bugs(), fixture.state.get_known_bugs(), fixture.state.get_current_cycle(), fixture.run.get_cash(), _pool_identity(fixture.beta), _selection_identity(fixture.beta)] == state_before, "Failed production preserves pending correction, state, pool, and selection")
+	var state_before:=[fixture.state.get_hidden_bugs(),fixture.state.get_known_bugs(),fixture.state.get_current_cycle(),fixture.run.get_cash(),_pool_identity(fixture.beta),_selection_identity(fixture.beta)]
+	_expect(not fixture.beta.play_selected_hand(),"Historical pending view-readiness failure rejects production")
+	_expect(fixture.beta.get_pending_corrective_pass_ids()==pending_before and [fixture.state.get_hidden_bugs(),fixture.state.get_known_bugs(),fixture.state.get_current_cycle(),fixture.run.get_cash(),_pool_identity(fixture.beta),_selection_identity(fixture.beta)]==state_before,"Failed historical publication preserves pending/state/pool/selection")
 	fixture.beta.queue_free()
 	await process_frame
 
-
 func _verify_corrective_pass_resolution() -> void:
 	var fixture := await _make_beta(1500)
-	fixture.state.add_core_score(ProjectState.CoreScore.GRAPHICS, 5)
-	fixture.state.add_core_score(ProjectState.CoreScore.SOUND, 1)
-	fixture.state.add_core_score(ProjectState.CoreScore.TECHNOLOGY, 1)
-	fixture.state.add_core_score(ProjectState.CoreScore.DESIGN, 3)
+	_seed_sound_technology_tie(fixture.state)
 	_select_count(fixture.beta, 4)
 	fixture.beta.host_playtest()
 	fixture.beta.play_selected_hand([] as Array[int], [0.05, 0.15] as Array[float], [0.1, 0.2] as Array[float])
@@ -209,6 +233,7 @@ func _verify_single_corrective_pass_resolution() -> void:
 
 
 func _expect(condition: bool, description: String) -> void:
+	_checks += 1
 	if condition:
 		print("PASS: %s" % description)
 	else:

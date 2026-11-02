@@ -1,0 +1,7 @@
+# Empty Feature Store center — 2026-11-02
+
+User requests an empty5x5 node-space center, with multiple branches stemming from its square perimeter. Interpret node-space as five existing212px lattice pitches on each axis, not25 new nodes. Draw only an unfilled neutral square and five non-prerequisite category stems. Keep five category trees, actual catalog/prerequisites/ownership/queues/payments/phase gates/RNG/save rules. Preserve side-root grouping and category-relative geometry; shift Visuals/Audio outward enough for their labels beyond the square. No nodes or labels inside the square, and route real prerequisites around its interior. Opening view frames the square plus nearest roots; node inspection retains readable zoom. No new gameplay, background fill or central purchasable root. Header/HUD/queue/Back/tools/pan/zoom/inspect/missing-parent navigation remain functional.
+
+Plan: failing geometry/native test first; pin genuine preceding pair before source changes; minimally update grid geometry/map connectors/opening camera; focused and maintained interaction/save checks, native screenshots, read-only review; truthful docs/log/TODO. Standing no-input/canonical workflow selects in-place changes with before copies/private profiles. Preserve shared edits and .codex-godot-temp; no commit/push/export.
+
+Subsequent user instruction: update the Git repository when done; source commit/push now authorized after scoped verification. No export requested.

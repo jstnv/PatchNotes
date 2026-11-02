@@ -1,4 +1,5 @@
 extends SceneTree
+const Owned=preload("res://scripts/debug/owned_engine_test_setup.gd")
 const Factory := preload("res://scripts/simulation/run_factory.gd")
 const Replay := preload("res://scripts/simulation/development_replay.gd")
 var count := 0
@@ -27,6 +28,9 @@ func run() -> void:
   FileAccess.open(args[1],FileAccess.WRITE).store_string(JSON.stringify({"player":saved,"source":Replay.source_identity()}))
   quit(failures);return
  var r:=fresh(&"action")
+ check(r.add_cash_cents(2000000,&"other_income",&"audio_owned_setup"),"Recorded owned-engine fixture funding")
+ check(Owned.create_owned(r,"Audio owned"),"Paid real owned engine and selection")
+ check(Owned.acquire(r,&"8_bit_sound"),"Paid root before Audio branches")
  check(r!=null,"New action initializes")
  var graph:=FeatureStoreCatalog.graph(r._feature_definitions,r._feature_offers)
  check(graph.parents[&"8_bit_sound"].is_empty(),"Audio root has no parent")
@@ -75,20 +79,31 @@ func run() -> void:
  var before:=Replay.digest(Replay.freeze(r))
  check(not r.admit_feature_research({"feature_id":&"dynamic_sequencing","can_admit":true}),"Forged admission rejected")
  check(before==Replay.digest(Replay.freeze(r)),"Rejected admission changes no state/RNG")
+ var engine_before:=r._engine_features.duplicate(true)
  for missing: StringName in [&"multiple_soundtracks",&"instrumental_sounds"]:
-  var held: bool=r._owned_features.has(missing)
-  r._owned_features.erase(missing)
+  var held: bool=r._engine_features.engines[r.get_selected_engine_id()].implemented.has(missing)
+  r._engine_features.engines[r.get_selected_engine_id()].implemented.erase(missing)
   check(not r.get_feature_store_offer(&"dynamic_sequencing").unlocked,"Every Dynamic Sequencing AND arm required "+str(missing))
-  if held:r._owned_features[missing]=true
+  if held:r._engine_features.engines[r.get_selected_engine_id()].implemented.append(missing)
+ r._engine_features=engine_before
  var adapter:=StudioCheckpoint.new()
  var saved:=adapter.capture(r)
- check(not saved.is_empty() and adapter.hydrate(saved)!=null,"Current funded ownership/payment/history saves round trip")
- var old: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://../docs/codex/findings/audio-adoption-20261028-v1/predecessor.json"))
+ check(not saved.is_empty() and adapter.hydrate(saved)!=null,"Current funded ownership/payment/history saves round trip: "+adapter.error)
+ var old: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://scripts/debug/fixtures/audio_predecessor_20261028.json"))
  var legacy:=adapter.hydrate(old.player)
  check(legacy!=null,"Exact prior retired queue restores")
  if legacy!=null:
   var expected: Dictionary=old.player.duplicate(true);expected.content_revision=adapter.revision()
-  check(adapter.capture(legacy)==expected,"Every old ownership/payment/finance/RNG field retained apart from revision")
+  var migrated:=adapter.capture(legacy)
+  var historical:=migrated.duplicate(true)
+  # Source-pinned approved additions only; every historical field and full RNG remains exact.
+  historical.source_build=expected.source_build
+  for key in ["calendar_start_year","rival_founder_profile","historical_close_cycle","closed_historical_ids","engine_entitlements","release_engine_ids","engine_royalty_receipts","engine_features","calendar"]:historical.run.erase(key)
+  historical.run.studio_finance.erase("calendar")
+  historical.run.studio_finance.erase("calendar_cutover_actions")
+  historical.run.fanbase.erase("calendar")
+  check(historical==expected,"Every pre-existing ownership/payment/finance/RNG field retained after explicit additive migration projection")
+  check(adapter.capture(adapter.hydrate(migrated))==migrated,"Full migrated current save is cold-idempotent")
   var quote:=legacy.get_feature_research_quote(&"16_bit_music")
   check(quote.queued and not quote.can_admit and quote.can_research,"Retired paid queue may finish but not admit")
   var legacy_store:=FeatureStore.new();root.add_child(legacy_store);legacy_store.setup(legacy);legacy_store.open_store()

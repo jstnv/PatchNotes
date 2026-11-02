@@ -56,6 +56,54 @@
       "frames": 1316571,
       "channels": 2,
       "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/studio_pool/crunch_time_studio_idle_70bpm.wav",
+      "sha256": "643315cfe5cbf36b86bd7b166fc28a27e27e7557fbb775bfc6a1899594576b84",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/studio_pool/crunch_time_studio_main_70bpm.wav",
+      "sha256": "a01d7d23cac0a59ec0f81b99de5898fd51a7fcb6fc0aa0114a64f41b37967259",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/studio_pool/crunch_time_studio_active_70bpm.wav",
+      "sha256": "eb35aaaf7c9456728b9baf39d6b4259bbfb4c7b8c838633d5b68cbd68ba6b487",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/studio_pool/crunch_time_studio_bass_led_idle_70bpm.wav",
+      "sha256": "b2a7bc0ca15e16a4f321d3050c94efde829d658a845ac494aa0ffd80569343e3",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/studio_pool/crunch_time_studio_bass_led_main_70bpm.wav",
+      "sha256": "32397e6c441fe121ca3cf151d69deb5fef87b31178be7b690fc4c9f144cf44aa",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
+    },
+    {
+      "path": "res://assets/audio/crunch_time_70/studio_pool/crunch_time_studio_bass_led_active_70bpm.wav",
+      "sha256": "88af0f23f30f91edbe228d72877628420410b76670f17090b1c0bf27e43687a1",
+      "sample_rate": 48000,
+      "frames": 1316571,
+      "channels": 2,
+      "sample_bytes": 3
     }
   ],
   "source": "User-supplied Crunch Time Prototype 01 / Tempo_70 WAV",
@@ -66,7 +114,7 @@
     "Final release clearance/attribution review",
     "Audible card tap/whoosh mix preference"
   ],
-  "note": "Dream Groove opens the Main Menu once; Echo Reverb is its repeating arrangement. Version A/B remains selectable for development and Contracts, and Studio Smooth remains the Studio arrangement. All four WAVs share the music transport and exact loop length; MP3 previews are not shipped.",
+  "note": "Dream Groove opens the Main Menu once; Echo Reverb repeats. Version A/B remains selectable for development and Contracts. Studio uses the six confirmed original/bass-led variations, switching at eight-bar boundaries without crossfade or repeat. The previous Studio Smooth asset is retained historically but is outside the active pool. All active WAVs share the music transport and exact loop length; MP3 previews are not shipped.",
   "card_sfx": {
     "source": "Original procedural synthesis; no external samples",
     "cues": {
@@ -94,5 +142,11 @@
     "adaptation": "Decoded to 48 kHz stereo PCM and trimmed to the existing 1316571-frame phrase; no speed or pitch change.",
     "time_map": "crunch-time-d-minor-70-v1",
     "provenance": "assets/audio/crunch_time_70/MENU_THEME.md"
+  },
+  "studio_pool": {
+    "source": "Original Studio WAVs from the user-confirmed Patch Notes Music workspace; bass-led idle/main/active replaced by the newer user-supplied Downloads WAVs on 2026-11-01.",
+    "adaptation": "Copied byte for byte as ordinary 48 kHz stereo 24-bit PCM, with embedded reverb preserved.",
+    "time_map": "70 BPM, 4/4, eight bars, 1316571 frames",
+    "provenance": "assets/audio/crunch_time_70/studio_pool/STUDIO_POOL.md"
   }
 }
