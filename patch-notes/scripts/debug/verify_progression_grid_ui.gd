@@ -20,7 +20,7 @@ func go()->void:
  var browser=load("res://scripts/ui/engine_market_browser.gd").new();root.add_child(browser);await frames()
  browser.open(run,null,created.engine_id);browser._open_skill_tree();await frames()
  check(browser.get("skill_grid")!=null,"Engine Skill page uses outward grid")
- var panel:=EmployeePanel.new();root.add_child(panel);panel.open_for(run);panel.show_section(&"courses");await frames()
+ var panel:=EmployeePanel.new();root.add_child(panel);panel.open_for(run);panel.open_courses(&"project_manager");await frames()
  check(panel.get("course_grid")!=null,"Employee Courses uses outward grid")
  if failures:quit(1);return
  panel.hide()
@@ -35,7 +35,7 @@ func go()->void:
   check(browser.skill_grid.popup.visible and browser.skill_grid.action_button.disabled,"Unearned upgrade is inspectable with unavailable purchase")
   check(Rect2(Vector2.ZERO,Vector2(dimensions)).encloses(browser.skill_grid.popup.get_global_rect()),"Engine inspector stays inside "+str(dimensions))
   await shot("engine-detail-"+str(dimensions.x));browser.skill_grid.close_details();browser.hide()
-  panel.show();panel.show_section(&"courses");await frames();panel.course_grid.fit_all();await frames();await shot("courses-all-"+str(dimensions.x))
+  panel.show();panel.open_courses(&"project_manager");await frames();panel.course_grid.fit_all();await frames();await shot("courses-all-"+str(dimensions.x))
   panel.course_grid.inspect(&"manager_4");await frames()
   check(panel.course_grid.action_button.disabled,"Unhired future course remains inspectable and locked")
   check(Rect2(Vector2.ZERO,Vector2(dimensions)).encloses(panel.course_grid.popup.get_global_rect()),"Course inspector stays inside "+str(dimensions))

@@ -35,18 +35,8 @@ func _initialize() -> void:
 	gameplay._continue_checkpoint()
 	await process_frame
 	expect(gameplay._active_phase is StudioPhase,"cold Continue enters Studio")
-	# Opened-save Continue always defers a real tutorial invitation that hides Studio.
-	var invitation_deadline:=Time.get_ticks_msec()+3000
-	while (gameplay.guided_tutorial==null or not gameplay.guided_tutorial.asking) and Time.get_ticks_msec()<invitation_deadline:
-		await process_frame
-	var invitation: GuidedProductionTutorial=gameplay.guided_tutorial
-	expect(invitation!=null and invitation.asking,"cold Continue offers its real tutorial invitation before navigation")
-	var invitation_rng: Dictionary=gameplay.run_state.random_streams.snapshot()
-	if invitation!=null:
-		invitation.experienced_button.pressed.emit()
-		invitation.skip_button.pressed.emit()
 	await process_frame
-	expect(gameplay.guided_tutorial==null and gameplay._active_phase.is_visible_in_tree() and gameplay.run_state.random_streams.snapshot()==invitation_rng,"real Skip restores visible cold Studio without consuming game RNG")
+	expect(gameplay.guided_tutorial==null and gameplay._active_phase.is_visible_in_tree(),"cold Continue opens the Studio without a tutorial invitation")
 	expect(gameplay.rival_world!=null and gameplay.rival_world.cycle==1,"cold Continue restores exact shared cycle")
 	if gameplay.rival_world!=null:
 		expect(gameplay.rival_world.studios.size()==8 and gameplay.rival_world.live_releases.is_empty(),"cold Continue preserves eight active rivals")

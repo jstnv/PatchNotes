@@ -34,6 +34,9 @@ func _initialize() -> void:
 	expect(await game.checkpoints.wait_saved(), "Fixture reaches a durable Week 2 before recording disk bytes")
 	var saved: Dictionary = game.checkpoints.store.inspect()
 	expect(saved.status == &"valid", "Fixture is a real validated Studio/world checkpoint")
+	if saved.status != &"valid":
+		print("CONTINUE_FIXTURE_FAILURE ",{"status":saved.status,"checkpoint_failure":game.checkpoints.failure})
+		await close_game();finish();return
 	var bytes := FileAccess.get_file_as_bytes(saved.path)
 	var expected_run: Dictionary = game.checkpoints.adapter.capture(game.run_state)
 	await close_game()
@@ -48,6 +51,8 @@ func _initialize() -> void:
 		var pixels := root.get_texture().get_size()
 		viewports.append({"requested":[size.x,size.y],"window":[root.size.x,root.size.y],"initial_render_pixels":[pixels.x,pixels.y]})
 		var menu: MainMenu = game._active_phase
+		var circuits: Control=game.circuit_background
+		var circuit_id:=circuits.get_instance_id()
 		var transport: AudioStreamPlayer = music.player
 		var stream: AudioStream = transport.stream
 		var playback_id := transport.get_stream_playback().get_instance_id()
@@ -59,6 +64,7 @@ func _initialize() -> void:
 			await close_game()
 			finish()
 			return
+		expect(circuits.get_parent()==overlay._surface and circuits.is_visible_in_tree(),"Continue loading shows the existing circuit background")
 		expect(game._loading_checkpoint and overlay.visible, "Loading guard remains active while overlay is visible")
 		expect(overlay.studio_label.text == STUDIO, "Loading identifies saved Studio including Unicode")
 		expect(overlay.date_label.text == "1980 · Month 1, Week 2", "Loading shows the saved year/month/week, not wall-clock date")
@@ -95,6 +101,7 @@ func _initialize() -> void:
 					rendered = true
 			await process_frame
 		expect(game._active_phase is StudioPhase and game.project_state == null and game.active_contract_state == null, "Completed Continue reveals only the saved Studio boundary")
+		expect(is_instance_valid(circuits) and circuits.get_instance_id()==circuit_id and circuits.get_parent()==game.get_node("Background") and circuits._active,"Continue restores Studio with the same running circuits")
 		expect(music.requested_theme == &"studio" and is_equal_approx(music.blend.pending_duration, AudioMap.STEP), "Studio cue begins only after Continue loading reveals Studio")
 		expect(not paused and not game.pause_menu.is_open(), "Esc during loading cannot pause or open another menu")
 		expect(game.run_state.get_studio_name() == STUDIO, "New Run cannot replace the restore while loading")

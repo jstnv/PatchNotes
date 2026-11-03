@@ -33,6 +33,8 @@ func _run() -> void:
 	for i in range(4):await process_frame
 	root.size=Vector2i(1280,720);root.content_scale_size=root.size
 	var menu: MainMenu=game._active_phase
+	var circuits: Control=game.circuit_background
+	var circuit_id:=circuits.get_instance_id()
 	var music=root.get_node("Soundtrack")
 	var transport: AudioStreamPlayer=music.player
 	var playback=transport.get_stream_playback()
@@ -42,6 +44,7 @@ func _run() -> void:
 	expect(overlay!=null,"Create immediately shows a new-save loading screen")
 	if overlay==null:
 		game.queue_free();await process_frame;quit(failures);return
+	expect(circuits.get_parent()==overlay._surface and circuits.is_visible_in_tree(),"New-save loading shows the existing circuit background")
 	expect(game._transition_in_progress and game.guided_tutorial==null,"Creation is guarded before the tutorial exists")
 	expect(overlay.studio_label.text=="Fresh Horizon" and overlay.date_label.text=="1980 · Month 1, Week 1","New-save loading shows Studio name and game date")
 	menu.studio_created.emit("Duplicate must not win",&"action",[])
@@ -59,6 +62,7 @@ func _run() -> void:
 			captured=true
 		await process_frame
 	expect(not game._transition_in_progress and game.get_node_or_null("NewStudioLoading")==null,"Loading completes and removes its input cover")
+	expect(is_instance_valid(circuits) and circuits.get_instance_id()==circuit_id and circuits.get_parent()==game.get_node("Background") and circuits._active,"Studio keeps the same running circuits after loading")
 	expect(music.requested_theme == &"studio" and is_equal_approx(music.blend.pending_duration,AudioMap.STEP),"Studio cue begins after new-save loading reveals the invitation")
 	expect(not paused and not game.pause_menu.is_open(),"Esc during creation cannot pause the loading flow")
 	expect(stages.size()>=2 and captured,"Real creation stages render before the invitation")

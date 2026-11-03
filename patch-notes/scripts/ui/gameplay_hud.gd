@@ -14,6 +14,7 @@ var scoreboard: ProductionScoreboard
 var footer: Label
 var footer_panel: PanelContainer
 var _cash_feedback: Control
+var challenge_notices: Control
 var cash_button: Button
 var fans_button: Button
 var fans_dialog: AcceptDialog
@@ -109,6 +110,9 @@ func _ready() -> void:
 	_cash_feedback=preload("res://scripts/ui/cash_feedback.gd").new()
 	add_child(_cash_feedback)
 	_cash_feedback.configure(cash_button)
+	challenge_notices=preload("res://scripts/ui/challenge_progress_notices.gd").new()
+	challenge_notices.name="ChallengeProgressNotices";add_child(challenge_notices)
+	challenge_notices.configure(footer_panel)
 	fans_dialog = preload("res://scripts/ui/quit_confirmation.gd").new()
 	fans_dialog.name = "FanHistory"
 	fans_dialog.title = "Studio Fans"
@@ -151,6 +155,7 @@ func setup(project_state: ProjectState, run_state: RunState) -> void:
 	var changed_run:=run!=run_state
 	project = project_state
 	run = run_state
+	challenge_notices.bind_run(run)
 	if project != null:
 		project.values_changed.connect(_queue_refresh)
 		project.cycle_changed.connect(_queue_refresh)
@@ -198,6 +203,8 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 	if is_instance_valid(phase) and phase.has_signal("guidance_changed") and phase.guidance_changed.is_connected(_refresh_guidance):
 		phase.guidance_changed.disconnect(_refresh_guidance)
 	phase = controller
+	var circuits := get_parent().get_node_or_null("Background/PersistentCircuitBackground")
+	if circuits != null and not phase is MainMenu: circuits.readability_right = 0.0
 	var save_notice := get_parent().get_node_or_null("SavePresentation/SaveNotification")
 	if save_notice != null: save_notice.set_success_context(phase is StudioPhase)
 	theme=preload("res://resources/ui/onyx_theme.tres") if phase is StudioPhase else FolderUI.THEME
@@ -223,6 +230,7 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 	_layout_sales_hud()
 	synergy_notification.visible = not release_menu
 	if phase.has_method("get_workspace"):
+		phase.get_workspace().overlay.set_chrome(scoreboard,footer_panel)
 		phase.get_workspace().use_synergy_presenter(synergy_notification)
 		phase.get_workspace().presentation_changed.connect(refresh)
 		phase.get_workspace().overlay.closed.connect(_refresh_guidance)
@@ -398,6 +406,8 @@ func _production_guidance() -> Dictionary:
 			var marketing := true
 			var categories := {CardData.BETA_CATEGORY_QA: 0, CardData.BETA_CATEGORY_MARKETING: 0, CardData.BETA_CATEGORY_INSIDER: 0}
 			for view: CardView in selected:
+				if view.card_data == null or not categories.has(view.card_data.beta_category):
+					return {"key": "beta_corrective_pass", "title": "Corrective Pass selected", "body": "A Host Playtest corrective Pass can still add Core score when played, but a hand containing one does not qualify for QA, Marketing or Balanced Operations synergy."}
 				categories[view.card_data.beta_category] += 1
 				if view.card_data.beta_category != CardData.BETA_CATEGORY_QA: qa = false
 				if view.card_data.beta_category != CardData.BETA_CATEGORY_MARKETING: marketing = false
@@ -465,7 +475,7 @@ func refresh() -> void:
 	elif phase is PostGameReview: context = &"review"
 	elif phase is ContractPhase: context = &"contract"
 	scoreboard.render(project,context,_presented_scores)
-	change_priorities.disabled = not is_instance_valid(phase) or not phase.has_method("can_edit_priorities") or not phase.can_edit_priorities()
+	change_priorities.disabled = not is_instance_valid(phase) or not phase.has_method("can_edit_priorities") or not phase.can_edit_priorities() or (phase.has_method("is_initial_priority_planning") and phase.is_initial_priority_planning())
 	if is_instance_valid(phase) and phase.has_method("get_workspace") and phase.get_workspace().hand_motion != null and phase.get_workspace().hand_motion.busy: change_priorities.disabled = true
 	change_priorities.tooltip_text = "Begin the phase to edit priorities." if change_priorities.disabled else "Stage a new allocation for future draws."
 	_refresh_footer()

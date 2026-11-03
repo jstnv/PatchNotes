@@ -1,5 +1,7 @@
 # Central progression grids
 
+**2026-11-02 individual Employee courses — IMPLEMENTED locally.** Employee UI now opens a separate employee-rooted tree from the adjacent Courses button. Production/Manager chains and independent QA siblings retain existing dependencies; the earlier combined role-center description below is superseded for presentation. Optional inspector slots are Employee-only; Engine defaults remain. [Source and acceptance](../logs/2026-11-02-employee-browser-v1.md).
+
 ACTIVE locally, 2026-11-02. User requests the Feature Store grid formation for Engine upgrades and course nodes, and explicitly clarifies Employee Courses. This changes presentation only.
 
 Use the same212px integer lattice and central/outward topology. Engine center shows its name/current Scope, with Graphics left, Sound right, Technology up and Design down. Each arm contains its existing free foundation, Generation I and Generation II upgrade. Center details preserve automatic25/30/35 milestones, actual next4-branch purchase count and future III40/IV45 unavailability. Public/licensed engine access and Skill Tree restrictions remain unchanged.

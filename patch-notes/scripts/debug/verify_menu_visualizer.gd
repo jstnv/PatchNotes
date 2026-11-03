@@ -29,19 +29,17 @@ func _run() -> void:
 	expect(AudioServer.get_bus_effect_count(music)==baseline+1,"Only one owned analyser joins the Music bus")
 	for dimensions in [Vector2i(1152,648),Vector2i(1280,720),Vector2i(900,600),Vector2i(1920,1080),Vector2i(720,600)]:
 		root.size=dimensions;root.content_scale_size=dimensions;await frames(3)
-		var title: Control=menu.get("_title_screen")
-		if visual.visible:
-			expect(root.get_visible_rect().encloses(visual.get_global_rect()) and not visual.get_global_rect().intersects(title.get_global_rect()),"Spectrum fits unused title space at "+str(dimensions))
-			for index in visual.BANDS:
-				expect(Rect2(Vector2.ZERO,visual.size).encloses(visual.bar_rect(index)),"Each drawn bar stays inside its allocated bounds")
-		else:expect(dimensions.x<800,"Compact windows omit spectrum instead of covering controls")
+		expect(visual.visible and visual.get_global_rect()==root.get_visible_rect(),"Circuit background fills the entire title at "+str(dimensions))
+		expect(visual.get_parent().get_index()<menu.get_node("CenterContainer").get_index(),"Native menu controls render above circuits")
+		expect(visual.geometry.routes.size()==11,"Resizing retains all connected circuit routes")
 	root.size=Vector2i(1152,648);root.content_scale_size=Vector2i(1152,648)
 	await create_timer(0.7).timeout
 	var high:=maximum(visual.levels)
 	expect(high>0.01,"Real running soundtrack produces nonzero FFT energy")
 	var first: PackedFloat32Array=visual.levels.duplicate()
 	await create_timer(0.25).timeout
-	expect(visual.levels!=first,"Actual audio changes the bars over time")
+	expect(visual.levels!=first,"Actual audio changes the reused spectrum data over time")
+	expect(not visual.field.fallback and visual.field.count()>0,"Real FFT drives traveling circuit energy")
 	await capture("main-menu-spectrum-1152")
 	for bus in [&"Music",&"Master"]:
 		var index:=AudioServer.get_bus_index(bus)
@@ -49,6 +47,7 @@ func _run() -> void:
 		AudioServer.set_bus_mute(index,true)
 		await create_timer(0.8).timeout
 		expect(maximum(visual.levels)<0.02,"Muted "+str(bus)+" settles to silence, not fake beat motion")
+		expect(visual.field.fallback and visual.field.luminosity<.2 and visual.field.speed>0,"Muted audio uses subdued continuous fallback")
 		AudioServer.set_bus_mute(index,prior)
 		await create_timer(0.3).timeout
 	var volume:=AudioServer.get_bus_volume_db(music)
@@ -58,12 +57,12 @@ func _run() -> void:
 	AudioServer.set_bus_volume_db(music,volume)
 	menu.navigation.animate=false
 	menu.open_setup();await frames(3)
-	expect(not visual.visible and AudioServer.get_bus_effect_count(music)==baseline,"Creation folders hide spectrum and release FFT work")
+	expect(visual.visible and AudioServer.get_bus_effect_count(music)==baseline+1,"Creation folders retain the live circuit analyzer")
 	menu.navigate_back();await frames(3)
-	expect(visual.visible and AudioServer.get_bus_effect_count(music)==baseline+1,"Returning to title reacquires exactly one analyser")
+	expect(visual.visible and AudioServer.get_bus_effect_count(music)==baseline+1,"Returning to title retains exactly one analyzer")
 	var folder:=PanelContainer.new();var back:=Button.new();folder.add_child(back);menu.add_child(folder)
 	menu.navigation.push(folder,back);await frames(3)
-	expect(not visual.visible and AudioServer.get_bus_effect_count(music)==baseline,"Other title navigation destinations stop the spectrum too")
+	expect(visual.visible and AudioServer.get_bus_effect_count(music)==baseline+1,"Other title navigation destinations retain the circuits")
 	menu.navigation.pop();await frames(3)
 	expect(visual.visible and AudioServer.get_bus_effect_count(music)==baseline+1,"Folder Back restores spectrum without a leak")
 	await create_timer(0.35).timeout

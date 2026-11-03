@@ -67,3 +67,44 @@ static func courses(run: RunState) -> Array:
 			rows.append(entry)
 			previous=course;preceding_complete=completed
 	return rows
+
+## One employee's existing courses, projected without shared role branches.
+static func employee_courses(run: RunState,role: StringName) -> Array:
+	if role not in [&"production",&"qa",&"project_manager"]:return []
+	var rows: Array=[]
+	for row: Dictionary in courses(run):
+		if row.id==StringName("role_"+str(role)):
+			var center:=row.duplicate(true);center.cell=Vector2i.ZERO;center.parents=[]
+			center.description="This employee's courses. Enrollment starts a challenge; benefits and wage increases are earned on completion."
+			rows.push_front(center)
+		elif row.get("role")==role:
+			var entry:=row.duplicate(true)
+			var index:=rows.size()
+			entry.cell=Vector2i(-1 if entry.course==&"mixed" else 1,-1) if role==&"qa" else Vector2i(-index if role==&"production" else index,0)
+			rows.append(entry)
+	return rows
+
+## Display-only milestones; the roster remains the sole training authority.
+static func course_progress(employee: Dictionary,course: StringName) -> Dictionary:
+	var qa: bool=employee.get("type")==&"qa"
+	var record: Dictionary=employee.get("courses",{}).get(course,{}) if qa else employee.get("career",{}).get("courses",{}).get(course,{})
+	var maximum:=6 if course==&"pure" else 3 if course==&"pass_alignment" else 4 if course==&"mixed" or employee.get("type")==&"project_manager" else 1
+	var result:={"enrolled":not record.is_empty(),"complete":not record.is_empty() and int(record.get("completed_cycle",-1))>=0,"value":0,"maximum":maximum,"text":"Not enrolled"}
+	if not result.enrolled:return result
+	if result.complete:result.value=maximum;result.text="Completed";return result
+	if qa and course==&"mixed":
+		result.value=mini(4,int(employee.get("mixed_count",0)))
+		result.text="%d / 4 qualifying hands"%result.value
+	elif qa and course==&"pure":
+		var searches:=mini(3,int(employee.get("search_count",0)));var debugs:=mini(3,int(employee.get("debug_count",0)))
+		result.value=searches+debugs;result.text="Search %d/3 · Debug %d/3"%[searches,debugs]
+	elif employee.get("type")==&"project_manager":
+		result.value=mini(4,employee.get("career",{}).get("games",{}).get(course,[]).size())
+		result.text="%d / 4 qualifying releases"%result.value
+	elif course==&"pass_alignment":
+		for project: Dictionary in employee.get("career",{}).get("projects",{}).values():
+			var matches:=int(not project.get("design",[]).is_empty())+int(not project.get("alpha",[]).is_empty())
+			result.value=maxi(result.value,matches)
+		result.text="%d / 3 steps · Design, Alpha, release"%result.value
+	else:result.text="0 / 1 qualifying hand"
+	return result

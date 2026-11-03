@@ -168,16 +168,15 @@ func _verify() -> void:
 func _verify_category_layout(store: FeatureStore) -> void:
 	var map := store._map
 	expect(map.category_regions.size()==5 and map.category_headers.size()==5 and map.category_paths.size()==5 and map.tree.get_node_or_null("FeatureLibraryRoot")==null, "Five trees stem from a noninteractive empty square")
-	var tech_row_bottom := map.node_footprint(store._nodes[&"keyboard_and_mouse"]).end.y
-	for id: StringName in [&"menu_system", &"save_files", &"controller", &"split_screen"]:
-		tech_row_bottom = maxf(tech_row_bottom, map.node_footprint(store._nodes[id]).end.y)
-	var side_roots_top := minf(map.node_footprint(store._nodes[&"8_color_palette"]).position.y, map.node_footprint(store._nodes[&"16_bit_sound"]).position.y)
-	expect(side_roots_top - tech_row_bottom >= 32.0 and side_roots_top - tech_row_bottom <= 64.0, "Technology crown clears the closer Visuals and Audio branches with room for labels")
+	var tech_row:=map.node_footprint(store._nodes[&"keyboard_and_mouse"]).position.y
+	var visual_crown:=map.node_footprint(store._nodes[&"8_color_palette"]).position.y
+	var audio_crown:=map.node_footprint(store._nodes[&"16_bit_sound"]).position.y
+	expect(is_equal_approx(tech_row,visual_crown) and is_equal_approx(tech_row,audio_crown),"Side crowns align with Technology roots after the one-tile upward move")
 	var complete := true
 	for lane: StringName in store.LANE_ORDER:
 		var area: Rect2 = map.category_regions[lane]
 		var header: Label = map.category_headers[lane]
-		complete = complete and Rect2(Vector2.ZERO,map.bounds).grow(0.1).encloses(area) and area.grow(0.1).encloses(map.header_rect(header))
+		complete = complete and Rect2(Vector2.ZERO,map.bounds).grow(0.1).encloses(area) and map.center_square.grow(0.1).encloses(map.header_rect(header))
 		for id: StringName in store.LANE_MEMBERS[lane]:
 			var footprint := map.node_footprint(store._nodes[id])
 			for other_lane: StringName in store.LANE_ORDER:
@@ -189,7 +188,8 @@ func _verify_category_layout(store: FeatureStore) -> void:
 					if footprint.intersects(map.node_footprint(store._nodes[other_id])):
 						print("OVERLAP: ", id, " / ", other_id)
 						complete = false
-		expect(is_zero_approx(header.rotation) if lane==&"Technology & Tools" else is_equal_approx(absf(header.rotation),PI/2), "Sideways heading except Technology & Tools: "+str(lane))
+		var horizontal := lane in [&"Technology & Tools", &"Gameplay", &"Story & World"]
+		expect(is_zero_approx(header.rotation) if horizontal else is_equal_approx(absf(header.rotation),PI/2), "Category heading orientation: "+str(lane))
 	expect(complete,"Five bounded categories with clear cards and headers")
 	var routes_clear := true
 	for path: PackedVector2Array in map.category_paths:

@@ -15,6 +15,17 @@ var initial_setup := false
 var priority_chart: PriorityInfluenceChart
 var budget_feedback: PriorityBudgetFeedback
 const INITIAL_FOOTER_REVEAL := 46.0
+const INITIAL_HEADER_REVEAL := 96.0
+var _top_chrome: Control
+var _bottom_chrome: Control
+var _observed_viewport: Viewport
+var _owns_workspace_visibility:=false
+
+func _enter_tree() -> void:
+	_connect_chrome()
+
+func _exit_tree() -> void:
+	_disconnect_chrome()
 
 func configure(controller: Control, priority_panel: Control, commit: Button) -> void:
 	phase = controller
@@ -22,7 +33,7 @@ func configure(controller: Control, priority_panel: Control, commit: Button) -> 
 	visible = false
 	shade = ColorRect.new()
 	shade.name = "ModalBlocker"
-	shade.color = Color(0.015, 0.01, 0.015, 0.82)
+	shade.color = Color.TRANSPARENT
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(shade)
@@ -116,8 +127,10 @@ func open() -> bool:
 	initial_setup = phase.has_method("is_initial_priority_planning") and phase.is_initial_priority_planning()
 	if not initial_setup and not phase.can_edit_priorities(): return false
 	var phase_name: String = phase.get_workspace().phase_name
-	shade.color = FolderUI.color(&"background") if initial_setup else Color(0.015, 0.01, 0.015, 0.82)
-	shade.offset_bottom = -INITIAL_FOOTER_REVEAL if initial_setup else 0.0
+	shade.color = Color.TRANSPARENT
+	_layout_cover()
+	if initial_setup:
+		phase.get_workspace().hide();_owns_workspace_visibility=true
 	title_label.text = "Initialize Priorities" if initial_setup else "Change Priorities"
 	help.text = _help_text(phase_name).replace("10–75",_range_text())
 	commit_button.text = "Begin " + phase_name if initial_setup else "Commit Priorities"
@@ -177,6 +190,8 @@ func commit_draft() -> bool:
 
 func _close() -> void:
 	visible = false
+	if _owns_workspace_visibility:
+		phase.get_workspace().show();_owns_workspace_visibility=false
 	phase.refresh_overlay_actions()
 	if is_instance_valid(previous_focus) and previous_focus.is_inside_tree():
 		previous_focus.grab_focus()
@@ -200,3 +215,35 @@ func _input(event: InputEvent) -> void:
 
 func _unhandled_input(_event: InputEvent) -> void:
 	if visible: get_viewport().set_input_as_handled()
+
+func set_chrome(header: Control,footer: Control) -> void:
+	_disconnect_chrome()
+	_top_chrome=header;_bottom_chrome=footer
+	_connect_chrome()
+	_layout_cover()
+
+func _connect_chrome() -> void:
+	if not is_inside_tree() or (not is_instance_valid(_top_chrome) and not is_instance_valid(_bottom_chrome)): return
+	for chrome: Control in [_top_chrome,_bottom_chrome]:
+		if is_instance_valid(chrome) and not chrome.item_rect_changed.is_connected(_layout_cover): chrome.item_rect_changed.connect(_layout_cover)
+	_observed_viewport = get_viewport()
+	if is_instance_valid(_observed_viewport) and not _observed_viewport.size_changed.is_connected(_layout_cover): _observed_viewport.size_changed.connect(_layout_cover)
+
+func _disconnect_chrome() -> void:
+	for chrome: Control in [_top_chrome,_bottom_chrome]:
+		if is_instance_valid(chrome) and chrome.item_rect_changed.is_connected(_layout_cover): chrome.item_rect_changed.disconnect(_layout_cover)
+	if is_instance_valid(_observed_viewport) and _observed_viewport.size_changed.is_connected(_layout_cover): _observed_viewport.size_changed.disconnect(_layout_cover)
+	_observed_viewport = null
+
+func _layout_cover() -> void:
+	var viewport := get_viewport()
+	if not is_inside_tree() or not is_instance_valid(viewport) or not is_instance_valid(shade) or not is_instance_valid(dialog): return
+	var viewport_size:=viewport.get_visible_rect().size
+	var top:=maxf(0,_top_chrome.get_global_rect().end.y+6) if is_instance_valid(_top_chrome) else INITIAL_HEADER_REVEAL
+	var bottom:=maxf(0,viewport_size.y-_bottom_chrome.get_global_rect().position.y+6) if is_instance_valid(_bottom_chrome) else INITIAL_FOOTER_REVEAL
+	shade.offset_top=top if initial_setup else 0.0
+	shade.offset_bottom=-bottom if initial_setup else 0.0
+	if initial_setup:
+		var height:=minf(516.0,maxf(120.0,viewport_size.y-top-bottom-16))
+		dialog.offset_top=-height/2;dialog.offset_bottom=height/2
+	else:dialog.offset_top=-258;dialog.offset_bottom=258

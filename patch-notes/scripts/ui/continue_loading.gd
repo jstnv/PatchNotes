@@ -10,6 +10,8 @@ var _surface: ColorRect
 var _indicator: Label
 var _elapsed := 0.0
 var _fade: Tween
+var _circuit: Control
+var _circuit_home: WeakRef
 
 func _ready() -> void:
 	name = "ContinueLoading"
@@ -86,7 +88,32 @@ func cover() -> void:
 	# frame. Otherwise the old menu remains visible under half-faded text.
 	if _fade != null and _fade.is_running(): await _fade.finished
 
+func attach_background(circuit: Control, home: Control) -> void:
+	if not is_instance_valid(circuit) or not is_instance_valid(home):return
+	_circuit=circuit;_circuit_home=weakref(home)
+	circuit.transfer_to(_surface)
+	_surface.move_child(circuit,0)
+	circuit.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	circuit.readability_right=0.0
+
+func _return_background() -> void:
+	var home: Control=_circuit_home.get_ref() if _circuit_home!=null else null
+	if is_instance_valid(_circuit) and is_instance_valid(home) and _circuit.get_parent()==_surface:
+		_circuit.transfer_to(home)
+		_circuit.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_circuit=null;_circuit_home=null
+
+func _exit_tree() -> void:
+	_return_background()
+
+func dismiss() -> void:
+	# Return the live observer before freeing its temporary loading parent.
+	_return_background()
+	if get_parent()!=null:get_parent().remove_child(self)
+	queue_free()
+
 func reveal() -> void:
+	_return_background()
 	if _fade != null: _fade.kill()
 	_fade = create_tween().set_ignore_time_scale(true)
 	_fade.tween_property(_surface, "modulate:a", 0.0, 0.16)

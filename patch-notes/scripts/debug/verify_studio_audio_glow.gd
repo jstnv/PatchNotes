@@ -31,7 +31,7 @@ func _verify() -> void:
 	check(beams.get_parent()==hud and beams.get_index()<hud.scoreboard.get_index(),"Beams sit behind existing header and Studio content")
 	check(beams.mouse_filter==Control.MOUSE_FILTER_IGNORE and beams.focus_mode==Control.FOCUS_NONE and beams.clip_contents,"Beam paint cannot intercept input or escape its bounds")
 	var before := preload("res://scripts/simulation/development_replay.gd").digest(preload("res://scripts/simulation/development_replay.gd").freeze(session.run))
-	check(glow.visible and glow.is_processing() and AudioServer.get_bus_effect_count(bus)==effects+1,"Studio attaches exactly one FFT observer")
+	check(glow.visible and glow.is_processing() and game.circuit_background._active and AudioServer.get_bus_effect_count(bus)==effects+2,"Studio keeps the persistent circuit and header-glow analyzers")
 	check(glow.mouse_filter==Control.MOUSE_FILTER_IGNORE and glow.focus_mode==Control.FOCUS_NONE and glow.clip_contents,"Glow cannot intercept input and stays clipped")
 	check(glow.get_parent()==hud.scoreboard and glow.get_index()<hud.scoreboard.row.get_index(),"Light is inside existing header behind text and chart")
 	for dimensions: Vector2i in [Vector2i(1152,648),Vector2i(1280,720),Vector2i(1920,1080)]:
@@ -74,9 +74,9 @@ func _verify() -> void:
 	AudioServer.set_bus_volume_db(bus,volume)
 	var reverb: AudioEffect=AudioServer.get_bus_effect(bus,0)
 	hud.hide();await process_frame
-	check(not glow.is_processing() and not beams.visible and AudioServer.get_bus_effect_count(bus)==effects,"Hidden HUD releases its analyzer and beam paint")
+	check(not glow.is_processing() and not beams.visible and AudioServer.get_bus_effect_count(bus)==effects+1,"Hidden HUD releases only its analyzer; circuits remain active")
 	hud.show();await process_frame
-	check(glow.is_processing() and AudioServer.get_bus_effect_count(bus)==effects+1 and AudioServer.get_bus_effect(bus,0)==reverb,"HUD return reacquires one observer without altering other effects")
+	check(glow.is_processing() and AudioServer.get_bus_effect_count(bus)==effects+2 and AudioServer.get_bus_effect(bus,0)==reverb,"HUD return reacquires its observer without altering other effects")
 	game.pause_menu.open();await create_timer(0.4).timeout
 	var seconds: float=song.presentation_seconds()
 	await create_timer(0.3).timeout
@@ -84,12 +84,12 @@ func _verify() -> void:
 	game.pause_menu.close();await create_timer(0.3).timeout
 	var studio: StudioPhase=game._active_phase
 	studio._open_feature_store();await process_frame
-	check(glow.visible and AudioServer.get_bus_effect_count(bus)==effects+1,"Studio Store browsing retains one header glow")
+	check(glow.visible and AudioServer.get_bus_effect_count(bus)==effects+2,"Studio Store browsing retains the header glow and circuits")
 	check(preload("res://scripts/simulation/development_replay.gd").digest(preload("res://scripts/simulation/development_replay.gd").freeze(session.run))==before,"Decoration and passive browsing preserve all run state/RNG")
 	if game.checkpoints != null and game.checkpoints.is_saving():await game.checkpoints.wait_saved()
 	check(game._begin_next_project(studio,"Glow departure",&"action",&"fantasy"),"Legal project departure succeeds")
 	await process_frame
-	check(not glow.visible and not beams.visible and not glow.is_processing() and AudioServer.get_bus_effect_count(bus)==effects,"Production releases Studio FFT work and beams")
+	check(not glow.visible and not beams.visible and not glow.is_processing() and game.circuit_background._active and AudioServer.get_bus_effect_count(bus)==effects+1,"Production releases Studio beams while retaining the circuit background")
 	check(song.player.get_instance_id()==player_id and song.player.playing and is_equal_approx(AudioServer.get_bus_volume_db(bus),volume),"Observer preserves player identity and mix gain")
 	game.free();await process_frame
 	check(AudioServer.get_bus_effect_count(bus)==effects,"Gameplay teardown leaves no owned analyzer")

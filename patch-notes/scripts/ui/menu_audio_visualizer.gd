@@ -11,6 +11,14 @@ var _active := false
 var _quiet := false
 var _effect: AudioEffectSpectrumAnalyzer
 var _instance: AudioEffectSpectrumAnalyzerInstance
+var _transferring := false
+
+func transfer_to(parent: Node) -> void:
+	# Node.reparent briefly leaves the tree. Keep the live observer only for
+	# this synchronous handoff; ordinary teardown must still release it.
+	_transferring = true
+	reparent(parent)
+	_transferring = false
 
 func _ready() -> void:
 	theme = preload("res://resources/ui/onyx_theme.tres")
@@ -144,4 +152,4 @@ func _draw() -> void:
 	draw_string(mono,Vector2(26,size.y-10),"40 Hz – 12 kHz  ·  "+("QUIET" if _quiet else "LIVE"),HORIZONTAL_ALIGNMENT_LEFT,-1,10,muted)
 
 func _exit_tree() -> void:
-	_release()
+	if not _transferring: _release()

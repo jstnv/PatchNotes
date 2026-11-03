@@ -1,5 +1,7 @@
 # One-time Dream Groove opener and repeating Echo Reverb menu theme — 2026-10-31
 
+**2026-11-02 supersession:** The user-selected Dreamwave Bass v03 is now the Main Menu theme after the track-timed boot sequence. The original Dream Groove and Echo Reverb files remain preserved as historical assets; the prior opener/repeat description below is historical. [Source and checks](../../../../docs/codex/logs/2026-11-02-boot-menu-sequencing-v1.md).
+
 The user supplied `crunch_time_menu_dream_groove_final_v01.mp3` (SHA-256 `5d8eb00362f1f24ca5c4c09da87f5205f77aa68518f86f3819446dfc4fef71a7`) as the one-time Main Menu opener. The later supplied `crunch_time_menu_theme_echo_reverb_v02.mp3` (SHA-256 `2bf4b7677a56c25e12833274da805222f2aff15981276b787e65339e43a65a5f`) is the repeating menu arrangement. Neither file stated its authorship or release rights; human release review remains open.
 
 Runtime assets: `crunch_time_menu_dream_groove_v01.wav` (SHA-256 `7ec49fb82919f1e40f8708b2cca83571453b943e518b6884bf8c0ebc37e386e7`) and `crunch_time_menu_theme_echo_reverb_v02.wav` (SHA-256 `266af96b6be668dd7d6b2899d8701ff284e1ae24b01897ee36f3a8fe708c6c01`). Both MP3 duration headers are inconsistent with decoded audio. Decode as 48 kHz stereo PCM, keep exactly 1,316,571 frames from sample zero, and store plain 24-bit PCM RIFF WAVs for Godot. This retains the 27.4285625-second loop and 64-step transport map without changing playback speed or pitch. The supplied MP3s were not modified.

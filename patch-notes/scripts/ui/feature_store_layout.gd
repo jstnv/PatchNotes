@@ -4,37 +4,37 @@ extends RefCounted
 
 const PITCH := 212.0
 const CELLS := {
-	&"4_color_palette":Vector2i(-4,-1), &"text":Vector2i(-4,0),
-	&"sprites":Vector2i(-5,-1), &"animated_sprites":Vector2i(-6,-1),
-	&"colored_text":Vector2i(-5,0), &"8_color_palette":Vector2i(-5,-2),
-	&"scrolling":Vector2i(-5,1), &"multi_directional_scrolling":Vector2i(-7,-1),
-	&"8_bit_sound":Vector2i(4,-1), &"16_bit_sound":Vector2i(5,-2),
-	&"main_theme":Vector2i(5,-1), &"recorded_sounds":Vector2i(5,0),
-	&"multiple_soundtracks":Vector2i(6,-1), &"instrumental_sounds":Vector2i(6,0),
-	&"dynamic_sequencing":Vector2i(7,-1),
+	&"4_color_palette":Vector2i(-3,-2), &"text":Vector2i(-3,-1),
+	&"sprites":Vector2i(-4,-2), &"animated_sprites":Vector2i(-5,-2),
+	&"colored_text":Vector2i(-4,-1), &"8_color_palette":Vector2i(-4,-3),
+	&"scrolling":Vector2i(-4,0), &"multi_directional_scrolling":Vector2i(-6,-2),
+	&"8_bit_sound":Vector2i(3,-2), &"16_bit_sound":Vector2i(4,-3),
+	&"main_theme":Vector2i(4,-2), &"recorded_sounds":Vector2i(4,-1),
+	&"multiple_soundtracks":Vector2i(5,-2), &"instrumental_sounds":Vector2i(5,-1),
+	&"dynamic_sequencing":Vector2i(6,-2),
 	&"menu_system":Vector2i(-1,-3), &"keyboard_and_mouse":Vector2i(0,-3),
 	&"controller":Vector2i(1,-3), &"save_files":Vector2i(-1,-4),
 	&"branching_nodes":Vector2i(-1,-5), &"split_screen":Vector2i(-2,-6),
 	&"player_level_editor":Vector2i(1,-6),
-	&"lives_system":Vector2i(-1,3), &"enemies":Vector2i(-2,3),
-	&"general_combat":Vector2i(-3,3), &"turn_based_combat":Vector2i(-4,3),
-	&"character_classes":Vector2i(-4,4), &"timer_system":Vector2i(-1,5),
-	&"categorized_scores":Vector2i(-3,5), &"power_ups":Vector2i(-4,5),
-	&"score_system":Vector2i(-1,7), &"high_scores":Vector2i(-2,7),
-	&"local_leaderboards":Vector2i(-3,7), &"inventory_system":Vector2i(-1,8),
-	&"scripted_ai":Vector2i(-3,9), &"difficulty_levels":Vector2i(-5,7),
-	&"controls":Vector2i(-1,9),
-	&"simple_story":Vector2i(2,3), &"dialogue":Vector2i(3,3),
-	&"character_backstories":Vector2i(3,4), &"branching_dialogue":Vector2i(4,3),
-	&"character_development":Vector2i(4,4), &"multiple_endings":Vector2i(5,3),
-	&"switchable_protagonists":Vector2i(5,5), &"levels":Vector2i(2,7),
-	&"maps":Vector2i(3,7), &"exploration":Vector2i(3,8),
-	&"secrets":Vector2i(4,8), &"ability_gated_exploration":Vector2i(5,9),
-	&"character_skill_checks":Vector2i(6,8),
+	&"lives_system":Vector2i(-3,2), &"enemies":Vector2i(-4,2),
+	&"general_combat":Vector2i(-5,2), &"turn_based_combat":Vector2i(-7,2),
+	&"character_classes":Vector2i(-7,3), &"timer_system":Vector2i(-3,4),
+	&"categorized_scores":Vector2i(-5,4), &"power_ups":Vector2i(-7,4),
+	&"score_system":Vector2i(-3,6), &"high_scores":Vector2i(-4,6),
+	&"local_leaderboards":Vector2i(-5,6), &"inventory_system":Vector2i(-3,7),
+	&"scripted_ai":Vector2i(-5,8), &"difficulty_levels":Vector2i(-8,6),
+	&"controls":Vector2i(-3,8),
+	&"simple_story":Vector2i(3,2), &"dialogue":Vector2i(4,2),
+	&"character_backstories":Vector2i(4,3), &"branching_dialogue":Vector2i(5,2),
+	&"character_development":Vector2i(5,3), &"multiple_endings":Vector2i(7,2),
+	&"switchable_protagonists":Vector2i(7,4), &"levels":Vector2i(3,6),
+	&"maps":Vector2i(4,6), &"exploration":Vector2i(4,7),
+	&"secrets":Vector2i(5,7), &"ability_gated_exploration":Vector2i(7,8),
+	&"character_skill_checks":Vector2i(8,7),
 }
 
 static func center_square() -> Rect2:
-	# Five empty cells on each axis, centered on the existing cell lattice.
+	# Five cells on each axis for category labels, never Feature cards.
 	return Rect2(Vector2(64,86)-Vector2.ONE*PITCH*2.5,Vector2.ONE*PITCH*5.0)
 
 static func cells(ids: Array) -> Dictionary:

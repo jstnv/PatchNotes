@@ -262,7 +262,7 @@ func _restore_scores() -> void:
 
 func _modal_content(layer: CanvasLayer, minimum: Vector2) -> VBoxContainer:
 	var shade := ColorRect.new()
-	shade.color = Color(0.015, 0.01, 0.015, 0.82)
+	shade.color = Color.TRANSPARENT
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	layer.add_child(shade)

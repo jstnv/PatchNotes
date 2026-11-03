@@ -55,6 +55,7 @@ var _awards_phase_process := Node.PROCESS_MODE_INHERIT
 var _awards_hud_process := Node.PROCESS_MODE_INHERIT
 var _awards_focus: WeakRef
 var _awards_animate := true
+var circuit_background: Control
 
 func _ready() -> void:
 	theme=FolderUI.THEME
@@ -62,6 +63,7 @@ func _ready() -> void:
 	# pre-import project bootstrap. Subwindows share the same live UI authority.
 	get_window().theme=theme
 	get_node("Background").color=FolderUI.color(&"background")
+	_install_circuit_background()
 	add_child(MenuTransitions.new())
 	if run_state == null:
 		run_state = RunState.new()
@@ -125,10 +127,44 @@ func _return_to_main_menu() -> void:
 	# A fresh scene releases the old writer and all pending presentation callbacks.
 	# Never save development/active Contract progress as a Studio checkpoint.
 	_resume_from_pause()
+	# The replacement scene adopts the same live visual observer, without
+	# restarting its pulses or audio analyzer.
+	if is_instance_valid(circuit_background):
+		get_tree().root.set_meta("persistent_game_circuits",circuit_background)
+		circuit_background.transfer_to(get_tree().root)
 	var error := get_tree().change_scene_to_file("res://scenes/gameplay.tscn")
 	if error != OK:
+		if get_tree().root.has_meta("persistent_game_circuits"):get_tree().root.remove_meta("persistent_game_circuits")
+		if is_instance_valid(circuit_background):circuit_background.transfer_to(get_node("Background"))
 		pause_menu.open()
 		pause_menu.message.text = "Could not open Main Menu. Your current game is still here."
+
+func _install_circuit_background() -> void:
+	var window:=get_tree().root
+	var inherited: Variant=window.get_meta("persistent_game_circuits") if window.has_meta("persistent_game_circuits") else null
+	if window.has_meta("persistent_game_circuits"):window.remove_meta("persistent_game_circuits")
+	if is_instance_valid(inherited):
+		circuit_background=inherited
+		circuit_background.transfer_to(get_node("Background"))
+	else:
+		circuit_background=preload("res://scripts/ui/menu_circuit_background.gd").new()
+		get_node("Background").add_child(circuit_background)
+	circuit_background.name="PersistentCircuitBackground"
+	circuit_background.process_mode=Node.PROCESS_MODE_ALWAYS
+	circuit_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	if not window.has_meta("boot_menu_transition"):circuit_background.set_active(true)
+
+func adopt_boot_circuits(incoming: Control) -> void:
+	if not is_instance_valid(incoming):return
+	if is_instance_valid(circuit_background) and circuit_background!=incoming:circuit_background.free()
+	circuit_background=incoming
+	incoming.transfer_to(get_node("Background"));incoming.name="PersistentCircuitBackground"
+	incoming.process_mode=Node.PROCESS_MODE_ALWAYS
+	incoming.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	incoming.set_active(true)
+	if _active_phase is MainMenu:
+		_active_phase._visualizer=incoming
+		_active_phase._layout_title()
 
 func _start_gameplay() -> void:
 	var data_error := StartupDataCheck.inspect(get_node_or_null("/root/CardDatabase"))
@@ -236,11 +272,12 @@ func _present_studio_creation(name: String, specialty: StringName, trait_ids: Ar
 	_transition_in_progress = true
 	var overlay := preload("res://scripts/ui/continue_loading.gd").new()
 	add_child(overlay)
+	overlay.attach_background(circuit_background,get_node("Background"))
 	overlay.name = "NewStudioLoading"
 	overlay.show_new_studio(name)
 	await overlay.cover()
 	if not is_instance_valid(source) or source != _active_phase:
-		overlay.free()
+		overlay.dismiss()
 		_transition_in_progress = false
 		return
 	overlay.stage_label.text = "Creating and saving Studio…"
@@ -248,7 +285,7 @@ func _present_studio_creation(name: String, specialty: StringName, trait_ids: Ar
 	await get_tree().process_frame
 	if not run_state.create_studio_with_traits(name,specialty,trait_ids):
 		source.show_error("Enter a valid name and Genre; check the trait balance.")
-		overlay.free();_transition_in_progress=false;return
+		overlay.dismiss();_transition_in_progress=false;return
 	var job:=preload("res://scripts/persistence/rival_hydration_job.gd").new()
 	var player_payload:=StudioCheckpoint.new().capture(run_state)
 	job.start(player_payload,checkpoints.rival_catalog)
@@ -257,7 +294,7 @@ func _present_studio_creation(name: String, specialty: StringName, trait_ids: Ar
 		# Worker owns a detached player. Bind the live one only after joining.
 		job.world.player=run_state;job.world.bind_market_providers()
 	if not _adopt_new_studio_world(job.world):
-		overlay.free();_transition_in_progress=false;return
+		overlay.dismiss();_transition_in_progress=false;return
 	await checkpoints.wait_saved()
 	overlay.stage_label.text = "Opening tutorial invitation…" if checkpoints.failure.is_empty() else "Opening Studio…"
 	# Prepare the invitation under the cover, avoiding a dashboard flash.
@@ -268,7 +305,7 @@ func _present_studio_creation(name: String, specialty: StringName, trait_ids: Ar
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await overlay.reveal()
-	overlay.free()
+	overlay.dismiss()
 	get_node("/root/Soundtrack").request_theme(&"studio",true)
 	_transition_in_progress = false
 	if guided_tutorial != null:
@@ -309,13 +346,13 @@ func _enter_initial_studio(restored: bool = false) -> bool:
 		previous.queue_free()
 	if not restored: run_state.refresh_redraws()
 	if checkpoints != null: checkpoints.entered_studio(restored)
-	_offer_guided_tutorial.call_deferred()
+	if not restored: _offer_guided_tutorial.call_deferred()
 	_queue_annual_awards()
 	return true
 
-func _offer_guided_tutorial(opened_save: bool = false) -> void:
+func _offer_guided_tutorial() -> void:
 	if _awards_waiting or guided_tutorial != null or not _active_phase is StudioPhase or _transition_in_progress or _loading_checkpoint: return
-	if opened_save or not _onboarding.read().answered: _create_guided_tutorial()
+	if not _onboarding.read().answered: _create_guided_tutorial()
 
 func _create_guided_tutorial() -> void:
 	guided_tutorial = GuidedProductionTutorial.new()
@@ -830,7 +867,7 @@ func _continue_checkpoint() -> void:
 	if restored==null:
 		_show_checkpoint_recovery()
 		return
-	if _finish_checkpoint_load(restored): _offer_guided_tutorial.call_deferred(true)
+	_finish_checkpoint_load(restored)
 
 func _present_checkpoint_load() -> void:
 	if checkpoints == null or _transition_in_progress or _loading_checkpoint: return
@@ -839,6 +876,7 @@ func _present_checkpoint_load() -> void:
 	_hide_checkpoint_dialogs()
 	var overlay := preload("res://scripts/ui/continue_loading.gd").new()
 	add_child(overlay)
+	overlay.attach_background(circuit_background,get_node("Background"))
 	if _active_phase is MainMenu:
 		overlay.show_checkpoint(_active_phase.checkpoint_info.get("payload", {}))
 	else:
@@ -855,7 +893,7 @@ func _present_checkpoint_load() -> void:
 		if operation.inspected.get("status") == &"valid":
 			overlay.show_checkpoint(operation.inspected.payload)
 	if operation.restored == null:
-		overlay.free()
+		overlay.dismiss()
 		_loading_checkpoint = false
 		_show_checkpoint_recovery()
 		return
@@ -863,7 +901,7 @@ func _present_checkpoint_load() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if not _finish_checkpoint_load(operation.restored):
-		overlay.free()
+		overlay.dismiss()
 		_loading_checkpoint = false
 		checkpoints.failure = "Could not open the saved Studio."
 		_show_checkpoint_recovery()
@@ -871,13 +909,12 @@ func _present_checkpoint_load() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await overlay.reveal()
-	overlay.free()
+	overlay.dismiss()
 	get_node("/root/Soundtrack").request_theme(&"studio",true)
 	_loading_checkpoint = false
 	if is_instance_valid(_active_phase):
 		var start := _active_phase.get_node_or_null("%StartNextGame") as Control
 		if start != null: start.grab_focus()
-	_offer_guided_tutorial.call_deferred(true)
 	_queue_annual_awards()
 
 ## Cheap input gate; no checkpoint snapshots or ranking run during presentation.
@@ -891,8 +928,7 @@ func _queue_annual_awards() -> void:
 	_schedule_annual_awards.call_deferred()
 
 func _schedule_annual_awards() -> void:
-	# Continue queues its invitation after _enter_initial_studio returns. Yield
-	# one additional deferred boundary so that invitation has first ownership.
+	# Let the Studio entry and its loading transition settle before presentation.
 	_try_annual_awards.call_deferred()
 
 func _try_annual_awards() -> void:
@@ -933,7 +969,7 @@ func _try_annual_awards() -> void:
 	_awards_root.add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
 	_awards_layer.add_child(_awards_root)
 	var shade := ColorRect.new()
-	shade.color = FolderUI.color(&"background")
+	shade.color = Color.TRANSPARENT
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_awards_root.add_child(shade)
 	var center := CenterContainer.new()

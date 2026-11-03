@@ -4,6 +4,7 @@ const F=preload("res://scripts/finance/studio_finance_ledger.gd")
 const Beta=preload("res://scripts/simulation/beta_hand_command.gd")
 const Actions=preload("res://scripts/simulation/development_actions.gd")
 const Freeze=preload("res://scripts/simulation/development_replay.gd")
+const Clock=preload("res://scripts/calendar/calendar_clock.gd")
 var checks:=0
 var failures:=0
 func expect(ok: bool,label: String) -> void:
@@ -25,18 +26,23 @@ func _run() -> void:
 	var mixed: Dictionary=run.get_qa_course_quote(&"mixed")
 	expect(run.purchase_qa_course(mixed) and not run.purchase_qa_course(mixed),"Once-only mixed course")
 	expect(run.purchase_qa_course(run.get_qa_course_quote(&"pure")),"Separate pure course")
-	var p:=ProjectState.new(30);p._release_id=&"qa_mechanics_project";p.initialize_snapshots(&"fast_follower",&"stable_market");p.finalize_design_bugs(false,20,[],[]);p.finalize_alpha(0,[],[])
+	var p:=ProjectState.new(30);p._release_id=&"qa_mechanics_project";p.initialize_snapshots(&"fast_follower",&"stable_market");p.finalize_design_bugs(false,100,[],[]);p.finalize_alpha(0,[],[])
 	var snapshots:=PrimitiveSnapshotDatabase.new();snapshots.load_ledgers()
 	var h:=Beta.new();h._project_state=p;h._run_state=run;h._snapshot_database=snapshots;h._deal_rng=run.random_streams.stream(&"beta_deal");h._insight_rng=run.random_streams.stream(&"beta_insight");h.active=true;h.priorities=BetaPriorityAllocation.new().get_distribution()
 	for c: CardData in db.get_cards_by_phase(CardData.PHASE_BETA):h._definitions_by_id[c.id]=c;h._beta_definitions.append(c)
 	var actions:=Actions.new();actions.hand=h;actions.phase=&"beta";actions.catalog=db.get_development_catalog()
-	pool(h,["search_for_bugs","debug","search_for_bugs","debug","posters","posters","posters"])
-	var result: Dictionary=h.execute(h.command(h.candidate_ids.slice(0,4)))
-	var qa: Dictionary=run.get_employees().employees.values()[0]
-	expect(result.ok and result.discovered>0 and result.fixed>0 and qa.trained,"Actual Search-before-Debug commit earns mixed benefit")
+	var result: Dictionary={}
+	var qa: Dictionary={}
+	for i in range(4):
+		pool(h,["search_for_bugs","debug","search_for_bugs","debug","posters","posters","posters"])
+		result=h.execute(h.command(h.candidate_ids.slice(0,4)))
+		qa=run.get_employees().employees.values()[0]
+		expect(result.ok and result.discovered>=2 and result.fixed>=2 and qa.trained==(i==3),"Actual mixed Beta hand %d/4"%[i+1])
 	var completed: int=run.get_completed_run_cycles()
 	var ledger:=run.get_studio_finance_snapshot();var pay: Dictionary=ledger.employees[0]
-	expect(pay.wage_changes.size()==1 and pay.wage_changes[0].cycle==2*(completed/2+2) and F.payroll_wage(pay,completed)==100000,"Raise starts in next expense month and leaves current bill alone")
+	var calendar: Dictionary=run.get_calendar_profile()
+	var expected_due:=Clock.month_end(Clock.month(completed,calendar)+1,calendar)
+	expect(pay.wage_changes.size()==1 and pay.wage_changes[0].cycle==expected_due and F.payroll_wage(pay,completed,calendar)==100000,"Raise starts in next expense month and leaves current bill alone")
 	for i in range(6):
 		var id: String="search_for_bugs" if i%2==0 else "debug"
 		pool(h,[id,id,id,id,"posters","posters","posters"])

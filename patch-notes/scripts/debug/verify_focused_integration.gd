@@ -40,9 +40,7 @@ func go() -> void:
  check(publication.status==&"saved","Genuine preceding paired Studio publishes to private fixture store: "+str(publication))
  if publication.status!=&"saved":quit(1);return
  game._continue_checkpoint()
- if not await wait_for(func():return game.guided_tutorial!=null,"Ordinary Continue invitation takes precedence",20.0):quit(1);return
- check(not game.focused_guidance.view.is_open(),"Focused invitation never covers production-practice invitation")
- game.guided_tutorial.choice.emit(true,false)
+ check(game.guided_tutorial==null,"Continue does not reopen the production-practice invitation")
  if not await wait_for(func():return game.focused_guidance.view.is_open(),"Relevant first-time invitation appears after safe Studio entry",20.0):quit(1);return
  await capture("first-notice")
  var focus=game.focused_guidance

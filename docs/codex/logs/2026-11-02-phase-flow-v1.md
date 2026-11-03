@@ -1,0 +1,3 @@
+# Phase exhaustion and initialization — 2026-11-02
+
+User requested automatic progress on exhausting all playable cards, a visible HUD in initial priorities, and no phase controls showing underneath. Implemented the event-driven presentation-safe auto request and HUD-bounded initialization; current Scope/Launch warnings remain. Headless10/0 plus under-Scope warning/cancel11/0; native HUD50/0, priority chart306/0, flexible hands38/0 and genuine pair4/0. Full details, preserved failures, source and limits: [finding](../findings/phase-flow-20261102-v1/RESULT.md). Main / HEAD529aeac81bef9a36600761a35d8518f2a75f993c; no commit/push/export.

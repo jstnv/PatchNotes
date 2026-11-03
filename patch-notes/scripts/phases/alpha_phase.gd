@@ -662,6 +662,7 @@ func _on_play_alpha_hand_pressed() -> void:
 	_refresh_redraw_controls()
 	_update_host_playtest_action()
 	_update_proceed_action()
+	refresh_workspace()
 	var final_production: Dictionary = result.final_action
 	if not final_production.specialization_stat.is_empty():
 		print(_build_specialization_debug_message(final_production.specialization_stat, final_production.score_additions))

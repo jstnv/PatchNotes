@@ -6,6 +6,38 @@ extends RefCounted
 ## history, annual ledger, finance and RNG validation still applies.
 # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
 const CONTRACT_LATENCY_PREDECESSORS := [
+	"fe5ac14f16e34f3634e9940aecabff24e155781d11f61d7f5b893155bd2d4c0f", # Exact pre-persistent-circuits source; gameplay and saved state are unchanged.
+	"0a4fd9376cb933df378d93106d2f99e4216ea608eaa32a0f8239d3e4ae0e0a8a", # Exact pre-menu-surroundings presentation source; gameplay and saved state are unchanged.
+	"38d7aaef796efb7613184979432c3cd274db6ac2d209e5ef7b640c9a62082d19", # Exact pre-challenge-notice presentation source; gameplay and saved state are unchanged.
+	"b0615874b4094a781bde453c875d93542b07787fb4254b0190452509a8eef7e7", # Exact pre-engine-upgrade presentation source; gameplay and saved state are unchanged.
+	"1eafc270a7aa34df1ae2a1fb892c68c32f17b8f6f25f6d3b6db3260d82ff26c3", # Exact pre-course-view switch; gameplay and saved state are unchanged.
+	"4f63f0aa608ce7bf418a3cf780641a0f0187016e874c1f9ad6d79a6ecaa621b7", # Exact pre-priority teardown and artwork-warning fix; saved rules and data are unchanged.
+	"90d668d693c9a21af4f6f573b7fc22743d9391315a253a7e299a46308425f00c", # Exact pre-Store-trails runtime; gameplay and saved state are unchanged.
+	"885e752317658d9f7749c0caf9cde052910ac62cc475e0cdeb472ea8c20565ae", # Exact pre-lower-tree layout; gameplay and saved state are unchanged.
+	"2e56c2a16fe44e056f10a78a1a38f48793c4d987102d9c76b1236982a3a1772a", # Exact pre-horizontal Store headings; gameplay and saved state are unchanged.
+	"df60dc3e95c17266d01069846c79109a605dd824e3cd7f58e9946072657c1f83", # Exact pre-Store text-outline runtime; gameplay and saved state are unchanged.
+	"5d104eb150215abcbbd532defc7c73fa64b4d7abd7b09bbee558e18853b2ce49", # Exact pre-Continue-invitation runtime; saved rules and data are unchanged.
+	"7666325e2bd71d20a712643e4ab0c574dc3727c33a63c19379b6c1f40524c27e", # Exact pre-default-fullscreen runtime; gameplay and saved state are unchanged.
+	"902004e8a4927a54816be76549b30e52db8fa46026b10984aaa8d1ad5ffb8a2d", # Exact pre-title-bar-entrance runtime; gameplay and saved state are unchanged.
+	"016b0c2c46a922e280ad39e3028a3ba096d805e9c73d43cf4908c6f8127c1a00", # Exact pre-splice-alignment runtime; gameplay and saved state are unchanged.
+	"df8a7ab0023dee8ba74f0cb885c145861b42c0fbaf9e2c5beb6dd4119bca578d", # Exact pre-parallel-splice runtime; gameplay and saved state are unchanged.
+	"8e03071cf48338067c706d8a98afc1b1ba77f0ce811f1b5d5b0b3ed9d1b7a952", # Exact pre-bar-splice runtime; gameplay and saved state are unchanged.
+	"863db0d2b0193e1cd6c9c20dc7c84c615f791e8be4fd8f458f47fb5cb543c5e2", # Exact pre-60fps-opening runtime; gameplay and saved state are unchanged.
+	"0d9c2a28f9d8469410f709d9dc2a6a083f2568d80a7591bf6e47daf912955036", # Exact pre-title-bar-colors runtime; gameplay and saved state are unchanged.
+	"0c5f90b428b714ced838e0535e27eca271c5d89f500856ce454b5b00d443c109", # Exact pre-early-Start runtime; gameplay and saved state are unchanged.
+	"845467299d2b5fdb490fe09528beaffe8bf5780c188883877bcbace9a9dd14b9", # Exact pre-circuit-audio refinement; gameplay and saved state are unchanged.
+	"7f088389c1a63ad1969c7295454b9767593ebc9c5438ce01beb61a4cb1001e63", # Exact pre-boot-clipping runtime; gameplay and saved state are unchanged.
+	"26038e08cd2c407f852aaa59eb41dab7f3402f2781f946e382b7226e0ce31242", # Exact pre-title-wave refinement; gameplay and saved state are unchanged.
+	"9b35aaa085c89b2685214bf1ecc7e5019697e6443b48269aac6eab7e116359fd", # Exact pre-logo-refinement runtime; gameplay and saved state are unchanged.
+	"1f8cba039af0f8c72facae25b728cc6218fab73de548514d3d203900e45ee232", # Exact pre-menu-sequence runtime; gameplay and saved state are unchanged.
+	"eba7f5b0cbf87ad431c94b755aec0cb9a4e9232df7a1f23b196b831e84148459", # Exact pre-Search & Fix source; existing player and rival data remain valid.
+	"03e5a286aa14210a7c4f80d4f93b2aa9bf12d95675002daa7df2be2479e3a5b7", # Exact pre-boot UI/audio runtime; gameplay state and rules are unchanged.
+	"a2c79f83a47ebbeb4f2bf6c4cc328c538e8eb85c538d56d9654c165c09c866fc",
+	"03fabeee4439912bfad06e4126d5526696fafa33585483ff2e202319530de04a",
+	"1323b8b1e504024f8fed2b874d71a8b26606df70831aa0a3ced73d37d1a4415f",
+	"a073c94a054dd9c3080a98aa54f2b14b816a0779612209c96f9707865be9d7d7",
+	"2a76082e51e9465efda444e12a9b91c79ae0b3000d8e63c8b1542f098f7bf042",
+	"a16105547ae52b2f41e33908977f53ae6a230af6434fbd637902f084e5544afb",
 	"b3bca0e2764772c746b82f4c76a8e087e540714fc4892f81395dd30b9a76e47f",
 	"4f84dd8baa0d27022f04b5626629a430496d64fd2f3b84a6af45d22cda79f858", # Exact captured pre-grid UI runtime; current gameplay/finance/RNG unchanged.
 	"6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563", "b496434dc8095aefd67d498de3f9f98c2992abaa5d531bbd36ff7017ec9a2547", "5d27b061021aac5944f855395ab011b9f3de844e4145f17c857bdac88f2f01eb", "e4512254abfa3817c820f5f42923946f25ea75012aa7cb1dfa6358d18595cc75", "035345172f2253b32d3e4540f1b299bbdb389f8d4bec487862397a91465fe0c0", "e1720b670204ebb318ed54e92b68cf157b9d9466cd0a61882f92601957c2edf9", "07ce9e0e59fcd60944fc4a117890c0d9ce4a2f437fa4c3b9375693db5908455d", "dd3874909e76aa243eaa8f855230561956c7e18744cd0c2842cabb4035f8dc35", "b8c50f210b5a300f0de547d64cce1e3b4888aeea0f763ae201a4e36954ba8e9e", "a574d685e47db14036bd4ab445a688dd6166de6993026fef1ed94253b42ce3ef"]

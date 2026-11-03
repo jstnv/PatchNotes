@@ -14,6 +14,11 @@ var canvas: Control
 var tree: Control
 var popup: PanelContainer
 var action_button: Button
+var details_scroll: ScrollContainer
+var detail_extension: VBoxContainer
+var action_extension: VBoxContainer
+var minimum_detail_height:=300.0
+var detail_width:=390.0
 var _title: Label
 var _copy: Label
 var _parents: HBoxContainer
@@ -53,14 +58,18 @@ func _ready() -> void:
 	var heading:=HBoxContainer.new();detail.add_child(heading)
 	_title=FolderUI.label(heading,"",&"SectionHeading");_title.size_flags_horizontal=Control.SIZE_EXPAND_FILL;_title.custom_minimum_size.x=240;_title.add_theme_font_size_override("font_size",20)
 	FolderUI.button(heading,"×",close_details).custom_minimum_size=Vector2(36,36)
-	var body:=ScrollContainer.new();body.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;body.custom_minimum_size.y=80;body.size_flags_vertical=Control.SIZE_EXPAND_FILL;detail.add_child(body)
-	_copy=FolderUI.label(body,"");_copy.custom_minimum_size.x=280;_copy.size_flags_horizontal=Control.SIZE_EXPAND_FILL;_copy.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	var body:=ScrollContainer.new();details_scroll=body;body.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;body.custom_minimum_size.y=80;body.size_flags_vertical=Control.SIZE_EXPAND_FILL;detail.add_child(body)
+	var document:=VBoxContainer.new();document.size_flags_horizontal=Control.SIZE_EXPAND_FILL;document.add_theme_constant_override("separation",12);body.add_child(document)
+	_copy=FolderUI.label(document,"");_copy.custom_minimum_size.x=280;_copy.size_flags_horizontal=Control.SIZE_EXPAND_FILL;_copy.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	detail_extension=VBoxContainer.new();document.add_child(detail_extension);document.move_child(detail_extension,0)
 	_parents=HBoxContainer.new();detail.add_child(_parents)
 	action_button=FolderUI.button(detail,"",func():action_requested.emit(selected_id),&"PrimaryButton")
+	action_extension=VBoxContainer.new();detail.add_child(action_extension)
 	popup.hide();resized.connect(_fit_popup)
 
-func set_rows(values: Array) -> void:
-	var initial:=rows.is_empty()
+func set_rows(values: Array,reset: bool=false) -> void:
+	var initial:=rows.is_empty() or reset
+	if reset:selected_id=&"";popup.hide();zoom=0.74
 	var focused:=get_viewport().gui_get_focus_owner()
 	var focused_id: StringName=&""
 	var focused_parent: StringName=&""
@@ -104,6 +113,7 @@ func inspect(id: StringName,focus: bool=true) -> void:
 	selected_id=id
 	var row: Dictionary=rows[id]
 	_title.text=row.title;_copy.text=row.get("description","")
+	_parents.show();detail_extension.hide();action_extension.hide()
 	for child in _parents.get_children():_parents.remove_child(child);child.queue_free()
 	for parent: StringName in row.parents:
 		if rows.has(parent):
@@ -111,9 +121,17 @@ func inspect(id: StringName,focus: bool=true) -> void:
 			button.set_meta("progression_parent",parent)
 	configure_action(str(row.action),false);popup.show();_fit_popup();_fit_popup.call_deferred()
 	inspected.emit(id)
-	if focus:
-		if action_button.visible and not action_button.disabled:action_button.grab_focus()
-		else:popup.find_children("*","Button",true,false)[0].grab_focus()
+	if focus:reset_details_scroll();focus_details()
+
+func reset_details_scroll() -> void:
+	details_scroll.set_deferred("scroll_vertical",0)
+
+func focus_details() -> void:
+	if action_button.visible and not action_button.disabled:action_button.grab_focus()
+	else:popup.find_children("*","Button",true,false)[0].grab_focus()
+
+func use_detail_extension() -> void:
+	_parents.hide();detail_extension.show();action_extension.show()
 
 func configure_action(text: String,enabled: bool) -> void:
 	action_button.text=text;action_button.visible=not text.is_empty();action_button.disabled=not enabled
@@ -126,8 +144,8 @@ func close_details() -> void:
 
 func _fit_popup() -> void:
 	if popup==null or not popup.visible:return
-	popup.custom_minimum_size.x=minf(390,size.x-32);popup.size=Vector2(minf(390,size.x-32),0);popup.reset_size()
-	popup.size.y=minf(maxf(300,popup.get_combined_minimum_size().y),size.y-20)
+	popup.custom_minimum_size.x=minf(detail_width,size.x-32);popup.size=Vector2(minf(detail_width,size.x-32),0);popup.reset_size()
+	popup.size.y=minf(maxf(minimum_detail_height,popup.get_combined_minimum_size().y),size.y-20)
 	popup.position=Vector2(maxf(10,size.x-popup.size.x-10),maxf(10,size.y-popup.size.y-10))
 
 func _apply_scale() -> void:

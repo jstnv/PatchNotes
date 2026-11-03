@@ -162,8 +162,7 @@ func go() -> void:
 		check(stored_entry(game).stage == str(stage), "Frozen page has matching durable stage%d" % stage)
 	game._continue_checkpoint()
 	await settle()
-	check(game.guided_tutorial != null and game.annual_awards_ceremony == null, "Continue invitation delays pending presentation safely")
-	if game.guided_tutorial != null: game._close_guided_tutorial(false)
+	check(game.guided_tutorial == null, "Continue does not reopen the tutorial invitation")
 	if not await wait_for(func(): return ready_ceremony(game,3), "Continue resumes exact saved stage3"):
 		game.queue_free(); await settle(); finish(); return
 	studio = game._active_phase; hud = game.get_node("%GameplayHUD")

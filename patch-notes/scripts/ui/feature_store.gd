@@ -62,20 +62,21 @@ static func notes_tooltip(for_text: String, viewport_width: float) -> Label:
 	label.custom_minimum_size.x = minf(480, viewport_width - 48)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.text = for_text
-	backed_text(label)
+	var background := StyleBoxFlat.new()
+	background.bg_color = FolderUI.color(&"secondary")
+	background.set_content_margin_all(4)
+	label.add_theme_stylebox_override("normal", background)
 	return label
 
 static func score_label(stat: StringName) -> String:
 	return "Tech" if stat == &"technology" else str(stat).capitalize()
 
 
-static func backed_text(label: Label) -> void:
-	var background := StyleBoxFlat.new()
-	background.bg_color = FolderUI.color(&"secondary")
-	background.set_content_margin_all(4)
-	label.add_theme_stylebox_override("normal", background)
+static func outlined_text(label: Label) -> void:
+	# Floating map labels should not paint a rectangle over nearby Features.
+	label.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
 	label.add_theme_constant_override("outline_size", 2)
-	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_color_override("font_outline_color", FolderUI.color(&"indigo"))
 	label.add_theme_constant_override("shadow_offset_x", 2)
 	label.add_theme_constant_override("shadow_offset_y", 2)
 	label.add_theme_color_override("shadow_color", Color.BLACK)
@@ -202,7 +203,7 @@ func setup(run: RunState) -> void:
 	_map.configure(self, _toolbar, _map_host)
 	for group: Control in [_header, _implementation_controls, _toolbar]:
 		for label: Label in group.find_children("*", "Label", true, false):
-			backed_text(label)
+			outlined_text(label)
 			label.mouse_filter = Control.MOUSE_FILTER_STOP
 		group.minimum_size_changed.connect(_layout_store_chrome)
 	_map_host.resized.connect(_layout_store_chrome)
@@ -251,6 +252,7 @@ func _refresh() -> void:
 	var view := _run.get_feature_store_view(_engine_id)
 	if view.has("error"):
 		_map_offers={}
+		_map.trails.clear_edges()
 		_cash.text = "Feature Implementation unavailable: " + str(view.error)
 		_research_button.disabled = true
 		_map.popup.hide()
@@ -322,6 +324,7 @@ func _refresh() -> void:
 			style.border_color = SCORE_COLORS[card.primary_stat]
 			if style_name == "focus": style.bg_color = Color.TRANSPARENT
 			button.add_theme_stylebox_override(style_name, style)
+	_map.trails.sync_edges(_edges,_map.edge_routes,view.quotes,_run,_engine_id)
 	_tree.queue_redraw()
 	_show_details()
 	_layout_store_chrome.call_deferred()

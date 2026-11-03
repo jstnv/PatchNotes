@@ -33,7 +33,7 @@ func _ready() -> void:
 	layer = 130
 	var shade := ColorRect.new()
 	_surface=shade
-	shade.color = FolderUI.color(&"background")
+	shade.color = Color.TRANSPARENT
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(shade)
 	panel = PanelContainer.new()

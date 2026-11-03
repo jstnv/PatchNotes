@@ -5,7 +5,7 @@ const PATH := "user://preferences-v1.cfg"
 const BUSES := ["Master", "Music", "SFX"]
 
 static func defaults() -> Dictionary:
-	return {"version": 1, "fullscreen": false, "width": 1280, "height": 720,
+	return {"version": 1, "fullscreen": true, "width": 1280, "height": 720,
 		"Master": 80, "Music": 80, "SFX": 80,
 		"Master_muted": false, "Music_muted": false, "SFX_muted": false, "skip_awards": false}
 

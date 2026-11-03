@@ -63,7 +63,7 @@ func _ready() -> void:
 	add_child(shade)
 	var backdrop := ColorRect.new()
 	backdrop.name = "FinanceShade"
-	backdrop.color = Color(0.02, 0.015, 0.025, 0.9)
+	backdrop.color = Color.TRANSPARENT
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	backdrop.offset_top = 88
 	backdrop.offset_bottom = -64

@@ -20,6 +20,9 @@ static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) 
 	if typeof(event.get("cycle"))!=TYPE_INT:return {}
 	for prior: Dictionary in state.events:
 		if prior.get("cycle",0)>event.cycle:return {}
+		# Once this journal has used the new rule, an unversioned hand cannot
+		# appear later and retroactively award the retired one-hand benefit.
+		if kind==&"qa_beta" and not event.has("rules_version") and prior.type==&"qa_beta" and prior.get("rules_version",1)==2:return {}
 		# A Run commits at most one hand on a productive cycle. Changing the
 		# supplied project-cycle must never make that hand train twice.
 		if kind in [&"qa_beta",&"qa_proc"] and prior.type==kind and prior.cycle==event.cycle:return {}
@@ -47,13 +50,20 @@ static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) 
 			var p: Dictionary=e.projects.get(event.project_id,{"armed_action":&"","used_action":&"","actions":[]})
 			if action in p.actions: return {}
 			if kind==&"qa_beta":
-				if event.keys().size()!=8: return {}
+				var mixed_v2: bool = event.has("rules_version")
+				if event.keys().size()!=(9 if mixed_v2 else 8) or (mixed_v2 and event.rules_version!=2): return {}
 				for k in ["search","debug","discovered","fixed"]:
 					if typeof(event.get(k))!=TYPE_INT or event[k]<0: return {}
 				if event.search+event.debug>4: return {}
 				var was_trained: bool=e.swap_trained
-				if e.courses.has(&"mixed") and not e.trained and event.cycle>e.courses[&"mixed"].cycle and event.search>0 and event.debug>0 and event.discovered>0 and event.fixed>0:
-					e.trained=true; e.courses[&"mixed"].completed_cycle=event.cycle
+				if e.courses.has(&"mixed") and not e.trained and event.cycle>e.courses[&"mixed"].cycle and event.search>0 and event.debug>0:
+					if mixed_v2 and event.discovered>=2 and event.fixed>=2:
+						e.mixed_count=mini(4,int(e.get("mixed_count",0))+1)
+						if e.mixed_count==4:
+							e.trained=true; e.courses[&"mixed"].completed_cycle=event.cycle
+					elif not mixed_v2 and event.discovered>0 and event.fixed>0:
+						# Historical event replay preserves already-earned benefits.
+						e.trained=true; e.courses[&"mixed"].completed_cycle=event.cycle
 				var pure: bool=event.search==4 or event.debug==4
 				if e.courses.has(&"pure") and event.cycle>e.courses[&"pure"].cycle:
 					if event.search==4: e.search_count=mini(3,e.search_count+1)
@@ -90,10 +100,13 @@ static func schema() -> Dictionary:
 	qa.courses=S.map_of("id",{"cycle":"uint","completed_cycle":"int"})
 	qa.projects=S.map_of("id",{"armed_action":"id","used_action":"id","actions":S.array_of("id")})
 	qa.pending_design=S.map_of("id","uint");qa.rng_seed="int";qa.rng_state="int"
-	return qa
+	var current := qa.duplicate(true)
+	current.mixed_count="uint"
+	return S.union_of([qa,current])
 static func event_schemas() -> Array:
 	var S=CheckpointSchema
 	var base: Dictionary=S.fields("type project_id","id");base.merge(S.fields("project_cycle cycle"))
 	var beta: Dictionary=base.duplicate();beta.merge(S.fields("search debug discovered fixed"))
+	var beta_v2: Dictionary=beta.duplicate();beta_v2.rules_version="uint"
 	var proc: Dictionary=base.duplicate();proc.phase="id";proc.features="uint";proc.rules_version="uint";proc.chance_percent="uint"
-	return [{"type":"id","cycle":"uint","rules_version":"uint"},{"type":"id","role":"id","cycle":"uint"},{"type":"id","employee_id":"id","course":"id","cycle":"uint","fee_cents":"uint"},base,beta,proc]
+	return [{"type":"id","cycle":"uint","rules_version":"uint"},{"type":"id","role":"id","cycle":"uint"},{"type":"id","employee_id":"id","course":"id","cycle":"uint","fee_cents":"uint"},base,beta,beta_v2,proc]

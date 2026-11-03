@@ -25,7 +25,7 @@ func _ready() -> void:
 	process_mode=Node.PROCESS_MODE_ALWAYS;layer=130
 	panel=Control.new();panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);add_child(panel)
 	panel.add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
-	var shade:=ColorRect.new();panel.add_child(shade);shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);shade.color=Color(0.015,0.02,0.025,0.85)
+	var shade:=ColorRect.new();panel.add_child(shade);shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);shade.color=Color.TRANSPARENT
 	var host:=CenteredHost.new();panel.add_child(host);host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);host.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	surface=FolderUI.surface(host)
 	var body:=VBoxContainer.new();body.add_theme_constant_override("separation",14);surface.add_child(body)

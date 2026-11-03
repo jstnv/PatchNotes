@@ -245,9 +245,10 @@ func _run() -> void:
 	print("Tutorial Continue wait: %d ms, loading=%s" % [Time.get_ticks_msec()-continue_started,game._loading_checkpoint])
 	await settle()
 	view = game.guided_tutorial
-	expect(not game._loading_checkpoint and view!=null and view.asking,"First-time Continue offers the invitation after the loading overlay closes")
+	expect(not game._loading_checkpoint and view==null and game._active_phase is StudioPhase,"First-time Continue opens Studio without the invitation")
+	expect(game._start_guided_practice(),"Optional tutorial remains available after Continue")
+	view = game.guided_tutorial
 	if view != null:
-		await click(view.new_button); await click(view.start_button)
 		var continued := state()
 		var continued_disk := disk()
 		for index in 4: await select_card(view.fan.card_views()[index],view.fan)

@@ -1,0 +1,15 @@
+# Employee and Engine challenge progress notices — 2026-11-03
+
+Branch `main`, HEAD `529aeac81bef9a36600761a35d8518f2a75f993c`. Existing shared work and `.codex-godot-temp` were preserved. No commit, push or export.
+
+An observing HUD component compares compact player employee and proprietary-engine progress snapshots only when committed Run signals publish. Notifications identify the employee/course or engine/upgrade, slide down above the bottom HUD, ignore input and display in a three-notice stack with queued overflow. Search & Fix, QA Versatility, Production Planning, Pass Alignment, Project Management and both generations of proprietary engine challenges use existing authoritative counters. Matching Production phase hands and Project Manager specializations explicitly say a release is required; confirmed release/completion is separate. Switching or binding a run initializes the baseline without replaying historical progress. The observer does not copy the growing employee journal or QA RNG, save notices, modify gameplay, or grant rewards. The exact pre-change source identity `38d7aaef796efb7613184979432c3cd274db6ac2d209e5ef7b640c9a62082d19` was added to existing strict world compatibility.
+
+Changed `patch-notes/scripts/ui/challenge_progress_notices.gd`, `patch-notes/scripts/ui/gameplay_hud.gd`, `patch-notes/scripts/market/rival_world_checkpoint.gd`, `docs/codex/design/employees-courses.md`, `docs/codex/design/engine-skill-tree.md`, `docs/codex/design/ui-design-system.md`, `docs/codex/CURRENT_STATE.md` and the authorized entry in `docs/codex/TODO.md`. Focused harness and retained logs: `docs/codex/findings/challenge-popups-20261103-v1/`.
+
+Godot 4.7.1 with isolated profiles and dummy audio:
+
+- Red-before: focused check failed because the notice component did not exist. Final headless and native runs each passed 27/0: real committed Beta hands and one engine productive action, rejected action, QA counts, simultaneous/queued notices, no duplicate observations, both release-dependent Production matches and Manager specializations, release confirmation, initial bind, nonblocking HUD placement and native visual inspection. Initial layout inflation and an early test's typed-array/teardown errors were reproduced and fixed.
+- Existing QA transactions 190/0, career rules 45/0, Engine Skill Tree 0 failures and priority HUD 306/0 pass. A synthetic-funded four-game career/cold-restore run passed 123/0 across 107 legal commands, retaining partial 2/4 and 3/4 QA course progress; this is not affordability evidence.
+- Genuine immediately preceding paired checkpoint 4/0: player, finance, history, RNG and rival world preserve their contents, and an unapproved source remains rejected.
+
+Full exported-device and controller acceptance, broad economic balance, and full-game performance were not evaluated. The focused actual-action notice check covers Beta and one engine productive action; release-dependent notice projections use the real career reducer and the existing full-career cold-restore test separately.

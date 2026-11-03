@@ -65,7 +65,7 @@ func _ready() -> void:
 	visible = false
 	shade = ColorRect.new()
 	shade.name = "TutorialBlocker"
-	shade.color = FolderUI.color(&"background")
+	shade.color = Color.TRANSPARENT
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shade.offset_bottom = -46.0
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP

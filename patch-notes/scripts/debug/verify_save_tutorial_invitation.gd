@@ -26,40 +26,30 @@ func _run() -> void:
 	expect(inspected.status == &"valid", "Fixture creates a real Studio/world save")
 	var bytes := FileAccess.get_file_as_bytes(inspected.path)
 	await close_game()
-	for completed in [false, true]:
+	for preference in ["unanswered", "skipped", "completed"]:
 		await open_game()
-		if completed: expect(game._onboarding.finish(), "Fixture remembers a completed tutorial")
+		if preference == "unanswered": game._onboarding.path = "user://never-answered.cfg"
+		if preference == "completed": expect(game._onboarding.finish(), "Fixture remembers a completed tutorial")
 		expect(game._active_phase is MainMenu, "Save opens through the actual Main Menu")
 		game._active_phase.continue_requested.emit()
 		expect(game.guided_tutorial == null and game._loading_checkpoint, "Invitation waits until the save loading overlay has finished")
 		game._active_phase.continue_requested.emit()
 		while game._loading_checkpoint: await process_frame
 		await settle()
-		var view: GuidedProductionTutorial = game.guided_tutorial
-		expect(view != null and view.asking, "Opening a save offers the tutorial after previous " + ("completion" if completed else "Skip"))
-		expect(game.get_node_or_null("ContinueLoading") == null, "Invitation appears after the loader is removed")
-		expect(state() == original and disk() == saved, "Save invitation preserves every Studio/world/RNG field and disk generation")
-		if view != null:
-			game._offer_guided_tutorial()
-			expect(game.guided_tutorial == view, "Repeated requests cannot stack invitations")
-			await click(view.experienced_button)
-			if completed:
-				await click(view.start_button)
-				expect(not view.asking and view.model.pool.size() == 4, "Returning players can start isolated practice from their save")
-				await click(view.exit_button)
-			else:
-				await click(view.skip_button)
-			expect(game.guided_tutorial == null and game._active_phase.visible, "Skip or Exit reveals the restored Studio")
-			game._offer_guided_tutorial()
-			expect(game.guided_tutorial == null, "Ordinary Studio navigation does not repeat the invitation")
-			expect(state() == original and disk() == saved, "Skip and practice Exit preserve restored state and save bytes")
+		expect(game.guided_tutorial == null and game._active_phase is StudioPhase and game._active_phase.visible, "Continue opens Studio without the tutorial with preference " + preference)
+		expect(game.get_node_or_null("ContinueLoading") == null, "Loading overlay is removed")
+		expect(state() == original and disk() == saved, "Continue preserves every Studio/world/RNG field and disk generation")
+		if preference == "completed":
+			expect(game._start_guided_practice(), "Returning players can still start optional practice")
+			expect(game.guided_tutorial != null and not game.guided_tutorial.asking, "Manual practice skips the invitation")
+			game._close_guided_tutorial(false)
+			expect(state() == original and disk() == saved, "Practice exit preserves restored state and save bytes")
 		await close_game()
 	await open_game()
 	game._continue_checkpoint()
 	await settle()
-	expect(game.guided_tutorial != null and game.guided_tutorial.asking, "Synchronous save restore also offers the tutorial")
-	if game.guided_tutorial != null: game._close_guided_tutorial(false)
-	expect(state() == original and disk() == saved, "Synchronous restore invitation preserves the Studio and saves")
+	expect(game.guided_tutorial == null and game._active_phase is StudioPhase, "Synchronous restore also opens without an invitation")
+	expect(state() == original and disk() == saved, "Synchronous restore preserves the Studio and saves")
 	await close_game()
 	await open_game()
 	FileAccess.open(inspected.path, FileAccess.WRITE).store_string("{broken-after-preview")

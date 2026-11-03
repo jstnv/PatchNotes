@@ -73,10 +73,7 @@ func _run() -> void:
 		expect(not game._quit_dialog.visible and game.checkpoints.store.inspect().payload==baseline.payload,"Themed close button cancels without quitting or changing the checkpoint")
 		game._continue_checkpoint()
 		await process_frame
-		# Explicitly Skip the save-opening invitation before recovery testing.
-		if game.guided_tutorial != null:
-			game.guided_tutorial.experienced_button.pressed.emit()
-			game.guided_tutorial.skip_button.pressed.emit()
+		expect(game.guided_tutorial == null,"Continue does not reopen the tutorial invitation")
 		# Hold the real isolated TCP writer lease while Continue tries to acquire it.
 		var owner: StudioCheckpointStore = game.checkpoints.store
 		game.checkpoints.store = ContendingStore.new(owner.directory,owner.validator)

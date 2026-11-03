@@ -13,6 +13,7 @@ var third_score: Label
 var pass_budget_label: Label
 var pass_budget_remaining := -1
 var pass_budget_progress := 0.0
+static var _reported_artwork_warnings: Dictionary = {}
 
 @onready var artwork_fallback: TextureRect = %Background
 @onready var artwork: TextureRect = %Artwork
@@ -192,15 +193,23 @@ func _refresh_artwork() -> void:
 	if card_data.artwork_path.is_empty():
 		return
 	if not ResourceLoader.exists(card_data.artwork_path, "Texture2D"):
-		push_warning("Artwork not found for card '%s': %s" % [card_data.id, card_data.artwork_path])
+		_warn_artwork_once("missing", "Artwork not found for card '%s': %s" % [card_data.id, card_data.artwork_path])
 		return
 
 	var loaded_artwork := load(card_data.artwork_path) as Texture2D
 	if loaded_artwork == null:
-		push_warning("Artwork is not a Texture2D for card '%s': %s" % [card_data.id, card_data.artwork_path])
+		_warn_artwork_once("invalid", "Artwork is not a Texture2D for card '%s': %s" % [card_data.id, card_data.artwork_path])
 		return
+	_reported_artwork_warnings.erase("missing:" + card_data.artwork_path)
+	_reported_artwork_warnings.erase("invalid:" + card_data.artwork_path)
 	artwork.texture = loaded_artwork
 	# The kit background remains below artwork, including transparent artwork.
+
+func _warn_artwork_once(kind: String, message: String) -> void:
+	var key := kind + ":" + card_data.artwork_path
+	if _reported_artwork_warnings.has(key): return
+	_reported_artwork_warnings[key] = true
+	push_warning(message)
 
 
 func _on_input_button_pressed() -> void:

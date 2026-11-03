@@ -43,17 +43,31 @@ var _discard_dialog: ConfirmationDialog
 var _replacement_acknowledged := false
 var _setup_focus: WeakRef
 var _visualizer: Control
-const Visualizer := preload("res://scripts/ui/menu_audio_visualizer.gd")
+var _button_wave: Node
+var _boot_entrance := false
+var _boot_entrance_started := false
+var _boot_entrance_elapsed := 0.0
+var _boot_backdrop: Control
+var _boot_logo: TextureRect
+var _boot_logo_atlas: AtlasTexture
+var _boot_logo_sheets: Array[Texture2D] = []
+var _boot_input_modes: Dictionary = {}
+var _boot_resume_modes: Dictionary = {}
+const Visualizer := preload("res://scripts/ui/menu_circuit_background.gd")
 
 const FOLDERS := {&"genre": "Genre Specializations", &"traits": "Traits", &"overview": "Overview"}
 
 func _ready() -> void:
+	_boot_entrance = get_tree().root.has_meta("boot_menu_transition")
+	if _boot_entrance: get_tree().root.remove_meta("boot_menu_transition")
 	FolderUI.enable_menu_gamepad()
 	theme = preload("res://resources/ui/onyx_theme.tres")
 	set_meta("folder_navigation_managed",true)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	clip_contents = true
 	var background := preload("res://scripts/ui/arcade_backdrop.gd").new()
+	_boot_backdrop = background
+	if _boot_entrance: background.entrance_progress = 0.0
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(background)
@@ -65,12 +79,18 @@ func _ready() -> void:
 	_title_screen.name = "MenuLayout"
 	_title_screen.add_theme_constant_override("separation",10)
 	root.add_child(_title_screen)
+	background.colorful_title = true
+	_title_screen.visibility_changed.connect(func(): background.colorful_title = _title_screen.visible)
 	var logo := TextureRect.new()
 	logo.name = "PatchNotesLogo"
 	var artwork := AtlasTexture.new()
-	artwork.atlas = preload("res://assets/branding/patch_notes_logo_onyx_mint.png")
-	artwork.region = Rect2(38,293,1180,610)
+	# The stationary logo is the exact last animation frame, not a second
+	# differently cropped or coloured image swapped in at the music cue.
+	artwork.atlas = preload("res://assets/boot/start-v10/reveal-09.png")
+	artwork.region = Rect2(1020,500,510,250)
 	logo.texture = artwork
+	_boot_logo = logo
+	_boot_logo_atlas = artwork
 	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	logo.custom_minimum_size = Vector2(0,180)
@@ -92,6 +112,15 @@ func _ready() -> void:
 			button.add_theme_constant_override("h_separation",18)
 			button.icon_alignment=HORIZONTAL_ALIGNMENT_RIGHT if id in ["StartGame","Continue"] else HORIZONTAL_ALIGNMENT_LEFT
 		_actions[id] = button
+	_button_wave=preload("res://scripts/ui/title_button_wave.gd").new()
+	_button_wave.name="TitleButtonWave"
+	_button_wave.travel=5.0
+	# Preserve the previous pixels-per-second speed with a shorter path.
+	_button_wave.period=3.6*5.0/7.0
+	add_child(_button_wave)
+	var wave_buttons: Array[Button]=[]
+	for id in ["StartGame","Continue","HowToPlay","Settings","Quit"]:wave_buttons.append(_actions[id])
+	_button_wave.bind_buttons(_title_screen,wave_buttons)
 	_actions.Continue.disabled = checkpoint_info.status != &"valid"
 	_actions.Continue.focus_mode=Control.FOCUS_NONE if _actions.Continue.disabled else Control.FOCUS_ALL
 	if checkpoint_info.status != &"empty": _actions.StartGame.text = "New Run"
@@ -103,9 +132,20 @@ func _ready() -> void:
 	recovery.visible = checkpoint_info.status not in [&"empty",&"valid"]
 	_actions.CheckpointRecovery = recovery
 	FolderUI.label(_title_screen,"PROTOTYPE",&"MetadataLabel")
-	_visualizer = Visualizer.new()
-	_visualizer.name = "MenuAudioVisualizer"
-	root.add_child(_visualizer)
+	var window := get_tree().root
+	var owner:=get_parent().get_parent() if get_parent()!=null else null
+	var shared: Node=owner.get_node_or_null("Background/PersistentCircuitBackground") if owner!=null else null
+	if shared!=null:
+		_visualizer=shared
+		background.transparent_base=true
+	elif window.has_meta("boot_circuits"):
+		_visualizer = window.get_meta("boot_circuits")
+		window.remove_meta("boot_circuits")
+		_visualizer.transfer_to(background)
+	else:
+		_visualizer = Visualizer.new()
+		background.add_child(_visualizer)
+	if shared==null:_visualizer.name = "MenuCircuitBackground"
 	_setup_surface = FolderUI.surface(root)
 	_setup_surface.set_meta("bounded_folder",true)
 	_setup_surface.name = "StudioCreationFolder"
@@ -181,6 +221,75 @@ func _ready() -> void:
 	resized.connect(_layout_title)
 	_title_screen.minimum_size_changed.connect(_layout_title)
 	_layout_title.call_deferred()
+	if _boot_entrance:
+		_prepare_boot_entrance()
+	else:
+		_actions.StartGame.grab_focus.call_deferred()
+
+func _prepare_boot_entrance() -> void:
+	for i in range(1, 10): _boot_logo_sheets.append(load("res://assets/boot/start-v10/reveal-%02d.png" % i))
+	_set_boot_logo_frame(0)
+	for child: Control in _title_screen.get_children():
+		if child == _boot_logo: continue
+		child.modulate.a = 0.0
+		if child is Button:
+			_boot_input_modes[child] = [child.mouse_filter, child.focus_mode]
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			child.focus_mode = Control.FOCUS_NONE
+	var soundtrack := get_node("/root/Soundtrack")
+	soundtrack.boot_menu_started.connect(_begin_boot_entrance, CONNECT_ONE_SHOT)
+	if soundtrack.boot_phase == &"menu": _begin_boot_entrance()
+
+func _begin_boot_entrance() -> void:
+	if not _boot_entrance or _boot_entrance_started: return
+	_boot_entrance_started = true
+	_boot_entrance_elapsed = 0.0
+	_boot_backdrop.entrance_progress = 1.0
+	_set_boot_logo_frame(202)
+
+static func _menu_reveal_frame(frame: int) -> int:
+	# The source types PACH and erases it. Hold the correct PA until the
+	# original animation resumes typing PATCH, without moving the music cue.
+	if frame >= 91 and frame < 136: return 90
+	return frame
+
+func _set_boot_logo_frame(frame: int) -> void:
+	var mapped := _menu_reveal_frame(clampi(frame, 0, 202))
+	_boot_logo_atlas.atlas = _boot_logo_sheets[mapped / 24]
+	var cell := mapped % 24
+	_boot_logo_atlas.region = Rect2((cell % 4) * 510, (cell / 4) * 250, 510, 250)
+
+func _update_boot_entrance(delta: float) -> void:
+	var soundtrack := get_node("/root/Soundtrack")
+	if not _boot_entrance_started:
+		var progress := clampf((soundtrack.boot_switch_seconds() - soundtrack._boot_clock.logo_reveal_at()) / 2.0, 0.0, 1.0)
+		_boot_backdrop.entrance_progress = progress
+		var frame := mini(int(progress * 202.0), 202)
+		_set_boot_logo_frame(frame)
+		return
+	_boot_entrance_elapsed += delta
+	var bars := clampf(_boot_entrance_elapsed / 1.25, 0.0, 1.0)
+	var index := 0
+	for child: Control in _title_screen.get_children():
+		if child == _boot_logo: continue
+		if child is Button and child in _boot_input_modes:
+			if not child.visible: continue
+			var progress := clampf((_boot_entrance_elapsed - index * 0.14) / 1.25, 0.0, 1.0)
+			child.modulate.a = progress
+			child.position.x = -(_title_screen.position.x + child.size.x + 30.0) * pow(1.0 - progress, 3.0)
+			index += 1
+		else:
+			child.modulate.a = bars
+	if _boot_entrance_elapsed < 1.25 + 0.14 * max(0, index - 1): return
+	for button: Button in _boot_input_modes:
+		button.mouse_filter = _boot_input_modes[button][0]
+		button.focus_mode = _boot_input_modes[button][1]
+		button.modulate.a = 1.0
+	for node: Node in _boot_resume_modes:
+		if is_instance_valid(node): node.process_mode = _boot_resume_modes[node]
+	_boot_resume_modes.clear()
+	_boot_entrance = false
+	_boot_logo_sheets.clear()
 	_actions.StartGame.grab_focus.call_deferred()
 
 func _layout_title() -> void:
@@ -189,20 +298,28 @@ func _layout_title() -> void:
 	_title_screen.size.y=_title_screen.get_combined_minimum_size().y
 	_title_screen.position=Vector2(maxf(24,size.x*0.045),maxf(12,(size.y-_title_screen.size.y)/2))
 	if is_instance_valid(_visualizer):
-		var left := _title_screen.position.x+_title_screen.size.x+40.0
-		var available := maxf(0.0,size.x-left-48.0)
-		var width := available
-		var height:=minf(440.0,size.y*0.59)
-		_visualizer.position=Vector2(left,maxf(48.0,(size.y-height)/2.0+10))
-		_visualizer.size=Vector2(width,height)
+		if is_ancestor_of(_visualizer):
+			_visualizer.position=Vector2.ZERO
+			_visualizer.size=size
+		_visualizer.readability_right=_title_screen.position.x+_title_screen.size.x
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not is_instance_valid(_visualizer) or navigation == null: return
-	_visualizer.set_active(is_visible_in_tree() and _title_screen.is_visible_in_tree() and navigation.is_top(_title_screen) and not navigation.busy and _visualizer.size.x>=120.0 and size.y>=360.0)
+	if _boot_entrance:
+		_update_boot_entrance(delta)
+		_visualizer.set_active(true)
+		return
+	# Full-screen loading can own focus outside the folder stack.
+	var focus_owner:=get_viewport().gui_get_focus_owner()
+	var owns_focus:=focus_owner==null or is_ancestor_of(focus_owner)
+	_button_wave.advance(delta,owns_focus and is_visible_in_tree() and _title_screen.is_visible_in_tree() and navigation.is_top(_title_screen) and not navigation.busy)
+	_visualizer.readability_right=_title_screen.position.x+_title_screen.size.x if owns_focus and _title_screen.is_visible_in_tree() and navigation.is_top(_title_screen) else 0.0
+	_visualizer.set_active(true)
 
 func action_button(id: String) -> Button: return _actions.get(id)
 
 func _activate_action(id: String) -> void:
+	if _boot_entrance: return
 	if navigation.busy or navigation.depth()!=1: return
 	match id:
 		"StartGame": open_setup()

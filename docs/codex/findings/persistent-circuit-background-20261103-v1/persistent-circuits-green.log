@@ -1,0 +1,21 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Loaded 40 cards.
+ERROR: The object does not have any 'meta' values with the key 'persistent_game_circuits'.
+   at: get_meta (core/object/object.cpp:1053)
+   GDScript backtrace (most recent call first):
+       [0] _install_circuit_background (res://scripts/gameplay.gd:144)
+       [1] _ready (res://scripts/gameplay.gd:66)
+       [2] go (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/persistent-circuit-background-20261103-v1/check.gd:12)
+PASS: Gameplay owns one persistent circuit background
+PASS: Circuit background actively animates
+PASS: Circuit background is beneath HUD and game menus
+PASS: Main Menu uses the same background instance
+PASS: Studio creation leaves the background running
+PASS: Loading supports the persistent background
+PASS: Loading retains the same moving threads
+PASS: Loading text stays above the background
+PASS: Loading returns the same background to the game
+PASS: Background continues animating while paused
+PASS: Guided production shows the persistent background
+PERSISTENT_CIRCUITS checks=11 failures=0

@@ -7,13 +7,7 @@ signal step_requested(direction: int)
 class Spotlight extends Control:
  var hole:=Rect2()
  func _draw() -> void:
-  var color:=Color(0.015,0.012,0.03,0.76)
-  if hole.size==Vector2.ZERO:draw_rect(Rect2(Vector2.ZERO,size),color);return
-  draw_rect(Rect2(0,0,size.x,hole.position.y),color)
-  draw_rect(Rect2(0,hole.end.y,size.x,maxf(0,size.y-hole.end.y)),color)
-  draw_rect(Rect2(0,hole.position.y,hole.position.x,hole.size.y),color)
-  draw_rect(Rect2(hole.end.x,hole.position.y,maxf(0,size.x-hole.end.x),hole.size.y),color)
-  draw_rect(hole,Color("5ef2c2"),false,3.0)
+  if hole.has_area():draw_rect(hole,Color("5ef2c2"),false,3.0)
 var panel: PanelContainer
 var title: Label
 var body: Label

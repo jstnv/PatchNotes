@@ -12,6 +12,8 @@ const CORE_BY_STAT := {
 	&"design": ProjectState.CoreScore.DESIGN,
 }
 
+var _exhaustion_queued:=false
+var _exhaustion_attempted:=false
 var phase: Control
 var phase_name: String
 var played_hand: Label
@@ -254,6 +256,7 @@ func refresh() -> void:
 			progress.text += "\nPlay a Feature before Beta."
 			progress.tooltip_text = "Play a Feature with positive Scope before Beta. Passes alone are not enough."
 	presentation_changed.emit()
+	request_exhaustion_check()
 
 
 func _synergy_tip() -> Dictionary:
@@ -345,3 +348,36 @@ func _beta_synergy_tip(selected: Array[CardView]) -> Dictionary:
 	if counts[CardData.BETA_CATEGORY_QA] >= 1 and counts[CardData.BETA_CATEGORY_MARKETING] >= 1 and counts[CardData.BETA_CATEGORY_INSIDER] >= 1:
 		return {"label": "Balanced ×1.25", "title": "Balanced Operations ready", "body": "This 2/1/1 mix of QA, Marketing and Insider gives ×1.25 to qualifying QA and Marketing output and Insider insight chances. It does not multiply cash rewards."}
 	return {"label": "Synergy: none", "title": "No Beta synergy on this hand", "body": "The hand can still play normally. Try four QA, four Marketing, or a 2/1/1 mix of QA, Marketing and Insider for a bonus."}
+
+## UI orchestration only: canonical commands retain finalization and legality.
+func request_exhaustion_check() -> void:
+	if not is_instance_valid(phase) or not phase.is_inside_tree():return
+	var cards: Array=phase.get("_candidate_cards")
+	if not cards.is_empty():_exhaustion_attempted=false;return
+	if _exhaustion_queued or _exhaustion_attempted:return
+	_exhaustion_queued=true
+	_advance_exhausted.call_deferred()
+
+func _advance_exhausted() -> void:
+	_exhaustion_queued=false
+	if not is_instance_valid(phase) or not phase.is_inside_tree() or overlay.visible or hand_motion.busy or _exhaustion_attempted:return
+	var actions: RefCounted=phase.call("_capture_development_actions")
+	var command: RefCounted=actions.hand
+	if not command.active or not command._candidate_cards.is_empty() or not actions.valid_pool():return
+	if phase_name in ["Design","Alpha"]:
+		if not command._available_features.is_empty() or command.pass_budget_available()>0:return
+		if phase_name=="Alpha" and not command._pending_playtest_categories.is_empty():return
+	else:
+		if not command._pending_corrective_pass_ids.is_empty():return
+		for card: CardData in command._beta_definitions:
+			if card.renewable or not project.is_beta_card_exhausted(card.id):return
+	match phase_name:
+		"Design":
+			phase.call("_on_proceed_to_alpha_pressed")
+			_exhaustion_attempted=project.has_design_bug_finalization()
+		"Alpha":
+			phase.call("request_proceed_to_beta")
+			_exhaustion_attempted=project.has_alpha_finalization() or phase.get("_scope_warning_pending")
+		"Beta":
+			phase.call("request_launch")
+			_exhaustion_attempted=project.has_beta_finalization() or phase.get("_launch_confirmation_pending")

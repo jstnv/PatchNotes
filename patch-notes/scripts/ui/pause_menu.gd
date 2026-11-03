@@ -36,7 +36,7 @@ func _ready() -> void:
 	panel.theme = preload("res://resources/ui/onyx_theme.tres")
 	add_child(panel)
 	var dim := ColorRect.new()
-	dim.color = Color(0.015, 0.01, 0.02, 0.8)
+	dim.color = Color.TRANSPARENT
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.add_child(dim)
 	var center := CenterContainer.new()

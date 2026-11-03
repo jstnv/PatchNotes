@@ -28,6 +28,10 @@ func state(run: RunState) -> Array:
 	return [run.get_cash_cents(), run.get_completed_run_cycles(), run.get_available_redraws(), run.get_owned_feature_ids(), run.get_studio_finance_snapshot(),run.get_studio_creation_snapshot()]
 func go() -> void:
 	var defaults := DemoSettingsStore.defaults()
+	# Exercise display confirmation from an explicitly saved windowed setup.
+	var windowed_defaults := defaults.duplicate(true)
+	windowed_defaults.fullscreen = false
+	check(DemoSettingsStore.write_settings(windowed_defaults) == OK, "Saved windowed setup is available for the preview test")
 	var invalid := defaults.duplicate()
 	invalid.Music = 101
 	check(not DemoSettingsStore.valid(invalid) and DemoSettingsStore.write_settings(invalid, "user://bad.cfg") == ERR_INVALID_DATA and not FileAccess.file_exists("user://bad.cfg"), "Invalid values reject without file creation")
@@ -73,7 +77,12 @@ func go() -> void:
 	settings.reset_button.pressed.emit()
 	check(settings.draft == defaults and settings.committed != defaults, "Reset Defaults is a draft until Apply")
 	settings.apply_draft()
+	if settings.previewing: settings.confirm_display()
 	check(settings.committed == defaults and not AudioServer.is_bus_mute(0), "Defaults persist and unmute")
+	settings.draft.fullscreen = false
+	settings.apply_draft()
+	if settings.previewing: settings.confirm_display()
+	check(not settings.committed.fullscreen, "Windowed mode can be restored for subsequent preview checks")
 	for size: Vector2i in [Vector2i(1152,648), Vector2i(1280,720)]:
 		root.size = size
 		root.content_scale_size = size

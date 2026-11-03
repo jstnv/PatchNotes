@@ -24,15 +24,18 @@ func _initialize() -> void:
 	expect(game.checkpoints.store.inspect().status == &"valid", "Real initial Studio checkpoint exists")
 	await check_pause_and_settings()
 	# Studio -> title -> Continue uses the real scene replacement and disk slot.
+	var circuits: Control=game.circuit_background
+	var circuit_id:=circuits.get_instance_id()
 	await key(KEY_ESCAPE)
 	game.pause_menu.main_menu_button.pressed.emit()
 	await scene_changed
 	game = current_scene
 	expect(not paused and game._active_phase is MainMenu, "Saved Studio returns to active title")
+	expect(is_instance_valid(circuits) and game.circuit_background==circuits and circuits.get_instance_id()==circuit_id and circuits._active,"Returning to Main Menu retains the same running circuits")
 	expect(game.checkpoints.store.inspect().payload == saved, "Returning from Studio does not create an extra save")
 	game._continue_checkpoint()
 	await process_frame
-	await skip_save_invitation()
+	await skip_save_invitation(false)
 	expect(game._active_phase is StudioPhase and game.run_state.get_studio_name() == "Pause test Studio", "Title Continue restores saved Studio")
 	# Play a real hand, then pause while its committed result is being presented.
 	expect(game._begin_next_project(game._active_phase, "Pause project", &"action", &"fantasy"), "Legal development begins")
@@ -87,7 +90,7 @@ func _initialize() -> void:
 	expect(game.checkpoints.store.inspect().payload == saved, "Mid-development return preserves exact Studio checkpoint")
 	game._continue_checkpoint()
 	await process_frame
-	await skip_save_invitation()
+	await skip_save_invitation(false)
 	expect(game.project_state == null and game.run_state.get_completed_run_cycles() == 0, "Continue rolls back unsaved hand and departure cycles")
 	expect(game.checkpoints.store.inspect().payload == saved, "Continue does not rewrite or pay anything twice")
 	await check_save_failure()
@@ -103,7 +106,12 @@ func _initialize() -> void:
 	print("PAUSE_MENU checks=%d failures=%d" % [checks,failures])
 	quit(0 if failures == 0 else 1)
 
-func skip_save_invitation() -> void:
+func skip_save_invitation(expect_invitation: bool = true) -> void:
+	if not expect_invitation:
+		var end := Time.get_ticks_msec() + 3000
+		while game._loading_checkpoint and Time.get_ticks_msec() < end: await process_frame
+		expect(game.guided_tutorial == null, "Continue restores without reopening the new-Studio invitation")
+		return
 	# New-save loading spans several rendered frames; a fixed single-frame wait
 	# can arrive before the invitation on a slower host. Keep the test bounded.
 	var deadline := Time.get_ticks_msec() + 3000
@@ -213,7 +221,7 @@ func check_save_failure() -> void:
 	game._quit_dialog.hide()
 	game._continue_checkpoint()
 	await process_frame
-	await skip_save_invitation()
+	await skip_save_invitation(false)
 
 func check_prior_world() -> void:
 	var path := OS.get_environment("PN_PAUSE_PRIOR_WORLD")

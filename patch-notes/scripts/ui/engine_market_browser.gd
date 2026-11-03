@@ -25,6 +25,17 @@ var skill_page: VBoxContainer
 var skill_button: Button
 var skill_back: Button
 var skill_feedback: Label
+var skill_view_switch: HSlider
+var skill_view_row: HBoxContainer
+var skill_challenge_tab: Label
+var skill_rewards_tab: Label
+var skill_detail: Label
+var skill_heading: Label
+var skill_progress: ProgressBar
+var skill_progress_label: Label
+var skill_selected_view: StringName = &""
+var skill_challenge_text := ""
+var skill_reward_text := ""
 var page_scroll: ScrollContainer
 var buttons: Dictionary = {}
 
@@ -68,6 +79,7 @@ func _init() -> void:
 	skill_tree=VBoxContainer.new();skill_tree.name="EngineSkillTree";skill_tree.add_theme_constant_override("separation",12);skill_page.add_child(skill_tree)
 	skill_page.size_flags_vertical=Control.SIZE_EXPAND_FILL;skill_tree.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	skill_grid=preload("res://scripts/ui/progression_tree_view.gd").new();skill_grid.size_flags_vertical=Control.SIZE_EXPAND_FILL;skill_tree.add_child(skill_grid)
+	skill_grid.ready.connect(_build_skill_details)
 	skill_grid.inspected.connect(_inspect_skill_node);skill_grid.action_requested.connect(_purchase_skill_node)
 	creation=VBoxContainer.new();creation.name="EngineCreation";creation.add_theme_constant_override("separation",18);pages.add_child(creation)
 	FolderUI.button(creation,"Back to Engines",func():_show_page(&"overview"))
@@ -132,7 +144,61 @@ func _show_page(page: StringName) -> void:
 
 func _open_skill_tree() -> void:
 	if run==null or run.get_proprietary_engine_row(selected_id).is_empty():return
+	skill_selected_view=&""
 	skill_feedback.text="";_refresh_skill_tree();_show_page(&"skill")
+
+func _build_skill_details() -> void:
+	skill_grid.detail_width=480.0
+	skill_grid.minimum_detail_height=400.0
+	var header: HBoxContainer=skill_grid._title.get_parent()
+	skill_grid._title.custom_minimum_size.x=88
+	var close_button: Control=header.get_child(1)
+	close_button.size_flags_vertical=Control.SIZE_SHRINK_CENTER
+	skill_view_row=HBoxContainer.new();skill_view_row.name="EngineViewSelector"
+	skill_view_row.add_theme_constant_override("separation",4);skill_view_row.size_flags_vertical=Control.SIZE_SHRINK_CENTER
+	header.add_child(skill_view_row);header.move_child(skill_view_row,1)
+	skill_challenge_tab=FolderUI.label(skill_view_row,"Challenge",&"MetadataLabel")
+	skill_challenge_tab.autowrap_mode=TextServer.AUTOWRAP_OFF;skill_challenge_tab.vertical_alignment=VERTICAL_ALIGNMENT_CENTER;skill_challenge_tab.add_theme_font_size_override("font_size",12)
+	skill_view_switch=HSlider.new();skill_view_switch.name="EngineViewSwitch"
+	skill_view_switch.min_value=0;skill_view_switch.max_value=1;skill_view_switch.step=1
+	skill_view_switch.custom_minimum_size=Vector2(48,32);skill_view_switch.focus_mode=Control.FOCUS_ALL;skill_view_switch.scrollable=false
+	skill_view_switch.tooltip_text="Switch between challenge and rewards."
+	var track:=StyleBoxFlat.new();track.bg_color=FolderUI.color(&"secondary");track.border_color=FolderUI.color(&"indigo")
+	track.set_border_width_all(1);track.set_corner_radius_all(6);track.content_margin_top=4;track.content_margin_bottom=4
+	skill_view_switch.add_theme_stylebox_override("slider",track)
+	var knob_image:=Image.create(16,16,false,Image.FORMAT_RGBA8);knob_image.fill(Color.TRANSPARENT)
+	for x in 16:
+		for y in 16:
+			if Vector2(x-7.5,y-7.5).length_squared()<=49.0:knob_image.set_pixel(x,y,FolderUI.color(&"mint"))
+	var knob:=ImageTexture.create_from_image(knob_image)
+	skill_view_switch.add_theme_icon_override("grabber",knob);skill_view_switch.add_theme_icon_override("grabber_highlight",knob)
+	skill_view_row.add_child(skill_view_switch)
+	skill_rewards_tab=FolderUI.label(skill_view_row,"Rewards",&"MetadataLabel")
+	skill_rewards_tab.autowrap_mode=TextServer.AUTOWRAP_OFF;skill_rewards_tab.vertical_alignment=VERTICAL_ALIGNMENT_CENTER;skill_rewards_tab.add_theme_font_size_override("font_size",12)
+	skill_view_switch.value_changed.connect(func(_value: float):_render_skill_view(true));skill_view_row.hide()
+	var surface:=FolderUI.surface(skill_grid.detail_extension)
+	surface.add_theme_stylebox_override("panel",FolderUI.THEME.get_stylebox("normal",&"Button"));surface.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	var inset:=MarginContainer.new();surface.add_child(inset)
+	for edge in ["left","right","top","bottom"]:inset.add_theme_constant_override("margin_"+edge,14)
+	var body:=VBoxContainer.new();body.add_theme_constant_override("separation",8);inset.add_child(body)
+	skill_heading=FolderUI.label(body,"Challenge",&"SectionHeading");skill_heading.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+	skill_detail=FolderUI.label(body,"");skill_detail.name="EngineUpgradeDetail";skill_detail.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+	skill_progress=ProgressBar.new();skill_progress.name="EngineUpgradeProgress";skill_progress.custom_minimum_size.y=62;skill_progress.show_percentage=false;skill_progress.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	skill_progress.add_theme_stylebox_override("background",FolderUI.THEME.get_stylebox("normal",&"Button"));skill_progress.add_theme_stylebox_override("fill",FolderUI.THEME.get_stylebox("normal",&"ActiveFolderTab"))
+	skill_grid.action_extension.add_child(skill_progress)
+	skill_progress_label=FolderUI.label(skill_progress,"",&"MetadataLabel");skill_progress_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	skill_progress_label.offset_left=10;skill_progress_label.offset_right=-10;skill_progress_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;skill_progress_label.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
+	skill_progress_label.add_theme_font_size_override("font_size",14);skill_progress_label.add_theme_color_override("font_color",FolderUI.color(&"text"));skill_progress_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
+
+func _render_skill_view(reset_scroll: bool=false) -> void:
+	var rewards:=skill_view_switch.value>=0.5
+	skill_heading.text="Rewards" if rewards else "Challenge"
+	skill_detail.text=skill_reward_text if rewards else skill_challenge_text
+	skill_challenge_tab.add_theme_color_override("font_color",FolderUI.color(&"muted") if rewards else FolderUI.color(&"mint"))
+	skill_rewards_tab.add_theme_color_override("font_color",FolderUI.color(&"mint") if rewards else FolderUI.color(&"muted"))
+	if skill_grid.popup.visible:
+		if reset_scroll:skill_grid.reset_details_scroll()
+		skill_grid._fit_popup.call_deferred()
 
 func _back() -> void:
 	if skill_page.visible:_show_page(&"detail");skill_button.grab_focus()
@@ -211,11 +277,28 @@ func _refresh_skill_tree() -> void:
 
 func _inspect_skill_node(id: StringName) -> void:
 	var node: Dictionary=skill_grid.rows.get(id,{})
-	if node.get("kind")!=&"skill":return
+	if node.get("kind")!=&"skill":
+		skill_selected_view=&"";skill_view_row.hide();skill_grid._copy.show();return
+	if skill_selected_view!=id:
+		skill_selected_view=id;skill_view_switch.set_value_no_signal(0)
+	skill_view_row.show()
+	var definition: Dictionary=run.ProprietaryEngines.node(node.branch,node.generation)
+	var category:=str(node.branch).capitalize()
+	skill_challenge_text="Use this engine in Design or Alpha and play Features that contribute %d printed %s Core in total. Primary and secondary Core both count. Pass cards, synergies and replays do not count."%[int(definition.threshold),category]
+	if node.state=="locked":skill_challenge_text="First implement the Generation I %s upgrade to start this challenge.\n\n"%category+skill_challenge_text
+	skill_reward_text="+20% matching Feature Core toward Pass Budget generation." if node.generation==1 else "+10% matching Pass effectiveness." if node.branch in [&"graphics",&"sound"] else "−15% matching Feature bug pressure."
+	skill_reward_text+="\n\nImplementing costs %s and takes no cycle."%CashFormatter.format_exact_cents(int(node.cost_cents))
+	skill_grid._copy.hide();skill_grid.use_detail_extension();_render_skill_view()
+	var row: Dictionary=run.get_proprietary_engine_row(selected_id)
+	var progress: int=int(definition.threshold) if node.state=="complete" else int(row.challenge_progress.get(node.branch,0)) if node.state!="locked" else 0
+	skill_progress.max_value=int(definition.threshold);skill_progress.value=progress;skill_progress.show()
+	skill_progress_label.text="Implemented" if node.state=="complete" else "%d / %d %s Core%s"%[progress,int(definition.threshold),category," · Locked" if node.state=="locked" else ""]
 	var quote: Dictionary=run.get_engine_skill_quote(selected_id,node.branch) if node.state=="ready" else {}
 	skill_grid.action_button.name="EngineSkill_%s_%d"%[node.branch,node.generation]
-	skill_grid.configure_action("Purchased" if node.state=="complete" else node.action,not quote.is_empty())
-	if node.state=="ready" and quote.is_empty():skill_grid.set_description(node.description+"\n\nPurchase unavailable: check available cash, overdue bills or the current save/action warning.")
+	skill_grid.configure_action("Implement · "+CashFormatter.format_exact_cents(int(node.cost_cents)) if node.state=="ready" else "",not quote.is_empty())
+	if node.state=="ready" and quote.is_empty():
+		skill_grid.set_description("Implementation unavailable: check available cash, overdue bills or the current save/action warning.");skill_grid._copy.show()
+	skill_grid._fit_popup.call_deferred()
 
 func _purchase_skill_node(id: StringName) -> void:
 	var node: Dictionary=skill_grid.rows.get(id,{})

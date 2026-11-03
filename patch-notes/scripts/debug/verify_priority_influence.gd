@@ -93,18 +93,18 @@ func _verify_predevelopment_chart(resolution: Vector2i) -> void:
 	_assert_chart(chart, [25, 25, 25, 25], [.25, .25, .25, .25], "Pre-Development default")
 	expect(chart.get("category_names") == CORE_NAMES, "Pre-Development labels use Graphics, Sound, Tech, Design")
 	_assert_bounds(chart, overlay, resolution, "Pre-Development %s" % resolution)
-	for i in range(4): overlay.priority_sliders[i].value = [50, 15, 15, 20][i]
+	for i in range(4): overlay.priority_sliders[i].value = [40, 20, 20, 20][i]
 	await _settle_chart()
-	_assert_chart(chart, [50, 15, 15, 20], [.5, .15, .15, .2], "Pre-Development edited")
+	_assert_chart(chart, [40, 20, 20, 20], [.4, .2, .2, .2], "Pre-Development edited")
 	expect(not overlay.begin_button.disabled, "Valid displayed allocation enables Begin Development")
 	await _capture("predevelopment", resolution)
-	overlay.priority_sliders[0].value = 40
+	overlay.priority_sliders[0].value = 35
 	await _settle_chart()
-	_assert_chart(chart, [40, 15, 15, 20], [.4, .15, .15, .2, .1], "Pre-Development under budget")
+	_assert_chart(chart, [35, 20, 20, 20], [.35, .2, .2, .2, .05], "Pre-Development under budget")
 	expect(overlay.begin_button.disabled, "Unallocated draft remains invalid for Begin Development")
-	for slider in overlay.priority_sliders: slider.value = 50
+	for slider in overlay.priority_sliders: slider.value = 40
 	await _settle_chart()
-	_assert_chart(chart, [50, 50, 50, 50], [.25, .25, .25, .25], "Pre-Development over budget")
+	_assert_chart(chart, [40, 40, 40, 40], [.25, .25, .25, .25], "Pre-Development over budget")
 	expect(overlay.begin_button.disabled, "Over-budget draft remains invalid for Begin Development")
 	overlay.queue_free()
 	await _settle_chart()
@@ -133,8 +133,8 @@ func _verify_phase_chart(title: String, resolution: Vector2i) -> void:
 	_assert_bounds(chart, overlay.dialog, resolution, title + " %s" % resolution)
 	var before := _snapshot(project, run)
 	var committed: Dictionary = phase.get_priority_distribution()
-	var values := [75, 25] if title == "Beta" else [50, 15, 15, 20]
-	var shares := [.75, .25] if title == "Beta" else [.5, .15, .15, .2]
+	var values := [60, 40] if title == "Beta" else [40, 20, 20, 20]
+	var shares := [.6, .4] if title == "Beta" else [.4, .2, .2, .2]
 	for i in range(names.size()): (phase.get_node("%" + names[i]) as Range).value = values[i]
 	await _settle_chart()
 	_assert_chart(chart, values, shares, title + " staged initialization")
@@ -187,9 +187,9 @@ func _verify_contract_chart(resolution: Vector2i) -> void:
 	_assert_chart(chart, [25, 25, 25, 25], [.25, .25, .25, .25], "Contract default")
 	_assert_bounds(chart, panel, resolution, "Contract %s" % resolution)
 	var inputs: Dictionary = phase.get("_priority_inputs")
-	for i in range(4): (inputs[i] as Range).value = [50, 15, 15, 20][i]
+	for i in range(4): (inputs[i] as Range).value = [40, 20, 20, 20][i]
 	await _settle_chart()
-	_assert_chart(chart, [50, 15, 15, 20], [.5, .15, .15, .2], "Contract edited")
+	_assert_chart(chart, [40, 20, 20, 20], [.4, .2, .2, .2], "Contract edited")
 	await _capture("contract", resolution)
 	var cancel: Button
 	for button in panel.find_children("*", "Button", true, false):

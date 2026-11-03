@@ -117,7 +117,7 @@ static func hire_specialist(state: Dictionary, role: StringName, cycle: int) -> 
 static func buy_course(state: Dictionary, id: StringName, course: StringName, cycle: int) -> Dictionary:
 	return _apply(state,{"type":&"course","employee_id":id,"course":course,"cycle":cycle,"fee_cents":15000}) if valid(state) else {}
 static func qa_beta_hand(state: Dictionary, project: StringName, project_cycle: int, cycle: int, search: int, debug: int, discovered: int, fixed: int) -> Dictionary:
-	return _apply(state,{"type":&"qa_beta","project_id":project,"project_cycle":project_cycle,"cycle":cycle,"search":search,"debug":debug,"discovered":discovered,"fixed":fixed}) if valid(state) else {}
+	return _apply(state,{"type":&"qa_beta","project_id":project,"project_cycle":project_cycle,"cycle":cycle,"search":search,"debug":debug,"discovered":discovered,"fixed":fixed,"rules_version":2}) if valid(state) else {}
 static func qa_wage(e: Dictionary) -> int: return QA.wage(e)
 static func qa_swap_available(state: Dictionary, project: StringName) -> bool: return valid(state) and QA.available(state,project)
 static func qa_swap(state: Dictionary, project: StringName, project_cycle: int, cycle: int) -> Dictionary:

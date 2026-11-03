@@ -1,0 +1,95 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.18 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU
+
+Loaded 40 cards.
+PASS: How to Play leaves its surroundings transparent
+PASS: How to Play retains the panel and folders
+PASS: Actual background remains visible at the guide's outer corner
+PASS: Actual Main Menu guide keeps the background while navigating away from the buttons
+PASS: Pause surroundings are transparent
+PASS: Finances and Bank surroundings are transparent
+PASS: Finance input remains blocked outside the panel
+PASS: Tutorial surroundings are transparent and modal
+PASS: Pass selection surroundings are transparent
+PASS: Developer menu surroundings are transparent
+PASS: Focused guidance does not darken the surroundings
+PASS: Focused guidance retains modal input handling
+PASS: Focused guidance leaves the actual background visible
+PASS: New-player invitation leaves the surroundings visible
+PASS: Guided gameplay leaves the persistent background visible
+PASS: Priority setup opens
+PASS: Initial priorities are transparent and modal
+WARNING: Artwork not found for card 'keyboard_and_mouse': res://assets/artwork/keyboard_and_mouse.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_artwork_once (res://scripts/cards/card_view.gd:212)
+       [1] _refresh_artwork (res://scripts/cards/card_view.gd:196)
+       [2] refresh (res://scripts/cards/card_view.gd:133)
+       [3] _ready (res://scripts/cards/card_view.gd:60)
+       [4] _publish_refill (res://scripts/phases/design_phase.gd:309)
+       [5] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:293)
+       [6] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:281)
+       [7] begin_design (res://scripts/phases/design_phase.gd:180)
+       [8] commit_draft (res://scripts/ui/priority_overlay.gd:176)
+       [9] go (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:66)
+       [10] frames (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:9)
+WARNING: Artwork not found for card 'sprites': res://assets/artwork/sprites.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_artwork_once (res://scripts/cards/card_view.gd:212)
+       [1] _refresh_artwork (res://scripts/cards/card_view.gd:196)
+       [2] refresh (res://scripts/cards/card_view.gd:133)
+       [3] _ready (res://scripts/cards/card_view.gd:60)
+       [4] _publish_refill (res://scripts/phases/design_phase.gd:309)
+       [5] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:293)
+       [6] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:281)
+       [7] begin_design (res://scripts/phases/design_phase.gd:180)
+       [8] commit_draft (res://scripts/ui/priority_overlay.gd:176)
+       [9] go (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:66)
+       [10] frames (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:9)
+WARNING: Artwork not found for card 'split_screen': res://assets/artwork/split_screen.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_artwork_once (res://scripts/cards/card_view.gd:212)
+       [1] _refresh_artwork (res://scripts/cards/card_view.gd:196)
+       [2] refresh (res://scripts/cards/card_view.gd:133)
+       [3] _ready (res://scripts/cards/card_view.gd:60)
+       [4] _publish_refill (res://scripts/phases/design_phase.gd:309)
+       [5] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:293)
+       [6] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:281)
+       [7] begin_design (res://scripts/phases/design_phase.gd:180)
+       [8] commit_draft (res://scripts/ui/priority_overlay.gd:176)
+       [9] go (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:66)
+       [10] frames (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:9)
+WARNING: Artwork not found for card '8_bit_sound': res://assets/artwork/8_bit_sound.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_artwork_once (res://scripts/cards/card_view.gd:212)
+       [1] _refresh_artwork (res://scripts/cards/card_view.gd:196)
+       [2] refresh (res://scripts/cards/card_view.gd:133)
+       [3] _ready (res://scripts/cards/card_view.gd:60)
+       [4] _publish_refill (res://scripts/phases/design_phase.gd:309)
+       [5] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:293)
+       [6] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:281)
+       [7] begin_design (res://scripts/phases/design_phase.gd:180)
+       [8] commit_draft (res://scripts/ui/priority_overlay.gd:176)
+       [9] go (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:66)
+       [10] frames (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:9)
+WARNING: Artwork not found for card 'score_system': res://assets/artwork/score_system.png
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_artwork_once (res://scripts/cards/card_view.gd:212)
+       [1] _refresh_artwork (res://scripts/cards/card_view.gd:196)
+       [2] refresh (res://scripts/cards/card_view.gd:133)
+       [3] _ready (res://scripts/cards/card_view.gd:60)
+       [4] _publish_refill (res://scripts/phases/design_phase.gd:309)
+       [5] _deal_next_candidate_pool (res://scripts/phases/design_phase.gd:293)
+       [6] _initialize_design_lifecycle (res://scripts/phases/design_phase.gd:281)
+       [7] begin_design (res://scripts/phases/design_phase.gd:180)
+       [8] commit_draft (res://scripts/ui/priority_overlay.gd:176)
+       [9] go (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:66)
+       [10] frames (C:/Users/64jus/OneDrive/Documents/GitHub/PatchNotes/docs/codex/findings/transparent-menu-surroundings-20261103-v1/check.gd:9)
+PASS: Priority setup can still be committed
+PASS: Later priority edits stay transparent
+PASS: Contract completion and priority modal surroundings are transparent
+MENU_SURROUNDINGS checks=20 failures=0

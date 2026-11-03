@@ -35,7 +35,7 @@ func _verify() -> void:
 		root.size=dimensions;root.content_scale_size=dimensions
 		var run:=preload("res://scripts/debug/employee_test_actions.gd").fresh_two_releases(catalog)
 		var panel:=EmployeePanel.new();root.add_child(panel);panel.open_for(run);await frames(8)
-		test(panel.tabs.size()==3 and panel._hire_buttons.size()==3,"Three role folders and hires are visible")
+		test(panel.employee_buttons.size()==3 and panel.course_buttons.size()==3,"Three employee rows expose individual course entries")
 		var before:=[run.get_cash_cents(),run.get_completed_run_cycles(),run.get_employees()]
 		await click(panel._hire_buttons[&"production"]);await create_timer(0.3).timeout
 		test(panel.confirmation.visible and panel.confirmation.get_ok_button().theme_type_variation==&"PrimaryButton","Pointer opens themed hire confirmation")
@@ -44,17 +44,18 @@ func _verify() -> void:
 		await click(panel._hire_buttons[&"production"]);await create_timer(0.3).timeout
 		await key(panel.confirmation.get_ok_button())
 		test(run.get_employees().employees.size()==1 and run.get_cash_cents()==before[0]-10000,"Keyboard confirms Production hire once")
-		var manager: Button=panel._hire_buttons[&"project_manager"]
-		panel.content.get_parent().ensure_control_visible(manager);await frames()
+		await click(panel.employee_buttons[&"project_manager"])
+		var manager: Button=panel._hire_buttons[&"project_manager"];await frames()
 		await key(manager);await create_timer(0.3).timeout;await key(panel.confirmation.get_ok_button())
 		test(run.get_employees().employees.size()==2 and run.get_cash_cents()==before[0]-20000,"Scrollable Manager hire is keyboard reachable")
-		await click(panel.tabs[&"courses"])
+		await click(panel.course_buttons[&"production"])
 		panel.course_grid.inspect(&"production_planning");await frames()
 		var course: Button=panel.course_grid.action_button
 		test(course!=null and not course.disabled,"Production first course is available")
 		if course!=null:
 			await frames();await key(course);await create_timer(0.3).timeout
 			await shot("course-confirm-%d"%dimensions.x);await key(panel.confirmation.get_ok_button())
+		panel._back();panel._back();await frames();await click(panel.course_buttons[&"project_manager"])
 		panel.course_grid.inspect(&"manager_1");await frames()
 		course=panel.course_grid.action_button
 		test(course!=null and not course.disabled,"Manager first course is available")
@@ -62,9 +63,11 @@ func _verify() -> void:
 			await frames();await key(course);await create_timer(0.3).timeout;await key(panel.confirmation.get_ok_button())
 		test(run.get_cash_cents()==before[0]-50000 and run.get_completed_run_cycles()==before[1],"Two hires and two courses charge exact $500 with no cycles")
 		test(EmployeeRoster.Career.level(run._employees)==0 and not EmployeeRoster.Career.alignment_available(run._employees),"Enrollment gives no immediate range or alignment buff")
-		await click(panel.tabs[&"progress"]);await shot("progress-%d"%dimensions.x)
+		panel.course_grid.inspect(&"manager_1");await frames();await shot("progress-%d"%dimensions.x)
 		test(panel.footer.is_visible_in_tree() and Rect2(Vector2.ZERO,Vector2(dimensions)).encloses(panel.panel.get_global_rect()),"Fixed payroll footer and bounded folder fit viewport")
-		await key(panel.back_button);test(not panel.visible,"Back returns from Employees")
+		await key(panel.back_button);test(panel.visible and panel.section==&"courses" and not panel.course_grid.popup.visible,"Header Back closes inspector first")
+		await key(panel.back_button);test(panel.visible and panel.section==&"roster","Tree Back returns to owning employee")
+		await key(panel.back_button);test(not panel.visible,"Roster Back returns from Employees")
 		panel.open_for(run);await frames();await key(panel.back_button,KEY_ESCAPE);test(not panel.visible,"Escape returns from Employees")
 		panel.queue_free();await frames()
 		for phase_name: StringName in [&"design",&"alpha"]:await phase_ui(phase_name,dimensions,catalog)

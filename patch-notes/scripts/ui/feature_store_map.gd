@@ -3,6 +3,7 @@ extends Control
 
 const GridLayout := preload("res://scripts/ui/feature_store_layout.gd")
 var edge_routes: Dictionary = {}
+var trails: Control
 
 var store: FeatureStore
 var scroll: ScrollContainer
@@ -69,7 +70,7 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer, map_host: Contr
 		else: button.pressed.connect(func(): set_zoom(zoom / 1.25))
 	store._debug.reparent(toolbar)
 	zoom_label = Label.new()
-	FeatureStore.backed_text(zoom_label)
+	FeatureStore.outlined_text(zoom_label)
 	toolbar.add_child(zoom_label)
 	var help := Label.new()
 	help.text = "Drag: pan · Wheel: zoom · Arrow keys: browse · Click: inspect"
@@ -108,6 +109,12 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer, map_host: Contr
 	canvas.resized.connect(_center_canvas)
 	tree = Control.new()
 	canvas.add_child(tree)
+	trails = preload("res://scripts/ui/feature_store_trails.gd").new()
+	tree.add_child(trails)
+	trails.map_view = scroll
+	# Parent visibility signals can precede propagation to descendants.
+	store.visibility_changed.connect(func(): trails.sync_processing.call_deferred())
+	trails.visibility_changed.connect(func(): trails.sync_processing.call_deferred())
 	store._scroll = scroll
 	store._tree = tree
 	tree.draw.connect(store._draw_connections)
@@ -331,42 +338,56 @@ func layout_map(_children: Dictionary) -> void:
 		heading.theme_type_variation=&"HeadingLabel"
 		heading.add_theme_font_size_override("font_size", 36)
 		if lane == &"Technology & Tools":
-			var row_center := node_footprint(store._nodes[&"keyboard_and_mouse"]).get_center().x
-			heading.size = Vector2(2.0*minf(row_center-area.position.x,area.end.x-row_center),44)
-			heading.position = Vector2(row_center-heading.size.x/2.0,area.position.y+16.0)
+			heading.size = Vector2(640,56)
+		elif lane in [&"Gameplay", &"Story & World"]:
+			heading.size = Vector2(320,56)
 		else:
-			# Bound the rotated label to its text zone instead of letting its
-			# control extend through the neighboring Technology root row.
-			var label_span := 224.0 if lane in [&"Visuals", &"Audio"] else 320.0
-			heading.size = Vector2(minf(label_span, area.size.y - 32.0), 56)
-			heading.rotation = -PI / 2.0 if direction == Vector2.LEFT else PI / 2.0
-			heading.position = Vector2(area.end.x - 64, area.get_center().y + heading.size.x / 2.0) if direction == Vector2.LEFT else Vector2(area.position.x + 64, area.get_center().y - heading.size.x / 2.0)
+			heading.size = Vector2(224,56)
+			heading.rotation = -PI/2.0 if direction == Vector2.LEFT else PI/2.0
 		heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		tree.add_child(heading)
 		category_headers[lane] = heading
 		origins[lane] = area.get_center()
-	# An empty organizing square is presentation, never a purchasable root.
+	# The center holds category labels, never a purchasable root or Feature.
 	center_square=GridLayout.center_square()
 	center=center_square.get_center()
+	var anchor_ids:={&"Visuals":&"4_color_palette",&"Audio":&"8_bit_sound",&"Technology & Tools":&"keyboard_and_mouse",&"Gameplay":&"lives_system",&"Story & World":&"simple_story"}
+	var anchors:={}
+	var inner:=center_square.grow(-16.0)
+	for lane: StringName in store.LANE_ORDER:
+		var root_rect:=node_footprint(store._nodes[anchor_ids[lane]])
+		anchors[lane]=root_rect
+		var heading: Label=category_headers[lane]
+		var rect:=header_rect(heading)
+		var half:=rect.size/2.0
+		var wanted:=root_rect.get_center()
+		if lane==&"Technology & Tools":wanted=Vector2(center.x,inner.position.y+half.y)
+		elif lane==&"Visuals":wanted.x=inner.position.x+half.x
+		elif lane==&"Audio":wanted.x=inner.end.x-half.x
+		else:wanted.y=inner.end.y-half.y
+		wanted=Vector2(clampf(wanted.x,inner.position.x+half.x,inner.end.x-half.x),clampf(wanted.y,inner.position.y+half.y,inner.end.y-half.y))
+		heading.position+=wanted-rect.get_center()
 	category_paths.clear()
-	var top:=Vector2(center.x,center_square.position.y)
-	var technology_end:=Vector2(center.x,node_footprint(store._nodes[&"keyboard_and_mouse"]).end.y+8.0)
-	category_paths.append(PackedVector2Array([top,technology_end]))
-	for lane: StringName in [&"Visuals",&"Audio"]:
-		var area: Rect2=category_regions[lane]
-		var left: bool=lane==&"Visuals"
-		var port:=Vector2(center_square.position.x if left else center_square.end.x,center.y-GridLayout.PITCH)
-		var anchor:=Vector2(area.end.x if left else area.position.x,header_rect(category_headers[lane]).get_center().y)
-		var corridor: float=(port.x+anchor.x)*0.5
-		category_paths.append(PackedVector2Array([port,Vector2(corridor,port.y),Vector2(corridor,anchor.y),anchor]))
-	for lane: StringName in [&"Gameplay",&"Story & World"]:
-		var area: Rect2=category_regions[lane]
-		var left: bool=lane==&"Gameplay"
-		var port:=Vector2(center.x+(-1.0 if left else 1.0)*center_square.size.x*0.25,center_square.end.y)
-		var anchor:=Vector2(area.end.x if left else area.position.x,header_rect(category_headers[lane]).get_center().y)
-		var corridor: float=anchor.x+(16.0 if left else -16.0)
-		var exit_y: float=center_square.end.y+8.0
-		category_paths.append(PackedVector2Array([port,Vector2(port.x,exit_y),Vector2(corridor,exit_y),Vector2(corridor,anchor.y),anchor]))
+	for lane: StringName in store.LANE_ORDER:
+		var root_rect: Rect2=anchors[lane]
+		var port: Vector2
+		var anchor: Vector2
+		if lane==&"Technology & Tools":
+			port=Vector2(center.x,center_square.position.y)
+			anchor=Vector2(center.x,root_rect.end.y+8.0)
+		elif lane in [&"Visuals",&"Audio"]:
+			var left: bool=lane==&"Visuals"
+			port=Vector2(center_square.position.x if left else center_square.end.x,root_rect.get_center().y)
+			anchor=Vector2(root_rect.end.x+8.0 if left else root_rect.position.x-8.0,port.y)
+		else:
+			# The lower roots sit just outside the square, above its bottom edge.
+			# Leave from the lower perimeter and route around it to each root.
+			port=Vector2(clampf(root_rect.get_center().x,center_square.position.x+64.0,center_square.end.x-64.0),center_square.end.y)
+			anchor=Vector2(root_rect.get_center().x,root_rect.end.y+8.0)
+			var corridor_y:=center_square.end.y+GridLayout.PITCH/2.0
+			category_paths.append(PackedVector2Array([port,Vector2(port.x,corridor_y),Vector2(anchor.x,corridor_y),anchor]))
+			continue
+		category_paths.append(PackedVector2Array([port,anchor]))
 	var extent: Rect2 = category_regions[&"Technology & Tools"]
 	for area: Rect2 in category_regions.values(): extent = extent.merge(area)
 	extent = extent.merge(center_square).grow(32.0)
@@ -390,6 +411,7 @@ func layout_map(_children: Dictionary) -> void:
 	bounds = extent.size
 	store._lane_heading.hide()
 	tree.size = bounds
+	trails.size = bounds
 	# Wait for Containers to lay out before measuring the first overview.
 	_initial_overview()
 

@@ -19,6 +19,7 @@ const INSTRUCTIONS := [
 ]
 var model: GuidedProductionModel
 var root_control: Control
+var practice_background: ColorRect
 var heading: Label
 var progress: Label
 var instruction: Label
@@ -58,6 +59,7 @@ func _ready() -> void:
 	root_control.theme = preload("res://resources/ui/onyx_theme.tres")
 	add_child(root_control)
 	var shade := ColorRect.new()
+	practice_background = shade
 	shade.color = FolderUI.color(&"background")
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root_control.add_child(shade)
@@ -216,6 +218,7 @@ func _button(parent: Node, text: String, action: Callable) -> Button:
 
 func open_invitation() -> void:
 	asking = true
+	practice_background.color = Color.TRANSPARENT
 	prompt.show(); practice.hide()
 	progress.text = "Welcome to your Studio"
 	instruction.text = "Have you played Patch Notes before?"
@@ -237,6 +240,7 @@ func start_practice() -> bool:
 	model = GuidedProductionModel.new()
 	if not model.start(get_node("/root/CardDatabase").get_development_catalog()): return false
 	asking = false
+	practice_background.color = Color.TRANSPARENT
 	invitation.hide()
 	heading.reparent(guide_rows)
 	heading.theme_type_variation=&"HeadingLabel"

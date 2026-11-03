@@ -24,7 +24,7 @@ class CenteredHost extends Container:
 func _ready() -> void:
 	layer=25
 	add_to_group(PauseMenu.CANCEL_OWNER_GROUP)
-	var shade:=ColorRect.new();shade.color=Color(0.015,0.02,0.025,0.85)
+	var shade:=ColorRect.new();shade.color=Color.TRANSPARENT
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);add_child(shade)
 	_host=CenteredHost.new();shade.add_child(_host);_host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_host.mouse_filter=Control.MOUSE_FILTER_IGNORE

@@ -1,0 +1,5 @@
+# Repository synchronization — 2026-11-03
+
+Starting branch `main`, HEAD `529aeac81bef9a36600761a35d8518f2a75f993c`; the remote branch matched that commit when checked. The user requested publication of completed work. The prepared snapshot includes tracked source and records, new game scripts and boot assets, recent session logs, and the persistent-background finding. Generated simulator copies, temporary profiles, save fixtures and `.codex-godot-temp` remain local.
+
+Fresh Godot 4.7.1 headless persistent-background verification: 14 checks, 0 failures, including normal and canceled loading; the engine reported 20 leaked ObjectDB instances at test exit. `git -c core.whitespace=cr-at-eol diff --cached --check` passed for the prepared snapshot. The earlier `git diff --check` without that setting reported CRLF line endings as trailing whitespace; the repository preserves exact bytes for source files. Physical listening, exported-device checks and broad performance were not performed in this synchronization pass. Existing task logs retain previous failures and focused evidence.
