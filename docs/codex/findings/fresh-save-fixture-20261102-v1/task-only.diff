@@ -1,0 +1,72 @@
+diff --git a/patch-notes/scripts/debug/ui_test_actions.gd b/patch-notes/scripts/debug/ui_test_actions.gd
+index e70263c4..0f4a3697 100644
+--- a/patch-notes/scripts/debug/ui_test_actions.gd
++++ b/patch-notes/scripts/debug/ui_test_actions.gd
+@@ -1,15 +1,27 @@
+ extends RefCounted
+ ## Drive the real asynchronous new-save path in isolated UI fixtures.
++## Rival hydration and durable publication are setup, not ordinary UI actions.
++const NEW_SAVE_TIMEOUT_MSEC := 60000
+ static func finish_new_save(game: Node) -> void:
+-	var deadline := Time.get_ticks_msec() + 20000
++	var started := Time.get_ticks_msec()
++	var deadline := started + NEW_SAVE_TIMEOUT_MSEC
++	var next_report := started + 10000
+ 	while game.get("_transition_in_progress") and Time.get_ticks_msec() < deadline:
++		if Time.get_ticks_msec() >= next_report:
++			print("NEW_SAVE_WAIT elapsed_ms=%d phase=%s" % [Time.get_ticks_msec()-started,_new_save_phase(game)])
++			next_report += 10000
+ 		await game.get_tree().process_frame
+-	assert(not game.get("_transition_in_progress"), "New-save transition timed out")
++	assert(not game.get("_transition_in_progress"), "New-save transition timed out after%dms (phase=%s)" % [Time.get_ticks_msec()-started,_new_save_phase(game)])
++	print("NEW_SAVE_READY waited_ms=%d" % (Time.get_ticks_msec()-started))
+ 	assert(game.get("_active_phase") is StudioPhase)
+ 	if game.get("guided_tutorial") != null:
+ 		game.guided_tutorial.choice.emit(true, false)
+ 	await game.get_tree().process_frame
+ 
++static func _new_save_phase(game: Node) -> String:
++	var phase: Node = game.get("_active_phase")
++	return str(phase.name) if is_instance_valid(phase) else "none"
++
+ static func create_feature_engine(run: RunState,label: String) -> StringName:
+ 	var quote:=run.get_proprietary_engine_creation_quote(label)
+ 	assert(not quote.is_empty(),"Engine fixture needs an affordable creation quote")
+diff --git a/patch-notes/scripts/debug/verify_feature_store_radial.gd b/patch-notes/scripts/debug/verify_feature_store_radial.gd
+index 8a0ffbaa..fcc4b4ee 100644
+--- a/patch-notes/scripts/debug/verify_feature_store_radial.gd
++++ b/patch-notes/scripts/debug/verify_feature_store_radial.gd
+@@ -1,9 +1,10 @@
+ extends SceneTree
+ 
++const VIEWPORTS := [Vector2i(1152,648),Vector2i(900,600),Vector2i(1280,720)]
+ var failures := 0
+ 
+ func _initialize() -> void:
+-	create_timer(110).timeout.connect(func(): push_error("Store verifier timed out"); quit(2))
++	create_timer(VIEWPORTS.size()*float(preload("res://scripts/debug/ui_test_actions.gd").NEW_SAVE_TIMEOUT_MSEC)/1000.0+50.0).timeout.connect(func(): push_error("Store verifier timed out"); quit(2))
+ 	if not OS.get_environment("PN_CHECKPOINT_TEST_PORT").is_empty():
+ 		node_added.connect(func(node: Node):
+ 			if node is CheckpointCoordinator: node.store = preload("res://scripts/debug/verify_rival_gameplay_activation.gd").TestStore.new("user://saves/studio",node._validate_payload))
+@@ -22,7 +23,7 @@ func _capture(name: String, width: int) -> void:
+ 	root.get_texture().get_image().save_png(directory.path_join("%s-%d.png" % [name,width]))
+ 
+ func _verify() -> void:
+-	for dimensions in [Vector2i(1152, 648), Vector2i(900, 600), Vector2i(1280, 720)]:
++	for dimensions in VIEWPORTS:
+ 		root.size = dimensions
+ 		var game: Control = load("res://scenes/gameplay.tscn").instantiate()
+ 		root.add_child(game)
+diff --git a/patch-notes/scripts/debug/verify_new_save_loading.gd b/patch-notes/scripts/debug/verify_new_save_loading.gd
+index 46f98442..5f161768 100644
+--- a/patch-notes/scripts/debug/verify_new_save_loading.gd
++++ b/patch-notes/scripts/debug/verify_new_save_loading.gd
+@@ -49,7 +49,7 @@ func _run() -> void:
+ 	root.push_input(event,true)
+ 	var stages := []
+ 	var captured := false
+-	var deadline:=Time.get_ticks_msec()+15000
++	var deadline:=Time.get_ticks_msec()+preload("res://scripts/debug/ui_test_actions.gd").NEW_SAVE_TIMEOUT_MSEC
+ 	while game._transition_in_progress and Time.get_ticks_msec()<deadline:
+ 		if not stages.has(overlay.stage_label.text):
+ 			stages.append(overlay.stage_label.text)

@@ -1,0 +1,9 @@
+# Fresh-save fixture timeout repair — 2026-11-02 (America/Los_Angeles)
+
+User authorizes fixing the remaining fresh-save fixture timeout, acceptance and repo update with no input. Read CURRENT_STATE/TODO/README and relevant UI/fixture records; inspected main/HEAD51293b2cf6180ecb139a83ea136e4e9114aa552c, clean tracked tree/index and diff. Preserve all generated/untracked work and .codex-godot-temp; one canonical writer, private test profiles and scoped before copies.
+
+[Source-pinned root cause, exact changed files, checks and retained failures](../findings/fresh-save-fixture-20261102-v1/RESULT.md). Only debug/ui_test_actions.gd, verify_feature_store_radial.gd and verify_new_save_loading.gd change. Central60s setup budget replaces20/15s; case-count-aware suite guard replaces110s. Ordinary action/focus deadlines and all gameplay remain. Diagnostic wait/timeout output retained.
+
+Controlled actual private publication delay21s: meaningful RED→8/0 GREEN. Maintained Store255/0 headless and255/0 native across1152/900stress/1280; focused22/0 native; loading18/0 headless and18/0 native; exact genuine paired state4/0. Positive580 assertions, audit48/0, all fences true, no errors. Stuck setup intentionally asserts at60,007ms; completed wrong phase intentionally asserts. Warm baseline22/0; initial extra-sentinel negative attempt retained. Original loading LF restored without logical change; final native manifests match current source.
+
+Production runtime identity staysa16105547ae52b2f41e33908977f53ae6a230af6434fbd637902f084e5544afb; exact paired player/world/finance/history/RNG data remain equal. Native loading/invitation and900stress captures inspected. Read-only review and Git receipt close this scoped task; no broad speed/perfect simulator/export/device claim. Earlier failed receipts are retained rather than relabeled. No gameplay/save-schema/compatibility changes, no balance adoption, no player-save writes and no export.

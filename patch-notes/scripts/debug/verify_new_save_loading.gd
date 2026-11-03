@@ -49,7 +49,7 @@ func _run() -> void:
 	root.push_input(event,true)
 	var stages := []
 	var captured := false
-	var deadline:=Time.get_ticks_msec()+15000
+	var deadline:=Time.get_ticks_msec()+preload("res://scripts/debug/ui_test_actions.gd").NEW_SAVE_TIMEOUT_MSEC
 	while game._transition_in_progress and Time.get_ticks_msec()<deadline:
 		if not stages.has(overlay.stage_label.text):
 			stages.append(overlay.stage_label.text)

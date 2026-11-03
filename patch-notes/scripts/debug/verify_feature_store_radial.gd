@@ -1,9 +1,10 @@
 extends SceneTree
 
+const VIEWPORTS := [Vector2i(1152,648),Vector2i(900,600),Vector2i(1280,720)]
 var failures := 0
 
 func _initialize() -> void:
-	create_timer(110).timeout.connect(func(): push_error("Store verifier timed out"); quit(2))
+	create_timer(VIEWPORTS.size()*float(preload("res://scripts/debug/ui_test_actions.gd").NEW_SAVE_TIMEOUT_MSEC)/1000.0+50.0).timeout.connect(func(): push_error("Store verifier timed out"); quit(2))
 	if not OS.get_environment("PN_CHECKPOINT_TEST_PORT").is_empty():
 		node_added.connect(func(node: Node):
 			if node is CheckpointCoordinator: node.store = preload("res://scripts/debug/verify_rival_gameplay_activation.gd").TestStore.new("user://saves/studio",node._validate_payload))
@@ -22,7 +23,7 @@ func _capture(name: String, width: int) -> void:
 	root.get_texture().get_image().save_png(directory.path_join("%s-%d.png" % [name,width]))
 
 func _verify() -> void:
-	for dimensions in [Vector2i(1152, 648), Vector2i(900, 600), Vector2i(1280, 720)]:
+	for dimensions in VIEWPORTS:
 		root.size = dimensions
 		var game: Control = load("res://scenes/gameplay.tscn").instantiate()
 		root.add_child(game)
