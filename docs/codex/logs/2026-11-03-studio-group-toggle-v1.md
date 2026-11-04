@@ -1,0 +1,9 @@
+# Studio group toggle — 2026-11-03
+
+Started on `main`, HEAD `df2448cc7a1c9490aa2880b5d413a3ba73ab588a`, preserving existing uncommitted Store, review, window-preference and other work. Directly activating the currently requested Studio sidebar button now closes its companion with the existing animation, clears the selection, keeps focus and returns to the overview. Selecting another group still switches; programmatic `select_group` remains idempotent so destination Back can restore its group. Rapid repeated inputs settle on the latest requested state. No gameplay, economy, calendar or RNG rule changed.
+
+- `scripts/ui/studio_hub.gd`: direct root-button toggle and consistent empty selection notification when closing.
+- `scripts/debug/verify_studio_group_toggle.gd`: baseline 30 checks / 14 failures; final 38/0 headless and 38/0 native, including all four groups, synthetic mouse and keyboard input, focus, rapid clicks, real Studio integration, programmatic re-selection and unchanged in-memory state. Logs under `.codex-godot-temp/studio-group-toggle-integrated-{headless,native}/`.
+- Maintained release-menu navigation passed 49/0 headless, including return through Review and Summary. Log `.codex-godot-temp/studio-toggle-release-regression/headless.log`.
+- `scripts/market/rival_world_checkpoint.gd` accepts the exact pre-toggle source `4e8abae4d9f9720b6d585094a317aed924d54be813b0b19e283fb347259b60e7` with unchanged current rules. A genuine isolated eight-rival predecessor pair restored exact player/finance/RNG and world/history/RNG aside from the current source stamp; unknown-source rejection passed. Evidence under `.codex-godot-temp/studio-toggle-source-identity/`.
+- `git -c core.whitespace=cr-at-eol diff --check` passed. Native tests used an isolated profile and Dummy audio; exported and physical-device acceptance remain separate.

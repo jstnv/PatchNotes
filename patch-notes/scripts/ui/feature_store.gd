@@ -83,14 +83,15 @@ static func outlined_text(label: Label) -> void:
 
 func _layout_store_chrome() -> void:
 	if _toolbar == null or _map_host == null: return
-	var available := maxf(0, _map_host.size.x - 32)
 	_toolbar.position = Vector2(16, maxf(16, _map_host.size.y - _toolbar.get_combined_minimum_size().y - 16))
 	_toolbar.size = _toolbar.get_combined_minimum_size()
-	_implementation_controls.position = Vector2(16, 24 + maxf(44, _header.get_combined_minimum_size().y))
-	_implementation_controls.size = Vector2(minf(760, available), _implementation_controls.get_combined_minimum_size().y)
+	# Keep the two-line summary legible without crowding the queue at small widths.
+	var summary_font := 15 if _map_host.size.x < 1100 else 18
+	if _owned_summary.get_theme_font_size("font_size") != summary_font:
+		_owned_summary.add_theme_font_size_override("font_size", summary_font)
 
 func _over_floating_control(point: Vector2) -> bool:
-	for group: Control in [_header, _implementation_controls, _toolbar]:
+	for group: Control in [_header, _toolbar]:
 		for control: Control in group.find_children("*", "Control", true, false):
 			if (control is BaseButton or control is Label) and control.is_visible_in_tree() and control.get_global_rect().has_point(point): return true
 	return false
@@ -128,6 +129,14 @@ func setup(run: RunState) -> void:
 	_close.pressed.connect(hide)
 	_header.add_child(_close)
 	FolderUI.standard_back(_close)
+	_close.size_flags_vertical = Control.SIZE_FILL
+	_implementation_controls = VBoxContainer.new()
+	_implementation_controls.name = "ImplementationControls"
+	_implementation_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_implementation_controls.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_implementation_controls.size_flags_vertical = Control.SIZE_FILL
+	_implementation_controls.add_theme_constant_override("separation", 0)
+	_header.add_child(_implementation_controls)
 	_cash = Label.new()
 	_cash.name = "EngineTitle"
 	_cash.theme_type_variation = &"HeadingLabel"
@@ -136,24 +145,8 @@ func setup(run: RunState) -> void:
 	_cash.clip_text = true
 	_cash.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_cash.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	_cash.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	_header.add_child(_cash)
-	var gap := Control.new()
-	gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_header.add_child(gap)
-	_owned_summary = PoolSummaryLabel.new()
-	_owned_summary.size_flags_horizontal = Control.SIZE_SHRINK_END
-	_owned_summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_owned_summary.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	_owned_summary.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	_owned_summary.add_theme_font_size_override("font_size", 14)
-	_header.add_child(_owned_summary)
-	_implementation_controls = VBoxContainer.new()
-	_implementation_controls.name = "ImplementationControls"
-	_implementation_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_implementation_controls.add_theme_constant_override("separation", 6)
-	_map_host.add_child(_implementation_controls)
+	_cash.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_implementation_controls.add_child(_cash)
 	# Queue and completion use the former Research row, with engine-scoped
 	# implementation terms. Selected Feature details keep their actions too.
 	var actions := HBoxContainer.new()
@@ -165,7 +158,7 @@ func setup(run: RunState) -> void:
 	_research_list.fit_to_longest_item = false
 	_research_list.clip_text = true
 	_research_list.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	_research_list.custom_minimum_size.x = 220
+	_research_list.custom_minimum_size.x = 120
 	_research_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_research_list.show()
 	_research_list.item_selected.connect(func(index: int):
@@ -178,6 +171,14 @@ func setup(run: RunState) -> void:
 	_research_button.pressed.connect(func():
 		if not _research_quote.is_empty(): _implement(_research_quote.feature_id))
 	actions.add_child(_research_button)
+	_owned_summary = PoolSummaryLabel.new()
+	_owned_summary.name = "AvailableLibrary"
+	_owned_summary.size_flags_horizontal = Control.SIZE_SHRINK_END
+	_owned_summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_owned_summary.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_owned_summary.size_flags_vertical = Control.SIZE_FILL
+	_owned_summary.add_theme_font_size_override("font_size", 18)
+	_header.add_child(_owned_summary)
 	_toolbar = VBoxContainer.new()
 	_toolbar.name = "StoreToolbar"
 	_toolbar.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -201,7 +202,7 @@ func setup(run: RunState) -> void:
 	_map = FeatureStoreMap.new()
 	add_child(_map)
 	_map.configure(self, _toolbar, _map_host)
-	for group: Control in [_header, _implementation_controls, _toolbar]:
+	for group: Control in [_header, _toolbar]:
 		for label: Label in group.find_children("*", "Label", true, false):
 			outlined_text(label)
 			label.mouse_filter = Control.MOUSE_FILTER_STOP

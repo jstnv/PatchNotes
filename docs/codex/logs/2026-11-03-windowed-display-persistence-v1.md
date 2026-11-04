@@ -1,0 +1,15 @@
+# Windowed startup and persistent display preference — 2026-11-03
+
+Started on `main`, HEAD `df2448cc7a1c9490aa2880b5d413a3ba73ab588a`, with the uncommitted Store header and trail changes already present; these and `.codex-godot-temp` were preserved. The prior fresh-profile fullscreen default is superseded.
+
+`project.godot` and `DemoSettingsStore.defaults()` now start a fresh profile at 1280×720 windowed, and Boot applies valid stored display settings before its opening animation. Settings still use the existing Keep/Revert transaction. A stable direct windowed/fullscreen mode change is written to the same preferences file; transient, minimized and maximized modes do not become fullscreen preferences, and an unconfirmed Settings preview is never automatically saved. Menu return and quit flush a current direct mode before recreating or exiting the scene. Reconstructing Settings leaves an already-maximized window maximized when its saved preference is windowed.
+
+An exact current-rules predecessor source entry preserves saves made after the earlier uncommitted UI work; no player/world schema or game rules changed. Changed files: `project.godot`, `scripts/settings/demo_settings_store.gd`, `scripts/ui/boot_screen.gd`, `scripts/ui/demo_settings_menu.gd`, `scripts/gameplay.gd`, `scripts/market/rival_world_checkpoint.gd`, `scripts/debug/verify_display_preference_lifecycle.gd`, and this state/design record.
+
+Checks in isolated profiles, Godot 4.7.1 with Dummy audio:
+
+- Baseline native lifecycle: 17 checks / 6 failures, including fresh default and a direct fullscreen mode lost on Main Menu return. A later 25-check baseline exposed a maximized window reverting on return.
+- Final native lifecycle: 28/0 on fresh and saved-windowed profiles, and 25/0 with previously saved fullscreen. It drives real Boot, a Studio, confirmed Settings, direct fullscreen/windowed changes, immediate return, and maximization. The extra three checks hold a fullscreen preview beyond the observer delay and confirm that reverting does not change the preferences file. Logs are under `.codex-godot-temp/display-preview-final-{fresh,windowed}/` and `.codex-godot-temp/display-retry-final-fullscreen/`.
+- Separate native process relaunches preserved fullscreen and windowed preferences, with `DISPLAY_RELAUNCH failures=0` in each profile. Maintained Settings verification passed 31/0 native and 31/0 headless, including preview and revert.
+- A genuine eight-rival predecessor pair with source `2329dfddf82421b727b974f1e08bcfd375f1c9f93c41a354c9043b9d35a171a8` restored exact player/finance/RNG and world/history/RNG aside from its new source stamp; unknown-source rejection passed. The isolated fixture and log are under `.codex-godot-temp/windowed-source-identity/`.
+- Initial test execution exposed a GDScript type-inference error; it was corrected before the final checks. `git -c core.whitespace=cr-at-eol diff --check` is the appropriate whitespace check for the existing CRLF files. No player saves, exported build, physical display or audio-device acceptance were used.

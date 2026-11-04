@@ -2,6 +2,7 @@ class_name DemoSettingsMenu
 extends CanvasLayer
 
 const DISPLAY_CONFIRM_SECONDS := 12.0
+const EXTERNAL_DISPLAY_STABLE_SECONDS := 0.4
 var settings_path := DemoSettingsStore.PATH
 var committed: Dictionary
 var draft: Dictionary
@@ -22,6 +23,8 @@ var _return_focus: Control
 var _navigation: MenuTransitions
 var _syncing := false
 var _startup_error := ""
+var _external_display_mode := -1
+var _external_display_elapsed := 0.0
 
 func _ready() -> void:
 	# Display confirmation/revert and input must work inside the pause menu.
@@ -32,7 +35,9 @@ func _ready() -> void:
 	draft = committed.duplicate(true)
 	_startup_error = loaded.error
 	DemoSettingsStore.apply_audio(committed)
-	_apply_display(committed)
+	# Rebuilding the menu must not unmaximize an ordinary windowed session.
+	var keep_maximized := DisplayServer.get_name() != "headless" and get_window().mode == Window.MODE_MAXIMIZED and not bool(committed.fullscreen)
+	if not keep_maximized: _apply_display(committed)
 	_build()
 	panel.hide()
 
@@ -177,14 +182,36 @@ func _sync() -> void:
 	_syncing = false
 
 func _apply_display(values: Dictionary) -> void:
-	if DisplayServer.get_name() == "headless": return
-	var window := get_window()
-	window.min_size = Vector2i(1152, 648)
-	window.mode = Window.MODE_FULLSCREEN if values.fullscreen else Window.MODE_WINDOWED
-	window.borderless = bool(values.fullscreen)
-	if not values.fullscreen:
-		window.size = Vector2i(values.width, values.height)
-		window.move_to_center()
+	DemoSettingsStore.apply_display(values, get_window())
+	_external_display_mode = -1
+	_external_display_elapsed = 0.0
+
+func _actual_fullscreen() -> int:
+	if DisplayServer.get_name() == "headless": return -1
+	var actual := get_window().mode
+	if actual == Window.MODE_FULLSCREEN or actual == Window.MODE_EXCLUSIVE_FULLSCREEN: return 1
+	if actual == Window.MODE_WINDOWED: return 0
+	# Maximized and minimized are not fullscreen settings.
+	return -1
+
+func remember_current_display() -> void:
+	# A preview is transactional: only Keep may persist its mode.
+	if previewing or committed.is_empty(): return
+	var actual := _actual_fullscreen()
+	if actual < 0 or bool(actual) == bool(committed.fullscreen): return
+	var updated := committed.duplicate(true)
+	updated.fullscreen = bool(actual)
+	var result := DemoSettingsStore.write_settings(updated, settings_path)
+	if result != OK:
+		_external_display_elapsed = 0.0
+		status.text = "Display preference could not be saved (%s)." % error_string(result)
+		return
+	var draft_followed_committed: bool = bool(draft.fullscreen) == bool(committed.fullscreen)
+	committed = updated
+	if draft_followed_committed: draft.fullscreen = updated.fullscreen
+	if is_open(): _sync()
+	_external_display_mode = -1
+	_external_display_elapsed = 0.0
 
 func apply_draft() -> void:
 	if not is_open() or previewing or not DemoSettingsStore.valid(draft): return
@@ -272,11 +299,23 @@ func _finish_close() -> void:
 	panel.hide()
 	if is_instance_valid(_return_focus) and _return_focus.is_visible_in_tree(): _return_focus.grab_focus()
 
-func _process(_delta: float) -> void:
-	if not previewing: return
-	var seconds := ceili(deadline - Time.get_ticks_msec() / 1000.0)
-	status.text = "Keep this display? Reverting in %d seconds." % maxi(0, seconds)
-	if seconds <= 0: revert_display()
+func _process(delta: float) -> void:
+	if previewing:
+		var seconds := ceili(deadline - Time.get_ticks_msec() / 1000.0)
+		status.text = "Keep this display? Reverting in %d seconds." % maxi(0, seconds)
+		if seconds <= 0: revert_display()
+		return
+	var actual := _actual_fullscreen()
+	if actual < 0 or committed.is_empty() or bool(actual) == bool(committed.fullscreen):
+		_external_display_mode = -1
+		_external_display_elapsed = 0.0
+		return
+	if actual != _external_display_mode:
+		_external_display_mode = actual
+		_external_display_elapsed = 0.0
+	else:
+		_external_display_elapsed += delta
+		if _external_display_elapsed >= EXTERNAL_DISPLAY_STABLE_SECONDS: remember_current_display()
 
 func _focusable() -> Array[Control]:
 	if previewing: return [confirmation.get_node("Keep"), confirmation.get_node("Revert"), back_button]

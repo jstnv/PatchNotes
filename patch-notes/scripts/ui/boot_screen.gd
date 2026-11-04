@@ -52,6 +52,8 @@ func _exit_tree() -> void:
 		jooce_sound.stream = null
 
 func _ready() -> void:
+	# Restore the saved display choice before drawing the opening animation.
+	DemoSettingsStore.apply_display(DemoSettingsStore.read_settings().values, get_window())
 	theme = preload("res://resources/ui/onyx_theme.tres")
 	FolderUI.enable_menu_gamepad()
 	background = ColorRect.new()

@@ -5,6 +5,9 @@ extends Control
 const INTERVAL := 1.25
 const SPEED := 520.0
 const TAIL := 100.0
+const SHAFT_WIDTH := 3.0
+const TIP_LENGTH := 9.0
+const TIP_HALF_WIDTH := 6.0
 
 var active_edges: Dictionary = {}
 var _clock := 0.0
@@ -74,23 +77,53 @@ func point_along(path: PackedVector2Array, distance: float) -> Vector2:
 		remaining -= length
 	return path[-1]
 
-func _draw_range(path: PackedVector2Array, start: float, end: float, color: Color, width: float) -> void:
+func _draw_range(path: PackedVector2Array, start: float, end: float, head: float, color: Color, width: float) -> void:
 	var walked := 0.0
 	for i in range(1,path.size()):
 		var length := path[i-1].distance_to(path[i])
 		if length <= 0.0: continue
 		var a := maxf(start,walked)
 		var b := minf(end,walked + length)
-		if b > a:
-			draw_line(path[i-1].lerp(path[i],(a-walked)/length),path[i-1].lerp(path[i],(b-walked)/length),color,width,true)
+		# A pulse can land almost exactly on a bend; a zero-area sliver cannot
+		# be triangulated reliably at the map's large coordinate values.
+		if b - a > 0.01:
+			var from := path[i-1].lerp(path[i],(a-walked)/length)
+			var to := path[i-1].lerp(path[i],(b-walked)/length)
+			var normal := (path[i] - path[i-1]).normalized().orthogonal()
+			var fade_a := clampf((a - head + TAIL) / TAIL,0.0,1.0)
+			var fade_b := clampf((b - head + TAIL) / TAIL,0.0,1.0)
+			var side_a := normal * width * 0.5 * lerpf(0.2,1.0,fade_a)
+			var side_b := normal * width * 0.5 * lerpf(0.2,1.0,fade_b)
+			var color_a := Color(color.r,color.g,color.b,color.a * fade_a)
+			var color_b := Color(color.r,color.g,color.b,color.a * fade_b)
+			draw_polygon(PackedVector2Array([from + side_a,to + side_b,to - side_b,from - side_a]),PackedColorArray([color_a,color_b,color_b,color_a]))
 		walked += length
 		if walked >= end: break
+
+func _draw_tip(path: PackedVector2Array, total: float, start: float, end: float, head: float, color: Color) -> void:
+	# Clip the pulse to the same triangular arrowhead as the underlying route.
+	var a := maxf(start,total - TIP_LENGTH)
+	var b := minf(end,total)
+	if b - a <= 0.01: return
+	var direction := (path[-1] - path[-2]).normalized()
+	if direction.is_zero_approx(): return
+	var normal := direction.orthogonal()
+	var point_a := path[-1] - direction * (total - a)
+	var point_b := path[-1] - direction * (total - b)
+	var side_a := normal * TIP_HALF_WIDTH * (total - a) / TIP_LENGTH
+	var side_b := normal * TIP_HALF_WIDTH * (total - b) / TIP_LENGTH
+	var fade_a := clampf((a - head + TAIL) / TAIL,0.0,1.0)
+	var fade_b := clampf((b - head + TAIL) / TAIL,0.0,1.0)
+	var color_a := Color(color.r,color.g,color.b,color.a * fade_a)
+	var color_b := Color(color.r,color.g,color.b,color.a * fade_b)
+	if total - b <= 0.01:
+		draw_polygon(PackedVector2Array([point_a + side_a,point_b,point_a - side_a]),PackedColorArray([color_a,color_b,color_a]))
+	else:
+		draw_polygon(PackedVector2Array([point_a + side_a,point_b + side_b,point_b - side_b,point_a - side_a]),PackedColorArray([color_a,color_b,color_b,color_a]))
 
 func _draw() -> void:
 	if active_edges.is_empty() or not is_instance_valid(map_view): return
 	var visible := get_global_transform().affine_inverse() * map_view.get_global_rect()
-	var scale_factor := maxf(absf(get_global_transform().get_scale().x),0.025)
-	var width := maxf(4.0,2.5 / scale_factor)
 	for edge: Dictionary in active_edges.values():
 		if not visible.intersects(edge.bounds): continue
 		var path: PackedVector2Array = edge.path
@@ -98,6 +131,6 @@ func _draw() -> void:
 		for head: float in pulse_heads(_clock - float(edge.started),total):
 			var start := maxf(0.0,head - TAIL)
 			var end := minf(total,head)
-			_draw_range(path,start,end,Color(0.37,0.95,0.76,0.35),width * 2.4)
-			_draw_range(path,start,end,Color(0.37,0.95,0.76,0.95),width)
-			if head <= total: draw_circle(point_along(path,head),width * 0.7,Color("fff3e2"),true,-1.0,true)
+			_draw_range(path,start,end,head,Color(0.37,0.95,0.76,0.65),SHAFT_WIDTH)
+			_draw_range(path,start,end,head,Color(0.80,1.0,0.92,0.85),SHAFT_WIDTH * 0.5)
+			_draw_tip(path,total,start,end,head,Color(0.37,0.95,0.76,0.85))

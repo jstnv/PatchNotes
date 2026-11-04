@@ -5,7 +5,7 @@ const PATH := "user://preferences-v1.cfg"
 const BUSES := ["Master", "Music", "SFX"]
 
 static func defaults() -> Dictionary:
-	return {"version": 1, "fullscreen": true, "width": 1280, "height": 720,
+	return {"version": 1, "fullscreen": false, "width": 1280, "height": 720,
 		"Master": 80, "Music": 80, "SFX": 80,
 		"Master_muted": false, "Music_muted": false, "SFX_muted": false, "skip_awards": false}
 
@@ -53,3 +53,12 @@ static func apply_audio(values: Dictionary) -> void:
 			AudioServer.set_bus_send(index, "Master")
 		AudioServer.set_bus_volume_db(index, linear_to_db(float(values[bus]) / 100.0) if values[bus] > 0 else -80.0)
 		AudioServer.set_bus_mute(index, values[bus + "_muted"])
+
+static func apply_display(values: Dictionary, window: Window) -> void:
+	if DisplayServer.get_name() == "headless" or window == null: return
+	window.min_size = Vector2i(1152, 648)
+	window.mode = Window.MODE_FULLSCREEN if values.fullscreen else Window.MODE_WINDOWED
+	window.borderless = bool(values.fullscreen)
+	if not values.fullscreen:
+		window.size = Vector2i(values.width, values.height)
+		window.move_to_center()

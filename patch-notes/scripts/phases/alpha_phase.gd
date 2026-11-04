@@ -230,7 +230,7 @@ func _on_host_playtest_pressed() -> void:
 func request_proceed_to_beta() -> bool:
 	if not _can_proceed_to_beta() or _scope_warning_pending:
 		return false
-	if _project_state.get_current_scope() < _project_state.get_required_scope():
+	if _project_state.get_current_scope() < _project_state.get_required_scope() and not _has_exhausted_alpha_supply():
 		_scope_warning_pending = true
 		var actual := _project_state.get_current_scope()
 		var required := _project_state.get_required_scope()
@@ -244,6 +244,14 @@ func request_proceed_to_beta() -> bool:
 		%UnderScopeDialog.popup_centered()
 		return false
 	return _finalize_with_run_rng()
+
+
+func _has_exhausted_alpha_supply() -> bool:
+	# Match the workspace's automatic-advance guard: an empty hand alone does
+	# not mean that Features, budgeted Passes or Playtest cards are exhausted.
+	var actions: RefCounted = _capture_development_actions()
+	var hand: RefCounted = actions.hand
+	return hand.active and actions.valid_pool() and hand._candidate_cards.is_empty() and hand._available_features.is_empty() and hand.pass_budget_available() <= 0 and hand._pending_playtest_categories.is_empty()
 
 
 func _on_proceed_to_beta_pressed() -> void:

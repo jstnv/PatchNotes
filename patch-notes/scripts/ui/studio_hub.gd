@@ -36,10 +36,16 @@ func add_group(id: StringName,title: String) -> VBoxContainer:
 	if id==&"production":
 		var divider:=HSeparator.new();divider.custom_minimum_size.y=26;_root_choices.add_child(divider)
 		var line:=StyleBoxLine.new();line.color=Color("6F42FF");line.thickness=2;divider.add_theme_stylebox_override("separator",line)
-	var button:=FolderUI.button(_root_choices,title,select_group.bind(id,null));button.custom_minimum_size=Vector2(260,54);button.toggle_mode=true;root_buttons[id]=button
+	var button:=FolderUI.button(_root_choices,title,_root_pressed.bind(id));button.custom_minimum_size=Vector2(260,54);button.toggle_mode=true;root_buttons[id]=button
 	button.theme_type_variation=&"ArcadePrimary" if id==&"production" else &"HubButton"
 	var choices:=VBoxContainer.new();choices.name=String(id).capitalize()+"Choices";choices.add_theme_constant_override("separation",10);_contents.add_child(choices);choices.hide();groups[id]=choices
 	return choices
+
+func _root_pressed(id: StringName) -> void:
+	# Direct activation toggles the active group; programmatic selection remains
+	# idempotent so returning from a destination can restore its parent menu.
+	if requested == id: close_group()
+	else: select_group(id)
 
 func select_group(id: StringName,focus: Control=null) -> void:
 	if not groups.has(id):return
@@ -104,14 +110,18 @@ func settle_motion() -> void:
 
 func close_group() -> void:
 	settle_motion()
+	var had_selection := not requested.is_empty() or not selected.is_empty()
 	requested=&""
-	if selected.is_empty():return
+	for button: Button in root_buttons.values():button.set_pressed_no_signal(false)
+	_style_roots()
+	if had_selection:selection_changed.emit(&"")
+	if selected.is_empty():
+		_restore_choices()
+		return
 	transitioning=true;_disable_choices()
 	motion.slide_panel(_companion,_companion.position.x,-_clip.size.x,func():
 		groups[selected].hide();selected=&"";_companion.hide();transitioning=false;_restore_choices()
 		if not requested.is_empty():_advance())
-	for button: Button in root_buttons.values():button.set_pressed_no_signal(false)
-	_style_roots()
 
 func _queue_fit() -> void:
 	if not is_inside_tree():return

@@ -1,0 +1,7 @@
+# UI and phase changes — publication check, 2026-11-03
+
+User requested publication of the six completed Store, display, Review, Studio navigation and exhausted-Alpha changes. Started on `main` at `df2448cc7a1c9490aa2880b5d413a3ba73ab588a`; existing work and `.codex-godot-temp` were preserved. Six scoped implementation logs and six matching debug verifiers/UIDs describe the changes and prior focused checks.
+
+On the combined source, isolated headless checks passed: Store compact header 93/0, Studio group toggle 38/0, exhausted-Scope transition 24/0, Review surface 27/0, and Settings 31/0. Native checks passed for arrow-shaped trails 13/0 and fresh display-preference lifecycle 28/0. Logs are under `.codex-godot-temp/push-combined-20261103/`. The immediately preceding genuine eight-rival pair restores with player/world/finance/RNG exact apart from the new source stamp and rejects an unknown identity; see `.codex-godot-temp/phase-exhaustion-source-identity/verify.log`.
+
+The repository already tracks both `patch-notes/Scenes/phases/post_game_review.tscn` and `patch-notes/scenes/phases/post_game_review.tscn`; their existing blobs and intended updates match on Windows. Stage both paths together. User-owned untracked simulator findings and temporary profiles remain local. Cold late-save latency and exported/device acceptance remain open; no new executable or package is implied by this push.

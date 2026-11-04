@@ -6,6 +6,11 @@ extends RefCounted
 ## history, annual ledger, finance and RNG validation still applies.
 # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
 const CONTRACT_LATENCY_PREDECESSORS := [
+	"38d060f1b0d13bd62c4849365785df4eaf66e661ed3a41d233b436f29b22ee03", # Exact pre-exhausted-scope-prompt source; saved rules and state are unchanged.
+	"4e8abae4d9f9720b6d585094a317aed924d54be813b0b19e283fb347259b60e7", # Exact pre-Studio-toggle source; saved rules and state are unchanged.
+	"2329dfddf82421b727b974f1e08bcfd375f1c9f93c41a354c9043b9d35a171a8", # Exact pre-window-preference source; saved rules and state are unchanged.
+	"32cd01836ce9840b38bc8aee2ff5bcb4fb600e7369b2fc827cdf1b64e38c8877", # Exact pre-trail presentation source; saved rules and state are unchanged.
+	"5499674a2d7fbe43fb805816f5fffa9c14d08c2daa0278311a0c570666c166b3", # Published pre-header source; saved rules and state are unchanged.
 	"8797ab6a761ea58d0702ee86d6e2f6943c990bc7c09c3c0b586833bdbb3a669c", # Exact pre-late-career-performance source; saved rules and state are unchanged.
 	"cc2565a22815987d69aa388eae2811e0ca1cb9e66d0b1d657f088b1b2763f69f", # Exact pre-byte-budget source; saved rules and state are unchanged.
 	"7867f5e1df6a0272ef155aac431b2ee4344c9a5368c947e153b96dddb9bbac6e", # Exact pre-node-budget source; saved rules and state are unchanged.

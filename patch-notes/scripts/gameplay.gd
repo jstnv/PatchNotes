@@ -146,6 +146,7 @@ func _return_to_main_menu() -> void:
 	# A fresh scene releases the old writer and all pending presentation callbacks.
 	# Never save development/active Contract progress as a Studio checkpoint.
 	_resume_from_pause()
+	%GameplayHUD.settings_menu.remember_current_display()
 	# The replacement scene adopts the same live visual observer, without
 	# restarting its pulses or audio analyzer.
 	if is_instance_valid(circuit_background):
@@ -837,6 +838,7 @@ func _notification(what: int) -> void:
 func _request_quit() -> void:
 	if _loading_checkpoint or _save_navigation_pending: return
 	_resume_from_pause()
+	%GameplayHUD.settings_menu.remember_current_display()
 	if checkpoints!=null and checkpoints.debug_session:
 		_show_quit_confirmation("Quit debug session?","Debug progress is not saved. Your normal Studio checkpoint stays unchanged.")
 		return
