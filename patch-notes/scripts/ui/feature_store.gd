@@ -273,13 +273,18 @@ func _refresh() -> void:
 	_research_button.visible = not starter_gate
 	for entry: Dictionary in pending:
 		if entry.engine_id!=_engine_id:continue
-		var q: Dictionary = _run.get_feature_research_quote(entry.feature_id,entry.engine_id)
+		# This view was just computed synchronously from the same engine, FIFO,
+		# cash and calendar. Avoid re-planning the identical head for each label.
+		var q: Dictionary = view.quotes.get(entry.feature_id,{})
+		if q.is_empty():q=_run.get_feature_research_quote(entry.feature_id,entry.engine_id)
 		_research_list.add_item("%d. %s / %s - %d action(s) left" % [_research_list.item_count+1,engine_state.engines[entry.engine_id].name,_run._feature_definitions[entry.feature_id].name,q.remaining_actions])
 		_research_list.set_item_metadata(_research_list.item_count-1,entry.feature_id)
 	_research_list.tooltip_text = "Implementation Queue for " + str(selected_record.name)
 	_research_list.disabled = _research_list.item_count==0
 	if _research_list.disabled: _research_list.add_item("Implementation queue empty")
-	if not pending.is_empty() and pending[0].engine_id==_engine_id:_research_quote = _run.get_feature_research_quote(pending[0].feature_id,_engine_id)
+	if not pending.is_empty() and pending[0].engine_id==_engine_id:
+		_research_quote = view.quotes.get(pending[0].feature_id,{})
+		if _research_quote.is_empty():_research_quote=_run.get_feature_research_quote(pending[0].feature_id,_engine_id)
 	_research_button.disabled = _research_quote.is_empty() or not _research_quote.can_research
 	_research_button.text = "Other engine first" if not pending.is_empty() and pending[0].engine_id!=_engine_id else "Implement" if _research_quote.is_empty() else "Implement %s - 1 cycle" % CashFormatter.format_exact_cents(_research_quote.due_cents)
 	_research_button.tooltip_text = "Select a Feature node and queue its implementation first." if pending.is_empty() else "Only the first queued Feature can complete. Completion takes one productive cycle and makes it available to future games."

@@ -260,7 +260,9 @@ func bind_run(value: RunState) -> void:
 	close()
 	run = value
 	if run != null: run.finance_changed.connect(_on_finance_changed)
-	if is_node_ready(): refresh()
+	# The panel is closed here. Its open path refreshes from the new RunState;
+	# discard the old report now instead of building an unseen history table.
+	report = {}
 
 
 func open(return_label: String = "Back to Game",initial_page: StringName=&"finances") -> bool:

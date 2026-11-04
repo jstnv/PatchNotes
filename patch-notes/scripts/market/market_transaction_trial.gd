@@ -111,7 +111,12 @@ static func targets(snapshot: Dictionary, studio_id: String, genre: StringName) 
 	return {"snapshot_id":snapshot.id,"cycle_start":snapshot.cycle_start,"standards":result,"base":base.duplicate(),
 		"recent_count":recent_count,"density_lift":density_lift,"benchmark_lifts":benchmark_lifts,"historical":false}
 static func sales_factor(snapshot: Dictionary, studio_id: String, release_id: String, genre: String, theme: String) -> Dictionary:
-	if not valid(snapshot) or studio_id.is_empty() or release_id.is_empty() or genre.is_empty() or theme.is_empty(): return {}
+	if not valid(snapshot): return {}
+	return _sales_factor_from_valid_snapshot(snapshot,studio_id,release_id,genre,theme)
+
+## Only use with a snapshot already validated and unchanged by its caller.
+static func _sales_factor_from_valid_snapshot(snapshot: Dictionary, studio_id: String, release_id: String, genre: String, theme: String) -> Dictionary:
+	if studio_id.is_empty() or release_id.is_empty() or genre.is_empty() or theme.is_empty(): return {}
 	if snapshot.version==3 or (is_book(snapshot) and snapshot.epoch_offset==0): return neutral_factor()
 	var g:=0
 	var t:=0

@@ -29,6 +29,9 @@ static func query(run: RunState, world: RivalWorld = null) -> Dictionary:
 static func _historical_rows(world: RivalWorld) -> Array:
 	var rows: Array = []
 	if world == null: return rows
+	# The catalog is immutable during this projection. Read it once per refresh,
+	# rather than reopening and parsing it for every historical record.
+	var catalog := PrimitivePredevelopment.catalog()
 	var seen := {}
 	for owner: Variant in world.historical_archive:
 		if not Index._text(owner) or not world.studios.has(StringName(owner)): continue
@@ -41,7 +44,7 @@ static func _historical_rows(world: RivalWorld) -> Array:
 				valid = valid and Index._text(record.get(field))
 			if not valid or not record.get("year") is int or record.year <= 0 or record.year >= RunState.START_YEAR: continue
 			if not record.get("review_tenths") is int or record.review_tenths < 0 or record.review_tenths > 100: continue
-			if PrimitivePredevelopment.find_entry("genres",StringName(record.genre)).is_empty() or PrimitivePredevelopment.find_entry("themes",StringName(record.theme)).is_empty(): continue
+			if _catalog_entry(catalog,"genres",StringName(record.genre)).is_empty() or _catalog_entry(catalog,"themes",StringName(record.theme)).is_empty(): continue
 			var key := JSON.stringify([str(owner),str(record.id)])
 			if seen.has(key): continue
 			seen[key] = true
@@ -53,3 +56,8 @@ static func _historical_rows(world: RivalWorld) -> Array:
 		if a.studio_id != b.studio_id: return a.studio_id < b.studio_id
 		return a.release_id < b.release_id)
 	return rows
+
+static func _catalog_entry(catalog: Dictionary, kind: String, id: StringName) -> Dictionary:
+	for entry: Dictionary in catalog.get(kind,[]):
+		if StringName(entry.id)==id: return entry
+	return {}

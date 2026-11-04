@@ -12,9 +12,11 @@ var _candidate: Dictionary = {}
 var _player_payload: Dictionary = {}
 var _run: RunState
 var _world: RivalWorld
+var _parsed_cache: StudioCheckpointStore
 
-func _init(coordinator: Node) -> void:
+func _init(coordinator: Node, parsed_cache: StudioCheckpointStore = null) -> void:
 	_owner = coordinator
+	_parsed_cache = parsed_cache
 
 func label() -> String:
 	return LABELS[mini(stage, LABELS.size() - 1)]
@@ -80,7 +82,8 @@ func advance_async() -> void:
 			_reject("Another Patch Notes process owns the save slot. Close it before continuing.");_owner.status_changed.emit();return
 		if _owner.rival_catalog==null:_reject("Rival definitions unavailable for Continue");return
 		_read_job=preload("res://scripts/persistence/checkpoint_read_job.gd").new()
-		_read_job.start(_owner.store.directory,_owner.rival_catalog)
+		_read_job.start(_owner.store.directory,_owner.rival_catalog,_parsed_cache)
+		_parsed_cache=null
 		return
 	if not _read_job.poll():return
 	inspected=_read_job.inspected

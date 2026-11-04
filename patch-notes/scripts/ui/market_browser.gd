@@ -105,6 +105,8 @@ func refresh() -> void:
 	status.text = "%d games shown · %d live releases · %d historical records across all Studios" % [rows.size(),all_rows.size(),historical_rows.size()]
 	var tree_root := games.create_item()
 	var selected_item: TreeItem
+	# Read the label catalog once for this synchronous list rebuild.
+	var label_catalog := PrimitivePredevelopment.catalog()
 	for row: Dictionary in rows:
 		var item := games.create_item(tree_root)
 		item.set_metadata(0,_key(row))
@@ -112,7 +114,8 @@ func refresh() -> void:
 		var historical: bool = row.get("record_type","") == "historical"
 		var title := "Historical · %d · %s" % [row.release_year,row.release_title] if historical else str(row.release_title)
 		var units := "—" if historical else str(row.earned_units)
-		var values := [title,owner,_name("genres",row.genre),"%.1f / 10" % (row.review_tenths/10.0),units]
+		var genre_name := str(Model._catalog_entry(label_catalog,"genres",StringName(row.genre)).get("name",row.genre))
+		var values := [title,owner,genre_name,"%.1f / 10" % (row.review_tenths/10.0),units]
 		for i in range(values.size()):
 			item.set_text(i,str(values[i]))
 			item.set_tooltip_text(i,str(values[i]))

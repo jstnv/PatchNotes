@@ -10,13 +10,13 @@ var _scan_error := ""
 var fault := &"" # Injected by focused verification; never loaded from a save.
 const PARSED_CACHE_LIMIT := 3
 # Current, backup and newly written generations must coexist during publication.
-# A real eight-rival ceremony generation costs about7.8MB including its DTO;
-# the previous8MB bound evicted every other proof and repeatedly reparsed it.
-const PARSED_CACHE_BYTES := 32 * 1024 * 1024
+# Keep current, backup and in-flight proofs for the measured larger eight-rival
+# history, while retaining a strict per-store memory ceiling.
+const PARSED_CACHE_BYTES := 48 * 1024 * 1024
 var _parsed_envelopes: Array[Dictionary] = []
 var _parsed_bytes := 0
 const VALIDATED_GENERATION_LIMIT:=3
-const VALIDATED_GENERATION_BYTES:=32*1024*1024
+const VALIDATED_GENERATION_BYTES:=48*1024*1024
 var _validated_generations: Array[Dictionary]=[]
 var _validated_bytes:=0
 
@@ -213,14 +213,14 @@ static func _wire_nodes(value: Variant, depth: int = 0) -> int:
 		for key: Variant in value:
 			if typeof(key)!=TYPE_STRING or key.to_utf8_buffer().get_string_from_utf8()!=key: return -1
 			var child:=_wire_nodes(value[key],depth+1)
-			if child<0 or nodes>500000-child: return -1
+			if child<0 or nodes>CheckpointCodec.MAX_NODES-child: return -1
 			nodes+=child
 		return nodes
 	if value is Array:
 		if value.is_typed(): return -1
 		for item: Variant in value:
 			var child:=_wire_nodes(item,depth+1)
-			if child<0 or nodes>500000-child: return -1
+			if child<0 or nodes>CheckpointCodec.MAX_NODES-child: return -1
 			nodes+=child
 		return nodes
 	return -1

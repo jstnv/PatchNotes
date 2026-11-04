@@ -6,6 +6,19 @@ extends RefCounted
 ## history, annual ledger, finance and RNG validation still applies.
 # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
 const CONTRACT_LATENCY_PREDECESSORS := [
+	"cc2565a22815987d69aa388eae2811e0ca1cb9e66d0b1d657f088b1b2763f69f", # Exact pre-byte-budget source; saved rules and state are unchanged.
+	"7867f5e1df6a0272ef155aac431b2ee4344c9a5368c947e153b96dddb9bbac6e", # Exact pre-node-budget source; saved rules and state are unchanged.
+	"a9c205fa16d07f7b0fbc690ef927afeb04548d33439948b8ec1fe51eeb81a10f", # Exact pre-hidden-finance-refresh source; saved rules and state are unchanged.
+	"b009937f6918808b85a3f3238dee8302f200f5da5619a5801b300d51d59c8942", # Exact pre-read-cache source; gameplay and saved state are unchanged.
+	"6f6e4d21df0fe60d25917ffa014f576914bd75194a5119b04347c1e82e90189d", # Exact pre-parallel-load source; saved rules and data remain unchanged.
+	"48802a7683eeb66de1e6a7e790c040933b2907605db27238e53253bde997e014", # Exact pre-local-snapshot-proof source; saved rules and data remain unchanged.
+	"895333f906bade35dd1c5b7abdd593097d7834dac1d754623dbb420bf08a9894", # Exact pre-Market-render source; gameplay and saved state remain unchanged.
+	"45e7136c8f79582903ea6ca846824bcc0681468737f14e4a791b30adb9d39c8b", # Exact pre-exit-warning source; gameplay and saved state remain unchanged.
+	"7809cd4cbb823e6445adcf1cc2348a92110be7c517ef589a349e08d7b7261c22", # Exact pre-cache-cap source; validation and saved state remain unchanged.
+	"d159801f53cb4ba0a0052985d3e62451cce920493f7e1600f467c70aa929d8c0", # Exact pre-background-title-inspection source; gameplay and saved state are unchanged.
+	"4e08d682d5226b13dbab3598e5168b1b2c017fd95f5ece9461e75b2d190f7f1d", # Exact pre-parallel-save-encoding source; saved rules and state are unchanged.
+	"5a3406596ed5436af3092ad709365f8d476df262966e466376614db592ab092b", # Exact pre-Store-refresh optimization; saved rules and state are unchanged.
+	"21d185f0d7b82870eaa8ef3484cb99fbe2059e48b4df8c96b22f547cef00e5b4", # Exact pre-save-serialization optimization; state and rules remain unchanged.
 	"fe5ac14f16e34f3634e9940aecabff24e155781d11f61d7f5b893155bd2d4c0f", # Exact pre-persistent-circuits source; gameplay and saved state are unchanged.
 	"0a4fd9376cb933df378d93106d2f99e4216ea608eaa32a0f8239d3e4ae0e0a8a", # Exact pre-menu-surroundings presentation source; gameplay and saved state are unchanged.
 	"38d7aaef796efb7613184979432c3cd274db6ac2d209e5ef7b640c9a62082d19", # Exact pre-challenge-notice presentation source; gameplay and saved state are unchanged.
@@ -450,19 +463,57 @@ func snapshot(world: RivalWorld, studio_adapter: StudioCheckpoint = null) -> Dic
 	payload["annual_awards"]=world.annual_awards.duplicate(true)
 	return payload
 
-func encode_snapshot(native: Dictionary) -> Dictionary:
+## Each worker owns only detached rival DTOs and its own codec/adapter. Results
+## are joined and consumed in original row order; live sessions never cross.
+class ActorEncodeWorker extends RefCounted:
+	var items: Array=[]
+	func encode() -> Dictionary:
+		var adapter:=StudioCheckpoint.new()
+		var result:Dictionary={}
+		for item:Dictionary in items:
+			var value:=adapter.encode_snapshot(item.run)
+			result[item.index]={"value":value,"error":adapter.error}
+		return result
+
+func _encode_actor_runs_parallel(rows: Array) -> Dictionary:
+	if rows.is_empty():return {}
+	var count:=mini(rows.size(),mini(4,maxi(1,OS.get_processor_count()-1)))
+	var jobs:Array[ActorEncodeWorker]=[]
+	for i in count:jobs.append(ActorEncodeWorker.new())
+	for i in rows.size():jobs[i%count].items.append({"index":i,"run":rows[i].run})
+	var results:Dictionary={}
+	if count==1:return jobs[0].encode()
+	var threads:Array[Thread]=[]
+	for job in jobs:
+		var thread:=Thread.new()
+		threads.append(thread)
+		if thread.start(job.encode,Thread.PRIORITY_LOW)!=OK:results.merge(job.encode())
+	for i in threads.size():
+		if not threads[i].is_started():continue
+		var result:Variant=threads[i].wait_to_finish()
+		results.merge(result if result is Dictionary else jobs[i].encode())
+	return results
+
+func encode_snapshot(native: Dictionary, parallel_actors: bool=false) -> Dictionary:
 	error = ""
 	var payload := native.duplicate(true)
 	var adapter := StudioCheckpoint.new()
-	for row: Dictionary in payload.studios:
+	var actor_results:=_encode_actor_runs_parallel(payload.studios) if parallel_actors else {}
+	for index in payload.studios.size():
+		var row: Dictionary=payload.studios[index]
 		if row.development!=null:
 			row.development=_encode(row.development,_development_schema(int(row.development.phase_index)))
 			if not error.is_empty():return {}
 		if payload.schema_version=="3":
 			row.policy=_encode(row.policy,_policy_schema())
 			if not error.is_empty():return {}
-		row.run=adapter.encode_snapshot(row.run)
-		if row.run.is_empty(): error=adapter.error; return {}
+		if parallel_actors:
+			var encoded_actor: Dictionary=actor_results.get(index,{"value":{},"error":"Actor encoding failed"})
+			row.run=encoded_actor.value
+			if row.run.is_empty():error=encoded_actor.error;return {}
+		else:
+			row.run=adapter.encode_snapshot(row.run)
+			if row.run.is_empty(): error=adapter.error; return {}
 		row.archive=_encode(row.archive,CheckpointSchema.array_of(_projected_archive_schema() if payload.schema_version in ["2","3"] else _archive_schema()))
 		if not error.is_empty(): return {}
 	payload.history=_encode(payload.history,CheckpointSchema.array_of(_release_schema()))
@@ -481,6 +532,41 @@ func encode_snapshot(native: Dictionary) -> Dictionary:
 func capture(world: RivalWorld) -> Dictionary:
 	var native := snapshot(world)
 	return {} if native.is_empty() else encode_snapshot(native)
+
+## Detached current-format actors can be validated independently. The caller
+## consumes the results in row order, preserving its existing error precedence.
+class ActorValidationWorker extends RefCounted:
+	var items: Array=[]
+	func validate() -> Dictionary:
+		var adapter:=StudioCheckpoint.new()
+		var result: Dictionary={}
+		for item: Dictionary in items:
+			result[item.index]=adapter.validate_active_rival(item.payload) if item.active else adapter.validate(item.payload)
+		return result
+
+func _parallel_current_actor_validation(rows: Array) -> Dictionary:
+	if rows.size()<2:return {}
+	var adapter:=StudioCheckpoint.new()
+	var revision:=adapter.revision()
+	for row: Variant in rows:
+		if not row is Dictionary or not row.get("run") is Dictionary or not row.has("development"):return {}
+		var actor: Dictionary=row.run
+		if actor.get("source_build")!=StudioCheckpoint.BUILD or actor.get("content_revision")!=revision or not actor.get("run") is Dictionary or not actor.run.has("calendar"):return {}
+	var count:=mini(rows.size(),mini(4,maxi(1,OS.get_processor_count()-1)))
+	if count<2:return {}
+	var jobs:Array[ActorValidationWorker]=[]
+	for i in count:jobs.append(ActorValidationWorker.new())
+	for i in rows.size():jobs[i%count].items.append({"index":i,"payload":rows[i].run.duplicate(true),"active":rows[i].development!=null})
+	var threads:Array[Thread]=[]
+	var result:Dictionary={}
+	for job in jobs:
+		var thread:=Thread.new();threads.append(thread)
+		if thread.start(job.validate,Thread.PRIORITY_LOW)!=OK:result.merge(job.validate())
+	for i in threads.size():
+		if not threads[i].is_started():continue
+		var values:Variant=threads[i].wait_to_finish()
+		result.merge(values if values is Dictionary else jobs[i].validate())
+	return result
 
 func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_source_identity: String = "") -> Dictionary:
 	if player_payload.get("run") is Dictionary and not player_payload.run.has("calendar_start_year"):
@@ -563,7 +649,12 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 	var rows: Array = []
 	var budget_definitions: Dictionary={}
 	var adapter := StudioCheckpoint.new()
+	# Writing already has a detached worker and usually warm actor proofs.
+	# Older actors retain the original serial migration/validation route.
+	var actor_results:=_parallel_current_actor_validation(payload.studios) if captured_source_identity.is_empty() else {}
+	var actor_index:=-1
 	for row: Variant in payload.studios:
+		actor_index+=1
 		if not row is Dictionary or row.size()!=((7 if career else 6) if projected else 5) or not row.get("id") is String or not row.get("run") is Dictionary or not row.get("sequence") is String or not row.has("development") or not row.get("archive") is Array or (projected and not row.get("offset") is String):
 			error = "Malformed rival record"; return {}
 		var id := StringName(row.id)
@@ -577,7 +668,9 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 			if not codec.error.is_empty() or parsed_offset!=72: error="Invalid projected rival offset"; return {}
 			offset=parsed_offset
 		var active := row.development != null
-		var reason := adapter.validate_active_rival(row.run) if active else adapter.validate(row.run)
+		var reason: String
+		if actor_results.has(actor_index):reason=actor_results[actor_index]
+		else:reason=adapter.validate_active_rival(row.run) if active else adapter.validate(row.run)
 		if not reason.is_empty(): error = reason; return {}
 		if int(row.run.run.completed_run_cycles) != cycle+offset: error = "Rival run cycle mismatch"; return {}
 		var archive: Variant = _decode(row.archive,CheckpointSchema.array_of(_projected_archive_schema() if projected else _archive_schema()))
@@ -692,6 +785,8 @@ func _validate_projected_archive(adapter: StudioCheckpoint, encoded_run: Diction
 ## reconstructed without saving duplicate snapshots in every sales row.
 func _validate_frozen_market(player_payload: Dictionary, encoded_rows: Array, decoded_rows: Array, cycle: int, origin: Dictionary) -> bool:
 	var snapshots := {0:Market.neutral()}
+	# These reconstructed snapshots are local and immutable throughout this read.
+	var validated_snapshots: Dictionary={}
 	var owners: Array=[{"id":player_payload.run_id,"run":player_payload,"development":{}}]
 	owners.append_array(decoded_rows)
 	var book_records: Array=[]
@@ -766,7 +861,14 @@ func _validate_frozen_market(player_payload: Dictionary, encoded_rows: Array, de
 				if not facts is Array: error="Missing historical market facts"; return false
 				snapshots[d.cycle_start]=Book.snapshot(full_basis,d.cycle_start,72,facts,Market.calendar_for(dated)) if not full_basis.is_empty() else Market.snapshot(d.cycle_start,facts,Market.calendar_for(dated))
 			var snapshot: Dictionary=snapshots[d.cycle_start]
-			var expected: Dictionary=Market.sales_factor(snapshot,str(owner.id),item.release,str(item.genre),str(item.theme)) if item.has("release") else Market.targets(snapshot,str(owner.id),item.genre)
+			var expected: Dictionary={}
+			if item.has("release"):
+				if not validated_snapshots.has(d.cycle_start):
+					if not Market.valid(snapshot):error="Frozen market history/provenance mismatch";return false
+					validated_snapshots[d.cycle_start]=true
+				expected=Market._sales_factor_from_valid_snapshot(snapshot,str(owner.id),item.release,str(item.genre),str(item.theme))
+			else:
+				expected=Market.targets(snapshot,str(owner.id),item.genre)
 			if expected!=d: error="Frozen market history/provenance mismatch"; return false
 	return true
 

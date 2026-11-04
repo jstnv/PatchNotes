@@ -31,8 +31,13 @@ var player: RunState
 var world: RivalWorld
 var error:=""
 var _task:=-1
-func start(path: String,definitions: RefCounted) -> void:
+## Retained only between a completed title read and the subsequent Continue.
+var cache_store: StudioCheckpointStore
+func start(path: String,definitions: RefCounted, prior_cache: StudioCheckpointStore = null) -> void:
 	directory=path;catalog=preload("res://scripts/market/rival_opening_loader.gd").copy_catalog(definitions)
+	cache_store=null
+	if prior_cache!=null and prior_cache.get_script()==preload("res://scripts/persistence/studio_checkpoint_store.gd") and prior_cache.directory==ProjectSettings.globalize_path(path).simplify_path():
+		cache_store=prior_cache
 	_task=WorkerThreadPool.add_task(_read.bind(self),false,"Inspect saved Studio")
 func poll() -> bool:
 	if _task==-2:return true
@@ -41,8 +46,12 @@ func poll() -> bool:
 	WorkerThreadPool.wait_for_task_completion(_task);_task=-2;return true
 func _read(_lifetime: RefCounted) -> void:
 	var validator:=ReadValidator.new();validator.rival_catalog=catalog
-	var store:=StudioCheckpointStore.new(directory,validator._validate_payload)
+	var store:=cache_store
+	if store==null:store=StudioCheckpointStore.new(directory,validator._validate_payload)
+	else:store.validator=validator._validate_payload
 	inspected=store.inspect()
-	if inspected.status!=&"valid":error=str(inspected.get("reason",inspected.status));return
-	if var_to_bytes(inspected.payload)!=validator.accepted_bytes:error="Validated read payload changed";return
+	store.validator=Callable()
+	if inspected.status!=&"valid":cache_store=null;error=str(inspected.get("reason",inspected.status));return
+	if var_to_bytes(inspected.payload)!=validator.accepted_bytes:cache_store=null;error="Validated read payload changed";return
+	cache_store=store
 	candidate=validator.candidate;player_payload=validator.player_payload;player=validator.player;world=validator.world

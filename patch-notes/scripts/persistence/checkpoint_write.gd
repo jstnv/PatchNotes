@@ -43,12 +43,15 @@ func start() -> Error:
 
 func _write() -> Dictionary:
 	var adapter:=StudioCheckpoint.new()
-	var payload: Dictionary=_presentation_payload(WorldCodec.Replay.source_identity()) if not world.is_empty() else {}
+	# Most saves change player state and cannot reuse the Awards presentation
+	# payload. Check those cheap necessary conditions before hashing every
+	# gameplay source; full encoding still hashes at its original later boundary.
+	var payload: Dictionary=_presentation_payload(WorldCodec.Replay.source_identity()) if _presentation_candidate() else {}
 	if payload.is_empty():payload=adapter.encode_snapshot(player)
 	if payload.is_empty(): return {"status":&"invalid","reason":adapter.error}
 	if not world.is_empty() and not payload.has("rival_world"):
 		var codec:=WorldCodec.new()
-		var encoded: Dictionary=codec.encode_snapshot(world)
+		var encoded: Dictionary=codec.encode_snapshot(world,true)
 		if encoded.is_empty(): return {"status":&"invalid","reason":codec.error}
 		payload["rival_world"]=encoded
 		_validator._publishing_source_identity=encoded.source_identity
@@ -61,6 +64,12 @@ func _write() -> Dictionary:
 	var result:=store.replace_run(payload) if replacing else store.save(payload)
 	if result.status==&"saved": result["payload"]=payload
 	return result
+
+func _presentation_candidate() -> bool:
+	if world.is_empty() or previous_player.is_empty() or previous_world.is_empty() or not previous_payload.get("rival_world") is Dictionary:return false
+	if var_to_bytes(player)!=var_to_bytes(previous_player):return false
+	if not world.get("annual_awards") is Dictionary or not previous_world.get("annual_awards") is Dictionary:return false
+	return not world.annual_awards.get("entries",[]).is_empty()
 
 func _presentation_payload(source: String) -> Dictionary:
 	if previous_player.is_empty() or previous_world.is_empty() or not previous_payload.get("rival_world") is Dictionary:return {}

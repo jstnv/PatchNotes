@@ -4,8 +4,11 @@ extends RefCounted
 ## Data-only, schema-directed codec. Schemas are trusted program constants;
 ## disk data never supplies types, resource paths, objects or constructors.
 const FORMAT := "patch-notes-studio-checkpoint"
-const LIMIT := 16 * 1024 * 1024
+const LIMIT := 24 * 1024 * 1024
 const MAX_DEPTH := 96
+## Value nodes are bounded independently of bytes and nesting. The Store's
+## native-wire proof uses the same bound as this strict parser.
+const MAX_NODES := 1000000
 var error := ""
 var _text := ""
 var _pos := 0
@@ -203,7 +206,7 @@ func _string() -> Variant:
 
 func _value(depth: int) -> Variant:
 	_nodes += 1
-	if depth > MAX_DEPTH or _nodes > 500000: return fail("JSON complexity limit")
+	if depth > MAX_DEPTH or _nodes > MAX_NODES: return fail("JSON complexity limit")
 	_space()
 	if _pos >= _text.length(): return fail("Truncated JSON")
 	var c := _text[_pos]

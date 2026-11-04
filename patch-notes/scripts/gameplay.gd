@@ -56,6 +56,8 @@ var _awards_hud_process := Node.PROCESS_MODE_INHERIT
 var _awards_focus: WeakRef
 var _awards_animate := true
 var circuit_background: Control
+var _title_checkpoint_job: RefCounted
+var _title_read_cache: StudioCheckpointStore
 
 func _ready() -> void:
 	theme=FolderUI.THEME
@@ -81,6 +83,17 @@ func _ready() -> void:
 	focused_guidance=preload("res://scripts/tutorial/focused_guidance_controller.gd").new()
 	add_child(focused_guidance)
 	focused_guidance.bind_game(self)
+
+func _process(_delta: float) -> void:
+	if _title_checkpoint_job==null or not _title_checkpoint_job.poll():return
+	var job:=_title_checkpoint_job
+	_title_checkpoint_job=null
+	var info:Dictionary=job.inspected
+	if not info.has("status") or (info.status==&"valid" and (job.player==null or not job.error.is_empty())):
+		info={"status":&"invalid","reason":job.error if not job.error.is_empty() else "Checkpoint inspection did not complete"}
+	if is_instance_valid(_active_phase) and _active_phase is MainMenu:
+		_title_read_cache=job.cache_store if info.status==&"valid" else null
+		_active_phase.update_checkpoint_info(info)
 
 func _build_pause_menu() -> void:
 	pause_menu = PauseMenu.new()
@@ -115,12 +128,16 @@ func _request_main_menu() -> void:
 			return
 		_return_to_main_menu()
 		return
-	var destination := "There is no saved Studio to continue."
+	pause_menu.confirm_main_menu("Progress since your last Studio checkpoint will be lost. " + _last_confirmed_checkpoint_notice())
+
+func _last_confirmed_checkpoint_notice() -> String:
+	# The coordinator only records this payload after a durable write or a
+	# validated load. Continue still validates the on-disk generation itself.
 	if checkpoints != null:
-		var info := checkpoints.store.inspect()
-		if info.status == &"valid":
-			destination = "Continue will return to %s, cycle %s." % [info.payload.run.studio_name, info.payload.run.completed_run_cycles]
-	pause_menu.confirm_main_menu("Progress since your last Studio checkpoint will be lost. " + destination)
+		var saved: Variant = checkpoints.last_payload.get("run", {})
+		if saved is Dictionary and saved.get("studio_name") is String and not saved.studio_name.is_empty() and saved.get("completed_run_cycles") is String:
+			return "Last confirmed Studio: %s, cycle %s. Continue will check the saved data." % [saved.studio_name, saved.completed_run_cycles]
+	return "Continue will check for a saved Studio."
 
 func _return_to_main_menu() -> void:
 	if not pause_menu.is_open(): return
@@ -191,7 +208,7 @@ func _start_gameplay() -> void:
 	if project_state == null:
 		if run_state.get_studio_name().is_empty():
 			var main_menu := MainMenu.new()
-			if checkpoints != null: main_menu.checkpoint_info = checkpoints.store.inspect()
+			if checkpoints != null: main_menu.checkpoint_info = {"status":&"checking"}
 			main_menu.continue_requested.connect(_present_checkpoint_load)
 			main_menu.recovery_requested.connect(_show_checkpoint_recovery)
 			main_menu.quit_requested.connect(_request_quit)
@@ -201,6 +218,11 @@ func _start_gameplay() -> void:
 			%PhaseRoot.add_child(main_menu)
 			_active_phase = main_menu
 			%GameplayHUD.set_phase(main_menu)
+			if checkpoints!=null:
+				_title_checkpoint_job=_adopt_title_inspection(checkpoints.store.directory)
+				if _title_checkpoint_job==null:
+					_title_checkpoint_job=preload("res://scripts/persistence/checkpoint_read_job.gd").new()
+					_title_checkpoint_job.start(checkpoints.store.directory,checkpoints.rival_catalog)
 		else:
 			_enter_initial_studio()
 		return
@@ -263,12 +285,12 @@ func _show_startup_failure(reason: String) -> void:
 
 func _on_studio_created(name: String, specialty: StringName, trait_ids: Array, source: MainMenu) -> void:
 	# Synchronous fixture/tool entry, like _continue_checkpoint.
-	if _transition_in_progress or _loading_checkpoint or source != _active_phase or source.get_parent() != %PhaseRoot:
+	if _title_checkpoint_job!=null or _transition_in_progress or _loading_checkpoint or source != _active_phase or source.get_parent() != %PhaseRoot:
 		return
 	if _commit_new_studio(name,specialty,trait_ids,source): checkpoints.flush()
 
 func _present_studio_creation(name: String, specialty: StringName, trait_ids: Array, source: MainMenu) -> void:
-	if _transition_in_progress or _loading_checkpoint or not is_instance_valid(source) or source != _active_phase or source.get_parent() != %PhaseRoot: return
+	if _title_checkpoint_job!=null or _transition_in_progress or _loading_checkpoint or not is_instance_valid(source) or source != _active_phase or source.get_parent() != %PhaseRoot: return
 	_transition_in_progress = true
 	var overlay := preload("res://scripts/ui/continue_loading.gd").new()
 	add_child(overlay)
@@ -334,6 +356,7 @@ func _enter_initial_studio(restored: bool = false) -> bool:
 		push_error("Could not open the new Studio.")
 		if studio != null: studio.free()
 		return false
+	_title_read_cache=null
 	studio.set_rival_world(rival_world)
 	studio.contract_requested.connect(_on_contract_requested)
 	studio.development_requested.connect(_on_development_requested)
@@ -823,10 +846,7 @@ func _request_quit() -> void:
 	if checkpoints==null or (checkpoints.in_studio and checkpoints.failure.is_empty()):
 		get_tree().quit()
 		return
-	var info := checkpoints.store.inspect()
-	var destination := "your last saved Studio"
-	if info.status==&"valid": destination = "%s, cycle %s" % [info.payload.run.studio_name,info.payload.run.completed_run_cycles]
-	_show_quit_confirmation("Quit Patch Notes?", "Progress since your last Studio checkpoint will be lost. Continue will return to %s. Quit anyway?" % destination)
+	_show_quit_confirmation("Quit Patch Notes?", "Progress since your last Studio checkpoint will be lost. %s Quit anyway?" % _last_confirmed_checkpoint_notice())
 
 func _show_quit_confirmation(heading: String, message: String) -> void:
 	_quit_dialog.title = heading
@@ -870,7 +890,7 @@ func _continue_checkpoint() -> void:
 	_finish_checkpoint_load(restored)
 
 func _present_checkpoint_load() -> void:
-	if checkpoints == null or _transition_in_progress or _loading_checkpoint: return
+	if checkpoints == null or _title_checkpoint_job!=null or _transition_in_progress or _loading_checkpoint: return
 	_clear_annual_awards()
 	_loading_checkpoint = true
 	_hide_checkpoint_dialogs()
@@ -882,7 +902,8 @@ func _present_checkpoint_load() -> void:
 	else:
 		overlay.show_checkpoint(checkpoints.last_payload)
 	await overlay.cover()
-	var operation := checkpoints.begin_load()
+	var operation := checkpoints.begin_load(_title_read_cache)
+	_title_read_cache=null
 	while not operation.done:
 		overlay.stage_label.text = operation.label()
 		# process_frame resumes before drawing: two yields guarantee a rendered
@@ -1106,6 +1127,31 @@ func _clear_annual_awards() -> void:
 
 func _exit_tree() -> void:
 	_awards_epoch += 1
+	if _title_checkpoint_job!=null:
+		if not _title_checkpoint_job.poll():
+			var keeper:=preload("res://scripts/persistence/checkpoint_title_keeper.gd").new()
+			keeper.job=_title_checkpoint_job
+			var root:=get_tree().root
+			var keepers: Array=root.get_meta("checkpoint_title_inspections",[])
+			keepers.append(keeper)
+			root.set_meta("checkpoint_title_inspections",keepers)
+			root.tree_exiting.connect(keeper.root_exiting,CONNECT_ONE_SHOT)
+			root.add_child.call_deferred(keeper)
+		_title_checkpoint_job=null
+
+func _adopt_title_inspection(directory: String) -> RefCounted:
+	var root:=get_tree().root
+	var keepers: Array=root.get_meta("checkpoint_title_inspections",[])
+	for keeper: Node in keepers.duplicate():
+		if is_instance_valid(keeper) and keeper.job!=null and keeper.job.directory==directory:
+			var job: RefCounted=keeper.job
+			keeper.job=null
+			keepers.erase(keeper)
+			if keepers.is_empty():root.remove_meta("checkpoint_title_inspections")
+			else:root.set_meta("checkpoint_title_inspections",keepers)
+			if keeper.is_inside_tree():keeper.queue_free()
+			return job
+	return null
 
 func _finish_checkpoint_load(restored: RunState) -> bool:
 	run_state = restored

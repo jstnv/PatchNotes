@@ -37,6 +37,7 @@ var _play: Button
 var navigation: MenuTransitions
 var _actions: Dictionary = {}
 var _title_screen: VBoxContainer
+var _saved_studio_label: Label
 var _setup_surface: PanelContainer
 var _back: Button
 var _discard_dialog: ConfirmationDialog
@@ -121,16 +122,12 @@ func _ready() -> void:
 	var wave_buttons: Array[Button]=[]
 	for id in ["StartGame","Continue","HowToPlay","Settings","Quit"]:wave_buttons.append(_actions[id])
 	_button_wave.bind_buttons(_title_screen,wave_buttons)
-	_actions.Continue.disabled = checkpoint_info.status != &"valid"
-	_actions.Continue.focus_mode=Control.FOCUS_NONE if _actions.Continue.disabled else Control.FOCUS_ALL
-	if checkpoint_info.status != &"empty": _actions.StartGame.text = "New Run"
-	if checkpoint_info.status == &"valid":
-		var saved: Dictionary = checkpoint_info.payload.run
-		FolderUI.label(_title_screen,"%s · %s"%[saved.studio_name,Clock.label(int(saved.completed_run_cycles),int(saved.get("calendar_start_year",1980)),Clock.from_saved_profile(saved.get("calendar",{})))],&"MetadataLabel").name="SavedStudio"
+	_saved_studio_label=FolderUI.label(_title_screen,"",&"MetadataLabel")
+	_saved_studio_label.name="SavedStudio"
 	var recovery := FolderUI.button(_title_screen,"Saved Studio needs attention",func(): recovery_requested.emit())
 	recovery.name = "CheckpointRecovery"
-	recovery.visible = checkpoint_info.status not in [&"empty",&"valid"]
 	_actions.CheckpointRecovery = recovery
+	_refresh_checkpoint_info()
 	FolderUI.label(_title_screen,"PROTOTYPE",&"MetadataLabel")
 	var window := get_tree().root
 	var owner:=get_parent().get_parent() if get_parent()!=null else null
@@ -318,6 +315,31 @@ func _process(delta: float) -> void:
 
 func action_button(id: String) -> Button: return _actions.get(id)
 
+## The title may be built while a detached strict checkpoint inspection runs.
+func update_checkpoint_info(info: Dictionary) -> void:
+	checkpoint_info=info
+	if is_node_ready():_refresh_checkpoint_info()
+
+func _refresh_checkpoint_info() -> void:
+	var status: StringName=checkpoint_info.get("status",&"invalid")
+	var checking:=status==&"checking"
+	_actions.StartGame.disabled=checking
+	_actions.StartGame.text="Start Game" if status in [&"empty",&"checking"] else "New Run"
+	_actions.Continue.disabled=status!=&"valid"
+	var continue_focus:=Control.FOCUS_NONE if _actions.Continue.disabled else Control.FOCUS_ALL
+	if _boot_entrance and _boot_input_modes.has(_actions.Continue):
+		var modes: Array=_boot_input_modes[_actions.Continue]
+		modes[1]=continue_focus
+	else:_actions.Continue.focus_mode=continue_focus
+	_actions.Continue.icon=null if status==&"valid" else load("res://assets/ui/arcade/lock.svg")
+	_actions.CheckpointRecovery.visible=status not in [&"empty",&"valid",&"checking"]
+	_saved_studio_label.visible=status==&"valid"
+	if status==&"valid":
+		var saved:Dictionary=checkpoint_info.payload.run
+		_saved_studio_label.text="%s · %s"%[saved.studio_name,Clock.label(int(saved.completed_run_cycles),int(saved.get("calendar_start_year",1980)),Clock.from_saved_profile(saved.get("calendar",{})))]
+	if not checking and not _boot_entrance and is_inside_tree() and get_viewport().gui_get_focus_owner()==null:
+		_actions.StartGame.grab_focus.call_deferred()
+
 func _activate_action(id: String) -> void:
 	if _boot_entrance: return
 	if navigation.busy or navigation.depth()!=1: return
@@ -331,6 +353,7 @@ func _activate_action(id: String) -> void:
 
 func open_setup() -> void:
 	if navigation.busy or navigation.depth()!=1 or _submitted: return
+	if checkpoint_info.get("status")==&"checking":return
 	if checkpoint_info.status != &"empty" and not _replacement_acknowledged:
 		if is_instance_valid(_replace_dialog) and _replace_dialog.visible: return
 		if is_instance_valid(_replace_dialog): _replace_dialog.queue_free()
