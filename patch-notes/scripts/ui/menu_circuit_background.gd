@@ -5,6 +5,7 @@ const Field:=preload("res://scripts/ui/circuit_pulse_field.gd")
 const Tuning:=preload("res://scripts/ui/circuit_flow_settings.gd")
 const NoteTimeline:=preload("res://scripts/ui/menu_note_timeline.gd")
 const NOTE_DATA := "res://assets/boot/sequence_v1/menu_visual_notes.json"
+const STUDIO_NOTE_DATA := "res://assets/audio/crunch_time_70/studio_pool/studio_visual_notes.json"
 const CYAN:=Color("22e7ef")
 const ORANGE:=Color("ff994f")
 @export var flow_settings:Tuning=Tuning.new()
@@ -21,6 +22,7 @@ var _last_debug:=false
 var _last_trace_opacity:=-1.0
 var draw_microseconds:=0
 var _note_data: Dictionary = {}
+var _studio_note_data: Dictionary = {}
 var _note_timelines: Dictionary = {}
 
 class Board extends Control:
@@ -37,6 +39,8 @@ func _ready()->void:
 	super._ready()
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(NOTE_DATA))
 	if parsed is Dictionary and parsed.get("version") == 1: _note_data = parsed
+	var studio_parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(STUDIO_NOTE_DATA))
+	if studio_parsed is Dictionary and studio_parsed.get("version") == 1: _studio_note_data = studio_parsed
 	if flow_settings==null:flow_settings=Tuning.new()
 	field.bind(geometry,flow_settings)
 	_board=Board.new();_board.owner_flow=self;_board.name="CircuitGeometry"
@@ -59,8 +63,16 @@ func _note_events(track: String, offset: float = 0.0) -> Array:
 	var data: Dictionary = _note_data.get("tracks",{}).get(track,{})
 	var rate := float(_note_data.get("sample_rate",48000))
 	for pair in [["bass",&"bass"],["chords",&"chord"]]:
+		var chord_indices := {}
 		for row: Array in data.get(pair[0],[]):
 			if row.size() < 3: continue
+			if pair[1] == &"chord":
+				var key := Vector2i(int(row[0]),int(row[1]))
+				if chord_indices.has(key):
+					var existing: Dictionary = result[chord_indices[key]]
+					existing.velocity = maxi(int(existing.velocity),int(row[2]))
+					continue
+				chord_indices[key] = result.size()
 			result.append({"time":float(row[0]) / rate + offset,"pitch":int(row[1]),"velocity":int(row[2]),"kind":pair[1]})
 	return result
 
@@ -69,7 +81,17 @@ func _make_note_timeline(id: StringName, at_seconds: float) -> RefCounted:
 	var rate := float(_note_data.get("sample_rate",48000))
 	var loop_length := float(_note_data.get("loop_frames",0)) / rate
 	var switch_length := float(_note_data.get("switch_frames",0)) / rate
-	if id == &"boot":
+	if String(id).begins_with("studio_"):
+		var studio_rate := float(_studio_note_data.get("sample_rate",48000))
+		var studio_length := float(_studio_note_data.get("loop_frames",0)) / studio_rate
+		var studio_data: Dictionary = _studio_note_data.get("tracks",{}).get(String(id),{})
+		var events := []
+		for pair in [["bass",&"bass"],["hook",&"chord"]]:
+			for row: Array in studio_data.get(pair[0],[]):
+				if row.size() >= 3:
+					events.append({"time":float(row[0])/studio_rate,"pitch":int(row[1]),"velocity":int(row[2]),"kind":pair[1]})
+		timeline.configure(id,events,studio_length,at_seconds)
+	elif id == &"boot":
 		var loops := _note_events("loop_a")
 		loops.append_array(_note_events("loop_b",loop_length))
 		timeline.configure_intro(id,_note_events("startup"),loop_length,loops,loop_length * 2.0,at_seconds)
@@ -90,14 +112,21 @@ func _music_note_events() -> Variant:
 	var seen := {}
 	for clock: Dictionary in clocks:
 		var id := StringName(clock.timeline)
-		if id not in [&"boot",&"switch_menu",&"menu"]: continue
+		var studio_track: bool = String(id).begins_with("studio_") and _studio_note_data.get("tracks",{}).has(String(id))
+		if id not in [&"boot",&"switch_menu",&"menu"] and not studio_track: continue
 		seen[id] = true
 		var seconds := float(clock.seconds)
 		if not _note_timelines.has(id):
 			# New tracks include their first sample; attaching to an already
 			# playing track never replays its earlier notes.
 			var newly_switched := id == &"switch_menu" and _note_timelines.has(&"boot")
-			_note_timelines[id] = _make_note_timeline(id,-0.000001 if newly_switched or seconds < 0.1 else seconds)
+			var start := -0.000001 if newly_switched or seconds < 0.1 else seconds
+			if studio_track and clock.has("start_seconds"):
+				for previous_id in _note_timelines:
+					if String(previous_id).begins_with("studio_"):
+						start = minf(seconds, float(clock.start_seconds) - 0.000001)
+						break
+			_note_timelines[id] = _make_note_timeline(id,start)
 		var timeline: RefCounted = _note_timelines[id]
 		var audible := not _quiet
 		for event: Dictionary in timeline.advance(id,seconds,audible,12.0):
@@ -106,7 +135,7 @@ func _music_note_events() -> Variant:
 			result.append(event)
 	for id: StringName in _note_timelines.keys():
 		if not seen.has(id): _note_timelines.erase(id)
-	return result
+	return result if not seen.is_empty() else null
 func _rebuild_geometry()->void:
 	if size.x<2 or size.y<2 or geometry.area==size:return
 	# Preserve each pulse's route progress through window/aspect changes.
@@ -166,7 +195,9 @@ func _draw()->void:
 	var used_slots := 0
 	for i in Field.HARD_LIMIT:
 		var p=field.pulses[i]
-		_pulse_data[i]=Vector4(p.route,p.distance,maxf(1,field.tail*(.58 if p.secondary else 1.0)),p.strength*(1 if p.color_index==0 else -1)) if p.active else Vector4(-1,0,1,0)
+		var packed_strength: float = p.strength * (1.0 if p.color_index == 0 else -1.0)
+		if p.color_index == 2: packed_strength = 2.0 + p.strength
+		_pulse_data[i]=Vector4(p.route,p.distance,maxf(1,field.tail*(.58 if p.secondary else 1.0)),packed_strength) if p.active else Vector4(-1,0,1,0)
 		if p.active: used_slots = i + 1
 	_shader.set_shader_parameter("pulses",_pulse_data)
 	_shader.set_shader_parameter("pulse_slots",used_slots)
@@ -182,7 +213,7 @@ func _draw()->void:
 		if p.distance<curve.get_baked_length():
 			var head:=curve.sample_baked(p.distance)
 			var shine:=field.luminosity*p.strength*_visibility_at(head.x)
-			var color:=CYAN if p.color_index==0 else ORANGE
+			var color:=CYAN if p.color_index==0 else (ORANGE if p.color_index==1 else Color("777b88"))
 			for junction in geometry.junctions:
 				var near:=1.0-clampf(head.distance_to(junction)/(34*u),0,1)
 				if near<=0:continue

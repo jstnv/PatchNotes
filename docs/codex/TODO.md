@@ -1,5 +1,17 @@
 # Local execution queue
 
+**2026-11-04 Studio pointer investigation — TEST HARNESS STABILIZED; historical cause OPEN.** Isolated native and headless routes pass with viewport-local synthetic gestures; a controlled competing move reproduced a weakness in the old split-frame helper. The earlier intermittent missed native clicks remain unproven as a player-facing defect or as that specific test issue. Continue physical/device acceptance if observed again. [Evidence](logs/2026-11-04-studio-pointer-investigation-v1.md).
+
+**2026-11-04 Studio slide-up layering — COMPLETE locally; focused checks PASS.** Destinations slide above Studio menus within the HUD-safe area, including the separately layered Bank. Native transition and interaction checks and exact preceding save restore pass; broader intermittent navigation fixture failures are retained. [Session log](logs/2026-11-04-studio-slide-layer-v1.md).
+
+**2026-11-04 Studio button wave — COMPLETE locally.** Three-pixel bounce and hover-to-extremes behavior pass native and headless checks; Studio navigation and exact preceding save restore also pass. [Session log](logs/2026-11-04-studio-three-pixel-wave-v1.md).
+
+**2026-11-04 Studio bass and hook threads — COMPLETE locally.** The six Studio tracks drive orange bass and blue hook threads from their source notes; native and headless mapping/transition checks, live audio and exact preceding paired-save restore pass. Physical listening and exported-build/device checks remain OPEN. [Session log](logs/2026-11-04-studio-bass-hook-visualizer-v1.md).
+
+**2026-11-04 Studio notice clearance — COMPLETE locally.** Publisher unlock notices clear the Studio panel and remain visible and dismissible above the selected companion. Native focused notice checks 20/0 and Studio motion 48/0; exact preceding save pair restores. [Session log](logs/2026-11-04-studio-notice-clearance-v1.md).
+
+**2026-11-04 persistent Dream Synth threads — IMPLEMENTED locally; focused checks PASS.** Source-note mapping uses only the approved synth for unsplit blue threads and preserves bass notes for orange. The shared background persists across tested loading, tutorial, Studio, production, pause and title routes; unidentified music uses a neutral reactive fallback. Native playback, resize and clocks, isolated prior-save restore, and source-note checks pass at their documented scopes. Physical listening and exported-build/device acceptance remain OPEN. [Implementation and results](logs/2026-11-04-persistent-dream-synth-threads-v1.md) · [Approved handoff](logs/2026-11-04-approved-dream-synth-threads-handoff.md).
+
 **2026-11-03 Awards placing stamps — COMPLETE locally.** Third, Second and Winner stamp into their bar bases when each score lands. Winner has a longer entrance with two outward strokes. The native ceremony verifier passed 332 checks. [Preview and checks](logs/2026-11-03-awards-placing-stamps.md).
 
 **2026-11-03 Awards bar motion — COMPLETE locally.** Podium bars advance a screen pixel at a time between whole-point score increments. The shared reveal clock preserves the slowdown and keeps rank reveals in sync. The native ceremony verifier passed 323 checks. [Session log](logs/2026-11-03-awards-pixel-steps.md).

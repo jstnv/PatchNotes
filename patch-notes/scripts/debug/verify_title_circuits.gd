@@ -52,6 +52,16 @@ func run()->void:
 	check(is_equal_approx(randf(),expected_random),"Circuit presentation does not consume gameplay RNG")
 	check(graph.builds==builds,"Simulation never rebuilds geometry")
 	check(quiet.fallback and quiet.count()>0 and quiet.speed>0 and quiet.luminosity<.2,"Missing/muted spectrum keeps subdued continuous fallback flow")
+	var muted_neutral := true
+	for pulse in quiet.pulses:
+		if pulse.active and pulse.color_index != 2: muted_neutral = false
+	check(muted_neutral and quiet.count() > 0,"Muted soundtrack produces only neutral fallback trails")
+	var unknown_neutral := true
+	for field in [bass, mid, treble]:
+		if field.count() == 0: unknown_neutral = false
+		for pulse in field.pulses:
+			if pulse.active and pulse.color_index != 2: unknown_neutral = false
+	check(unknown_neutral,"Unidentified but audible tracks react without fabricating colored instrument notes")
 	check(bass.tail>neutral.tail and bass.luminosity>neutral.luminosity and bass.thickness>neutral.thickness and bass.bloom>neutral.bloom,"Bass increases tail length, brightness, thickness and bloom")
 	check(mid.speed>neutral.speed and mid.total_spawned>neutral.total_spawned,"Mids increase continuous speed and spawn frequency")
 	check(treble.total_spawned>neutral.total_spawned,"Treble introduces bounded secondary pulses")

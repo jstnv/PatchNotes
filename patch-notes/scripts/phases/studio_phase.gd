@@ -65,6 +65,8 @@ func _refresh_rivals() -> void:
 
 func _ready() -> void:
 	FolderUI.enable_menu_gamepad()
+	# Studio destinations can slide across the hub, but not into the HUD.
+	clip_contents = true
 	theme=preload("res://resources/ui/onyx_theme.tres")
 	resized.connect(_fit_dashboard)
 	%Dashboard.visibility_changed.connect(_dashboard_visibility_changed)
@@ -189,18 +191,24 @@ func _present_destination(view: Control,focus: Control=null,layer: CanvasLayer=n
 	_destination_layer=layer
 	var layer_ref: WeakRef=weakref(layer) if is_instance_valid(layer) else null
 	var view_ref: WeakRef=weakref(view)
+	var previous_z := view.z_index
+	# Keep the incoming destination above the root, its notice and any lower
+	# destination throughout both its entrance and its return animation.
+	view.z_index = maxi(64 + _hub_motion.depth(), previous_z)
 	var closed:=func():
 		var current_layer: CanvasLayer=layer_ref.get_ref() if layer_ref!=null else null
 		var current_view: Control=view_ref.get_ref()
 		if is_instance_valid(current_layer):current_layer.hide()
-		if is_instance_valid(current_view):current_view.remove_meta("folder_navigation_managed")
+		if is_instance_valid(current_view):
+			current_view.remove_meta("folder_navigation_managed")
+			current_view.z_index = previous_z
 		_destination_layer=null;_returning_destination=false
 		if _hub_motion.depth()==1:_show_group(group)
 	if view.get_parent()==self:
 		var fit_callback:=_queue_destination_fit.bind(view)
 		if not view.minimum_size_changed.is_connected(fit_callback):view.minimum_size_changed.connect(fit_callback)
 		_queue_destination_fit(view)
-	_hub_motion.push_from_bottom(view,focus,closed,get_global_rect().end.y)
+	if not _hub_motion.push_from_bottom(view,focus,closed,get_global_rect().end.y):view.z_index = previous_z
 
 func _destination_invoker(view: Control) -> Control:
 	for pair in [[_engine_browser,get_node_or_null("%StudioEnginesButton")],[_feature_store,get_node_or_null("%StudioEnginesButton")],[_employees_panel,%Employees],[_rival_info,get_node_or_null("%RivalInfoButton")],[_studio_info,get_node_or_null("%StudioInfoButton")],[_market_browser,_market_button],[_publisher_browser,%PublisherList],[_predevelopment,%StartNextGame],[_contract_detail,%Contracts],[%SummaryPanel,%PostGameSummaries],[_review_view,%DetailedReviewButton],[_monthly_report,%MonthlySalesButton]]:

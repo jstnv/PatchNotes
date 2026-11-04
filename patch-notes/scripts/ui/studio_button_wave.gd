@@ -24,9 +24,9 @@ func _apply_poses() -> void:
 		if not is_instance_valid(row): continue
 		var local_left := left_edge - row.global_position.x
 		var normal_width := maxf(1.0,inner_width - 2.0 - travel)
-		var hover_width := maxf(1.0,inner_width - 4.0)
+		var hover_width := maxf(1.0,inner_width - 2.0)
 		button.size = Vector2(normal_width,row.size.y)
 		var wave_x := travel * 0.5 * (1.0 - cos(_phases[index]))
 		var stretch := smoothstep(0.0,1.0,_hover_weights[index])
-		button.position.x = lerpf(local_left + 1.0 + wave_x,local_left + 2.0,stretch)
+		button.position.x = lerpf(local_left + 1.0 + wave_x,local_left + 1.0,stretch)
 		button.scale = Vector2(lerpf(1.0,hover_width / normal_width,stretch),1.0)

@@ -89,7 +89,7 @@ func check_button_wave(hub: Control) -> void:
 		wave.set("_hover_weights",weights)
 		wave.call("_apply_poses")
 		var hovered := button_edges(button)
-		check(absf(hovered.x-inner.x-2.0) < 0.8 and absf(inner.y-hovered.y-2.0) < 0.8,"Fully hovered button stays two pixels inside both visible borders: " + str(id))
+		check(absf(hovered.x-inner.x-1.0) < 0.8 and absf(inner.y-hovered.y-1.0) < 0.8,"Fully hovered button reaches both wave endpoints, one pixel inside the visible borders: " + str(id))
 		weights[index] = 0.0
 	wave.set("_hover_weights",weights)
 	wave.call("_apply_poses")
@@ -168,7 +168,7 @@ func run() -> void:
 	check(pointer_button.is_hovered() and hover_weights[index] > 0.95,"Pointer hover animates the shifted Studio button")
 	var pointer_edges := button_edges(pointer_button)
 	var inner := panel_inner_edges(hub._root_panel)
-	check(absf(pointer_edges.x-inner.x-2.0) < 1.0 and absf(inner.y-pointer_edges.y-2.0) < 1.0,"Pointer hover reaches the intended two-pixel border clearance")
+	check(absf(pointer_edges.x-inner.x-1.0) < 1.0 and absf(inner.y-pointer_edges.y-1.0) < 1.0,"Pointer hover reaches both wave endpoints")
 	await pointer_click(pointer_button.get_global_rect().get_center())
 	await wait_motion(hub)
 	check(hub.selected == &"market","Pointer clicks the shifted, expanded button and opens its group")

@@ -1,0 +1,72 @@
+const fs = require('fs');
+const crypto = require('crypto');
+
+const sourcePath = 'C:/Users/64jus/OneDrive/Documents/ChatGPT/Patch Notes Music/soundtrack/prototype-01-crunch-time/Tempo_70/Main_Menu_Theme_Echo_Dreamwave_Bass_v03/MIDI/dreamwave_synth_and_bass.mid';
+const midi = fs.readFileSync(sourcePath);
+const digest = crypto.createHash('sha256').update(midi).digest('hex');
+if (digest !== 'e716399d9e70ae698bccf038e96e0a0a870cb31dae259fc23dbf41d75cafa418') throw Error('MIDI hash mismatch');
+if (midi.toString('ascii', 0, 4) !== 'MThd') throw Error('Invalid MIDI header');
+const count = midi.readUInt16BE(10);
+const ppq = midi.readUInt16BE(12);
+const tracks = {};
+let pos = 14;
+function variable(end) {
+  let result = 0;
+  let value;
+  do {
+    if (pos >= end) throw Error('MIDI bounds');
+    value = midi[pos++];
+    result = result * 128 + (value & 127);
+  } while (value & 128);
+  return result;
+}
+for (let index = 0; index < count; index++) {
+  if (midi.toString('ascii', pos, pos + 4) !== 'MTrk') throw Error('MIDI track header');
+  const end = pos + 8 + midi.readUInt32BE(pos + 4);
+  pos += 8;
+  let tick = 0, status = 0, name = '';
+  const events = [];
+  while (pos < end) {
+    tick += variable(end);
+    if (midi[pos] >= 128) status = midi[pos++];
+    if (status === 255) {
+      const kind = midi[pos++], length = variable(end);
+      if (kind === 3) name = midi.subarray(pos, pos + length).toString('latin1');
+      pos += length;
+      status = 0;
+    } else if (status === 240 || status === 247) {
+      const length = variable(end);
+      pos += length;
+      status = 0;
+    } else {
+      const op = status >> 4;
+      const length = (op === 12 || op === 13) ? 1 : 2;
+      const pitch = midi[pos], velocity = length === 2 ? midi[pos + 1] : 0;
+      pos += length;
+      if (op === 9 && velocity > 0) {
+        const sample = Math.floor((tick * 48000 * 60 + 70 * ppq / 2) / (70 * ppq));
+        events.push([sample, pitch, velocity]);
+      }
+    }
+  }
+  tracks[name] = events;
+  pos = end;
+}
+const synth = tracks['Dream Groove chord synth'];
+if (!synth) throw Error('Missing Dream Groove chord synth');
+const order = (a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+const data = JSON.parse(fs.readFileSync('.codex-godot-temp/dream-synth-only-candidate/project/assets/boot/sequence_v1/menu_visual_notes.json'));
+const mixed = JSON.parse(fs.readFileSync('.codex-godot-temp/note-route-candidate/project/assets/boot/sequence_v1/menu_visual_notes.json'));
+for (const id of ['startup', 'loop_a', 'loop_b', 'menu', 'switch']) {
+  const notes = id === 'switch'
+    ? synth.filter(row => row[0] >= 987428 && row[0] < 1316571).map(row => [row[0] - 987428, row[1], row[2]])
+    : synth;
+  const expected = notes.map(row => [...row]).sort(order);
+  const actual = data.tracks[id].chords.map(row => [...row]).sort(order);
+  if (JSON.stringify(expected) !== JSON.stringify(actual)) throw Error('Synth mismatch: ' + id);
+  if (JSON.stringify(data.tracks[id].bass) !== JSON.stringify(mixed.tracks[id].bass)) throw Error('Bass changed: ' + id);
+  const seen = new Set(actual.map(row => row[0] + ':' + row[1]));
+  if (seen.size !== actual.length) throw Error('Duplicate Dream Synth onset: ' + id);
+  console.log('PASS', id, actual.length, 'source synth notes, bass unchanged');
+}
+console.log('DREAM_MIDI_SOURCE checks=5 failures=0 source_sha256=' + digest);

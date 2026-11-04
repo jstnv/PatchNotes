@@ -18,9 +18,6 @@ SWITCH = BASE / 'Boot_Switch_v10_Rhythm_Alignment/v10_continuous_two_bar_switch.
 RUNTIME = Path('patch-notes/assets/boot/sequence_v1')
 OUT = args.output
 RATE, BPM, FRAMES, SWITCH_FRAMES = 48000, 70, 1316571, 329143
-CHORDS = ((53,60,64),(53,59,64),(52,59,62),(55,61,65),
-          (53,60,64),(57,62,65),(55,58,62),(55,61,64))
-RESPONSES = ((1,(57,59,64)),(3,(58,61,65)),(5,(58,62,65)),(7,(58,61,64)))
 
 def digest(path):
     h=hashlib.sha256()
@@ -82,22 +79,21 @@ dream,sway,jazz=map(midi,(dream_path,sway_path,jazz_path))
 bass=labelled(dream['Adapted super-wet bass notes'],'adapted_bass')
 low=labelled(dream['Dream Groove low synth'],'low_synth')
 chord_synth=labelled(dream['Dream Groove chord synth'],'dreamwave_chord_synth')
-jazz_chords=chord_synth+labelled(sway['Warm Rhodes ninth chords'],'warm_rhodes')+labelled(sway['Warm plucked strings'],'warm_plucked_strings')+labelled(jazz['Rhodes-style electric piano'],'jazz_electric_piano')+labelled(jazz['Muted electric guitar comp'],'jazz_muted_guitar')+labelled(jazz['Electronic arpeggiator'],'jazz_arpeggiator')
+def unique_attacks(events):
+    # Simultaneous copies of the same pitch are one synth attack; retain the
+    # loudest velocity without collapsing later attacks or different pitches.
+    attacks={}
+    for event in events:
+        key=(event['frame'],event['note'])
+        if key not in attacks or event['velocity']>attacks[key]['velocity']:
+            attacks[key]=event
+    return list(attacks.values())
 
-def comp(is_b):
-    out=[]
-    for bar,ch in enumerate(CHORDS):
-        hits=((.75,78),(1.5,83),(2.75,73),(3.5,80)) if not is_b else ((.5,74),(1.5,82),(2.5,73),(3.5,81))
-        for j,(beat,velocity) in enumerate(hits):
-            for n in ch[(j+bar)%2:]:
-                out.append({'frame':round((bar*4+beat)*RATE*60/BPM),'note':n,'velocity':velocity,'layer':'boot_comp_b' if is_b else 'boot_comp_a'})
-    return out
-
-responses=[{'frame':round((bar*4+2.5)*RATE*60/BPM),'note':n,'velocity':55,'layer':'boot_b_response'} for bar,notes in RESPONSES for n in notes]
+chord_synth=unique_attacks(chord_synth)
 def ordered(events):return sorted(events,key=lambda e:(e['frame'],e['layer'],e['note']))
 def track(chords):return {'frames':FRAMES,'bass':ordered(bass),'chords':ordered(chords),'other_low_synth_optional':ordered(low)}
-tracks={'startup':track(chord_synth+comp(False)),'loop_a':track(chord_synth+comp(False)),
-        'loop_b':track(chord_synth+comp(True)+responses),'menu':track(jazz_chords)}
+tracks={'startup':track(chord_synth),'loop_a':track(chord_synth),
+        'loop_b':track(chord_synth),'menu':track(chord_synth)}
 offset=FRAMES-SWITCH_FRAMES
 tracks['switch']={'frames':SWITCH_FRAMES}
 for key in ('bass','chords','other_low_synth_optional'):
@@ -116,8 +112,8 @@ sources=[dream_path,sway_path,jazz_path,ROOT/'make_boot_continuous_groove.py',RO
 result={'status':'CANDIDATE; implementation and interpretation not approved by this file',
  'sample_rate':RATE,'bpm':BPM,'loop_frames':FRAMES,'switch_frames':SWITCH_FRAMES,
  'events':'Each entry is one distinct source note-on, including simultaneous chord voices; render/frame timing is integer source-sample position.',
- 'chord_scope':'Dreamwave chord synth and chord/arpeggiated accompaniment. Hook, motif and percussion are not chord or bass voices; low synth is carried separately pending a role decision.',
- 'notes':'Boot startup comp has zero envelope at sample 0 and is retained from its first actual comp note. Loop B includes response chord notes. Switch uses the final two bars of loop A. Samples are exact 24-bit-to-16-bit shifts with no phase change; composite streams are exact concatenations.',
+ 'chord_scope':'Only the Dream Groove chord synth. Other accompaniment is excluded; low synth is carried separately and is not a chord voice.',
+ 'notes':'Switch uses the final two bars of loop A. Duplicate synth notes at the same frame and pitch keep the strongest velocity. Samples are exact 24-bit-to-16-bit shifts with no phase change; composite streams are exact concatenations.',
  'sources':[{'path':str(p),'sha256':digest(p)} for p in sources],
  'audio_comparison':conversions,'continuous_streams_equal_concatenation':True,
  'tracks':tracks}

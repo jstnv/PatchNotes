@@ -1,7 +1,8 @@
 shader_type canvas_item;
 render_mode unshaded, blend_add;
 // Cached geometry carries route id, arc distance and cross-trace distance.
-uniform vec4 pulses[128]; // route, head distance, tail length, signed strength/color
+// Color is encoded by sign for blue/orange, or by a strength above 2 for neutral.
+uniform vec4 pulses[128]; // route, head distance, tail length, encoded strength/color
 uniform int pulse_slots = 0;
 uniform float unit_scale = 1.0;
 uniform float brightness = 0.8;
@@ -34,8 +35,10 @@ void fragment() {
 		float front = gaussian(min(behind, 0.0) / (1.7 * unit_scale));
 		float aura_front = gaussian(min(behind, 0.0) / (8.0 * unit_scale));
 		float tip = gaussian(behind / (6.0 * unit_scale));
-		vec3 accent = pulses[i].w > 0.0 ? vec3(0.035,0.90,0.98) : vec3(1.0,0.40,0.075);
-		light += abs(pulses[i].w) * tail * brightness * (
+		bool neutral = pulses[i].w > 1.5;
+		float strength = neutral ? max(0.0, pulses[i].w - 2.0) : abs(pulses[i].w);
+		vec3 accent = neutral ? vec3(0.35,0.37,0.42) : (pulses[i].w > 0.0 ? vec3(0.035,0.90,0.98) : vec3(1.0,0.40,0.075));
+		light += strength * tail * brightness * (
 			accent * (core * 1.35 * front + (halo * 0.65 + glow * 0.18) * bloom * aura_front)
 			+ vec3(1.0,0.96,0.87) * tip * core * front * 1.2);
 	}

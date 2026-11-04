@@ -1,0 +1,6984 @@
+{
+  "status": "CANDIDATE; implementation and interpretation not approved by this file",
+  "sample_rate": 48000,
+  "bpm": 70,
+  "loop_frames": 1316571,
+  "switch_frames": 329143,
+  "events": "Each entry is one distinct source note-on, including simultaneous chord voices; render/frame timing is integer source-sample position.",
+  "chord_scope": "Dreamwave chord synth and chord/arpeggiated accompaniment. Hook, motif and percussion are not chord or bass voices; low synth is carried separately pending a role decision.",
+  "notes": "Boot startup comp has zero envelope at sample 0 and is retained from its first actual comp note. Loop B includes response chord notes. Switch uses the final two bars of loop A. Samples are exact 24-bit-to-16-bit shifts with no phase change; composite streams are exact concatenations.",
+  "sources": [
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\Tempo_70\\Main_Menu_Theme_Echo_Dreamwave_Bass_v03\\MIDI\\dreamwave_synth_and_bass.mid",
+      "sha256": "e716399d9e70ae698bccf038e96e0a0a870cb31dae259fc23dbf41d75cafa418"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\Tempo_70\\Main_Menu_Sway_v01\\MIDI\\crunch_time_menu_sway_v01.mid",
+      "sha256": "b63589624742d06f52a4d38f1610466f46567a60203b2782bee0ef03567d2ab0"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\Tempo_70\\MIDI\\crunch_time_A_jazz_70bpm.mid",
+      "sha256": "a61f0282bc894e1fe31ef53d0ac104c1f6cec14ce9bdc331b38d9fe3aa74dd59"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\make_boot_continuous_groove.py",
+      "sha256": "a9751f991451eb4371a3f2894d0cf8577dd58347f60527606a5991aeb057766a"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\make_boot_dreamwave_set.py",
+      "sha256": "0993c6112aa7a1204aa27692bd03250ab9560bbfabd8522ffdfc654107f54111"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\make_boot_short_transitions.py",
+      "sha256": "6bd06f3051aa12228bc25d83c8b028df60c626d0015ac25c370bf68aff787038"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\audition_boot_rhythm_alignment.py",
+      "sha256": "76f57600f79fa00652be474fe62c46ce58b20197f135897c98bf1edb222ab9b1"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\make_main_menu_theme_echo_dreamwave_bass.py",
+      "sha256": "37ed3aab000e6a4d8764fdca590ed2c35c4a0239adc51622041137560f92afc6"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\make_main_menu_theme_echo_reverb.py",
+      "sha256": "65fb7bc450d3b109774344cb772eeb07366846488a4a04276a23199c5f1bb54a"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\make_main_menu_sway.py",
+      "sha256": "1642474967b2cc9f4a759f60c4a9da90a610266d2508da47901951c6edf1c997"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\Tempo_70\\Main_Menu_Theme_Echo_Dreamwave_Bass_v03\\time_map.json",
+      "sha256": "696cd273e121c9d5af7d28179c301dff6e6f42218f18740ff4961551e2ce4258"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\Tempo_70\\Boot_Dreamwave_Set_v05\\Separate_Tracks\\01_startup.wav",
+      "sha256": "0231c402ed88310b5dc257bd00254d0a6362c0f1cfa303e93fbdd5ccdfdb1c8c"
+    },
+    {
+      "path": "patch-notes\\assets\\boot\\sequence_v1\\01_startup.wav",
+      "sha256": "93763e6432d0805e9c37e37f681d93e2a53f78d0fe2d0e567c6a31a6a768b9cd"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\Tempo_70\\Boot_Dreamwave_Set_v05\\Separate_Tracks\\02_logo_loop_A.wav",
+      "sha256": "9b79dc36a69368db411d2d7af481bc4893d217d51b28c22d2faabb7de393eb46"
+    },
+    {
+      "path": "patch-notes\\assets\\boot\\sequence_v1\\02_logo_loop_A.wav",
+      "sha256": "0a39530f5b114bf9d5389daa27d71f627a0f15eb681941f610f48a89bfe6ddac"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\Tempo_70\\Boot_Dreamwave_Set_v05\\Separate_Tracks\\03_logo_loop_B.wav",
+      "sha256": "61bae6cfe4c47d386fc3ba4b99317c4adb9f183a1e0a8dc561caf33c441d1557"
+    },
+    {
+      "path": "patch-notes\\assets\\boot\\sequence_v1\\03_logo_loop_B.wav",
+      "sha256": "14243fd8f425b76c61b509bf115fe06dc22ce5f81e9561f4aa82d1f1697f33ed"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\Tempo_70\\Boot_Switch_v10_Rhythm_Alignment\\v10_continuous_two_bar_switch.wav",
+      "sha256": "fbf98357513f42b6a6c011211f63990b5fff0129de536c9fa33193eb1c790ad6"
+    },
+    {
+      "path": "patch-notes\\assets\\boot\\sequence_v1\\04_start_switch.wav",
+      "sha256": "ec423709744829c86e2c17f33c66e1c4c891246ffbed3fa588a16ead9d445686"
+    },
+    {
+      "path": "C:\\Users\\64jus\\OneDrive\\Documents\\ChatGPT\\Patch Notes Music\\soundtrack\\prototype-01-crunch-time\\Tempo_70\\Main_Menu_Theme_Echo_Dreamwave_Bass_v03\\WAV\\crunch_time_menu_theme_echo_dreamwave_bass_v03.wav",
+      "sha256": "233bbb67ee37c8396e3a6703b271af4f61719c78d0d89fa4f637bd7d3a7ec0c6"
+    },
+    {
+      "path": "patch-notes\\assets\\boot\\sequence_v1\\crunch_time_menu_theme_echo_dreamwave_bass_v03.wav",
+      "sha256": "d54e5afb2dd24ab35f14541c011c161b08b08daea8e5f7a555e49ca9272197ba"
+    },
+    {
+      "path": "patch-notes\\assets\\boot\\sequence_v1\\startup_ab_continuous.wav",
+      "sha256": "b94ca67a1c5c41167cdf832624898fac4e8c7ca845bddc39bc2072288acd1554"
+    },
+    {
+      "path": "patch-notes\\assets\\boot\\sequence_v1\\switch_menu_continuous.wav",
+      "sha256": "a7fbb8daddaf67449e112e370025985c2b3c13b62bbbda29729e6c5e3e114000"
+    }
+  ],
+  "audio_comparison": {
+    "01_startup.wav": {
+      "frames": 1316571,
+      "all_16bit_samples_equal_24bit_shift_8": true
+    },
+    "02_logo_loop_A.wav": {
+      "frames": 1316571,
+      "all_16bit_samples_equal_24bit_shift_8": true
+    },
+    "03_logo_loop_B.wav": {
+      "frames": 1316571,
+      "all_16bit_samples_equal_24bit_shift_8": true
+    },
+    "04_start_switch.wav": {
+      "frames": 329143,
+      "all_16bit_samples_equal_24bit_shift_8": true
+    },
+    "crunch_time_menu_theme_echo_dreamwave_bass_v03.wav": {
+      "frames": 1316571,
+      "all_16bit_samples_equal_24bit_shift_8": true
+    }
+  },
+  "continuous_streams_equal_concatenation": true,
+  "tracks": {
+    "startup": {
+      "frames": 1316571,
+      "bass": [
+        {
+          "frame": 0,
+          "note": 38,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 30857,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 61714,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 92571,
+          "note": 41,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 113143,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 144000,
+          "note": 42,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 164571,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 195429,
+          "note": 55,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 226286,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 257143,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 277714,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 308571,
+          "note": 35,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 329143,
+          "note": 36,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 360000,
+          "note": 48,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 390857,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 421714,
+          "note": 40,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 442286,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 473143,
+          "note": 44,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 493714,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 524571,
+          "note": 57,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 555429,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 586286,
+          "note": 49,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 606857,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 637714,
+          "note": 37,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 658286,
+          "note": 38,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 689143,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 720000,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 750857,
+          "note": 41,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 771429,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 802286,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 822857,
+          "note": 46,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 853714,
+          "note": 58,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 884571,
+          "note": 53,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 915429,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 936000,
+          "note": 53,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 966857,
+          "note": 39,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 987429,
+          "note": 40,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1018286,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1049143,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1080000,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1100571,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1131429,
+          "note": 44,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1152000,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1182857,
+          "note": 57,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1213714,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1244571,
+          "note": 49,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1265143,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1296000,
+          "note": 37,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        }
+      ],
+      "chords": [
+        {
+          "frame": 0,
+          "note": 53,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 0,
+          "note": 60,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 0,
+          "note": 64,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 30857,
+          "note": 53,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 30857,
+          "note": 60,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 30857,
+          "note": 64,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 61714,
+          "note": 60,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 61714,
+          "note": 64,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 102857,
+          "note": 53,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 57,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 60,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 113143,
+          "note": 53,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 113143,
+          "note": 60,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 113143,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 144000,
+          "note": 60,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 144000,
+          "note": 64,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 164571,
+          "note": 53,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 59,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 64,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 195429,
+          "note": 59,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 195429,
+          "note": 64,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 53,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 59,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 64,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 59,
+          "velocity": 58,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 226286,
+          "note": 64,
+          "velocity": 58,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 277714,
+          "note": 59,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 277714,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 288000,
+          "note": 53,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 57,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 59,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 308571,
+          "note": 53,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 308571,
+          "note": 59,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 308571,
+          "note": 64,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 329143,
+          "note": 52,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 59,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 62,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 67,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 360000,
+          "note": 52,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 360000,
+          "note": 59,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 360000,
+          "note": 62,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 380571,
+          "note": 55,
+          "velocity": 55,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 380571,
+          "note": 59,
+          "velocity": 55,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 390857,
+          "note": 59,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 390857,
+          "note": 62,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 421714,
+          "note": 52,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 55,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 59,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 442286,
+          "note": 52,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 442286,
+          "note": 59,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 442286,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 473143,
+          "note": 59,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 473143,
+          "note": 62,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 473143,
+          "note": 62,
+          "velocity": 61,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 473143,
+          "note": 64,
+          "velocity": 61,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 55,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 61,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 65,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 70,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 524571,
+          "note": 61,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 524571,
+          "note": 65,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 524571,
+          "note": 55,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 524571,
+          "note": 61,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 55,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 555429,
+          "note": 61,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 555429,
+          "note": 65,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 555429,
+          "note": 55,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 61,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 65,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 586286,
+          "note": 58,
+          "velocity": 64,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 586286,
+          "note": 61,
+          "velocity": 64,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 606857,
+          "note": 61,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 606857,
+          "note": 65,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 617143,
+          "note": 55,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 58,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 61,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 65,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 637714,
+          "note": 55,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 637714,
+          "note": 61,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 637714,
+          "note": 65,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 658286,
+          "note": 53,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 60,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 64,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 689143,
+          "note": 53,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 689143,
+          "note": 60,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 689143,
+          "note": 64,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 709714,
+          "note": 57,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 709714,
+          "note": 60,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 720000,
+          "note": 60,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 720000,
+          "note": 64,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 750857,
+          "note": 53,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 57,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 60,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 771429,
+          "note": 53,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 771429,
+          "note": 60,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 771429,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 792000,
+          "note": 64,
+          "velocity": 59,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 792000,
+          "note": 65,
+          "velocity": 59,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 802286,
+          "note": 60,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 802286,
+          "note": 64,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 822857,
+          "note": 57,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 62,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 65,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 72,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 853714,
+          "note": 62,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 853714,
+          "note": 65,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 864000,
+          "note": 62,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 864000,
+          "note": 65,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 884571,
+          "note": 57,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 884571,
+          "note": 62,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 884571,
+          "note": 65,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 905143,
+          "note": 57,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 60,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 62,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 936000,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 936000,
+          "note": 65,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 946286,
+          "note": 57,
+          "velocity": 60,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 946286,
+          "note": 72,
+          "velocity": 60,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 966857,
+          "note": 57,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 966857,
+          "note": 62,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 966857,
+          "note": 65,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 987429,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 58,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 62,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1018286,
+          "note": 55,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1018286,
+          "note": 58,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1018286,
+          "note": 62,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1049143,
+          "note": 58,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1049143,
+          "note": 62,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1049143,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1049143,
+          "note": 62,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1100571,
+          "note": 55,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1100571,
+          "note": 58,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1100571,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1110857,
+          "note": 55,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 58,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 62,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1131429,
+          "note": 58,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1131429,
+          "note": 62,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1152000,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 61,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 64,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 70,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1182857,
+          "note": 61,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1182857,
+          "note": 64,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1182857,
+          "note": 55,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1182857,
+          "note": 61,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 55,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1213714,
+          "note": 61,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1213714,
+          "note": 64,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1213714,
+          "note": 55,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 61,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 64,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1254857,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1254857,
+          "note": 61,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1265143,
+          "note": 61,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1265143,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1296000,
+          "note": 55,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1296000,
+          "note": 61,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1296000,
+          "note": 64,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        }
+      ],
+      "other_low_synth_optional": [
+        {
+          "frame": 0,
+          "note": 38,
+          "velocity": 96,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 38,
+          "velocity": 82,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 31,
+          "velocity": 95,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 31,
+          "velocity": 86,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 36,
+          "velocity": 96,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 43,
+          "velocity": 87,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 33,
+          "velocity": 98,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 40,
+          "velocity": 89,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 33,
+          "velocity": 101,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 38,
+          "velocity": 94,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 45,
+          "velocity": 83,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 34,
+          "velocity": 92,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 41,
+          "velocity": 81,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 40,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 34,
+          "velocity": 78,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 33,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 40,
+          "velocity": 79,
+          "layer": "low_synth"
+        }
+      ]
+    },
+    "loop_a": {
+      "frames": 1316571,
+      "bass": [
+        {
+          "frame": 0,
+          "note": 38,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 30857,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 61714,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 92571,
+          "note": 41,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 113143,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 144000,
+          "note": 42,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 164571,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 195429,
+          "note": 55,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 226286,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 257143,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 277714,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 308571,
+          "note": 35,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 329143,
+          "note": 36,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 360000,
+          "note": 48,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 390857,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 421714,
+          "note": 40,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 442286,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 473143,
+          "note": 44,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 493714,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 524571,
+          "note": 57,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 555429,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 586286,
+          "note": 49,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 606857,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 637714,
+          "note": 37,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 658286,
+          "note": 38,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 689143,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 720000,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 750857,
+          "note": 41,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 771429,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 802286,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 822857,
+          "note": 46,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 853714,
+          "note": 58,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 884571,
+          "note": 53,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 915429,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 936000,
+          "note": 53,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 966857,
+          "note": 39,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 987429,
+          "note": 40,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1018286,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1049143,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1080000,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1100571,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1131429,
+          "note": 44,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1152000,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1182857,
+          "note": 57,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1213714,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1244571,
+          "note": 49,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1265143,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1296000,
+          "note": 37,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        }
+      ],
+      "chords": [
+        {
+          "frame": 0,
+          "note": 53,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 0,
+          "note": 60,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 0,
+          "note": 64,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 30857,
+          "note": 53,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 30857,
+          "note": 60,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 30857,
+          "note": 64,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 61714,
+          "note": 60,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 61714,
+          "note": 64,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 102857,
+          "note": 53,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 57,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 60,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 113143,
+          "note": 53,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 113143,
+          "note": 60,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 113143,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 144000,
+          "note": 60,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 144000,
+          "note": 64,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 164571,
+          "note": 53,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 59,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 64,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 195429,
+          "note": 59,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 195429,
+          "note": 64,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 53,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 59,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 64,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 59,
+          "velocity": 58,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 226286,
+          "note": 64,
+          "velocity": 58,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 277714,
+          "note": 59,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 277714,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 288000,
+          "note": 53,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 57,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 59,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 308571,
+          "note": 53,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 308571,
+          "note": 59,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 308571,
+          "note": 64,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 329143,
+          "note": 52,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 59,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 62,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 67,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 360000,
+          "note": 52,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 360000,
+          "note": 59,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 360000,
+          "note": 62,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 380571,
+          "note": 55,
+          "velocity": 55,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 380571,
+          "note": 59,
+          "velocity": 55,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 390857,
+          "note": 59,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 390857,
+          "note": 62,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 421714,
+          "note": 52,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 55,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 59,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 442286,
+          "note": 52,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 442286,
+          "note": 59,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 442286,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 473143,
+          "note": 59,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 473143,
+          "note": 62,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 473143,
+          "note": 62,
+          "velocity": 61,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 473143,
+          "note": 64,
+          "velocity": 61,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 55,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 61,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 65,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 70,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 524571,
+          "note": 61,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 524571,
+          "note": 65,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 524571,
+          "note": 55,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 524571,
+          "note": 61,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 55,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 555429,
+          "note": 61,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 555429,
+          "note": 65,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 555429,
+          "note": 55,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 61,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 65,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 586286,
+          "note": 58,
+          "velocity": 64,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 586286,
+          "note": 61,
+          "velocity": 64,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 606857,
+          "note": 61,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 606857,
+          "note": 65,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 617143,
+          "note": 55,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 58,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 61,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 65,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 637714,
+          "note": 55,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 637714,
+          "note": 61,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 637714,
+          "note": 65,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 658286,
+          "note": 53,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 60,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 64,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 689143,
+          "note": 53,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 689143,
+          "note": 60,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 689143,
+          "note": 64,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 709714,
+          "note": 57,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 709714,
+          "note": 60,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 720000,
+          "note": 60,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 720000,
+          "note": 64,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 750857,
+          "note": 53,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 57,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 60,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 771429,
+          "note": 53,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 771429,
+          "note": 60,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 771429,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 792000,
+          "note": 64,
+          "velocity": 59,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 792000,
+          "note": 65,
+          "velocity": 59,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 802286,
+          "note": 60,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 802286,
+          "note": 64,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 822857,
+          "note": 57,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 62,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 65,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 72,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 853714,
+          "note": 62,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 853714,
+          "note": 65,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 864000,
+          "note": 62,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 864000,
+          "note": 65,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 884571,
+          "note": 57,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 884571,
+          "note": 62,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 884571,
+          "note": 65,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 905143,
+          "note": 57,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 60,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 62,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 936000,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 936000,
+          "note": 65,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 946286,
+          "note": 57,
+          "velocity": 60,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 946286,
+          "note": 72,
+          "velocity": 60,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 966857,
+          "note": 57,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 966857,
+          "note": 62,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 966857,
+          "note": 65,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 987429,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 58,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 62,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1018286,
+          "note": 55,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1018286,
+          "note": 58,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1018286,
+          "note": 62,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1049143,
+          "note": 58,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1049143,
+          "note": 62,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1049143,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1049143,
+          "note": 62,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1100571,
+          "note": 55,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1100571,
+          "note": 58,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1100571,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1110857,
+          "note": 55,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 58,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 62,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1131429,
+          "note": 58,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1131429,
+          "note": 62,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1152000,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 61,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 64,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 70,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1182857,
+          "note": 61,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1182857,
+          "note": 64,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1182857,
+          "note": 55,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1182857,
+          "note": 61,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 55,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1213714,
+          "note": 61,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1213714,
+          "note": 64,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1213714,
+          "note": 55,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 61,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 64,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1254857,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1254857,
+          "note": 61,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1265143,
+          "note": 61,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1265143,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1296000,
+          "note": 55,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1296000,
+          "note": 61,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 1296000,
+          "note": 64,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        }
+      ],
+      "other_low_synth_optional": [
+        {
+          "frame": 0,
+          "note": 38,
+          "velocity": 96,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 38,
+          "velocity": 82,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 31,
+          "velocity": 95,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 31,
+          "velocity": 86,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 36,
+          "velocity": 96,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 43,
+          "velocity": 87,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 33,
+          "velocity": 98,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 40,
+          "velocity": 89,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 33,
+          "velocity": 101,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 38,
+          "velocity": 94,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 45,
+          "velocity": 83,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 34,
+          "velocity": 92,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 41,
+          "velocity": 81,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 40,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 34,
+          "velocity": 78,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 33,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 40,
+          "velocity": 79,
+          "layer": "low_synth"
+        }
+      ]
+    },
+    "loop_b": {
+      "frames": 1316571,
+      "bass": [
+        {
+          "frame": 0,
+          "note": 38,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 30857,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 61714,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 92571,
+          "note": 41,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 113143,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 144000,
+          "note": 42,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 164571,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 195429,
+          "note": 55,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 226286,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 257143,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 277714,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 308571,
+          "note": 35,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 329143,
+          "note": 36,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 360000,
+          "note": 48,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 390857,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 421714,
+          "note": 40,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 442286,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 473143,
+          "note": 44,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 493714,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 524571,
+          "note": 57,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 555429,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 586286,
+          "note": 49,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 606857,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 637714,
+          "note": 37,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 658286,
+          "note": 38,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 689143,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 720000,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 750857,
+          "note": 41,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 771429,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 802286,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 822857,
+          "note": 46,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 853714,
+          "note": 58,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 884571,
+          "note": 53,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 915429,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 936000,
+          "note": 53,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 966857,
+          "note": 39,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 987429,
+          "note": 40,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1018286,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1049143,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1080000,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1100571,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1131429,
+          "note": 44,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1152000,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1182857,
+          "note": 57,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1213714,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1244571,
+          "note": 49,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1265143,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1296000,
+          "note": 37,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        }
+      ],
+      "chords": [
+        {
+          "frame": 0,
+          "note": 53,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 0,
+          "note": 60,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 0,
+          "note": 64,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 20571,
+          "note": 53,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 20571,
+          "note": 60,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 20571,
+          "note": 64,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 61714,
+          "note": 60,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 61714,
+          "note": 64,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 102857,
+          "note": 53,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 102857,
+          "note": 60,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 102857,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 102857,
+          "note": 53,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 57,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 60,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 144000,
+          "note": 60,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 144000,
+          "note": 64,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 164571,
+          "note": 53,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 59,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 64,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 185143,
+          "note": 59,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 185143,
+          "note": 64,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 226286,
+          "note": 53,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 226286,
+          "note": 59,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 226286,
+          "note": 64,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 226286,
+          "note": 59,
+          "velocity": 58,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 226286,
+          "note": 64,
+          "velocity": 58,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 267429,
+          "note": 57,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 267429,
+          "note": 59,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 267429,
+          "note": 64,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 267429,
+          "note": 59,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 267429,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 288000,
+          "note": 53,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 57,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 59,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 308571,
+          "note": 53,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 308571,
+          "note": 59,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 308571,
+          "note": 64,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 329143,
+          "note": 52,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 59,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 62,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 67,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 349714,
+          "note": 52,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 349714,
+          "note": 59,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 349714,
+          "note": 62,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 380571,
+          "note": 55,
+          "velocity": 55,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 380571,
+          "note": 59,
+          "velocity": 55,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 390857,
+          "note": 59,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 390857,
+          "note": 62,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 421714,
+          "note": 52,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 55,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 59,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 432000,
+          "note": 52,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 432000,
+          "note": 59,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 432000,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 473143,
+          "note": 59,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 473143,
+          "note": 62,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 473143,
+          "note": 62,
+          "velocity": 61,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 473143,
+          "note": 64,
+          "velocity": 61,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 55,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 61,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 65,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 70,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 514286,
+          "note": 61,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 514286,
+          "note": 65,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 524571,
+          "note": 55,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 524571,
+          "note": 61,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 55,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 555429,
+          "note": 61,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 555429,
+          "note": 65,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 555429,
+          "note": 55,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 61,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 65,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 586286,
+          "note": 58,
+          "velocity": 64,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 586286,
+          "note": 61,
+          "velocity": 64,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 596571,
+          "note": 58,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 596571,
+          "note": 61,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 596571,
+          "note": 65,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 596571,
+          "note": 61,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 596571,
+          "note": 65,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 617143,
+          "note": 55,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 58,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 61,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 65,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 637714,
+          "note": 55,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 637714,
+          "note": 61,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 637714,
+          "note": 65,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 658286,
+          "note": 53,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 60,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 64,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 678857,
+          "note": 53,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 678857,
+          "note": 60,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 678857,
+          "note": 64,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 709714,
+          "note": 57,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 709714,
+          "note": 60,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 720000,
+          "note": 60,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 720000,
+          "note": 64,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 750857,
+          "note": 53,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 57,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 60,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 761143,
+          "note": 53,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 761143,
+          "note": 60,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 761143,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 792000,
+          "note": 64,
+          "velocity": 59,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 792000,
+          "note": 65,
+          "velocity": 59,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 802286,
+          "note": 60,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 802286,
+          "note": 64,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 822857,
+          "note": 57,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 62,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 65,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 72,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 843429,
+          "note": 62,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 843429,
+          "note": 65,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 864000,
+          "note": 62,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 864000,
+          "note": 65,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 884571,
+          "note": 57,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 884571,
+          "note": 62,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 884571,
+          "note": 65,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 905143,
+          "note": 57,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 60,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 62,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 925714,
+          "note": 58,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 925714,
+          "note": 62,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 925714,
+          "note": 65,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 925714,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 925714,
+          "note": 65,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 946286,
+          "note": 57,
+          "velocity": 60,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 946286,
+          "note": 72,
+          "velocity": 60,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 966857,
+          "note": 57,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 966857,
+          "note": 62,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 966857,
+          "note": 65,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 987429,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 58,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 62,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1008000,
+          "note": 55,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1008000,
+          "note": 58,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1008000,
+          "note": 62,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1049143,
+          "note": 58,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1049143,
+          "note": 62,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1049143,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1049143,
+          "note": 62,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1090286,
+          "note": 55,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1090286,
+          "note": 58,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1090286,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1110857,
+          "note": 55,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 58,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 62,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1131429,
+          "note": 58,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1131429,
+          "note": 62,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1152000,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 61,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 64,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 70,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1172571,
+          "note": 61,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1172571,
+          "note": 64,
+          "velocity": 74,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1182857,
+          "note": 55,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1182857,
+          "note": 61,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 55,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1213714,
+          "note": 61,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1213714,
+          "note": 64,
+          "velocity": 82,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1213714,
+          "note": 55,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 61,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 64,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1254857,
+          "note": 58,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 1254857,
+          "note": 61,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 1254857,
+          "note": 64,
+          "velocity": 55,
+          "layer": "boot_b_response"
+        },
+        {
+          "frame": 1254857,
+          "note": 61,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1254857,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1254857,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1254857,
+          "note": 61,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1296000,
+          "note": 55,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1296000,
+          "note": 61,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        },
+        {
+          "frame": 1296000,
+          "note": 64,
+          "velocity": 81,
+          "layer": "boot_comp_b"
+        }
+      ],
+      "other_low_synth_optional": [
+        {
+          "frame": 0,
+          "note": 38,
+          "velocity": 96,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 38,
+          "velocity": 82,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 31,
+          "velocity": 95,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 31,
+          "velocity": 86,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 36,
+          "velocity": 96,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 43,
+          "velocity": 87,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 33,
+          "velocity": 98,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 40,
+          "velocity": 89,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 33,
+          "velocity": 101,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 38,
+          "velocity": 94,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 45,
+          "velocity": 83,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 34,
+          "velocity": 92,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 41,
+          "velocity": 81,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 40,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 34,
+          "velocity": 78,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 33,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 40,
+          "velocity": 79,
+          "layer": "low_synth"
+        }
+      ]
+    },
+    "menu": {
+      "frames": 1316571,
+      "bass": [
+        {
+          "frame": 0,
+          "note": 38,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 30857,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 61714,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 92571,
+          "note": 41,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 113143,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 144000,
+          "note": 42,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 164571,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 195429,
+          "note": 55,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 226286,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 257143,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 277714,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 308571,
+          "note": 35,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 329143,
+          "note": 36,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 360000,
+          "note": 48,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 390857,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 421714,
+          "note": 40,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 442286,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 473143,
+          "note": 44,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 493714,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 524571,
+          "note": 57,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 555429,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 586286,
+          "note": 49,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 606857,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 637714,
+          "note": 37,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 658286,
+          "note": 38,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 689143,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 720000,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 750857,
+          "note": 41,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 771429,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 802286,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 822857,
+          "note": 46,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 853714,
+          "note": 58,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 884571,
+          "note": 53,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 915429,
+          "note": 50,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 936000,
+          "note": 53,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 966857,
+          "note": 39,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 987429,
+          "note": 40,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1018286,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1049143,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1080000,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1100571,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1131429,
+          "note": 44,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1152000,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1182857,
+          "note": 57,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1213714,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1244571,
+          "note": 49,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1265143,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 1296000,
+          "note": 37,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        }
+      ],
+      "chords": [
+        {
+          "frame": 0,
+          "note": 53,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 0,
+          "note": 60,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 0,
+          "note": 64,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 0,
+          "note": 62,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 0,
+          "note": 53,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 0,
+          "note": 60,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 0,
+          "note": 64,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 0,
+          "note": 69,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 10286,
+          "note": 53,
+          "velocity": 55,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 20571,
+          "note": 65,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 20571,
+          "note": 53,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 20571,
+          "note": 60,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 20571,
+          "note": 64,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 20571,
+          "note": 69,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 30857,
+          "note": 53,
+          "velocity": 63,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 31800,
+          "note": 60,
+          "velocity": 60,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 32743,
+          "note": 64,
+          "velocity": 57,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 41143,
+          "note": 69,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 41143,
+          "note": 60,
+          "velocity": 47,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 72000,
+          "note": 64,
+          "velocity": 50,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 82286,
+          "note": 76,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 92571,
+          "note": 53,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 92571,
+          "note": 60,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 92571,
+          "note": 64,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 92571,
+          "note": 69,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 102857,
+          "note": 53,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 57,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 60,
+          "velocity": 74,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 62,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 102857,
+          "note": 69,
+          "velocity": 34,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 113143,
+          "note": 53,
+          "velocity": 55,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 113143,
+          "note": 60,
+          "velocity": 44,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 114086,
+          "note": 60,
+          "velocity": 52,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 115029,
+          "note": 64,
+          "velocity": 49,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 123429,
+          "note": 65,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 144000,
+          "note": 69,
+          "velocity": 46,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 144000,
+          "note": 53,
+          "velocity": 41,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 164571,
+          "note": 53,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 59,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 64,
+          "velocity": 87,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 67,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 164571,
+          "note": 53,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 164571,
+          "note": 59,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 164571,
+          "note": 64,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 164571,
+          "note": 69,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 174857,
+          "note": 53,
+          "velocity": 55,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 185143,
+          "note": 71,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 185143,
+          "note": 53,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 185143,
+          "note": 59,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 185143,
+          "note": 64,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 185143,
+          "note": 69,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 195429,
+          "note": 53,
+          "velocity": 63,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 196371,
+          "note": 59,
+          "velocity": 60,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 197314,
+          "note": 64,
+          "velocity": 57,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 205714,
+          "note": 74,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 205714,
+          "note": 59,
+          "velocity": 47,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 226286,
+          "note": 59,
+          "velocity": 58,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 226286,
+          "note": 64,
+          "velocity": 58,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 236571,
+          "note": 64,
+          "velocity": 50,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 246857,
+          "note": 77,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 257143,
+          "note": 53,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 257143,
+          "note": 59,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 257143,
+          "note": 64,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 257143,
+          "note": 69,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 267429,
+          "note": 67,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 267429,
+          "note": 69,
+          "velocity": 34,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 277714,
+          "note": 53,
+          "velocity": 55,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 277714,
+          "note": 59,
+          "velocity": 44,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 278657,
+          "note": 59,
+          "velocity": 52,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 279600,
+          "note": 64,
+          "velocity": 49,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 288000,
+          "note": 53,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 57,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 59,
+          "velocity": 78,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 71,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 308571,
+          "note": 69,
+          "velocity": 46,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 308571,
+          "note": 53,
+          "velocity": 41,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 329143,
+          "note": 52,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 59,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 62,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 67,
+          "velocity": 88,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 60,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 329143,
+          "note": 52,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 329143,
+          "note": 59,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 329143,
+          "note": 62,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 329143,
+          "note": 67,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 339429,
+          "note": 52,
+          "velocity": 55,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 349714,
+          "note": 64,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 349714,
+          "note": 52,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 349714,
+          "note": 59,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 349714,
+          "note": 62,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 349714,
+          "note": 67,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 360000,
+          "note": 52,
+          "velocity": 63,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 360943,
+          "note": 59,
+          "velocity": 60,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 361886,
+          "note": 62,
+          "velocity": 57,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 370286,
+          "note": 67,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 370286,
+          "note": 59,
+          "velocity": 47,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 380571,
+          "note": 55,
+          "velocity": 55,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 380571,
+          "note": 59,
+          "velocity": 55,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 401143,
+          "note": 62,
+          "velocity": 50,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 411429,
+          "note": 74,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 421714,
+          "note": 52,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 55,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 59,
+          "velocity": 79,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 52,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 421714,
+          "note": 59,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 421714,
+          "note": 62,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 421714,
+          "note": 67,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 432000,
+          "note": 60,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 432000,
+          "note": 67,
+          "velocity": 34,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 442286,
+          "note": 52,
+          "velocity": 55,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 442286,
+          "note": 59,
+          "velocity": 44,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 443229,
+          "note": 59,
+          "velocity": 52,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 444171,
+          "note": 62,
+          "velocity": 49,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 452571,
+          "note": 64,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 473143,
+          "note": 62,
+          "velocity": 61,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 473143,
+          "note": 64,
+          "velocity": 61,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 473143,
+          "note": 67,
+          "velocity": 46,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 473143,
+          "note": 52,
+          "velocity": 41,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 493714,
+          "note": 55,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 61,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 65,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 70,
+          "velocity": 90,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 57,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 493714,
+          "note": 55,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 493714,
+          "note": 61,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 493714,
+          "note": 65,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 493714,
+          "note": 70,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 504000,
+          "note": 55,
+          "velocity": 55,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 514286,
+          "note": 61,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 514286,
+          "note": 55,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 514286,
+          "note": 61,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 514286,
+          "note": 65,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 514286,
+          "note": 70,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 524571,
+          "note": 55,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 524571,
+          "note": 61,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 524571,
+          "note": 55,
+          "velocity": 63,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 525514,
+          "note": 61,
+          "velocity": 60,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 526457,
+          "note": 65,
+          "velocity": 57,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 534857,
+          "note": 65,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 534857,
+          "note": 61,
+          "velocity": 47,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 555429,
+          "note": 55,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 61,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 65,
+          "velocity": 81,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 565714,
+          "note": 65,
+          "velocity": 50,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 576000,
+          "note": 70,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 586286,
+          "note": 58,
+          "velocity": 64,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 586286,
+          "note": 61,
+          "velocity": 64,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 586286,
+          "note": 55,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 586286,
+          "note": 61,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 586286,
+          "note": 65,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 586286,
+          "note": 70,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 596571,
+          "note": 57,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 596571,
+          "note": 70,
+          "velocity": 34,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 606857,
+          "note": 55,
+          "velocity": 55,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 606857,
+          "note": 61,
+          "velocity": 44,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 607800,
+          "note": 61,
+          "velocity": 52,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 608743,
+          "note": 65,
+          "velocity": 49,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 617143,
+          "note": 55,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 58,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 61,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 65,
+          "velocity": 93,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 61,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 637714,
+          "note": 70,
+          "velocity": 46,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 637714,
+          "note": 55,
+          "velocity": 41,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 658286,
+          "note": 53,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 60,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 64,
+          "velocity": 86,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 62,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 658286,
+          "note": 53,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 658286,
+          "note": 60,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 658286,
+          "note": 64,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 658286,
+          "note": 69,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 668571,
+          "note": 53,
+          "velocity": 55,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 678857,
+          "note": 65,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 678857,
+          "note": 53,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 678857,
+          "note": 60,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 678857,
+          "note": 64,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 678857,
+          "note": 69,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 689143,
+          "note": 53,
+          "velocity": 63,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 690086,
+          "note": 60,
+          "velocity": 60,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 691029,
+          "note": 64,
+          "velocity": 57,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 699429,
+          "note": 69,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 699429,
+          "note": 60,
+          "velocity": 47,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 709714,
+          "note": 57,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 709714,
+          "note": 60,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 730286,
+          "note": 64,
+          "velocity": 50,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 740571,
+          "note": 76,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 750857,
+          "note": 53,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 57,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 60,
+          "velocity": 75,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 53,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 750857,
+          "note": 60,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 750857,
+          "note": 64,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 750857,
+          "note": 69,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 761143,
+          "note": 62,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 761143,
+          "note": 69,
+          "velocity": 34,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 771429,
+          "note": 53,
+          "velocity": 55,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 771429,
+          "note": 60,
+          "velocity": 44,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 772371,
+          "note": 60,
+          "velocity": 52,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 773314,
+          "note": 64,
+          "velocity": 49,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 781714,
+          "note": 65,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 792000,
+          "note": 64,
+          "velocity": 59,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 792000,
+          "note": 65,
+          "velocity": 59,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 802286,
+          "note": 69,
+          "velocity": 46,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 802286,
+          "note": 53,
+          "velocity": 41,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 822857,
+          "note": 57,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 62,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 65,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 72,
+          "velocity": 84,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 58,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 822857,
+          "note": 57,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 822857,
+          "note": 60,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 822857,
+          "note": 62,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 822857,
+          "note": 65,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 833143,
+          "note": 57,
+          "velocity": 55,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 843429,
+          "note": 62,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 843429,
+          "note": 57,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 843429,
+          "note": 60,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 843429,
+          "note": 62,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 843429,
+          "note": 65,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 853714,
+          "note": 57,
+          "velocity": 63,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 854657,
+          "note": 60,
+          "velocity": 60,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 855600,
+          "note": 62,
+          "velocity": 57,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 864000,
+          "note": 62,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 864000,
+          "note": 65,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 864000,
+          "note": 65,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 864000,
+          "note": 60,
+          "velocity": 47,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 894857,
+          "note": 62,
+          "velocity": 50,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 905143,
+          "note": 57,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 60,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 62,
+          "velocity": 73,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 72,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 915429,
+          "note": 57,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 915429,
+          "note": 60,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 915429,
+          "note": 62,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 915429,
+          "note": 65,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 925714,
+          "note": 58,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 925714,
+          "note": 65,
+          "velocity": 34,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 936000,
+          "note": 57,
+          "velocity": 55,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 936000,
+          "note": 60,
+          "velocity": 44,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 936943,
+          "note": 60,
+          "velocity": 52,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 937886,
+          "note": 62,
+          "velocity": 49,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 946286,
+          "note": 57,
+          "velocity": 60,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 946286,
+          "note": 72,
+          "velocity": 60,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 946286,
+          "note": 62,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 966857,
+          "note": 65,
+          "velocity": 46,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 966857,
+          "note": 57,
+          "velocity": 41,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 987429,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 58,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 62,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 64,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 987429,
+          "note": 55,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 987429,
+          "note": 58,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 987429,
+          "note": 62,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 987429,
+          "note": 64,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 997714,
+          "note": 55,
+          "velocity": 55,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 1008000,
+          "note": 67,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1008000,
+          "note": 55,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1008000,
+          "note": 58,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1008000,
+          "note": 62,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1008000,
+          "note": 64,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1018286,
+          "note": 55,
+          "velocity": 63,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1019229,
+          "note": 58,
+          "velocity": 60,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1020171,
+          "note": 62,
+          "velocity": 57,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1028571,
+          "note": 70,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1028571,
+          "note": 58,
+          "velocity": 47,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 1049143,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1049143,
+          "note": 62,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1059429,
+          "note": 62,
+          "velocity": 50,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 1069714,
+          "note": 79,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1080000,
+          "note": 55,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1080000,
+          "note": 58,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1080000,
+          "note": 62,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1080000,
+          "note": 64,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1090286,
+          "note": 64,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1090286,
+          "note": 64,
+          "velocity": 34,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 1100571,
+          "note": 55,
+          "velocity": 55,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1100571,
+          "note": 58,
+          "velocity": 44,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 1101514,
+          "note": 58,
+          "velocity": 52,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1102457,
+          "note": 62,
+          "velocity": 49,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1110857,
+          "note": 55,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 58,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 62,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 67,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1131429,
+          "note": 64,
+          "velocity": 46,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1131429,
+          "note": 55,
+          "velocity": 41,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 1152000,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 61,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 64,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 70,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 57,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1152000,
+          "note": 55,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 1152000,
+          "note": 61,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 1152000,
+          "note": 64,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 1152000,
+          "note": 70,
+          "velocity": 53,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 1162286,
+          "note": 55,
+          "velocity": 55,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 1172571,
+          "note": 61,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1172571,
+          "note": 55,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1172571,
+          "note": 61,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1172571,
+          "note": 64,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1172571,
+          "note": 70,
+          "velocity": 74,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1182857,
+          "note": 55,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1182857,
+          "note": 61,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1182857,
+          "note": 55,
+          "velocity": 63,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1183800,
+          "note": 61,
+          "velocity": 60,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1184743,
+          "note": 70,
+          "velocity": 57,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1193143,
+          "note": 64,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1193143,
+          "note": 61,
+          "velocity": 47,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 1213714,
+          "note": 55,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 61,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 64,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1224000,
+          "note": 70,
+          "velocity": 50,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 1234286,
+          "note": 70,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1244571,
+          "note": 55,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1244571,
+          "note": 61,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1244571,
+          "note": 64,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1244571,
+          "note": 70,
+          "velocity": 64,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1254857,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1254857,
+          "note": 61,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1254857,
+          "note": 57,
+          "velocity": 28,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1254857,
+          "note": 70,
+          "velocity": 34,
+          "layer": "warm_rhodes"
+        },
+        {
+          "frame": 1265143,
+          "note": 55,
+          "velocity": 55,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1265143,
+          "note": 61,
+          "velocity": 44,
+          "layer": "warm_plucked_strings"
+        },
+        {
+          "frame": 1266086,
+          "note": 61,
+          "velocity": 52,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1267029,
+          "note": 70,
+          "velocity": 49,
+          "layer": "jazz_muted_guitar"
+        },
+        {
+          "frame": 1275429,
+          "note": 61,
+          "velocity": 34,
+          "layer": "jazz_arpeggiator"
+        },
+        {
+          "frame": 1296000,
+          "note": 70,
+          "velocity": 46,
+          "layer": "jazz_electric_piano"
+        },
+        {
+          "frame": 1296000,
+          "note": 55,
+          "velocity": 41,
+          "layer": "warm_plucked_strings"
+        }
+      ],
+      "other_low_synth_optional": [
+        {
+          "frame": 0,
+          "note": 38,
+          "velocity": 96,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 102857,
+          "note": 38,
+          "velocity": 82,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 164571,
+          "note": 31,
+          "velocity": 95,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 288000,
+          "note": 31,
+          "velocity": 86,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 329143,
+          "note": 36,
+          "velocity": 96,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 421714,
+          "note": 43,
+          "velocity": 87,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 493714,
+          "note": 33,
+          "velocity": 98,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 555429,
+          "note": 40,
+          "velocity": 89,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 617143,
+          "note": 33,
+          "velocity": 101,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 658286,
+          "note": 38,
+          "velocity": 94,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 750857,
+          "note": 45,
+          "velocity": 83,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 822857,
+          "note": 34,
+          "velocity": 92,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 905143,
+          "note": 41,
+          "velocity": 81,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 987429,
+          "note": 40,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1110857,
+          "note": 34,
+          "velocity": 78,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1152000,
+          "note": 33,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 1213714,
+          "note": 40,
+          "velocity": 79,
+          "layer": "low_synth"
+        }
+      ]
+    },
+    "switch": {
+      "frames": 329143,
+      "bass": [
+        {
+          "frame": 1,
+          "note": 40,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 30858,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 61715,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 92572,
+          "note": 43,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 113143,
+          "note": 47,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 144001,
+          "note": 44,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 164572,
+          "note": 45,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 195429,
+          "note": 57,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 226286,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 257143,
+          "note": 49,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 277715,
+          "note": 52,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        },
+        {
+          "frame": 308572,
+          "note": 37,
+          "velocity": 95,
+          "layer": "adapted_bass"
+        }
+      ],
+      "chords": [
+        {
+          "frame": 1,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1,
+          "note": 58,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 1,
+          "note": 62,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 30858,
+          "note": 55,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 30858,
+          "note": 58,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 30858,
+          "note": 62,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 61715,
+          "note": 58,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 61715,
+          "note": 62,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 61715,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 61715,
+          "note": 62,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 113143,
+          "note": 55,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 113143,
+          "note": 58,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 113143,
+          "note": 62,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 123429,
+          "note": 55,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 123429,
+          "note": 58,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 123429,
+          "note": 62,
+          "velocity": 70,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 144001,
+          "note": 58,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 144001,
+          "note": 62,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 164572,
+          "note": 55,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164572,
+          "note": 61,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164572,
+          "note": 64,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 164572,
+          "note": 70,
+          "velocity": 83,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 195429,
+          "note": 61,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 195429,
+          "note": 64,
+          "velocity": 78,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 195429,
+          "note": 55,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 195429,
+          "note": 61,
+          "velocity": 53,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 226286,
+          "note": 55,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 61,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 64,
+          "velocity": 83,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 226286,
+          "note": 55,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 226286,
+          "note": 61,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 226286,
+          "note": 64,
+          "velocity": 71,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 267429,
+          "note": 58,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 267429,
+          "note": 61,
+          "velocity": 57,
+          "layer": "dreamwave_chord_synth"
+        },
+        {
+          "frame": 277715,
+          "note": 61,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 277715,
+          "note": 64,
+          "velocity": 73,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 308572,
+          "note": 55,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 308572,
+          "note": 61,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        },
+        {
+          "frame": 308572,
+          "note": 64,
+          "velocity": 80,
+          "layer": "boot_comp_a"
+        }
+      ],
+      "other_low_synth_optional": [
+        {
+          "frame": 1,
+          "note": 40,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 123429,
+          "note": 34,
+          "velocity": 78,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 164572,
+          "note": 33,
+          "velocity": 91,
+          "layer": "low_synth"
+        },
+        {
+          "frame": 226286,
+          "note": 40,
+          "velocity": 79,
+          "layer": "low_synth"
+        }
+      ]
+    }
+  }
+}

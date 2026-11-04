@@ -28,13 +28,14 @@ func _init() -> void:
 	_root_choices=VBoxContainer.new();_root_choices.add_theme_constant_override("separation",14);_root_panel.add_child(_root_choices)
 	FolderUI.label(_root_choices,"STUDIO",&"HeadingLabel").add_theme_font_size_override("font_size",38)
 	_wave=preload("res://scripts/ui/studio_button_wave.gd").new();_wave.name="StudioButtonWave";_wave.panel=_root_panel
-	_wave.travel=5.0;_wave.period=3.6*5.0/7.0;add_child(_wave)
+	_wave.travel=3.0;_wave.period=3.6*3.0/7.0;add_child(_wave)
 	var initial_buttons: Array[Button]=[]
 	_wave.bind_buttons(_root_choices,initial_buttons)
 	_clip=Control.new();_clip.name="CompanionClip";_clip.clip_contents=true;add_child(_clip)
-	notice_host=Control.new();notice_host.name="StudioNoticeHost";notice_host.mouse_filter=Control.MOUSE_FILTER_IGNORE;_clip.add_child(notice_host)
-	notice_host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_companion=FolderUI.surface(_clip);_companion.name="CompanionPanel";_companion.add_to_group(PauseMenu.CANCEL_OWNER_GROUP);_companion.hide()
+	# Notices stay above both the moving root and its companion, in the spare
+	# area to the right of the root even while it moves to its idle position.
+	notice_host=Control.new();notice_host.name="StudioNoticeHost";notice_host.mouse_filter=Control.MOUSE_FILTER_IGNORE;notice_host.z_index=2;add_child(notice_host)
 	_contents=VBoxContainer.new();_contents.add_theme_constant_override("separation",14);_companion.add_child(_contents)
 	_heading=FolderUI.label(_contents,"",&"HeadingLabel")
 	resized.connect(_fit)
@@ -109,6 +110,8 @@ func _fit() -> void:
 	if not _root_sliding:_root_panel.position=Vector2(IDLE_OFFSET if requested.is_empty() and selected.is_empty() else 0.0,0)
 	_root_panel.size=Vector2(root_width,size.y)
 	_clip.position=Vector2(root_width+24,0);_clip.size=Vector2(maxf(0,size.x-root_width-24),size.y)
+	notice_host.position=Vector2(root_width+IDLE_OFFSET+24,0)
+	notice_host.size=Vector2(maxf(0,size.x-notice_host.position.x),size.y)
 	_companion.size=_clip.size
 	if not transitioning:_companion.position=Vector2.ZERO
 

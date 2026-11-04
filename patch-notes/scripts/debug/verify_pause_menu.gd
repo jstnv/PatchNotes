@@ -4,6 +4,18 @@ const Replay := preload("res://scripts/simulation/development_replay.gd")
 var game: Control
 var music: Node
 var traces: Array = []
+var shared_circuits: Control
+var shared_analyzer: AudioEffect
+
+func check_shared_circuits(label: String) -> void:
+	var same: bool = is_instance_valid(shared_circuits) and game.circuit_background == shared_circuits
+	expect(same and shared_circuits._active and shared_circuits.is_visible_in_tree(), label + ": same visible active circuit observer")
+	if not same: return
+	var bus := AudioServer.get_bus_index(&"Music")
+	var matches := 0
+	for slot in AudioServer.get_bus_effect_count(bus):
+		if AudioServer.get_bus_effect(bus, slot) == shared_analyzer: matches += 1
+	expect(shared_circuits._effect == shared_analyzer and matches == 1, label + ": exactly one original circuit analyzer")
 
 func _initialize() -> void:
 	await process_frame
@@ -15,11 +27,16 @@ func _initialize() -> void:
 	current_scene = game
 	music = root.get_node("Soundtrack")
 	await process_frame
+	shared_circuits = game.circuit_background
+	shared_analyzer = shared_circuits._effect
+	check_shared_circuits("Title")
 	await key(KEY_ESCAPE)
 	expect(not paused and not game.pause_menu.is_open(), "Title does not pause")
 	game._on_studio_created("Pause test Studio", &"action", [], game._active_phase)
+	check_shared_circuits("New Studio loading")
 	await process_frame
 	await skip_save_invitation()
+	check_shared_circuits("Studio")
 	var saved: Dictionary = game.checkpoints.store.inspect().payload.duplicate(true)
 	expect(game.checkpoints.store.inspect().status == &"valid", "Real initial Studio checkpoint exists")
 	await check_pause_and_settings()
@@ -34,12 +51,15 @@ func _initialize() -> void:
 	expect(is_instance_valid(circuits) and game.circuit_background==circuits and circuits.get_instance_id()==circuit_id and circuits._active,"Returning to Main Menu retains the same running circuits")
 	expect(game.checkpoints.store.inspect().payload == saved, "Returning from Studio does not create an extra save")
 	game._continue_checkpoint()
+	check_shared_circuits("Continue loading")
 	await process_frame
 	await skip_save_invitation(false)
+	check_shared_circuits("Continued Studio")
 	expect(game._active_phase is StudioPhase and game.run_state.get_studio_name() == "Pause test Studio", "Title Continue restores saved Studio")
 	# Play a real hand, then pause while its committed result is being presented.
 	expect(game._begin_next_project(game._active_phase, "Pause project", &"action", &"fantasy"), "Legal development begins")
 	await process_frame
+	check_shared_circuits("Design production")
 	var design: DesignPhase = game._active_phase
 	var workspace: PhaseWorkspace = design.get_workspace()
 	expect(workspace.overlay.commit_draft(), "Design setup commits a legal deal")
@@ -53,12 +73,15 @@ func _initialize() -> void:
 	await create_timer(0.3).timeout
 	await key(KEY_ESCAPE)
 	expect(paused and motion.busy, "Esc pauses even when HandPresentation owns GUI focus")
+	check_shared_circuits("Paused production")
+	var circuit_clock_before: float = shared_circuits._elapsed
 	var clock_before: float = music.presentation_seconds()
 	var trace_before: Array = motion.trace.duplicate(true)
 	var state_before := game_state()
 	var raw_before: Array = Replay.freeze([game.run_state, game.project_state])
 	var ghost_positions := positions(motion)
 	await create_timer(0.65).timeout
+	expect(shared_circuits._elapsed > circuit_clock_before + 0.4, "Circuit animation continues while production is paused")
 	expect(motion.trace == trace_before and positions(motion) == ghost_positions, "Card events and positions freeze")
 	expect(music.presentation_seconds() > clock_before + 0.4 and game_state() == state_before, "Music advances while full run/project and RNG remain frozen")
 	await key(KEY_ESCAPE)
@@ -119,9 +142,16 @@ func skip_save_invitation(expect_invitation: bool = true) -> void:
 		await process_frame
 	var view: GuidedProductionTutorial = game.guided_tutorial
 	expect(view != null and view.asking, "Save restore offers the optional tutorial before pause testing")
+	check_shared_circuits("Tutorial invitation")
 	if view != null:
 		view.experienced_button.pressed.emit()
-		view.skip_button.pressed.emit()
+		while game._transition_in_progress and Time.get_ticks_msec() < deadline:
+			await process_frame
+		view.start_button.pressed.emit()
+		await process_frame
+		expect(view.model != null and view.practice.is_visible_in_tree(), "Guided practice opens from the real invitation")
+		check_shared_circuits("Guided production tutorial")
+		view.finished.emit(false)
 	await process_frame
 
 func key(code: Key, shift := false) -> void:

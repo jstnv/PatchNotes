@@ -22,11 +22,13 @@ func settle() -> void:
 		if Time.get_ticks_msec()>=deadline:expect(false,"Studio navigation settles within five seconds");return
 		await process_frame
 func click(button: Control) -> void:
-	var point:=root.get_final_transform()*button.get_global_rect().get_center()
-	var motion:=InputEventMouseMotion.new();motion.position=point;Input.parse_input_event(motion);await process_frame
-	if button.name=="StudioInfoMenuButton":print("INFO_POINTER_DIAG ",{"point":point,"rect":button.get_global_rect(),"hover":str(root.gui_get_hovered_control()),"gui_disable":root.gui_disable_input,"viewport":root.get_final_transform()})
+	# Keep the synthetic gesture on this viewport: an unrelated native mouse
+	# move cannot arrive between the two edges and turn it into a drag-out.
+	var point:=button.get_global_rect().get_center()
+	var motion:=InputEventMouseMotion.new();motion.position=point;motion.global_position=point;root.push_input(motion,true)
 	for down in [true,false]:
-		var event:=InputEventMouseButton.new();event.position=point;event.button_index=MOUSE_BUTTON_LEFT;event.pressed=down;Input.parse_input_event(event);await process_frame
+		var event:=InputEventMouseButton.new();event.position=point;event.global_position=point;event.button_index=MOUSE_BUTTON_LEFT;event.button_mask=MOUSE_BUTTON_MASK_LEFT if down else 0;event.pressed=down;root.push_input(event,true)
+	await process_frame
 	await settle()
 func key(code: Key) -> void:
 	for down in [true,false]:
@@ -78,6 +80,7 @@ func _verify() -> void:
 				await click(studio.get_node("%CloseSummaryButton"))
 				test(studio._hub.selected==&"studio_info" and studio.get_node("%PostGameSummaries").has_focus(),"Summary Back returns to Studio Info and focus")
 			await click(studio.get_node("%StudioInfoButton"))
+			if studio._studio_info==null:expect(false,"Pointer creates Studio Info details");game.queue_free();await process_frame;quit(failures);return
 			test(studio._studio_info.is_visible_in_tree(),"Pointer opens Studio Info details")
 			await key(KEY_ESCAPE)
 			test(studio._hub.selected==&"studio_info" and studio.get_node("%StudioInfoButton").has_focus() and not game.pause_menu.is_open(),"Info Escape returns to Studio Info without pausing")
@@ -104,6 +107,7 @@ func _verify() -> void:
 				await RenderingServer.frame_post_draw;root.get_texture().get_image().save_png(output.get_basename()+"-%d.png"%dimensions.x)
 			await click(engines)
 			test(studio._engine_browser!=null and studio._engine_browser.is_visible_in_tree() and not employees.is_visible_in_tree(),"Pointer enters Engines")
+			if studio._engine_browser==null:game.queue_free();await process_frame;quit(failures);return
 			studio._engine_browser._inspect(engine_id)
 			studio._engine_browser.configure_button.pressed.emit();await settle()
 			test(studio._feature_store!=null and studio._feature_store.is_visible_in_tree(),"Owned engine detail opens Feature Implementation")

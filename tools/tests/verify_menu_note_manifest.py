@@ -39,7 +39,22 @@ def main() -> int:
         if actual.get("frames") != frames:
             failures.append(f"{track}: source/runtime segment lengths differ")
         for kind in ("bass", "chords"):
-            expected = Counter((e["frame"], e["note"], e["velocity"]) for e in original.get(kind, []))
+            source_notes = original.get(kind, [])
+            if kind == "chords":
+                # Only the approved synth layer emits blue. Simultaneous
+                # duplicate pitches are a single attack at the strongest velocity.
+                strongest = {}
+                for event in source_notes:
+                    if event.get("layer") != "dreamwave_chord_synth":
+                        continue
+                    key = (event["frame"], event["note"])
+                    strongest[key] = max(strongest.get(key, 0), event["velocity"])
+                expected = Counter((frame, note, velocity) for (frame, note), velocity in strongest.items())
+                expected_count = 19 if track == "switch" else 80
+                if len(expected) != expected_count:
+                    failures.append(f"{track}: synth source count {len(expected)} != {expected_count}")
+            else:
+                expected = Counter((e["frame"], e["note"], e["velocity"]) for e in source_notes)
             notes = actual.get(kind, [])
             try:
                 got = Counter(tuple(e) for e in notes)

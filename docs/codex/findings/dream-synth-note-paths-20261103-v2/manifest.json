@@ -1,0 +1,49 @@
+{
+  "status": "isolated candidate, not adopted",
+  "source_midi_sha256": "e716399d9e70ae698bccf038e96e0a0a870cb31dae259fc23dbf41d75cafa418",
+  "labelled_source_sha256": "0c7bc589bde8473780cfe9540df3463c74a63e1d83f20ba0886e5dd8d8e14dbd",
+  "files": {
+    "patch-notes/scripts/ui/circuit_pulse_field.gd": {
+      "before": "fb18c2521457a6545f5bcf1c50561eb722b63f63d0f4da42086c32f61f747088",
+      "after": "24c9ece224656bd4578a4bd5398d74d632b7ae997cbdccefd45c0a6e901bc625"
+    },
+    "patch-notes/scripts/ui/menu_circuit_background.gd": {
+      "before": "148e6c2f61c092052087d76e4df33c9c11dabed67f2cd1a03f09ec05e8b3d824",
+      "after": "fe7a4b6658d40e663f48a4dc3d6ced6bb989bb6309f728597c55ffd4cd1ca1bf"
+    },
+    "patch-notes/scripts/ui/circuit_glow.gdshader": {
+      "before": "00534730753431fbe63d62fc37cb9452edd5d533146f502df66e205cd337165a",
+      "after": "7adbe8a9b2d121ca9652cf2ef15fb6b9f9265a62e97c3cff63404efe407d1843"
+    },
+    "patch-notes/assets/boot/sequence_v1/menu_visual_notes.json": {
+      "before": "3018ed10ba2b9fcec8924503a45e8ab27411123e9ad3569f837299cbb061369f",
+      "after": "4e299dc5f8d5adacdcdd2778d74f3f8bf65e63fac2d05af6987593f33f0187f2"
+    }
+  },
+  "source_counts": {
+    "startup": 80,
+    "loop_a": 80,
+    "loop_b": 80,
+    "switch": 19,
+    "menu": 80
+  },
+  "fallback": "subdued neutral when no note data identifies an instrument",
+  "patch_sha256": "3e06f37398c53a4cda1b848c911b27417c693c89c905282c8cdd50ee6303d842",
+  "artifacts": {
+    "source-labelled-manifest.json": "0c7bc589bde8473780cfe9540df3463c74a63e1d83f20ba0886e5dd8d8e14dbd",
+    "dreamwave_synth_and_bass.mid": "e716399d9e70ae698bccf038e96e0a0a870cb31dae259fc23dbf41d75cafa418",
+    "verify_midi_source.cjs.txt": "596a5438aeccce3c1562b53f05c7de5430afff05b8b54e7477930f780e6fae9a",
+    "midi-source.txt": "17dae62cdfa8c71afea0a5c37fac3233d828d6de872039fc9cda1f09404b73c2",
+    "verify_note_routes.gd.txt": "5e8a66d4d0bd3f567a4d376b49044098a241885c7241476f9013d73dafcda16a",
+    "verify_note_streams.gd.txt": "280b5a6b374d15bdeb041c4f1f4b8167a8c89f137b6087f27a700b42a054d627",
+    "verify_neutral_render.gd.txt": "004adac0c0d062b35fd7d54f9468b80654c9081efc9f3cec81e91fe3f08a871b",
+    "routes-final.txt": "68b617805bdba5f68543658c5f9544f397984315fcb38c07a44fe1b2dbc5ec85",
+    "timeline-final.txt": "2db67c835db2b8d921fcd621fce8ac4e70eb04c3a33053e9f7b620e0147a3611",
+    "streams-final.txt": "d2118e8bf2ef7f6e9447c6eeddc5c2cc8ff85e13caff981b15b5a5b076aaf9d5",
+    "neutral-native.txt": "5486852b636bdb2f151496f98504c4f62aea06bee0cc30f27563c231b46c950e",
+    "native-capture.txt": "c871bd670129c69d64f50669ca40b52aa20836868b76b841e0ca931f5882446f",
+    "neutral.png": "c3fc9e7bd3c17b7627a7f1f9b3df50f36911e65fe0461a0f9850613f00dce232",
+    "preview-frame.png": "fddb08643f0e159cd1dc8ce280c1eab95f0203c17e3a223f8f4a28be42913f6c",
+    "dream-synth-preview.mp4": "09f193869d3e297443431316f54e9714dc555163bb09c62b295611364b2e9035"
+  }
+}

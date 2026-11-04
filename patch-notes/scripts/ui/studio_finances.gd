@@ -68,6 +68,7 @@ func _ready() -> void:
 	backdrop.offset_top = 88
 	backdrop.offset_bottom = -64
 	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	backdrop.clip_contents = true
 	shade.add_child(backdrop)
 	dialog = PanelContainer.new()
 	dialog.name = "StudioFinancesDialog"
@@ -75,9 +76,9 @@ func _ready() -> void:
 	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dialog.offset_left = 20
 	dialog.offset_right = -20
-	dialog.offset_top = 88
-	dialog.offset_bottom = -64
-	shade.add_child(dialog)
+	dialog.offset_top = 0
+	dialog.offset_bottom = 0
+	backdrop.add_child(dialog)
 	_content = MarginContainer.new()
 	for edge in ["left", "right", "top", "bottom"]:
 		_content.add_theme_constant_override("margin_" + edge, 20 if edge=="top" else 0)

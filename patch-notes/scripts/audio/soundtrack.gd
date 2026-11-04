@@ -26,6 +26,8 @@ var blend := Blend.new()
 var menu_blend := Blend.new()
 var studio_pool := StudioPool.new()
 var studio_pool_active := false
+var _visual_previous_studio_index := -1
+var _visual_studio_switch_seconds := 0.0
 var requested_theme: StringName = &"menu"
 var output_latency := 0.0
 var manually_paused := false
@@ -321,7 +323,12 @@ func _process(_delta: float) -> void:
 		_apply_pause_effects()
 	var studio_weight: float = blend.sample(grid.mix_seconds)
 	var menu_weight: float = menu_blend.sample(grid.mix_seconds)
-	studio_pool.on_loop(grid.loops, studio_pool_active and studio_weight == 1.0 and menu_weight == 0.0)
+	var previous_studio_index: int = studio_pool.selected
+	if studio_pool.on_loop(grid.loops, studio_pool_active and studio_weight == 1.0 and menu_weight == 0.0):
+		# Selection occurs on the mix cursor. The listener hears that change
+		# later, so keep the old note map until the audible cursor catches up.
+		_visual_previous_studio_index = previous_studio_index
+		_visual_studio_switch_seconds = grid.mix_seconds
 	_apply_blend(studio_weight, menu_weight, _opener_weight())
 
 func set_paused(value: bool) -> void:
@@ -379,6 +386,10 @@ func visual_note_clocks() -> Array[Dictionary]:
 		"tail_seconds": tail_seconds,
 		"menu_seconds": grid.seconds,
 		"menu_weight": menu_blend.weight,
+		"studio_weight": blend.weight,
+		"studio_index": studio_pool.selected,
+		"studio_previous_index": _visual_previous_studio_index,
+		"studio_switch_seconds": _visual_studio_switch_seconds,
 		"shared_menu": themes != null and player.stream == themes,
 	})
 
@@ -403,6 +414,18 @@ static func _visual_note_clock_projection(state: Dictionary) -> Array[Dictionary
 			result.append({"timeline": &"switch_menu", "seconds": seconds, "gain": sin(fade * PI * 0.5)})
 	elif phase == &"menu":
 		result.append({"timeline": &"switch_menu", "seconds": float(BootClock.SWITCH_FRAMES) / BootClock.SAMPLE_RATE + maxf(0.0, float(state.menu_seconds)), "gain": 1.0})
-	elif bool(state.get("shared_menu", false)) and float(state.get("menu_weight", 0.0)) > 0.0:
-		result.append({"timeline": &"menu", "seconds": maxf(0.0, float(state.menu_seconds)), "gain": clampf(float(state.menu_weight), 0.0, 1.0)})
+	elif bool(state.get("shared_menu", false)):
+		var menu_gain := clampf(float(state.get("menu_weight", 0.0)), 0.0, 1.0)
+		var seconds := maxf(0.0, float(state.menu_seconds))
+		if menu_gain > 0.0:
+			result.append({"timeline": &"menu", "seconds": seconds, "gain": menu_gain})
+		var studio_gain := (1.0 - menu_gain) * clampf(float(state.get("studio_weight", 0.0)), 0.0, 1.0)
+		var index := int(state.get("studio_index", -1))
+		var cutover := float(state.get("studio_switch_seconds", 0.0))
+		var previous := int(state.get("studio_previous_index", -1))
+		if previous >= 0 and seconds < cutover: index = previous
+		if studio_gain > 0.0 and index >= 0 and index < StudioPool.COUNT:
+			var entry := {"timeline": StringName("studio_%d" % index), "seconds": seconds, "gain": studio_gain}
+			if cutover > 0.0 and index != previous and seconds >= cutover: entry["start_seconds"] = cutover
+			result.append(entry)
 	return result
