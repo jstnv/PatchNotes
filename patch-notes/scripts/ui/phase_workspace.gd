@@ -2,7 +2,6 @@ class_name PhaseWorkspace
 extends Control
 
 signal presentation_changed
-signal synergy_help_requested(title: String, body: String)
 signal score_display_changed(values: Dictionary, deltas: Dictionary)
 
 const CORE_BY_STAT := {
@@ -16,7 +15,6 @@ var _exhaustion_queued:=false
 var _exhaustion_attempted:=false
 var phase: Control
 var phase_name: String
-var played_hand: Label
 var backlog_title: Label
 var phase_title: Label
 var progress: Label
@@ -24,7 +22,6 @@ var overlay: PriorityOverlay
 var project: ProjectState
 var run: RunState
 var synergy_notification: SynergyNotification
-var synergy_help_button: Button
 var organize_button: Button
 var employee_plan_button: Button
 var _employee_dialog: EmployeePlanningDialog
@@ -51,21 +48,11 @@ func configure(controller: Control, title: String) -> void:
 	layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	layout.add_theme_constant_override("separation", 4)
 	add_child(layout)
-	var selected_panel := PanelContainer.new()
-	selected_panel.name = "PlayedHand"
-	layout.add_child(selected_panel)
-	var selected_row := HBoxContainer.new()
-	selected_panel.add_child(selected_row)
-	label("Played Hand  ", selected_row).add_theme_color_override("font_color", FolderUI.color(&"mint"))
-	played_hand = label("Select up to four cards from the backlog.", selected_row, "SelectionSummary")
-	played_hand.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	played_hand.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	synergy_help_button = Button.new()
-	synergy_help_button.name = "SynergyHelpButton"
-	synergy_help_button.text = "Synergy ?"
-	synergy_help_button.custom_minimum_size.x = 164
-	synergy_help_button.pressed.connect(func(): synergy_help_requested.emit(_synergy_help_title, _synergy_help_body))
-	selected_row.add_child(synergy_help_button)
+	var pool_header := HBoxContainer.new()
+	pool_header.name = "PoolHeader"
+	layout.add_child(pool_header)
+	var pool_title := label("Backlog / Draw Pool", pool_header, "BacklogTitle")
+	pool_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if title in ["Design","Alpha"]:
 		employee_plan_button = Button.new()
 		employee_plan_button.text = "Specialist plan"
@@ -75,9 +62,7 @@ func configure(controller: Control, title: String) -> void:
 				_employee_dialog = EmployeePlanningDialog.new()
 				add_child(_employee_dialog)
 			_employee_dialog.open_for(phase))
-		selected_row.add_child(employee_plan_button)
-	var pool_title := label("Backlog / Draw Pool", layout, "BacklogTitle")
-	pool_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pool_header.add_child(employee_plan_button)
 	organize_button = Button.new()
 	organize_button.name = "OrganizePoolButton"
 	var fan: CardFan = phase.get_node("%HandContainer")
@@ -226,23 +211,13 @@ func refresh() -> void:
 		employee_plan_button.disabled = not status.get("available",false) or not status.get("qualifying",false)
 		employee_plan_button.tooltip_text = "Select a matching Pass and Feature, then optionally plan priorities with this hand." if status.get("available",false) else "Train with a matching Design hand first; only one use is available per project."
 	if not is_instance_valid(phase) or not phase.is_inside_tree(): return
-	var entries: Array[String] = []
-	for view: CardView in phase.get_selected_candidate_views():
-		entries.append("%d · %s" % [phase.get_node("%HandContainer").ordered_cards().find(view) + 1, view.card_data.card_name])
-	played_hand.text = "Select up to four cards from the backlog." if entries.is_empty() else "   /   ".join(entries)
-	if hand_motion != null and hand_motion.busy:
-		played_hand.text = "Redrawing selected cards…" if hand_motion.action_kind == "redraw" else "Resolving hand, left to right…"
-	synergy_help_button.disabled = hand_motion != null and hand_motion.busy
 	organize_button.disabled = hand_motion != null and hand_motion.busy
-	played_hand.tooltip_text = played_hand.text
 	var guided: Dictionary = phase.get_first_game_guidance() if phase.has_method("get_first_game_guidance") else {}
 	backlog_title.text = guided.get("hint", "Backlog / Draw Pool")
 	backlog_title.tooltip_text = guided.get("body", "")
 	var synergy_tip := _synergy_tip()
 	_synergy_help_title = synergy_tip.title
 	_synergy_help_body = synergy_tip.body
-	synergy_help_button.text = synergy_tip.label
-	synergy_help_button.tooltip_text = "%s\n%s" % [_synergy_help_title, _synergy_help_body]
 	for control: Label in get_node("Regions/Feedback").get_children():
 		control.tooltip_text = control.text
 	phase_title.text = phase_name + " · " + ("Prepare to launch" if phase_name == "Beta" else "Build Scope")

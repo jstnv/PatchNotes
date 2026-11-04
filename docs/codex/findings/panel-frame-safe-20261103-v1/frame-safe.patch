@@ -1,0 +1,114 @@
+diff --git a/patch-notes/scripts/ui/folder_ui.gd b/patch-notes/scripts/ui/folder_ui.gd
+--- a/patch-notes/scripts/ui/folder_ui.gd
++++ b/patch-notes/scripts/ui/folder_ui.gd
+@@ -3,6 +3,7 @@ extends RefCounted
+ 
+ ## Shared presentation primitives. All identity values live in the Godot Theme.
+ const THEME := preload("res://resources/ui/onyx_theme.tres")
++const FRAME_SAFE_VERTICAL_INSET := 42.0
+ 
+ static func enable_menu_gamepad() -> void:
+ 	for action in {&"ui_accept":JOY_BUTTON_A,&"ui_cancel":JOY_BUTTON_B}:
+@@ -26,11 +27,25 @@ class SurfaceHost extends Container:
+ 		mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	func _notification(what: int) -> void:
+ 		if what != NOTIFICATION_SORT_CHILDREN: return
++		var vertical_inset := float(get_meta("surface_vertical_inset",20.0))
++		var top_inset := float(get_meta("surface_top_inset",vertical_inset))
++		var bottom_inset := float(get_meta("surface_bottom_inset",vertical_inset))
+ 		for child in get_children():
+ 			if child is Control and child.has_meta("bounded_folder"):
+ 				# Keep sizing responsive while the title stack owns horizontal motion.
+ 				var x: float = child.position.x if child.get_meta("folder_navigation_motion",false) else 20.0
+-				fit_child_in_rect(child,Rect2(Vector2(x,20),(size-Vector2(40,40)).max(Vector2.ZERO)))
++				fit_child_in_rect(child,Rect2(Vector2(x,top_inset),(size-Vector2(40,top_inset+bottom_inset)).max(Vector2.ZERO)))
++static func panel_vertical_insets(owner: Node) -> Vector2:
++	var insets := Vector2.ONE * FRAME_SAFE_VERTICAL_INSET
++	var hud := owner.get_parent()
++	if hud == null: return insets
++	var header := hud.get_node_or_null("PersistentHeader") as Control
++	var footer := hud.get_node_or_null("PersistentFooter") as Control
++	if header != null and header.is_visible_in_tree():
++		insets.x = maxf(insets.x,header.get_global_rect().end.y+8.0)
++	if footer != null and footer.is_visible_in_tree():
++		insets.y = maxf(insets.y,owner.get_viewport().get_visible_rect().size.y-footer.get_global_rect().position.y+8.0)
++	return insets
+ static func color(token: StringName) -> Color:
+ 	return THEME.get_color(token,&"PatchNotes")
+ static func surface(parent: Node, document := false) -> PanelContainer:
+diff --git a/patch-notes/scripts/ui/how_to_play_guide.gd b/patch-notes/scripts/ui/how_to_play_guide.gd
+--- a/patch-notes/scripts/ui/how_to_play_guide.gd
++++ b/patch-notes/scripts/ui/how_to_play_guide.gd
+@@ -42,8 +42,8 @@ func _ready() -> void:
+ 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ 	panel.offset_left = 24
+ 	panel.offset_right = -24
+-	panel.offset_top = 20
+-	panel.offset_bottom = -20
++	panel.offset_top = FolderUI.FRAME_SAFE_VERTICAL_INSET
++	panel.offset_bottom = -FolderUI.FRAME_SAFE_VERTICAL_INSET
+ 	shade.add_child(panel)
+ 	panel.theme_type_variation=&"FolderPanel"
+ 	var layout := VBoxContainer.new()
+@@ -166,6 +166,9 @@ func is_open() -> bool:
+ func open(navigation_host: MenuTransitions = null) -> void:
+ 	if tour_scroll!=null and tour_scroll.visible:select_topic(topic_index)
+ 	if visible or (navigation_host != null and navigation_host.busy): return
++	var insets := FolderUI.panel_vertical_insets(self)
++	panel.offset_top = insets.x
++	panel.offset_bottom = -insets.y
+ 	_navigation=navigation_host
+ 	_return_focus = get_viewport().gui_get_focus_owner()
+ 	# A stacked Back hides this Control; ordinary gameplay reuses the same layer.
+diff --git a/patch-notes/scripts/ui/demo_settings_menu.gd b/patch-notes/scripts/ui/demo_settings_menu.gd
+--- a/patch-notes/scripts/ui/demo_settings_menu.gd
++++ b/patch-notes/scripts/ui/demo_settings_menu.gd
+@@ -43,6 +43,7 @@ func _ready() -> void:
+ 
+ func _build() -> void:
+ 	var host := FolderUI.SurfaceHost.new()
++	host.set_meta("surface_vertical_inset",FolderUI.FRAME_SAFE_VERTICAL_INSET)
+ 	host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ 	add_child(host)
+ 	panel = PanelContainer.new()
+@@ -58,9 +59,15 @@ func _build() -> void:
+ 	panel.add_child(folder)
+ 	var header := FolderUI.header(folder,"Settings","Display, audio and ceremony preferences",close)
+ 	back_button=header.get_node("Back")
++	var scroll := ScrollContainer.new()
++	scroll.name = "SettingsScroll"
++	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
++	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
++	scroll.follow_focus = true
++	folder.add_child(scroll)
+ 	var center := CenterContainer.new()
+-	center.size_flags_vertical=Control.SIZE_EXPAND_FILL
+-	folder.add_child(center)
++	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
++	scroll.add_child(center)
+ 	var box := VBoxContainer.new()
+ 	box.custom_minimum_size.x = 640
+ 	box.add_theme_constant_override("separation", 4)
+@@ -158,6 +165,11 @@ func _button(parent: Node, id: String, caption: String, action: Callable) -> But
+ 
+ func open(navigation_host: MenuTransitions = null) -> void:
+ 	if is_open() or (navigation_host != null and navigation_host.busy): return
++	var insets := FolderUI.panel_vertical_insets(self)
++	var host := panel.get_parent() as FolderUI.SurfaceHost
++	host.set_meta("surface_top_inset",insets.x)
++	host.set_meta("surface_bottom_inset",insets.y)
++	host.queue_sort()
+ 	_navigation=navigation_host
+ 	_return_focus = get_viewport().gui_get_focus_owner()
+ 	draft = committed.duplicate(true)
+diff --git a/patch-notes/scripts/phases/main_menu.gd b/patch-notes/scripts/phases/main_menu.gd
+--- a/patch-notes/scripts/phases/main_menu.gd
++++ b/patch-notes/scripts/phases/main_menu.gd
+@@ -73,6 +73,7 @@ func _ready() -> void:
+ 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 	add_child(background)
+ 	var root := FolderUI.SurfaceHost.new()
++	root.set_meta("surface_vertical_inset",FolderUI.FRAME_SAFE_VERTICAL_INSET)
+ 	root.name = "CenterContainer"
+ 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ 	add_child(root)

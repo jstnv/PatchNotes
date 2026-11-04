@@ -23,7 +23,7 @@ func settle() -> void:
 func sample() -> Dictionary:
 	var awards: Array = []
 	var ids := ["graphics", "sound", "technology", "design", "rising", "studio", "goty"]
-	var names := ["Best Graphics", "Best Sound", "Best Technology", "Best Design", "Rising Studio", "Studio of the Year", "Game of the Year"]
+	var names := ["Graphics", "Sound", "Technology", "Design", "Rising Studio", "Studio of the Year", "Game of the Year"]
 	for index in 7:
 		var nominees: Array = []
 		for place in (2 if index == 1 else 3):
@@ -40,9 +40,85 @@ func shot(label: String) -> void:
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png(OUT.path_join(label + ".png"))
 
+func check_pace(ui: AnnualAwardsCeremony, result: Dictionary) -> void:
+	var nominees: Array = result.awards[0].nominees
+	for i in 3: nominees[i].score = [50, 48, 46][i]
+	ui.configure(result, 2, true, false)
+	# At 80% of 46 the shared counter has covered 36.8 of 50 points.
+	var boundary := 1.4 * (1.0 - pow(1.0 - 36.8 / 50.0, 1.0 / 3.0))
+	check(is_equal_approx(ui._counter_position(0.3), 1.0 - pow(1.0 - 0.3 / 1.4, 3.0)) and is_equal_approx(ui._counter_position(boundary), 36.8 / 50.0), "Existing opening pace reaches the third-place threshold at its original time")
+	var early := ui._counter_position(boundary + 0.1) - ui._counter_position(boundary)
+	var middle := ui._counter_position(boundary + 0.3) - ui._counter_position(boundary + 0.2)
+	var late := ui._counter_position(boundary + 0.5) - ui._counter_position(boundary + 0.4)
+	check(early > middle and middle > late and late > 0.0, "Shared count slows progressively on the approach to third")
+	var a := ui._counter_position(1.4)
+	var b := ui._counter_position(1.9)
+	var c := ui._counter_position(2.4)
+	check(a >= 46.0 / 50.0 and a < 48.0 / 50.0 and c >= 48.0 / 50.0 and c < 1.0 and is_equal_approx(b - a, c - b), "The settled third-place pace stays constant through second place")
+	nominees[2].score = 0
+	ui.configure(result, 2, true, false)
+	check(ui._counter_position(0.5) > 0.0 and is_equal_approx(ui._counter_position(1.0), 2.0 * ui._counter_position(0.5)), "Zero third-place score starts at the steady finish pace")
+	nominees.resize(2)
+	ui.configure(result, 2, true, false)
+	check(is_equal_approx(ui._counter_position(1.0), 1.0 - pow(1.0 - 1.0 / 1.4, 3.0)) and ui._counter_position(1.4) == 1.0, "Without third place the original pacing runs to completion")
+
+func check_bar_scale(ui: AnnualAwardsCeremony) -> void:
+	var result := sample()
+	var nominees: Array = result.awards[0].nominees
+	for scores: Array in [[50,48,46], [50,48,5], [50,50,0], [0,0,0]]:
+		for i in 3: nominees[i].score = scores[i]
+		ui.configure(result, 2, true, false)
+		await settle()
+		ui.finish_counters()
+		var heights := PackedFloat64Array()
+		for i in 3:
+			var fill: ColorRect = ui.find_child("ScoreBar%d" % (i + 1), true, false)
+			check(fill.get_parent().get_global_rect().encloses(fill.get_global_rect()), "Bar stays inside its track at score %d" % scores[i])
+			heights.append(fill.size.y)
+		if scores == [50,48,46]:
+			var expected := ui.PLOT_HEIGHT * (2.0 / 50.0) * 5.0
+			check(absf(heights[0] - heights[1] - expected) <= 1.0 and absf(heights[1] - heights[2] - expected) <= 1.0, "Two-point gaps take five times their former height")
+		elif scores == [50,48,5]:
+			check(heights[0] > heights[1] and heights[1] > heights[2] and heights[2] > 0, "A wide spread keeps all positive scores distinct and visible")
+		elif scores == [50,50,0]:
+			check(heights[0] == heights[1] and heights[2] == 0.0, "Equal scores have equal height and a zero score has no fill")
+		else:
+			check(heights == PackedFloat64Array([0,0,0]), "An all-zero podium stays at the baseline")
+
 func finish() -> void:
 	print("ANNUAL_AWARDS_UI checks=%d failures=%d" % [checks, failures])
 	quit(1 if failures else 0)
+
+func check_pixel_motion(ui: AnnualAwardsCeremony) -> void:
+	var result := sample()
+	for i in 3:
+		result.awards[0].nominees[i].score = [50, 48, 46][i]
+	for fps in [30, 120]:
+		ui.configure(result, 2, true, false)
+		# Run the animation clock in controlled frame intervals after layout.
+		ui.set_process(false)
+		await settle()
+		var previous := [0, 0, 0]
+		var last_score := ""
+		var moved_within_point := false
+		var single_steps := true
+		var plot_pixels := ui._plot_pixels()
+		for frame in 900:
+			ui._process(1.0 / fps)
+			var score: String = ui.score_labels[0].text
+			for i in 3:
+				var height := (1.0 - float(ui._bar_fills[i].anchor_top)) * plot_pixels
+				var row := roundi(height)
+				var step: int = row - int(previous[i])
+				single_steps = single_steps and absf(height - row) < 0.001 and step in [0, 1]
+				if i == 0 and ui._rank_labels[2].visible and score == last_score and step == 1:
+					moved_within_point = true
+				previous[i] = row
+			last_score = score
+			if not ui._counter_running: break
+		check(single_steps and moved_within_point, "Late bars climb one pixel between displayed points at %d fps" % fps)
+		check(not ui._counter_running and previous[0] == plot_pixels and ui._rank_labels[0].visible, "Winner reaches its score and full bar together at %d fps" % fps)
+		check(ui._rank_labels[0].is_processing() and ui._rank_labels[0].scale.y < 1.0, "Winning stamp starts when the final counter naturally stops")
 
 func go() -> void:
 	check(DemoSettingsStore.defaults().get("skip_awards") == false, "Future ceremony skip defaults to false")
@@ -126,6 +202,11 @@ func go() -> void:
 	check(ceremony.stage == 1, "Owner alone advances stage")
 	for size: Vector2i in [Vector2i(1152,648), Vector2i(1280,720)]:
 		root.size = size; root.content_scale_size = size
+		await check_bar_scale(ceremony)
+		root.content_scale_size = Vector2i(1152, 648)
+		await check_pixel_motion(ceremony)
+		root.content_scale_size = size
+		ceremony.configure(frozen, 0, true, true)
 		for stage in 10:
 			ceremony.set_stage(stage)
 			await settle()
@@ -134,6 +215,8 @@ func go() -> void:
 				check(root.get_visible_rect().encloses(item.get_global_rect()), "Stage%d %s fits %s" % [stage,item.name,size])
 			check(not ceremony.scroll.is_ancestor_of(ceremony.next_button), "Next remains outside scroll stage%d" % stage)
 			if stage >= 2 and stage <= 8:
+				if stage <= 5:
+					check(ceremony._heading.text == "Best " + str(frozen.awards[stage-2].name) and ceremony._body.get_child(0) == ceremony.podium, "Core page shows Best category heading directly above the podium")
 				check(ceremony.podium.get_child_count() == 3, "Three physical podium places stage%d" % stage)
 				check(ceremony.tie_note.visible and ceremony.tie_note.text.contains("Studio ID"), "Equal-score tie explanation visible")
 				var labels: Array = ceremony.score_labels
@@ -147,7 +230,8 @@ func go() -> void:
 				for child in ceremony._body.get_children():
 					if child is Label: all_copy += child.text + "\n"
 				for award in frozen.awards:
-					check(all_copy.contains(award.name), "Final results retain award " + str(award.name))
+					var title := "Best " + str(award.name) if award.metric_kind == "core" else str(award.name)
+					check(all_copy.split("\n").has(title), "Final results retain award " + title)
 					for row in award.nominees:
 						check(all_copy.contains("#%d · %s — %s · %s" % [int(row.rank), row.studio_name, row.title, ceremony.format_score(int(row.score), award.metric_kind,str(award.id))]), "Final results retain exact frozen nominee")
 				check(all_copy.contains("7 nominations · 7 wins · +350 Fans · +35 banked Awareness"), "Final results show exact recorded rewards")
@@ -171,12 +255,45 @@ func go() -> void:
 	ceremony.animate_counters = false
 	ceremony.set_stage(8)
 	check(ceremony.score_labels[0].text == "8.7 / 10", "Animation bypass uses exact Review tenths")
+	check(ceremony._rank_labels.all(func(stamp): return stamp.visible and not stamp.is_processing() and stamp.scale == Vector2.ONE), "Bypass shows settled placings immediately")
 	ceremony.animate_counters = true
 	ceremony.set_stage(2)
 	var reveal_deadline:=Time.get_ticks_msec()+8000
 	while ceremony._counter_running and Time.get_ticks_msec()<reveal_deadline:await process_frame
 	check(not ceremony._counter_running and ceremony.score_labels[0].text == "1234567 Graphics", "Natural counter completion reaches exact target")
 	var sparse := sample()
+	var staggered := sample()
+	check_pace(ceremony, staggered.duplicate(true))
+	for index in 3:
+		staggered.awards[0].nominees[index].score = [50, 30, 0][index]
+		staggered.awards[0].nominees[index].studio_name = ["Zulu", "Alpha", "Bravo"][index]
+	ceremony.configure(staggered, 2, true, false)
+	await settle()
+	ceremony._counter_progress(0.0)
+	var winner: Label = ceremony.find_child("PodiumRank1", true, false)
+	var second: Label = ceremony.find_child("PodiumRank2", true, false)
+	var third: Label = ceremony.find_child("PodiumRank3", true, false)
+	var first_fill: ColorRect = ceremony.find_child("ScoreBar1", true, false)
+	var second_fill: ColorRect = ceremony.find_child("ScoreBar2", true, false)
+	check(not winner.visible and not second.visible and third.visible, "Only the zero-score nominee reveals at the starting count")
+	check(winner.text == "Winner" and second.text == "Second" and third.text == "Third", "Podium uses the three requested placing words")
+	check(first_fill.color == second_fill.color and ceremony.podium.get_child(0).is_ancestor_of(second), "Opening colors and name order conceal the winning lane")
+	ceremony._counter_progress(0.59)
+	check(not second.visible and ceremony.score_labels[1].text == "29 Graphics", "Runner-up hides place one count before its score")
+	ceremony._counter_progress(0.60)
+	check(second.visible and not winner.visible and ceremony.score_labels[1].text == "30 Graphics", "Runner-up reveals exactly at its score while winner keeps counting")
+	check(second.is_processing() and second.scale.y < 1.0, "Second starts visibly compressed on its score frame")
+	second._process(0.12)
+	var landed_scale := second.scale
+	ceremony._counter_progress(0.70)
+	check(landed_scale.x > 1.0 and second.scale == landed_scale, "Second stamps in once while the other counter continues")
+	second._process(0.30)
+	check(not second.is_processing() and second.scale == Vector2.ONE, "Second settles at full size")
+	ceremony.finish_counters()
+	check(winner.visible and winner.text == "Winner" and first_fill.color != second_fill.color, "Winner nameplate and accent reveal together")
+	check(winner.get_parent().get_global_rect().encloses(winner.get_global_rect()), "Winner label fits inside bar base")
+	var winner_card: Control = ceremony.score_labels[0].get_parent().get_parent()
+	check(first_fill.size.x < winner_card.size.x * 0.5 and winner_card.global_position.y >= winner.get_global_rect().end.y, "Narrow bar sits above its nominee card")
 	sparse.awards[0].nominees = []
 	ceremony.configure(sparse, 2, true, false)
 	await settle()

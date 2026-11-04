@@ -3,6 +3,8 @@ extends "res://scripts/ui/menu_audio_visualizer.gd"
 const Geometry:=preload("res://scripts/ui/circuit_geometry.gd")
 const Field:=preload("res://scripts/ui/circuit_pulse_field.gd")
 const Tuning:=preload("res://scripts/ui/circuit_flow_settings.gd")
+const NoteTimeline:=preload("res://scripts/ui/menu_note_timeline.gd")
+const NOTE_DATA := "res://assets/boot/sequence_v1/menu_visual_notes.json"
 const CYAN:=Color("22e7ef")
 const ORANGE:=Color("ff994f")
 @export var flow_settings:Tuning=Tuning.new()
@@ -18,6 +20,8 @@ var _elapsed:=0.0
 var _last_debug:=false
 var _last_trace_opacity:=-1.0
 var draw_microseconds:=0
+var _note_data: Dictionary = {}
+var _note_timelines: Dictionary = {}
 
 class Board extends Control:
 	var owner_flow:Control
@@ -31,6 +35,8 @@ class Ribbons extends Control:
 
 func _ready()->void:
 	super._ready()
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(NOTE_DATA))
+	if parsed is Dictionary and parsed.get("version") == 1: _note_data = parsed
 	if flow_settings==null:flow_settings=Tuning.new()
 	field.bind(geometry,flow_settings)
 	_board=Board.new();_board.owner_flow=self;_board.name="CircuitGeometry"
@@ -43,6 +49,64 @@ func _ready()->void:
 	add_child(_ribbons);_ribbons.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if OS.get_environment("PN_CIRCUIT_DEBUG")=="1":flow_settings.debug_white_traces=true
 	resized.connect(_rebuild_geometry);_rebuild_geometry()
+
+func set_active(value: bool) -> void:
+	if value != _active: _note_timelines.clear()
+	super.set_active(value)
+
+func _note_events(track: String, offset: float = 0.0) -> Array:
+	var result := []
+	var data: Dictionary = _note_data.get("tracks",{}).get(track,{})
+	var rate := float(_note_data.get("sample_rate",48000))
+	for pair in [["bass",&"bass"],["chords",&"chord"]]:
+		for row: Array in data.get(pair[0],[]):
+			if row.size() < 3: continue
+			result.append({"time":float(row[0]) / rate + offset,"pitch":int(row[1]),"velocity":int(row[2]),"kind":pair[1]})
+	return result
+
+func _make_note_timeline(id: StringName, at_seconds: float) -> RefCounted:
+	var timeline := NoteTimeline.new()
+	var rate := float(_note_data.get("sample_rate",48000))
+	var loop_length := float(_note_data.get("loop_frames",0)) / rate
+	var switch_length := float(_note_data.get("switch_frames",0)) / rate
+	if id == &"boot":
+		var loops := _note_events("loop_a")
+		loops.append_array(_note_events("loop_b",loop_length))
+		timeline.configure_intro(id,_note_events("startup"),loop_length,loops,loop_length * 2.0,at_seconds)
+	elif id == &"switch_menu":
+		timeline.configure_intro(id,_note_events("switch"),switch_length,_note_events("menu"),loop_length,at_seconds)
+	else:
+		timeline.configure(id,_note_events("menu"),loop_length,at_seconds)
+	return timeline
+
+func _music_note_events() -> Variant:
+	var song := get_node_or_null("/root/Soundtrack")
+	if _note_data.is_empty() or song == null or not song.has_method("visual_note_clocks"): return null
+	var clocks: Array = song.visual_note_clocks()
+	if clocks.is_empty():
+		_note_timelines.clear()
+		return null
+	var result := []
+	var seen := {}
+	for clock: Dictionary in clocks:
+		var id := StringName(clock.timeline)
+		if id not in [&"boot",&"switch_menu",&"menu"]: continue
+		seen[id] = true
+		var seconds := float(clock.seconds)
+		if not _note_timelines.has(id):
+			# New tracks include their first sample; attaching to an already
+			# playing track never replays its earlier notes.
+			var newly_switched := id == &"switch_menu" and _note_timelines.has(&"boot")
+			_note_timelines[id] = _make_note_timeline(id,-0.000001 if newly_switched or seconds < 0.1 else seconds)
+		var timeline: RefCounted = _note_timelines[id]
+		var audible := not _quiet
+		for event: Dictionary in timeline.advance(id,seconds,audible,12.0):
+			event["gain"] = clampf(float(clock.gain),0.0,1.0)
+			event["age"] = maxf(0.0,seconds - float(event.absolute_time))
+			result.append(event)
+	for id: StringName in _note_timelines.keys():
+		if not seen.has(id): _note_timelines.erase(id)
+	return result
 func _rebuild_geometry()->void:
 	if size.x<2 or size.y<2 or geometry.area==size:return
 	# Preserve each pulse's route progress through window/aspect changes.
@@ -68,7 +132,7 @@ func _process(delta:float)->void:
 	field.settings=flow_settings
 	_elapsed+=delta
 	var groups:=spectrum_groups()
-	field.step(delta,groups,_instance!=null and not _quiet and groups.length_squared()>.0001)
+	field.step(delta,groups,_instance!=null and not _quiet and groups.length_squared()>.0001,_music_note_events())
 	if _last_debug!=flow_settings.debug_white_traces or not is_equal_approx(_last_trace_opacity,flow_settings.inactive_trace_opacity):
 		_last_trace_opacity=flow_settings.inactive_trace_opacity
 		_last_debug=flow_settings.debug_white_traces;_board.queue_redraw();_ribbons.queue_redraw()
@@ -99,10 +163,13 @@ func draw_board(canvas:Control)->void:
 func _draw()->void:
 	if geometry.routes.is_empty():return
 	var started:=Time.get_ticks_usec();var u:=geometry.unit
+	var used_slots := 0
 	for i in Field.HARD_LIMIT:
 		var p=field.pulses[i]
 		_pulse_data[i]=Vector4(p.route,p.distance,maxf(1,field.tail*(.58 if p.secondary else 1.0)),p.strength*(1 if p.color_index==0 else -1)) if p.active else Vector4(-1,0,1,0)
+		if p.active: used_slots = i + 1
 	_shader.set_shader_parameter("pulses",_pulse_data)
+	_shader.set_shader_parameter("pulse_slots",used_slots)
 	_shader.set_shader_parameter("unit_scale",u)
 	_shader.set_shader_parameter("brightness",field.luminosity)
 	_shader.set_shader_parameter("bass",field.energy.x)

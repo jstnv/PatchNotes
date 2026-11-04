@@ -14,17 +14,26 @@ var _companion: PanelContainer
 var _contents: VBoxContainer
 var _heading: Label
 var _disabled: Dictionary={}
-var overview: Control
+var notice_host: Control
+const IDLE_OFFSET := 48.0
+var _root_sliding := false
+var _wave: Node
 
 func _init() -> void:
 	name="StudioHub"
 	theme=preload("res://resources/ui/onyx_theme.tres")
 	set_meta("folder_navigation_managed",true)
 	_root_panel=FolderUI.surface(self)
+	_root_panel.z_index=1
 	_root_choices=VBoxContainer.new();_root_choices.add_theme_constant_override("separation",14);_root_panel.add_child(_root_choices)
 	FolderUI.label(_root_choices,"STUDIO",&"HeadingLabel").add_theme_font_size_override("font_size",38)
+	_wave=preload("res://scripts/ui/studio_button_wave.gd").new();_wave.name="StudioButtonWave";_wave.panel=_root_panel
+	_wave.travel=5.0;_wave.period=3.6*5.0/7.0;add_child(_wave)
+	var initial_buttons: Array[Button]=[]
+	_wave.bind_buttons(_root_choices,initial_buttons)
 	_clip=Control.new();_clip.name="CompanionClip";_clip.clip_contents=true;add_child(_clip)
-	overview=preload("res://scripts/ui/studio_overview.gd").new();overview.name="StudioOverview";_clip.add_child(overview)
+	notice_host=Control.new();notice_host.name="StudioNoticeHost";notice_host.mouse_filter=Control.MOUSE_FILTER_IGNORE;_clip.add_child(notice_host)
+	notice_host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_companion=FolderUI.surface(_clip);_companion.name="CompanionPanel";_companion.add_to_group(PauseMenu.CANCEL_OWNER_GROUP);_companion.hide()
 	_contents=VBoxContainer.new();_contents.add_theme_constant_override("separation",14);_companion.add_child(_contents)
 	_heading=FolderUI.label(_contents,"",&"HeadingLabel")
@@ -36,8 +45,13 @@ func add_group(id: StringName,title: String) -> VBoxContainer:
 	if id==&"production":
 		var divider:=HSeparator.new();divider.custom_minimum_size.y=26;_root_choices.add_child(divider)
 		var line:=StyleBoxLine.new();line.color=Color("6F42FF");line.thickness=2;divider.add_theme_stylebox_override("separator",line)
-	var button:=FolderUI.button(_root_choices,title,_root_pressed.bind(id));button.custom_minimum_size=Vector2(260,54);button.toggle_mode=true;root_buttons[id]=button
+	var row:=Control.new();row.custom_minimum_size=Vector2(260,54);row.mouse_filter=Control.MOUSE_FILTER_IGNORE;_root_choices.add_child(row)
+	var button:=FolderUI.button(row,title,_root_pressed.bind(id));button.custom_minimum_size=Vector2(0,54);button.toggle_mode=true;root_buttons[id]=button
 	button.theme_type_variation=&"ArcadePrimary" if id==&"production" else &"HubButton"
+	var focus_style:=button.get_theme_stylebox("focus").duplicate() as StyleBoxFlat
+	if focus_style!=null:
+		focus_style.expand_margin_left=0;focus_style.expand_margin_right=0;button.add_theme_stylebox_override("focus",focus_style)
+	_wave.add_button(button)
 	var choices:=VBoxContainer.new();choices.name=String(id).capitalize()+"Choices";choices.add_theme_constant_override("separation",10);_contents.add_child(choices);choices.hide();groups[id]=choices
 	return choices
 
@@ -66,6 +80,9 @@ func _advance() -> void:
 		motion.slide_panel(_companion,_companion.position.x,-_clip.size.x,func():
 			groups[selected].hide();_companion.hide();selected=&"";transitioning=false;_advance())
 		return
+	if _root_panel.position.x>0.01:
+		_slide_root(0.0,func():transitioning=false;_advance())
+		return
 	selected=requested
 	for key: StringName in groups:groups[key].visible=key==selected
 	_heading.text=root_buttons[selected].text
@@ -88,23 +105,29 @@ func _restore_choices() -> void:
 
 func _fit() -> void:
 	if not is_inside_tree():return
-	var root_width:=maxf(330,_root_panel.get_combined_minimum_size().x)
-	_root_panel.position=Vector2.ZERO;_root_panel.size=Vector2(root_width,size.y)
+	var root_width:=maxf(330,_root_panel.get_combined_minimum_size().x)+4.0
+	if not _root_sliding:_root_panel.position=Vector2(IDLE_OFFSET if requested.is_empty() and selected.is_empty() else 0.0,0)
+	_root_panel.size=Vector2(root_width,size.y)
 	_clip.position=Vector2(root_width+24,0);_clip.size=Vector2(maxf(0,size.x-root_width-24),size.y)
 	_companion.size=_clip.size
-	overview.position=Vector2.ZERO;overview.size=_clip.size
 	if not transitioning:_companion.position=Vector2.ZERO
 
 func _process(_delta: float) -> void:
-	overview.visible=requested.is_empty() and selected.is_empty() and not transitioning
+	_wave.advance(_delta,is_visible_in_tree())
+
+func _slide_root(target: float,finished: Callable) -> void:
+	_root_sliding=true
+	motion.slide_panel(_root_panel,_root_panel.position.x,target,func():
+		_root_sliding=false;finished.call())
 
 func _style_roots() -> void:
 	for key: StringName in root_buttons:
 		root_buttons[key].theme_type_variation=&"ArcadePrimary" if key==&"production" else &"SelectedButton" if key==requested else &"HubButton"
 
 func settle_motion() -> void:
-	for _step in range(4):
+	for _step in range(8):
 		if not transitioning:break
+		motion.finish_panel(_root_panel)
 		motion.finish_panel(_companion)
 	_fit()
 
@@ -120,8 +143,13 @@ func close_group() -> void:
 		return
 	transitioning=true;_disable_choices()
 	motion.slide_panel(_companion,_companion.position.x,-_clip.size.x,func():
-		groups[selected].hide();selected=&"";_companion.hide();transitioning=false;_restore_choices()
-		if not requested.is_empty():_advance())
+		groups[selected].hide();selected=&"";_companion.hide()
+		if not requested.is_empty():
+			transitioning=false;_advance()
+		else:
+			_slide_root(IDLE_OFFSET,func():
+				transitioning=false;_restore_choices()
+				if not requested.is_empty():_advance()))
 
 func _queue_fit() -> void:
 	if not is_inside_tree():return

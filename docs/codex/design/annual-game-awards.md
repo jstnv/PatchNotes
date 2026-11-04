@@ -4,6 +4,16 @@ Status: **IMPLEMENTED locally; functional/native acceptance complete. Rules and 
 
 ## Categories, eligibility and ranking
 
+**Podium presentation, 2026-11-03.** Arrange the nominees by Studio name, then title. Start all counters together on a shared scale. Each bar stops at its nominee's score and reveals its place inside the bar on that frame. Only the winning bar gains the winner label and highlight. Center each narrow bar above the corresponding nominee panel. The bar has a label area at its base so very small and zero scores can still show a place.
+
+With three nominees, preserve the opening pace through 80% of third place's score. Gradually reduce the shared speed over the last 20% of that score. Once third place appears, hold that speed until the other two bars stop. Ties reveal together. If third place scores zero, the remaining counters start at the slower speed. One or two nominees use the original reveal curve. The chosen pacing allows 1.5–5 seconds from third place to a distinct winning score. [Native timing check and clip](../logs/2026-11-03-awards-counter-pacing.md).
+
+Each podium uses one scale for all nominees. Between the lowest and highest finalist scores, allocate up to five times the previous pixels per point while fitting the bars inside the track. Counts rise from zero along the same path. The four Core award pages and the recap use **Best Graphics**, **Best Sound**, **Best Technology** and **Best Design**. On each Core page the podium sits directly under the award heading. [Scale and heading checks](../logs/2026-11-03-awards-podium-scale.md).
+
+During an animated count, fills rise in single screen-pixel steps between displayed score changes. Each frame shows either the same height or one more pixel. The counters and fills share one clock, so a slower display can take longer to show every step. Ranks appear as each displayed score reaches its target.
+
+On the podium, the placing words are **Third**, **Second** and **Winner**. Each word appears compressed on the frame its nominee reaches the final score, springs slightly larger, then settles inside the bar base. Third and Second settle in 0.30 seconds. Winner settles in 0.46 seconds with a larger overshoot and two outward ink strokes. Immediate completion shows the settled words. [Preview and checks](../logs/2026-11-03-awards-placing-stamps.md).
+
 | Award | Eligible candidate | Descending frozen metric |
 | --- | --- | --- |
 | Graphics | Games | Released Graphics Core |

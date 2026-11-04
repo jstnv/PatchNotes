@@ -1,0 +1,19 @@
+# Menu note threads — 2026-11-03
+
+Branch `main`, starting HEAD `7c60a01cbfac76d3f3cae1062849a070b1563116`; tracked files were clean at the start. Existing untracked evidence and `.codex-godot-temp` were preserved. This local work has not been committed or pushed.
+
+## Change
+
+The presentation-only background now follows source note-on timing for bass (orange) and chord voices (blue) in startup, alternating A/B loops, the start switch and the menu theme. Simultaneous chord notes each start a trail. Bass pitch chooses the route; note velocity and the existing audio crossfade affect its strength. Current playback clocks drive the visuals without controlling audio or using gameplay RNG. The previous spectrum-based behavior remains for other tracks. Music, gameplay and save rules were not changed. A bounded recent-history window prevents a long suspension from replaying an unbounded trail backlog; trails already long past may be omitted. Existing note audio sources, their SHA-256 hashes, extraction, count and PCM checks are in [the source record](../findings/menu-note-threads-20261103-v1/SOURCES.md).
+
+Changed runtime files: `patch-notes/scripts/audio/soundtrack.gd`, `scripts/ui/menu_circuit_background.gd`, `scripts/ui/menu_note_timeline.gd`, `scripts/ui/circuit_pulse_field.gd`, `scripts/ui/circuit_glow.gdshader`, `assets/boot/sequence_v1/menu_visual_notes.json`, `export_presets.cfg`, and `scripts/market/rival_world_checkpoint.gd` (one exact preceding source compatibility entry). The note map lives outside the gameplay data directory to preserve the existing content revision. Verification adds `scripts/debug/verify_visual_note_clocks.gd`, `verify_menu_note_timeline.gd`, `verify_menu_note_integration.gd`, `tools/build_menu_note_manifest_candidate.py`, and `tools/tests/verify_menu_note_manifest.py`.
+
+## Checks and retained limitations
+
+- The parameterized source builder reproduced the pinned candidate byte for byte; original/runtime PCM and concatenation comparisons passed. `tools/tests/verify_menu_note_manifest.py --candidate .codex-godot-temp/menu-note-manifest-regenerated.json --verify-sources`: five segments, 1,063 note-ons, zero failures.
+- Isolated headless `verify_visual_note_clocks.gd`: 19/0, including live boot audio and crossfade clock projection. Isolated headless `verify_menu_note_timeline.gd`: 33/0, including simultaneous notes, looping, bounded capacity, mute and unchanged gameplay RNG.
+- Isolated native `verify_menu_note_integration.gd`: 16/0, including actual circuit startup/A/B and switch/menu note sets, colors, muted resume, delayed switch and bounded long-pause recovery. Its dense 128-trail local OpenGL sample rendered 60 frames in 416,457 microseconds with 1,421 microseconds maximum measured CPU draw time on an NVIDIA RTX 4060 Laptop GPU; no shader or script errors were logged. This is one machine/sample, not a general performance guarantee.
+- The genuinely captured immediately preceding source `b21a01145140d8845916cc17c4f73d643bfa3617ffc56e09f2fe5eff7a929419` restored the isolated eight-rival pair with exact player state and exact world state except the expected new source stamp; an unknown source was rejected. An earlier failed attempt and its log were retained: presentation JSON under `res://data` changed the gameplay content revision. Moving it to boot assets fixed the failure without weakening content checks.
+- `git diff --check` passed after the final tracked changes at the time of verification. Listening on actual devices, other hardware, and an exported build remain unverified. The map covers bass and chord-family note-ons; drums, hook and separate low synth are not assigned a requested color. No claim is made for generic transcription of other music tracks.
+
+Isolated evidence is under `.codex-godot-temp/note-final-clock-check/`, `note-final-timeline-check/`, `menu-note-integration-final/`, and `menu-note-pair-verify-final/`. No real player save was used by these checks.

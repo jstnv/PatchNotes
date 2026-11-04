@@ -50,6 +50,8 @@ var _boot_switch_lateness := 0.0
 var _boot_previous_position := -1.0
 var _boot_laps := 0
 var _boot_switch_stream: AudioStreamWAV
+var _boot_tail_start_position := 0.0
+var _boot_tail_start_laps := 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -179,7 +181,9 @@ func _update_boot_audio() -> void:
 			return
 		_boot_tail.stream = player.stream
 		_boot_tail.volume_db = 0.0
-		_boot_tail.play(player.get_playback_position())
+		_boot_tail_start_position = player.get_playback_position()
+		_boot_tail_start_laps = _boot_laps
+		_boot_tail.play(_boot_tail_start_position)
 		player.stop()
 		player.stream = _boot_switch_stream
 		player.volume_db = -80.0
@@ -353,3 +357,52 @@ func presentation_seconds() -> float:
 	var loops: int = grid.unwrap(position, length, elapsed, player.stream_paused)
 	return grid.sample(position, loops,
 		length, AudioServer.get_time_since_last_mix(), output_latency, player.stream_paused)
+
+
+## Read-only audible cursors for presentation note maps. These clocks never
+## control playback, and the caller owns its own event cursor/deduplication.
+## "boot" is startup followed by alternating A/B; "switch_menu" is the
+## switch followed by the looped menu; "menu" is the shared transport.
+func visual_note_clocks() -> Array[Dictionary]:
+	if not is_instance_valid(player) or not player.playing or player.stream_paused or not player.has_stream_playback(): return []
+	var since_mix := AudioServer.get_time_since_last_mix()
+	var switch_seconds := player.get_playback_position() + since_mix - output_latency
+	var tail_seconds := 0.0
+	var tail_active := is_instance_valid(_boot_tail) and _boot_tail.playing and _boot_tail.has_stream_playback()
+	if tail_active:
+		tail_seconds = _boot_tail_audible_seconds(_boot_tail.get_playback_position(), _boot_tail_start_position, _boot_tail_start_laps, since_mix, output_latency)
+	return _visual_note_clock_projection({
+		"phase": boot_phase,
+		"boot_seconds": _boot_grid.mix_seconds - output_latency,
+		"switch_seconds": switch_seconds,
+		"tail_active": tail_active,
+		"tail_seconds": tail_seconds,
+		"menu_seconds": grid.seconds,
+		"menu_weight": menu_blend.weight,
+		"shared_menu": themes != null and player.stream == themes,
+	})
+
+
+static func _boot_tail_audible_seconds(position: float, start: float, laps: int, since_mix: float, latency: float) -> float:
+	# The inherited A/B stream may wrap during its short crossfade.
+	if position < start - Map.LENGTH: laps += 1
+	return position + float(laps) * 2.0 * Map.LENGTH + since_mix - latency
+
+
+static func _visual_note_clock_projection(state: Dictionary) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var phase: StringName = state.get("phase", &"")
+	if phase == &"loop":
+		result.append({"timeline": &"boot", "seconds": maxf(0.0, float(state.boot_seconds)), "gain": 1.0})
+	elif phase == &"switch":
+		var seconds := float(state.switch_seconds)
+		var fade := clampf(seconds / BOOT_CROSSFADE, 0.0, 1.0)
+		if bool(state.tail_active) and fade < 1.0:
+			result.append({"timeline": &"boot", "seconds": maxf(0.0, float(state.tail_seconds)), "gain": cos(fade * PI * 0.5)})
+		if seconds >= 0.0:
+			result.append({"timeline": &"switch_menu", "seconds": seconds, "gain": sin(fade * PI * 0.5)})
+	elif phase == &"menu":
+		result.append({"timeline": &"switch_menu", "seconds": float(BootClock.SWITCH_FRAMES) / BootClock.SAMPLE_RATE + maxf(0.0, float(state.menu_seconds)), "gain": 1.0})
+	elif bool(state.get("shared_menu", false)) and float(state.get("menu_weight", 0.0)) > 0.0:
+		result.append({"timeline": &"menu", "seconds": maxf(0.0, float(state.menu_seconds)), "gain": clampf(float(state.menu_weight), 0.0, 1.0)})
+	return result

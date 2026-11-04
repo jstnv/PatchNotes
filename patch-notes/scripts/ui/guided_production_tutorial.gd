@@ -121,9 +121,6 @@ func _build_practice() -> void:
 	practice.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	practice.add_theme_constant_override("separation",4)
 	body.add_child(practice)
-	var selection := PanelContainer.new()
-	practice.add_child(selection)
-	_label(selection,"Played Hand · Select four cards",16)
 	_label(practice,"Backlog / Draw Pool",16).add_theme_color_override("font_color",FolderUI.color(&"mint"))
 	# This holder stays in layout while HandPresentation hides the actual fan.
 	var arena := Control.new()

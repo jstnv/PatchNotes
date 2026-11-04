@@ -36,6 +36,7 @@ var _priority_inputs: Dictionary = {}
 var _completion_panel: PanelContainer
 var _completion_stats: Label
 var _title: Label
+var _score_captions: Array[Label] = []
 var _score_values: Array[Label] = []
 var _change_priorities: Button
 var _priority_modal: CanvasLayer
@@ -100,10 +101,21 @@ func _build_ui() -> void:
 	header_row.add_theme_constant_override("separation", 18)
 	header.add_child(header_row)
 	for category in ["Graphics", "Sound", "Tech", "Design", "Scope"]:
+		var column := VBoxContainer.new()
+		column.name = category + "Column"
+		column.add_theme_constant_override("separation", 0)
+		column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		header_row.add_child(column)
+		var caption := Label.new()
+		caption.name = category + "Caption"
+		caption.text = category
+		caption.theme_type_variation = &"HeadingLabel"
+		caption.add_theme_font_size_override("font_size", 16)
+		column.add_child(caption)
+		_score_captions.append(caption)
 		var value := Label.new()
 		value.name = category + "Counter"
-		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		header_row.add_child(value)
+		column.add_child(value)
 		_score_values.append(value)
 	_change_priorities = Button.new()
 	_change_priorities.text = "Change Priorities"
@@ -126,7 +138,9 @@ func _build_ui() -> void:
 	add_child(_priority_modal)
 	var priority_content := _modal_content(_priority_modal, Vector2(640, 380))
 	var priority_title := Label.new()
+	priority_title.name = "PriorityTitle"
 	priority_title.text = "Change Priorities"
+	priority_title.theme_type_variation = &"HeadingLabel"
 	priority_title.add_theme_font_size_override("font_size", 24)
 	priority_content.add_child(priority_title)
 	var help := Label.new()
@@ -537,8 +551,8 @@ func _refresh_all() -> void:
 		var earned := _state.calculate_for_state(_state.get_scope(),cores)
 		_status_label.text += "\nBase cash at current completion: %s · Paid after hand 3" % CashFormatter.format_exact_cents(earned.get("remainder_cents",0))
 	for i in range(4):
-		_score_values[i].text = "%s\n%s / %s" % [["Graphics", "Sound", "Tech", "Design"][i], _format_half(_presented_scores.get(HandPresentation.CORE[i], _state.get_core_score_half_units(i))), _format_half(_state.get_core_target(i))]
-	_score_values[4].text = "Scope\n%d / %d" % [_presented_scores.get(&"scope", _state.get_scope()), _state.get_scope_target()]
+		_score_values[i].text = "%s / %s" % [_format_half(_presented_scores.get(HandPresentation.CORE[i], _state.get_core_score_half_units(i))), _format_half(_state.get_core_target(i))]
+	_score_values[4].text = "%d / %d" % [_presented_scores.get(&"scope", _state.get_scope()), _state.get_scope_target()]
 	_scores_label.text = "Scope %d / %d · Graphics %s · Sound %s · Technology %s · Design %s" % [
 		_presented_scores.get(&"scope", _state.get_scope()), _state.get_scope_target(), _format_half(_presented_scores.get(&"graphics", _state.get_core_score_half_units(ProjectState.CoreScore.GRAPHICS))),
 		_format_half(_presented_scores.get(&"sound", _state.get_core_score_half_units(ProjectState.CoreScore.SOUND))), _format_half(_presented_scores.get(&"technology", _state.get_core_score_half_units(ProjectState.CoreScore.TECHNOLOGY))),

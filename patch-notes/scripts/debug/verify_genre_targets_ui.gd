@@ -47,7 +47,7 @@ func _run() -> void:
 		phase.get_workspace().overlay.commit_draft()
 		await create_timer(3.0).timeout
 		var hud: GameplayHUD=game.get_node("%GameplayHUD")
-		check(hud.stats[1].text=="Graphics\n0 / 20" and hud.stats[4].text=="Design\n0 / 59","HUD uses project Genre rather than Studio specialty")
+		check(hud.scoreboard.headings[1].text=="Graphics" and hud.stats[1].text=="0 / 20" and hud.scoreboard.headings[4].text=="Design" and hud.stats[4].text=="0 / 59","HUD uses project Genre rather than Studio specialty")
 		for label in hud.stats: check(fits(label,resolution),"HUD score fits "+str(resolution))
 		await capture("hud",resolution)
 		game.queue_free()

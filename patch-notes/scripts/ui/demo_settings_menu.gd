@@ -25,6 +25,9 @@ var _syncing := false
 var _startup_error := ""
 var _external_display_mode := -1
 var _external_display_elapsed := 0.0
+var _outline_focus: WeakRef
+var _outline_bounds := Rect2()
+var _outline_padding_frames := 0
 
 func _ready() -> void:
 	# Display confirmation/revert and input must work inside the pause menu.
@@ -43,6 +46,7 @@ func _ready() -> void:
 
 func _build() -> void:
 	var host := FolderUI.SurfaceHost.new()
+	host.set_meta("surface_vertical_inset",FolderUI.FRAME_SAFE_VERTICAL_INSET)
 	host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(host)
 	panel = PanelContainer.new()
@@ -58,9 +62,21 @@ func _build() -> void:
 	panel.add_child(folder)
 	var header := FolderUI.header(folder,"Settings","Display, audio and ceremony preferences",close)
 	back_button=header.get_node("Back")
+	var scroll := ScrollContainer.new()
+	scroll.name = "SettingsScroll"
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
+	folder.add_child(scroll)
+	# Leave room for the theme's focus outline at both ends of the scroll area.
+	var scroll_padding := MarginContainer.new()
+	scroll_padding.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll_padding.add_theme_constant_override("margin_top",6)
+	scroll_padding.add_theme_constant_override("margin_bottom",6)
+	scroll.add_child(scroll_padding)
 	var center := CenterContainer.new()
-	center.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	folder.add_child(center)
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll_padding.add_child(center)
 	var box := VBoxContainer.new()
 	box.custom_minimum_size.x = 640
 	box.add_theme_constant_override("separation", 4)
@@ -158,6 +174,7 @@ func _button(parent: Node, id: String, caption: String, action: Callable) -> But
 
 func open(navigation_host: MenuTransitions = null) -> void:
 	if is_open() or (navigation_host != null and navigation_host.busy): return
+	_refresh_panel_insets()
 	_navigation=navigation_host
 	_return_focus = get_viewport().gui_get_focus_owner()
 	draft = committed.duplicate(true)
@@ -167,6 +184,15 @@ func open(navigation_host: MenuTransitions = null) -> void:
 	if _navigation != null:
 		if not _navigation.push(panel,mode,_finish_close): _finish_close()
 	else: mode.grab_focus()
+
+func _refresh_panel_insets() -> void:
+	if not is_inside_tree() or panel == null: return
+	var insets := FolderUI.panel_vertical_insets(self)
+	var host := panel.get_parent() as FolderUI.SurfaceHost
+	if is_equal_approx(float(host.get_meta("surface_top_inset",-1.0)),insets.x) and is_equal_approx(float(host.get_meta("surface_bottom_inset",-1.0)),insets.y): return
+	host.set_meta("surface_top_inset",insets.x)
+	host.set_meta("surface_bottom_inset",insets.y)
+	host.queue_sort()
 
 func is_open() -> bool:
 	return panel != null and panel.visible
@@ -300,6 +326,12 @@ func _finish_close() -> void:
 	if is_instance_valid(_return_focus) and _return_focus.is_visible_in_tree(): _return_focus.grab_focus()
 
 func _process(delta: float) -> void:
+	if is_open():
+		_refresh_panel_insets()
+		_track_focus_outline()
+	else:
+		_outline_focus=null
+		_outline_padding_frames=0
 	if previewing:
 		var seconds := ceili(deadline - Time.get_ticks_msec() / 1000.0)
 		status.text = "Keep this display? Reverting in %d seconds." % maxi(0, seconds)
@@ -316,6 +348,27 @@ func _process(delta: float) -> void:
 	else:
 		_external_display_elapsed += delta
 		if _external_display_elapsed >= EXTERNAL_DISPLAY_STABLE_SECONDS: remember_current_display()
+
+func _track_focus_outline() -> void:
+	var scroll := panel.find_child("SettingsScroll",true,false) as ScrollContainer
+	var focused := get_viewport().gui_get_focus_owner()
+	if scroll == null or not is_instance_valid(focused) or not scroll.is_ancestor_of(focused):
+		_outline_focus=null
+		_outline_padding_frames=0
+		return
+	var bounds := scroll.get_global_rect()
+	if _outline_focus==null or _outline_focus.get_ref()!=focused or _outline_bounds!=bounds:
+		_outline_focus=weakref(focused)
+		_outline_bounds=bounds
+		# Container layout/focus following may settle over several frames.
+		_outline_padding_frames=4
+	if _outline_padding_frames<=0:return
+	_outline_padding_frames-=1
+	var focus_bounds := focused.get_global_rect().grow(4.0)
+	if focus_bounds.position.y < bounds.position.y:
+		scroll.scroll_vertical -= ceili(bounds.position.y - focus_bounds.position.y)
+	elif focus_bounds.end.y > bounds.end.y:
+		scroll.scroll_vertical += ceili(focus_bounds.end.y - bounds.end.y)
 
 func _focusable() -> Array[Control]:
 	if previewing: return [confirmation.get_node("Keep"), confirmation.get_node("Revert"), back_button]

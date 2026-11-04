@@ -3,6 +3,7 @@ extends RefCounted
 
 ## Shared presentation primitives. All identity values live in the Godot Theme.
 const THEME := preload("res://resources/ui/onyx_theme.tres")
+const FRAME_SAFE_VERTICAL_INSET := 42.0
 
 static func enable_menu_gamepad() -> void:
 	for action in {&"ui_accept":JOY_BUTTON_A,&"ui_cancel":JOY_BUTTON_B}:
@@ -26,11 +27,25 @@ class SurfaceHost extends Container:
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 	func _notification(what: int) -> void:
 		if what != NOTIFICATION_SORT_CHILDREN: return
+		var vertical_inset := float(get_meta("surface_vertical_inset",20.0))
+		var top_inset := float(get_meta("surface_top_inset",vertical_inset))
+		var bottom_inset := float(get_meta("surface_bottom_inset",vertical_inset))
 		for child in get_children():
 			if child is Control and child.has_meta("bounded_folder"):
 				# Keep sizing responsive while the title stack owns horizontal motion.
 				var x: float = child.position.x if child.get_meta("folder_navigation_motion",false) else 20.0
-				fit_child_in_rect(child,Rect2(Vector2(x,20),(size-Vector2(40,40)).max(Vector2.ZERO)))
+				fit_child_in_rect(child,Rect2(Vector2(x,top_inset),(size-Vector2(40,top_inset+bottom_inset)).max(Vector2.ZERO)))
+static func panel_vertical_insets(owner: Node) -> Vector2:
+	var insets := Vector2.ONE * FRAME_SAFE_VERTICAL_INSET
+	var hud := owner.get_parent()
+	if hud == null: return insets
+	var header := hud.get_node_or_null("PersistentHeader") as Control
+	var footer := hud.get_node_or_null("PersistentFooter") as Control
+	if header != null and header.is_visible_in_tree():
+		insets.x = maxf(insets.x,header.get_global_rect().end.y+8.0)
+	if footer != null and footer.is_visible_in_tree():
+		insets.y = maxf(insets.y,owner.get_viewport().get_visible_rect().size.y-footer.get_global_rect().position.y+8.0)
+	return insets
 static func color(token: StringName) -> Color:
 	return THEME.get_color(token,&"PatchNotes")
 static func surface(parent: Node, document := false) -> PanelContainer:

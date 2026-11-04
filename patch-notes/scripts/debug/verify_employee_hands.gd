@@ -42,10 +42,13 @@ func _run() -> void:
 			if matching and trained:
 				var old_priority: Dictionary = phase.get_priority_distribution()
 				check(not phase.play_hand_with_employee_plan(old_priority) and state(phase,run,project)==full_before,"Unchanged plan preserves use")
-				var dialog := EmployeePlanningDialog.new()
-				phase.add_child(dialog)
-				dialog.open_for(phase)
-				check(dialog.visible,"Optional hand preview opens")
+				var workspace: PhaseWorkspace = phase.get_workspace()
+				workspace.refresh()
+				var plan_button: Button = workspace.employee_plan_button
+				check(plan_button != null and plan_button.is_visible_in_tree() and not plan_button.disabled,"Specialist plan remains visible and enabled for a qualifying hand")
+				plan_button.pressed.emit()
+				var dialog: EmployeePlanningDialog = workspace.get("_employee_dialog")
+				check(dialog != null and dialog.visible,"Specialist plan button opens the optional hand preview")
 				if "--capture" in OS.get_cmdline_user_args():
 					await process_frame
 					root.get_texture().get_image().save_png(ProjectSettings.globalize_path("res://../docs/codex/findings/employee-implementation-v1/planning-%s.png" % label))
@@ -81,7 +84,7 @@ func _run() -> void:
 					frames += 1
 				check(not motion.busy and run.get_completed_run_cycles()==cycle+1,"Specialist animation finishes without a second gameplay commit")
 				check(motion.trace.filter(func(step):return step.event=="score").size()==4,"Specialist presents four card score events once")
-				check(phase.get_selected_candidate_views().is_empty() and phase.get_workspace().played_hand.text.contains("Select"),"Specialist completion clears stale hand selection text")
+				check(phase.get_selected_candidate_views().is_empty(),"Specialist completion clears stale hand selection")
 				reconcile(run)
 				break
 			else:

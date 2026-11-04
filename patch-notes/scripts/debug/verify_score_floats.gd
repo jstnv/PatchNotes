@@ -246,9 +246,9 @@ func punch() -> void:
 	var before:=HandPresentation.project_snapshot(project,null)
 	project.add_core_scores_and_scope({},1,0.75)
 	hud.render(project,&"design",before)
-	check(hud.stats[6].text=="Bug Pressure\n0.00","Committed Bug Pressure stays held alongside floating scores")
+	check(hud.headings[6].text=="Bug Pressure" and hud.stats[6].text=="0.00","Committed Bug Pressure stays held alongside floating scores")
 	hud.render(project,&"design",HandPresentation.project_snapshot(project,null))
-	check(hud.stats[6].text=="Bug Pressure\n0.75","Deposited Bug Pressure shows the exact confirmed value")
+	check(hud.headings[6].text=="Bug Pressure" and hud.stats[6].text=="0.75","Deposited Bug Pressure shows the exact confirmed value")
 	hud.punch({&"graphics":3})
 	check(hud._punches.size()==1,"Scoreboard starts one bounded punch per changed counter")
 	# Sample the exact peak: a native frame can skip a short wall-clock peak.

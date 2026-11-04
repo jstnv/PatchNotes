@@ -82,6 +82,7 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer, map_host: Contr
 	layout.add_child(legend)
 	var legend_title := Label.new()
 	legend_title.text = "Border: primary score"
+	legend_title.theme_type_variation = &"ScoreHeading"
 	legend_title.add_theme_font_size_override("font_size", 12)
 	legend.add_child(legend_title)
 	for stat: StringName in FeatureStore.SCORE_COLORS:

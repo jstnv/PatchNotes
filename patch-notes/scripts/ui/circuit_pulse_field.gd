@@ -1,6 +1,7 @@
 extends RefCounted
 ## Local deterministic presentation RNG; never accesses the game's random stream.
-const HARD_LIMIT:=48
+const HARD_LIMIT:=128
+const NOTE_CAPACITY:=128
 class Pulse extends RefCounted:
 	var active:=false
 	var route:=0
@@ -10,6 +11,7 @@ class Pulse extends RefCounted:
 	var split:=false
 	var strength:=1.0
 	var updated_tick:=-1
+	var birth_order:=0
 var settings:Resource
 var geometry:RefCounted
 var pulses:Array[Pulse]=[]
@@ -31,6 +33,7 @@ var _baseline:=Vector3.ZERO
 var _band_cooldowns:=Vector3.ZERO
 var _live_weight:=0.0
 var _tick:=0
+var _birth_order:=0
 func _init()->void:
 	_random.seed=74291
 	for i in HARD_LIMIT:pulses.append(Pulse.new())
@@ -40,26 +43,43 @@ func reset()->void:
 	for p in pulses:p.active=false
 	_spawn_clock=0;energy=Vector3.ZERO;_live_weight=0
 	_previous_target=Vector3.ZERO;_baseline=Vector3.ZERO;_band_cooldowns=Vector3.ZERO
-	total_spawned=0;total_splits=0;last_trigger_band=-1;trigger_counts.fill(0);_random.seed=74291
+	total_spawned=0;total_splits=0;last_trigger_band=-1;trigger_counts.fill(0);_random.seed=74291;_birth_order=0
 func count()->int:
 	var result:=0
 	for p in pulses:
 		if p.active:result+=1
 	return result
-func spawn(route:int,color_index:int,secondary:=false,distance:=0.0,strength:=1.0)->Pulse:
-	if count()>=clampi(settings.max_pulses,2,HARD_LIMIT):return null
+func spawn(route:int,color_index:int,secondary:=false,distance:=0.0,strength:=1.0,capacity_override: int = -1)->Pulse:
+	var limit := clampi(settings.max_pulses if capacity_override < 0 else capacity_override,2,HARD_LIMIT)
+	if count()>=limit:return null
 	for p in pulses:
 		if p.active:continue
 		p.active=true;p.route=route;p.color_index=color_index;p.secondary=secondary
 		p.distance=distance;p.strength=strength;p.split=secondary
 		p.updated_tick=_tick
+		_birth_order+=1;p.birth_order=_birth_order
 		total_spawned+=1;return p
 	return null
-func step(delta:float,spectrum:Vector3,audible:bool)->void:
+
+func spawn_note(kind: StringName, pitch: int, capacity_override: int = -1, strength: float = 1.0, distance: float = 0.0) -> Pulse:
+	if kind not in [&"bass", &"chord"]: return null
+	var limit := clampi(settings.max_pulses if capacity_override < 0 else capacity_override,2,HARD_LIMIT)
+	if count() >= limit:
+		# Musical onsets take priority over decorative branches; at saturation,
+		# retire the oldest trail so a new note is never silently discarded.
+		var oldest: Pulse = null
+		for p: Pulse in pulses:
+			if not p.active: continue
+			if oldest == null or (p.secondary and not oldest.secondary) or (p.secondary == oldest.secondary and p.birth_order < oldest.birth_order): oldest = p
+		if oldest != null: oldest.active = false
+	var route := 7 - clampi(floori(float(pitch - 36) / 3.0),0,7) if kind == &"bass" else posmod(pitch + total_spawned,geometry.BASE_ROUTES)
+	return spawn(route,1 if kind == &"bass" else 0,false,distance,strength,limit)
+
+func step(delta:float,spectrum:Vector3,audible:bool,note_events: Variant = null)->void:
 	var dt:=clampf(delta,0,0.1)
 	if dt<=0 or geometry.routes.is_empty():return
 	_tick+=1
-	var available:=clampi(settings.max_pulses,2,HARD_LIMIT)
+	var available:=clampi(NOTE_CAPACITY if note_events is Array else settings.max_pulses,2,HARD_LIMIT)
 	for p in pulses:
 		if p.active:
 			if available<=0:p.active=false
@@ -81,7 +101,17 @@ func step(delta:float,spectrum:Vector3,audible:bool)->void:
 	bloom=settings.glow_intensity*(.35+.65*_live_weight+energy.x*.6)
 	_spawn_clock-=dt
 	for band in 3:_band_cooldowns[band]=maxf(0.0,_band_cooldowns[band]-dt)
-	if audible:
+	if note_events is Array:
+		for event: Dictionary in note_events:
+			var strength := lerpf(0.65,1.0,clampf(float(event.get("velocity",100)) / 127.0,0.0,1.0)) * clampf(float(event.get("gain",1.0)),0.0,1.0)
+			var distance := speed * maxf(0.0,float(event.get("age",0.0)))
+			var pulse := spawn_note(StringName(event.kind),int(event.pitch),NOTE_CAPACITY,strength,distance)
+			if pulse != null:
+				last_trigger_band=0 if StringName(event.kind)==&"bass" else 1
+				trigger_counts[last_trigger_band]+=1
+		_previous_target=target
+		_baseline=_baseline.lerp(target,1.0-exp(-dt/.55))
+	elif audible:
 		# Choose the most prominent fresh rise above its recent local level.
 		# Constant notes do not generate timer-driven duplicates.
 		var selected:=-1

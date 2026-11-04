@@ -1,0 +1,84 @@
+extends SceneTree
+
+var checks := 0
+var failures := 0
+
+func _initialize() -> void:
+	run.call_deferred()
+
+func check_panel(panel: Control, viewport_size: Vector2, label: String) -> void:
+	var bounds := panel.get_global_rect()
+	var top_ok := bounds.position.y >= 38.0
+	var bottom_ok := bounds.end.y <= viewport_size.y - 38.0
+	checks += 1
+	if not top_ok or not bottom_ok:
+		failures += 1
+	print("PASS " if top_ok and bottom_ok else "FAIL ", label, " ", viewport_size, " bounds=", bounds)
+
+func run() -> void:
+	create_timer(60).timeout.connect(func(): push_error("Frame-safe panel test timed out"); quit(2))
+	var hud := Control.new()
+	hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	root.add_child(hud)
+	var header := Control.new()
+	header.name = "PersistentHeader"
+	header.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	header.offset_top = 12
+	header.offset_bottom = 78
+	hud.add_child(header)
+	header.hide()
+	var footer := Control.new()
+	footer.name = "PersistentFooter"
+	footer.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	footer.offset_top = -46
+	footer.offset_bottom = -10
+	hud.add_child(footer)
+	footer.hide()
+	var guide := HowToPlayGuide.new()
+	hud.add_child(guide)
+	var settings := DemoSettingsMenu.new()
+	settings.settings_path = "user://panel_safe_area_preview.json"
+	hud.add_child(settings)
+	var menu := MainMenu.new()
+	root.add_child(menu)
+	guide.open()
+	settings.open()
+	menu._setup_surface.show()
+	for dims in [Vector2i(1152, 648), Vector2i(1280, 720), Vector2i(1920, 1080)]:
+		root.size = dims
+		root.content_scale_size = dims
+		for frame in 5:
+			await process_frame
+		check_panel(guide.panel, Vector2(dims), "Guide")
+		check_panel(settings.panel, Vector2(dims), "Settings")
+		check_panel(menu._setup_surface, Vector2(dims), "Studio setup")
+		guide.close()
+		settings.close()
+		header.show()
+		footer.show()
+		guide.open()
+		settings.open()
+		for frame in 3:
+			await process_frame
+		for panel in [guide.panel, settings.panel]:
+			var bounds: Rect2 = panel.get_global_rect()
+			var ok: bool = bounds.position.y >= header.get_global_rect().end.y + 8.0 and bounds.end.y <= footer.get_global_rect().position.y - 8.0
+			checks += 1
+			if not ok: failures += 1
+			print("PASS " if ok else "FAIL ", panel.name, " clears visible gameplay HUD ", dims, " bounds=", bounds)
+		guide.close()
+		var scroll := settings.panel.find_child("SettingsScroll",true,false) as ScrollContainer
+		for control in [settings.apply_button, settings.reset_button]:
+			control.grab_focus()
+			for frame in 3: await process_frame
+			var focus_visible: bool = root.gui_get_focus_owner() == control and scroll.get_global_rect().encloses(control.get_global_rect())
+			checks += 1
+			if not focus_visible: failures += 1
+			print("PASS " if focus_visible else "FAIL ", control.name, " focus follows into view ", dims)
+		settings.close()
+		header.hide()
+		footer.hide()
+		guide.open()
+		settings.open()
+	print("PANEL_SAFE checks=%d failures=%d" % [checks, failures])
+	quit(failures)

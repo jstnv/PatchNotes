@@ -59,7 +59,6 @@ func run() -> void:
 	hub.motion = motion
 	host.add_child(hub)
 	hub.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	hub.overview.bind_run(run_state)
 	var events: Array[StringName] = []
 	hub.selection_changed.connect(func(id: StringName): events.append(id))
 	for id: StringName in KEYS:
@@ -82,7 +81,7 @@ func run() -> void:
 		check(hub.selected == id and hub.requested == id,"Programmatic re-selection stays open " + str(id))
 		button.pressed.emit()
 		await wait_motion(hub)
-		check(hub.selected.is_empty() and hub.requested.is_empty() and hub.overview.visible,"Second root activation returns to dashboard " + str(id))
+		check(hub.selected.is_empty() and hub.requested.is_empty() and hub.get_node_or_null("CompanionClip/StudioOverview") == null,"Second root activation returns to the uncluttered Studio panel " + str(id))
 		check(not button.button_pressed and button.has_focus(),"Closing clears selection and keeps root focus " + str(id))
 		check(not events.is_empty() and events[-1].is_empty(),"Closing notifies Studio of empty selection " + str(id))
 		if not hub.selected.is_empty() or not hub.requested.is_empty():
@@ -100,7 +99,7 @@ func run() -> void:
 	hub.root_buttons[&"market"].pressed.emit()
 	hub.root_buttons[&"market"].pressed.emit()
 	await wait_motion(hub)
-	check(hub.selected.is_empty() and hub.requested.is_empty() and hub.overview.visible,"Rapid double activation returns to dashboard")
+	check(hub.selected.is_empty() and hub.requested.is_empty() and hub.get_node_or_null("CompanionClip/StudioOverview") == null,"Rapid double activation returns to the uncluttered Studio panel")
 	if not hub.selected.is_empty():hub.close_group();await wait_motion(hub)
 	hub.root_buttons[&"studio_info"].pressed.emit()
 	await wait_motion(hub)
@@ -116,13 +115,13 @@ func run() -> void:
 	check(hub.selected == &"studio_info","Keyboard activation opens the group")
 	await key_accept(keyboard)
 	await wait_motion(hub)
-	check(hub.selected.is_empty() and hub.overview.visible and keyboard.has_focus(),"Keyboard activation closes the group and keeps focus")
+	check(hub.selected.is_empty() and hub.get_node_or_null("CompanionClip/StudioOverview") == null and keyboard.has_focus(),"Keyboard activation closes the group and keeps focus")
 	await pointer_activate(keyboard)
 	await wait_motion(hub)
 	check(hub.selected == &"studio_info", "Pointer click opens the group")
 	await pointer_activate(keyboard)
 	await wait_motion(hub)
-	check(hub.selected.is_empty() and hub.overview.visible, "Pointer click closes the selected group")
+	check(hub.selected.is_empty() and hub.get_node_or_null("CompanionClip/StudioOverview") == null, "Pointer click closes the selected group")
 	host.queue_free()
 	for i in 4: await process_frame
 	var database := PrimitiveSnapshotDatabase.new()
@@ -140,7 +139,7 @@ func run() -> void:
 	check(studio._active_menu == &"studio_info" and studio._hub.selected == &"studio_info", "Programmatic Studio re-selection remains open")
 	await pointer_activate(studio_button)
 	await wait_motion(studio._hub)
-	check(studio._active_menu.is_empty() and studio._hub.selected.is_empty() and studio._hub.overview.visible, "Pointer closes actual Studio group and clears its active menu")
+	check(studio._active_menu.is_empty() and studio._hub.selected.is_empty() and studio._hub.get_node_or_null("CompanionClip/StudioOverview") == null, "Pointer closes actual Studio group and clears its active menu")
 	check(studio_button.has_focus(), "Actual Studio keeps sidebar focus after closing")
 	check(Replay.digest([run_state.get_cash_cents(),run_state.get_completed_run_cycles(),run_state.get_owned_feature_ids(),run_state.get_studio_finance_snapshot(),run_state.random_streams.snapshot()]) == before,"Browsing keeps finance, calendar, ownership and RNG unchanged")
 	print("STUDIO_GROUP_TOGGLE checks=%d failures=%d" % [checks, failures])

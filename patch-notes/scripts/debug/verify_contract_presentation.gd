@@ -28,7 +28,14 @@ func _verify() -> void:
 		expect(phase.get("_priority_modal").visible and run_snapshot(run, project) == before, "Priority navigation is passive")
 		phase.get("_priority_modal").hide()
 		var counters: Array = phase.get("_score_values")
-		expect(counters[0].text == "Graphics\n0 / 6" and counters[4].text == "Scope\n0 / 12", "Header displays current / required Core and Scope")
+		var captions: Array = phase.get("_score_captions") if "_score_captions" in phase else []
+		expect(captions.size() == 5 and captions[0].text == "Graphics" and captions[4].text == "Scope" and counters[0].text == "0 / 6" and counters[4].text == "0 / 12", "Bold header captions and regular values display current / required Core and Scope separately")
+		expect(captions.size() == 5 and captions[0].get_theme_font("font") == FolderUI.THEME.get_font("font",&"HeadingLabel") and counters[0].get_theme_font("font") == FolderUI.THEME.default_font, "Contract captions use the shared bold heading font and values use the shared regular font")
+		var priority_heading := phase.get("_priority_modal").find_child("PriorityTitle",true,false) as Label
+		expect(priority_heading != null and priority_heading.get_theme_font("font") == FolderUI.THEME.get_font("font",&"HeadingLabel"), "Priority dialog title uses the shared bold heading font")
+		for caption: Label in captions:
+			var width := caption.get_theme_font("font").get_string_size(caption.text,HORIZONTAL_ALIGNMENT_LEFT,-1,caption.get_theme_font_size("font_size")).x
+			expect(width <= caption.size.x + 0.5, "Contract header caption fits its column at %s: %s" % [resolution,caption.text])
 		await capture("pool", resolution)
 		for hand in range(2):
 			_select_first(phase, 4)
@@ -41,6 +48,7 @@ func _verify() -> void:
 				timeout += 1
 			expect(not phase.hand_motion.busy, "Animated hand finishes without freezing")
 			expect(state.get_successful_hand_count() == hand + 1, "Animated action commits exactly once")
+			expect(counters[0].text == "%s / %s" % [phase._format_half(state.get_core_score_half_units(0)),phase._format_half(state.get_core_target(0))] and counters[4].text == "%d / %d" % [state.get_scope(),state.get_scope_target()], "Score values update from the committed hand without changing their captions")
 			if hand == 0:
 				expect(phase.get("_candidate_row").visible and phase.get_selected_candidate_views().is_empty(), "Second pool is visible and selectable")
 		await process_frame
@@ -75,6 +83,11 @@ func _verify() -> void:
 
 
 func capture(label: String, resolution: Vector2i) -> void:
+	var font_capture := OS.get_environment("PN_CONTRACT_FONT_CAPTURE")
+	if not font_capture.is_empty() and DisplayServer.get_name() != "headless":
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(font_capture.path_join("%s-%dx%d.png" % [label,resolution.x,resolution.y]))
+		return
 	if "--capture" not in OS.get_cmdline_user_args(): return
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("res://design-logs/contract-ui-v1/%s-%dx%d.png" % [label, resolution.x, resolution.y])

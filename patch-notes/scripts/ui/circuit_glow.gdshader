@@ -1,7 +1,8 @@
 shader_type canvas_item;
 render_mode unshaded, blend_add;
 // Cached geometry carries route id, arc distance and cross-trace distance.
-uniform vec4 pulses[48]; // route, head distance, tail length, signed strength/color
+uniform vec4 pulses[128]; // route, head distance, tail length, signed strength/color
+uniform int pulse_slots = 0;
 uniform float unit_scale = 1.0;
 uniform float brightness = 0.8;
 uniform float bass = 0.0;
@@ -24,7 +25,8 @@ void fragment() {
 	float core = gaussian(cross_distance / (0.85 + bass * 0.5));
 	float halo = gaussian(cross_distance / (3.0 + bass * 1.8));
 	float glow = gaussian(cross_distance / (10.0 + bass * 4.0));
-	for (int i = 0; i < 48; i++) {
+	for (int i = 0; i < 128; i++) {
+		if (i >= pulse_slots) { break; }
 		if (abs(pulses[i].x - route_id) > 0.1 || pulses[i].w == 0.0) { continue; }
 		float behind = pulses[i].y - UV.x;
 		if (behind < -32.0 * unit_scale || behind > pulses[i].z) { continue; }

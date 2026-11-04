@@ -73,6 +73,7 @@ func _ready() -> void:
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(background)
 	var root := FolderUI.SurfaceHost.new()
+	root.set_meta("surface_vertical_inset",FolderUI.FRAME_SAFE_VERTICAL_INSET)
 	root.name = "CenterContainer"
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(root)

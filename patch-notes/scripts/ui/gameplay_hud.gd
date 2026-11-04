@@ -196,8 +196,6 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 			old_workspace.presentation_changed.disconnect(refresh)
 		if old_workspace.overlay.closed.is_connected(_refresh_guidance):
 			old_workspace.overlay.closed.disconnect(_refresh_guidance)
-		if old_workspace.synergy_help_requested.is_connected(_show_synergy_help):
-			old_workspace.synergy_help_requested.disconnect(_show_synergy_help)
 		if old_workspace.score_display_changed.is_connected(_show_presented_scores):
 			old_workspace.score_display_changed.disconnect(_show_presented_scores)
 	if is_instance_valid(phase) and phase.has_signal("guidance_changed") and phase.guidance_changed.is_connected(_refresh_guidance):
@@ -220,7 +218,7 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 	get_node("PersistentFooter").visible = not (phase is MainMenu)
 	get_node("PersistentHeader").visible = not (phase is MainMenu)
 	header_title.visible = release_menu and not (phase is MainMenu)
-	for item: Label in stats: item.visible = not release_menu
+	scoreboard.set_stats_visible(not release_menu)
 	change_priorities.visible = not release_menu
 	if header_title.visible and run != null:
 		header_title.text = _studio_header_text()
@@ -234,7 +232,6 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 		phase.get_workspace().use_synergy_presenter(synergy_notification)
 		phase.get_workspace().presentation_changed.connect(refresh)
 		phase.get_workspace().overlay.closed.connect(_refresh_guidance)
-		phase.get_workspace().synergy_help_requested.connect(_show_synergy_help)
 		phase.get_workspace().score_display_changed.connect(_show_presented_scores)
 	if phase.has_signal("guidance_changed"):
 		phase.guidance_changed.connect(_refresh_guidance)
@@ -312,10 +309,6 @@ func show_current_tip() -> void:
 	var tip := _guidance_for_current_state()
 	if tip.is_empty(): return
 	contextual_tip.show_tip(tip.title, tip.body)
-
-
-func _show_synergy_help(title: String, body: String) -> void:
-	contextual_tip.show_tip(title, body)
 
 
 func _refresh_guidance() -> void:
@@ -430,16 +423,16 @@ func _production_guidance() -> Dictionary:
 	if not available.is_empty(): return available
 	if tutorial_context == &"beta":
 		if project != null and project.get_known_bugs() > 0:
-			return {"key": "beta_fix", "title": "Fix Known Bugs", "body": "Debug fixes Known Bugs; Search reveals Hidden Bugs first. Four matching QA or Marketing cards make a stronger hand. Use Synergy ? for the exact patterns."}
-		return {"key": "beta_search", "title": "Find and prepare", "body": "Search reveals Hidden Bugs; Debug fixes Known Bugs. Four matching QA or Marketing cards make a stronger hand. Use Synergy ? for the exact patterns."}
+			return {"key": "beta_fix", "title": "Fix Known Bugs", "body": "Debug fixes Known Bugs; Search reveals Hidden Bugs first. Four matching QA or Marketing cards make a stronger hand. Open Tutorial for the full patterns."}
+		return {"key": "beta_search", "title": "Find and prepare", "body": "Search reveals Hidden Bugs; Debug fixes Known Bugs. Four matching QA or Marketing cards make a stronger hand. Open Tutorial for the full patterns."}
 	if project != null and project.get_current_scope() > 0:
 		var body := "Keep building Scope and Core Scores. Redraw selected cards without advancing a cycle; successful hands restore one redraw."
 		if tutorial_context == &"design": body += " Proceed to Alpha when you are ready."
-		if tutorial_context == &"alpha": body += " Match four primary Core labels for a ×1.5 synergy; use Synergy ? for the other pattern."
+		if tutorial_context == &"alpha": body += " Match four primary Core labels for a ×1.5 synergy; open Tutorial for the other pattern."
 		return {"key": name + "_progress", "title": "Watch the project", "body": body}
 	if tutorial_context == &"design":
-		return {"key": "design_choose", "title": "Select one to four cards", "body": "Choose one to four cards. A four-card synergy is a bonus for a matching hand. The first score on each card is its primary Core label; match all four for ×1.5 Core gains. Use Synergy ? for other combos."}
-	return {"key": name + "_choose", "title": "Select one to four cards", "body": "Choose four cards. Matching all four primary Core labels gives ×1.5 Core gains; the Synergy ? button explains other bonuses. Features exhaust; Passes return."}
+		return {"key": "design_choose", "title": "Select one to four cards", "body": "Choose one to four cards. A four-card synergy is a bonus for a matching hand. The first score on each card is its primary Core label; match all four for ×1.5 Core gains. Open Tutorial for other combos."}
+	return {"key": name + "_choose", "title": "Select one to four cards", "body": "Choose one to four cards. Matching all four primary Core labels gives ×1.5 Core gains; Tutorial explains other bonuses. Features exhaust; Passes return."}
 
 func _queue_refresh() -> void:
 	if _refresh_pending or not is_inside_tree(): return

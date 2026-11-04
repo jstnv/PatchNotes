@@ -24,6 +24,7 @@ func settle() -> void:
 func click(button: Control) -> void:
 	var point:=root.get_final_transform()*button.get_global_rect().get_center()
 	var motion:=InputEventMouseMotion.new();motion.position=point;Input.parse_input_event(motion);await process_frame
+	if button.name=="StudioInfoMenuButton":print("INFO_POINTER_DIAG ",{"point":point,"rect":button.get_global_rect(),"hover":str(root.gui_get_hovered_control()),"gui_disable":root.gui_disable_input,"viewport":root.get_final_transform()})
 	for down in [true,false]:
 		var event:=InputEventMouseButton.new();event.position=point;event.button_index=MOUSE_BUTTON_LEFT;event.pressed=down;Input.parse_input_event(event);await process_frame
 	await settle()
@@ -43,6 +44,9 @@ func _verify() -> void:
 				game.checkpoints.store._writer=TCPServer.new()
 				if game.checkpoints.store._writer.listen(int(test_port),"127.0.0.1")!=OK:quit(2);return
 			root.size=dimensions;root.content_scale_size=dimensions;game._onboarding.answer(true)
+			# This navigation fixture is not exercising first-time guidance. Keep
+			# its focused modal from covering the controls under test.
+			game.focused_guidance.automatic_enabled=false;game.focused_guidance.dismiss(true)
 			var run: RunState
 			if releases==2:run=preload("res://scripts/debug/employee_test_actions.gd").fresh_two_releases(catalog)
 			else:run=Factory.create_fresh_session({"schema_version":1,"studio_id":"management","studio_name":"Management Studio","specialty":"action","traits":[],"seed":"4417"},catalog).run

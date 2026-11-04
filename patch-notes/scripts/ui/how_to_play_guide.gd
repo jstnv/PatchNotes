@@ -42,8 +42,8 @@ func _ready() -> void:
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.offset_left = 24
 	panel.offset_right = -24
-	panel.offset_top = 20
-	panel.offset_bottom = -20
+	panel.offset_top = FolderUI.FRAME_SAFE_VERTICAL_INSET
+	panel.offset_bottom = -FolderUI.FRAME_SAFE_VERTICAL_INSET
 	shade.add_child(panel)
 	panel.theme_type_variation=&"FolderPanel"
 	var layout := VBoxContainer.new()
@@ -163,9 +163,19 @@ func _folder_style(button: Button, top: bool) -> void:
 func is_open() -> bool:
 	return visible
 
+func _refresh_panel_insets() -> void:
+	if not is_inside_tree() or panel == null: return
+	var insets := FolderUI.panel_vertical_insets(self)
+	if not is_equal_approx(panel.offset_top, insets.x): panel.offset_top = insets.x
+	if not is_equal_approx(panel.offset_bottom, -insets.y): panel.offset_bottom = -insets.y
+
+func _process(_delta: float) -> void:
+	if is_open(): _refresh_panel_insets()
+
 func open(navigation_host: MenuTransitions = null) -> void:
 	if tour_scroll!=null and tour_scroll.visible:select_topic(topic_index)
 	if visible or (navigation_host != null and navigation_host.busy): return
+	_refresh_panel_insets()
 	_navigation=navigation_host
 	_return_focus = get_viewport().gui_get_focus_owner()
 	# A stacked Back hides this Control; ordinary gameplay reuses the same layer.

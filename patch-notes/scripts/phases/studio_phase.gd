@@ -51,7 +51,6 @@ var _hub_motion: MenuTransitions
 var _returning_destination := false
 var _destination_layer: CanvasLayer
 var _destination_fits: Array[Dictionary]=[]
-var _overview: Control
 
 func set_rival_world(world: RivalWorld) -> void:
 	_rival_world = world
@@ -125,7 +124,6 @@ func _menu_page(key: StringName,title: String) -> VBoxContainer:
 func _build_management_menu() -> void:
 	_hub_motion=MenuTransitions.new();_hub_motion.name="StudioNavigation";_hub_motion.automatic_entrances=false;add_child(_hub_motion)
 	_hub=preload("res://scripts/ui/studio_hub.gd").new();_hub.motion=_hub_motion;%Dashboard.add_child(_hub)
-	_overview=_hub.overview;_overview.bind_run(_run_state)
 	var studio_info: VBoxContainer=_hub.add_group(&"studio_info","Studio Info")
 	var management: VBoxContainer=_hub.add_group(&"management","Studio Management")
 	var market: VBoxContainer=_hub.add_group(&"market","Market Info")
@@ -345,8 +343,8 @@ func _show_pending_publisher_notice() -> void:
 	if _publisher_notice == null:
 		_publisher_notice = PanelContainer.new()
 		_publisher_notice.name = "PublisherUnlockNotice"
-		# The decorative overview area owns notifications; menus and values stay clear.
-		_overview.notice_host.add_child(_publisher_notice)
+		# Keep the unlock notice available even when no companion is selected.
+		_hub.notice_host.add_child(_publisher_notice)
 		_publisher_notice.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 		_publisher_notice.offset_left=12;_publisher_notice.offset_right=312
 		_publisher_notice.offset_top=-112;_publisher_notice.offset_bottom=-12
@@ -718,7 +716,6 @@ func setup(project_state: ProjectState, run_state: RunState, snapshot_database: 
 			if _run_state.is_connected(event,_queue_run_refresh):_run_state.disconnect(event,_queue_run_refresh)
 	_project_state = project_state
 	_run_state = run_state
-	if is_instance_valid(_overview):_overview.bind_run(_run_state)
 	_snapshot_database = snapshot_database
 	# The fully validated Studio-entry boundary is idempotent on reconstruction.
 	if project_state != null and not prepare_only and not _run_state.register_release(project_state):

@@ -7,6 +7,10 @@ var capture := false
 func _initialize() -> void:
 	DirAccess.make_dir_recursive_absolute("res://design-logs/candidate-pool-repair-v1/card-motion")
 	capture = "--capture" in OS.get_cmdline_user_args()
+	if not OS.get_environment("PN_CHECKPOINT_TEST_PORT").is_empty():
+		node_added.connect(func(node: Node):
+			if node is CheckpointCoordinator:
+				node.store=preload("res://scripts/debug/verify_rival_gameplay_activation.gd").TestStore.new("user://saves/studio",node._validate_payload))
 	_verify.call_deferred()
 
 func expect(ok: bool, text: String) -> void:
@@ -108,7 +112,7 @@ func _production(width: int) -> void:
 	expect(motion.busy and project.get_core_score(0) == 12 and run.get_completed_run_cycles() == cycle + 1, "Native specialization commits once before visual playback")
 	expect(root.gui_get_focus_owner() == motion, "Presentation owns keyboard focus while the hand resolves")
 	expect(not hud.contextual_tip.panel.visible and hud.tip_button.disabled, "Next-pool guidance waits until the current hand presentation finishes")
-	expect(hud.stats[1].text == "Graphics\n0 / 33" and not fan.visible, "Scoreboard holds old value and target while committed candidates are hidden")
+	expect(hud.scoreboard.headings[1].text == "Graphics" and hud.stats[1].text == "0 / 33" and not fan.visible, "Scoreboard holds old value and target while committed candidates are hidden")
 	var committed := _snapshot(project, run)
 	phase.get_node("%PlayCardButton").pressed.emit()
 	phase.get_node("%RedrawButton").pressed.emit()
@@ -118,10 +122,10 @@ func _production(width: int) -> void:
 	await shot("centered-hand-%d" % width)
 	while not motion.trace.any(func(e): return e.event == "score"):
 		await process_frame
-	expect(hud.stats[1].text == "Graphics\n0 / 33" and is_instance_valid(motion._score_flow), "First bounce holds the HUD while the card score floats")
+	expect(hud.scoreboard.headings[1].text == "Graphics" and hud.stats[1].text == "0 / 33" and is_instance_valid(motion._score_flow), "First bounce holds the HUD while the card score floats")
 	await shot("score-bounce-%d" % width)
 	while not motion.trace.any(func(e): return e.event == "hud_deposit"): await process_frame
-	expect(hud.stats[1].text == "Graphics\n12 / 33" and not hud.scoreboard._punches.is_empty(), "Falling values deposit the final score and punch the HUD")
+	expect(hud.scoreboard.headings[1].text == "Graphics" and hud.stats[1].text == "12 / 33" and not hud.scoreboard._punches.is_empty(), "Falling values deposit the final score and punch the HUD")
 	if motion.busy: await motion.finished
 	var order: Array = []
 	for event in motion.trace:
@@ -160,7 +164,7 @@ func _production(width: int) -> void:
 		# than a fixed wall-clock interval on a slow rendering frame.
 		staggered = staggered and deals[i].msec > deals[i - 1].msec
 	expect(deals.size() == 4 and staggered, "Exactly four new instances enter from the top one at a time")
-	expect(hud.stats[1].text == "Graphics\n12 / 33" and _snapshot(project, run) == committed and fan.visible, "Playback totals exactly match native resolution and makes no extra state changes")
+	expect(hud.scoreboard.headings[1].text == "Graphics" and hud.stats[1].text == "12 / 33" and _snapshot(project, run) == committed and fan.visible, "Playback totals exactly match native resolution and makes no extra state changes")
 	expect(not hud.tip_button.disabled, "Guidance becomes available again when the retained pool is playable")
 	hud.contextual_tip.dismiss()
 	await shot("restored-fan-%d" % width)
@@ -215,7 +219,7 @@ func _production(width: int) -> void:
 	motion = phase.get_workspace().hand_motion
 	expect(motion.busy and project.get_core_score(0) == 24, "Alpha uses native scoring with the shared animation")
 	motion.cancel()
-	expect(hud.stats[1].text == "Graphics\n24 / 33" and not motion.busy, "Animation cancellation restores the authoritative scoreboard without rollback or replay")
+	expect(hud.scoreboard.headings[1].text == "Graphics" and hud.stats[1].text == "24 / 33" and not motion.busy, "Animation cancellation restores the authoritative scoreboard without rollback or replay")
 	project.add_scope(30)
 	phase.call("_finalize_alpha", 0.0, 0.5)
 	phase = game.get("_active_phase")
@@ -226,9 +230,9 @@ func _production(width: int) -> void:
 	for i in range(4): phase.get_node("%HandContainer").get_child(i).input_button.pressed.emit()
 	phase.get_node("%PlayHandButton").pressed.emit()
 	motion = phase.get_workspace().hand_motion
-	expect(motion.busy and project.get_marketing_output() == 6 and hud.stats[0].text == "Marketing\n0", "Beta Marketing specialization commits its true output while display waits for bounces")
+	expect(motion.busy and project.get_marketing_output() == 6 and hud.scoreboard.headings[0].text == "Marketing" and hud.stats[0].text == "0", "Beta Marketing specialization commits its true output while display waits for bounces")
 	if motion.busy: await motion.finished
-	expect(hud.stats[0].text == "Marketing\n6" and project.get_core_score(0) == 24, "Beta displays Marketing gain without inventing Core gains")
+	expect(hud.scoreboard.headings[0].text == "Marketing" and hud.stats[0].text == "6" and project.get_core_score(0) == 24, "Beta displays Marketing gain without inventing Core gains")
 	_install(phase, [&"debug", &"search_for_bugs", &"debug", &"search_for_bugs", &"sign_flippers", &"posters", &"press_release"])
 	await settle()
 	for i in range(4): phase.get_node("%HandContainer").get_child(i).input_button.pressed.emit()
@@ -241,7 +245,7 @@ func _production(width: int) -> void:
 	motion.card_step.connect(check_known)
 	if motion.busy: await motion.finished
 	motion.card_step.disconnect(check_known)
-	expect(never_negative[0] and hud.stats[6].text == "Known / Fixed\n%d / %d" % [known_final, fixed_final], "QA visual order keeps Known Bugs nonnegative and ends at native Search-before-Debug totals")
+	expect(never_negative[0] and hud.scoreboard.headings[6].text == "Known / Fixed" and hud.stats[6].text == "%d / %d" % [known_final, fixed_final], "QA visual order keeps Known Bugs nonnegative and ends at native Search-before-Debug totals")
 	await shot("beta-fan-%d" % width)
 	game.queue_free()
 	await process_frame

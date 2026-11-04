@@ -178,9 +178,9 @@ func _run() -> void:
 			expect(view.model.resolved and view.next_button.visible and not view.next_button.disabled,"Next waits until presentation completes")
 			expect(layout_clear,"Scores and instructions stay unobscured through score and synergy motion")
 			expect(action_row_stable,"Action buttons keep their position while the fan is hidden")
-			expect(view.stats.stats[5].text=="Scope\n%d / 30"%view.model.project.get_current_scope(),"Tutorial shares the live Scope scoreboard and target")
+			expect(view.stats.headings[5].text=="Scope" and view.stats.stats[5].text=="%d / 30"%view.model.project.get_current_scope(),"Tutorial shares the live Scope scoreboard and target")
 			if view.model.lesson==8:
-				expect(view.stats.stats[0].text=="Marketing\n7" and view.stats.stats[6].text=="Known / Fixed\n0 / 8" and view.stats.hidden_bugs.text=="Hidden Bugs\n0","Beta scoreboard shows retained Marketing and exact final Bug states")
+				expect(view.stats.headings[0].text=="Marketing" and view.stats.stats[0].text=="7" and view.stats.headings[6].text=="Known / Fixed" and view.stats.stats[6].text=="0 / 8" and view.stats.hidden_bugs_heading.text=="Hidden Bugs" and view.stats.hidden_bugs.text=="0","Beta scoreboard shows retained Marketing and exact final Bug states")
 			await click(view.next_button)
 			lessons += 1
 		expect(state()==original and disk()==saved,"Practice preserves complete real Studio/world/RNG and checkpoint bytes")
@@ -236,7 +236,16 @@ func _run() -> void:
 	root.content_scale_size = root.size
 	await settle()
 	expect(game._active_phase is MainMenu,"Cold scene enters the actual Main Menu")
-	game._active_phase.continue_requested.emit()
+	# Title inspection is asynchronous. The live Continue action is disabled
+	# until it completes, so the fixture must respect the same readiness gate.
+	var title_started := Time.get_ticks_msec()
+	var title_deadline := title_started + 90000
+	while game._active_phase is MainMenu and (game._title_checkpoint_job != null or game._active_phase.checkpoint_info.get("status") == &"checking") and Time.get_ticks_msec() < title_deadline:
+		await process_frame
+	var title_ready: bool = game._active_phase is MainMenu and game._active_phase.checkpoint_info.get("status") == &"valid"
+	print("Tutorial title inspection: %d ms, ready=%s" % [Time.get_ticks_msec()-title_started,title_ready])
+	expect(title_ready,"Cold Continue waits for a valid inspected checkpoint")
+	if title_ready: game._active_phase.continue_requested.emit()
 	# Paired world hydration runs in a worker; elapsed frames are not a time bound.
 	var continue_started := Time.get_ticks_msec()
 	var continue_deadline := continue_started + 90000

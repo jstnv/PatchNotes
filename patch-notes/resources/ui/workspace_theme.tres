@@ -1,14 +1,10 @@
-[gd_resource type="Theme" load_steps=25 format=3]
+[gd_resource type="Theme" load_steps=21 format=3]
 
 [ext_resource type="FontFile" path="res://assets/fonts/ibmplexsans/IBMPlexSans[wdth,wght].ttf" id="body"]
 
-[ext_resource type="FontFile" path="res://assets/fonts/chakrapetch/ChakraPetch-Bold.ttf" id="heading"]
 
-[ext_resource type="FontFile" path="res://assets/fonts/chakrapetch/ChakraPetch-SemiBold.ttf" id="tab"]
 
-[ext_resource type="FontFile" path="res://assets/fonts/chakrapetch/ChakraPetch-Medium.ttf" id="button"]
 
-[ext_resource type="FontFile" path="res://assets/fonts/ibmplexmono/IBMPlexMono-Regular.ttf" id="mono"]
 
 [sub_resource type="StyleBoxFlat" id="panel"]
 bg_color = Color(0.145098, 0.172549, 0.2, 1)
@@ -305,7 +301,7 @@ corner_radius_bottom_right = 4
 
 [sub_resource type="FontVariation" id="body_bold"]
 base_font = ExtResource("body")
-variation_opentype = {"wght": 700.0}
+variation_opentype = {2003265652: 700.0}
 
 [resource]
 default_font = ExtResource("body")
@@ -333,10 +329,10 @@ OptionButton/colors/font_color = Color(0.960784, 0.933333, 0.87451, 1)
 OptionButton/colors/font_disabled_color = Color(0.654902, 0.694118, 0.729412, 1)
 RichTextLabel/colors/font_color = Color(0.960784, 0.933333, 0.87451, 1)
 RichTextLabel/colors/font_disabled_color = Color(0.654902, 0.694118, 0.729412, 1)
-Button/fonts/font = ExtResource("button")
-CheckBox/fonts/font = ExtResource("button")
-CheckButton/fonts/font = ExtResource("button")
-OptionButton/fonts/font = ExtResource("button")
+Button/fonts/font = SubResource("body_bold")
+CheckBox/fonts/font = SubResource("body_bold")
+CheckButton/fonts/font = SubResource("body_bold")
+OptionButton/fonts/font = SubResource("body_bold")
 Button/styles/normal = SubResource("normal")
 Button/styles/hover = SubResource("hover")
 Button/styles/pressed = SubResource("pressed")
@@ -346,6 +342,9 @@ Button/styles/hover_pressed = SubResource("pressed")
 PanelContainer/styles/panel = SubResource("panel")
 RichTextLabel/fonts/normal_font = ExtResource("body")
 RichTextLabel/fonts/bold_font = SubResource("body_bold")
+RichTextLabel/fonts/italics_font = ExtResource("body")
+RichTextLabel/fonts/bold_italics_font = SubResource("body_bold")
+RichTextLabel/fonts/mono_font = ExtResource("body")
 LineEdit/styles/normal = SubResource("input")
 LineEdit/styles/focus = SubResource("input_focus")
 LineEdit/colors/caret_color = Color(0.25098, 0.788235, 0.811765, 1)
@@ -354,31 +353,31 @@ TooltipLabel/fonts/font = ExtResource("body")
 TooltipLabel/colors/font_color = Color(0.960784, 0.933333, 0.87451, 1)
 TooltipPanel/styles/panel = SubResource("panel")
 HeadingLabel/base_type = &"Label"
-HeadingLabel/fonts/font = ExtResource("heading")
+HeadingLabel/fonts/font = SubResource("body_bold")
 HeadingLabel/font_sizes/font_size = 30
 FolderHeading/base_type = &"Label"
-FolderHeading/fonts/font = ExtResource("heading")
+FolderHeading/fonts/font = SubResource("body_bold")
 FolderHeading/font_sizes/font_size = 24
 SecondaryLabel/base_type = &"Label"
 SecondaryLabel/fonts/font = ExtResource("body")
 SecondaryLabel/font_sizes/font_size = 16
 MetadataLabel/base_type = &"Label"
-MetadataLabel/fonts/font = ExtResource("mono")
+MetadataLabel/fonts/font = ExtResource("body")
 MetadataLabel/font_sizes/font_size = 14
 PrimaryButton/base_type = &"Button"
-PrimaryButton/fonts/font = ExtResource("tab")
+PrimaryButton/fonts/font = SubResource("body_bold")
 PrimaryButton/font_sizes/font_size = 17
 TitleMenuButton/base_type = &"Button"
-TitleMenuButton/fonts/font = ExtResource("tab")
+TitleMenuButton/fonts/font = SubResource("body_bold")
 TitleMenuButton/font_sizes/font_size = 20
 FolderTab/base_type = &"Button"
-FolderTab/fonts/font = ExtResource("tab")
+FolderTab/fonts/font = SubResource("body_bold")
 FolderTab/font_sizes/font_size = 17
 SidebarButton/base_type = &"Button"
-SidebarButton/fonts/font = ExtResource("tab")
+SidebarButton/fonts/font = SubResource("body_bold")
 SidebarButton/font_sizes/font_size = 16
 MetadataButton/base_type = &"Button"
-MetadataButton/fonts/font = ExtResource("mono")
+MetadataButton/fonts/font = ExtResource("body")
 MetadataButton/font_sizes/font_size = 14
 SecondaryLabel/colors/font_color = Color(0.654902, 0.694118, 0.729412, 1)
 PrimaryButton/colors/font_color = Color(0.12549, 0.145098, 0.168627, 1)

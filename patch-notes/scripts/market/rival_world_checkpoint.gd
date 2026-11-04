@@ -6,6 +6,11 @@ extends RefCounted
 ## history, annual ledger, finance and RNG validation still applies.
 # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
 const CONTRACT_LATENCY_PREDECESSORS := [
+	"348e0d3ef90079bb8281466805bec9685c48e52b8f0e0bd9cdab43d8e5eda9f3", # Exact pre-panel-clearance presentation source; saved rules and state are unchanged.
+	"97967757abe3de7a216351f7d75086775fc28a43a9b3ec3984e8e5894499ee8b", # Exact pre-typeface presentation source; saved rules and state are unchanged.
+	"3d435180b9ae88d5d66aa1ee74b2aeebbcaac163a96b75577fe8f1472c6e6d84", # Exact pre-played-hand-panel presentation source; saved rules and state are unchanged.
+	"6853bbd663c4505de6c1fff4d378f74f6fb94734edcaa3a631aacbd37d2c0e08", # Exact pre-Studio-panel presentation source; gameplay and saved state are unchanged.
+	"b21a01145140d8845916cc17c4f73d643bfa3617ffc56e09f2fe5eff7a929419", # Exact pre-menu-note presentation source; gameplay and saved state are unchanged.
 	"38d060f1b0d13bd62c4849365785df4eaf66e661ed3a41d233b436f29b22ee03", # Exact pre-exhausted-scope-prompt source; saved rules and state are unchanged.
 	"4e8abae4d9f9720b6d585094a317aed924d54be813b0b19e283fb347259b60e7", # Exact pre-Studio-toggle source; saved rules and state are unchanged.
 	"2329dfddf82421b727b974f1e08bcfd375f1c9f93c41a354c9043b9d35a171a8", # Exact pre-window-preference source; saved rules and state are unchanged.

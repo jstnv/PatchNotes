@@ -50,6 +50,13 @@ func select_first(phase: ContractPhase) -> void:
 			child.input_button.pressed.emit()
 
 
+func wait_studio_navigation(studio: StudioPhase) -> void:
+	var deadline := Time.get_ticks_msec() + 4000
+	while (studio._hub_motion.busy or studio._hub.transitioning) and Time.get_ticks_msec() < deadline:
+		await process_frame
+	await process_frame
+
+
 func _run() -> void:
 	snapshots.load_ledgers()
 	root.size = Vector2i(1152, 648)
@@ -69,10 +76,26 @@ func _verify_browser_and_release_thresholds() -> void:
 	root.add_child(studio)
 	await process_frame
 	check(run.get_unlocked_publisher_ids() == [&"ironclad"] and run.get_pending_publisher_notifications().is_empty(), "Only Ironclad unlocks at first release, and Studio presents its notification once")
-	var notice := studio.get_node("Dashboard/Layout/PublisherUnlockNotice") as PanelContainer
-	check(notice.visible and (notice.find_child("PublisherUnlockMessage", true, false) as Label).text.contains("Ironclad Interactive"), "One-time unlock banner names Ironclad")
+	var notice: PanelContainer = studio._publisher_notice
+	check(is_instance_valid(notice) and notice.get_parent() == studio._hub.notice_host and notice.is_visible_in_tree(), "One-time unlock banner remains visible in the Studio notification host")
+	check(is_instance_valid(notice) and (notice.find_child("PublisherUnlockMessage", true, false) as Label).text.contains("Ironclad Interactive"), "One-time unlock banner names Ironclad")
+	if is_instance_valid(notice):
+		var dismiss := notice.find_child("DismissPublisherNotice", true, false) as Button
+		await process_frame
+		var point := dismiss.get_global_rect().get_center()
+		var move := InputEventMouseMotion.new()
+		move.position = point; move.global_position = point
+		root.push_input(move,true)
+		for down in [true,false]:
+			var click := InputEventMouseButton.new()
+			click.position = point; click.global_position = point
+			click.button_index = MOUSE_BUTTON_LEFT; click.pressed = down
+			root.push_input(click,true)
+		await process_frame
+		check(not notice.visible, "Publisher unlock banner is dismissible by pointer")
 	var before := snapshot(run, project)
 	studio.get_node("%PublisherList").pressed.emit()
+	await wait_studio_navigation(studio)
 	var browser: PublisherBrowser = studio.get_node("PublisherBrowser")
 	var list := browser.find_child("PublisherEntries", true, false) as ItemList
 	var details := browser.find_child("PublisherDetails", true, false) as RichTextLabel
@@ -94,6 +117,7 @@ func _verify_browser_and_release_thresholds() -> void:
 		check(details.text.contains(PublisherCatalog.entries()[index].name) and details.text.contains("Prerequisite:") and details.text.contains(PublisherCatalog.entries()[index].personality), "Publisher %d displays identity, condition and personality" % index)
 	check(list.get_item_text(0).contains("Unlocked") and list.get_item_text(4).contains("Locked") and details.text.contains("3)."), "Locked Starwave states the unattainable three-contract condition")
 	(browser.find_child("ClosePublisherBrowser", true, false) as Button).pressed.emit()
+	await wait_studio_navigation(studio)
 	check(before == snapshot(run, project) and studio.get_node("%Dashboard").visible, "Browser navigation costs zero cash and cycles and preserves frozen results")
 	studio.get_node("%Contracts").pressed.emit()
 	var contract_detail := studio.get_node("ContractDetail") as PanelContainer
@@ -104,7 +128,7 @@ func _verify_browser_and_release_thresholds() -> void:
 	check(reconstructed.setup(project, run, snapshots), "Studio reconstruction accepts same release")
 	root.add_child(reconstructed)
 	await process_frame
-	check(reconstructed.get_node_or_null("Dashboard/Layout/PublisherUnlockNotice") == null and run.get_unlocked_publisher_ids() == [&"ironclad"] and before == snapshot(run, project), "Reconstruction neither repeats notification nor mutates release state")
+	check(reconstructed._publisher_notice == null and run.get_unlocked_publisher_ids() == [&"ironclad"] and before == snapshot(run, project), "Reconstruction neither repeats notification nor mutates release state")
 	studio.queue_free()
 	reconstructed.queue_free()
 	await process_frame

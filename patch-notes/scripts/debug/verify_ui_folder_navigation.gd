@@ -58,7 +58,12 @@ func _run() -> void:
 		if arg.begins_with("--out="): output=arg.trim_prefix("--out=")
 	var palette := {"background":"141519","secondary":"211b38","folder":"211b38","active":"6f42ff","text":"fff3e2","muted":"c2b9d6","cyan":"5ef2c2","orange":"6f42ff","border":"6f42ff"}
 	expect(palette.keys().all(func(token): return FolderUI.color(token).to_html(false)==palette[token]),"Shared Theme contains the nine approved identity colors")
-	expect(FolderUI.THEME.get_font("font","HeadingLabel").resource_path.ends_with("RussoOne-Regular.ttf") and FolderUI.THEME.get_font("font","MetadataLabel").resource_path.ends_with("IBMPlexMono-Regular.ttf") and FolderUI.THEME.default_font.resource_path.contains("IBMPlexSans"),"Authentic heading, numerical and body font roles resolve")
+	var heading_font: Font = FolderUI.THEME.get_font("font","HeadingLabel")
+	var metadata_font: Font = FolderUI.THEME.get_font("font","MetadataLabel")
+	var base_path := "res://assets/fonts/ibmplexsans/IBMPlexSans[wdth,wght].ttf"
+	var heading_base: Font = (heading_font as FontVariation).base_font if heading_font is FontVariation else heading_font
+	var metadata_base: Font = (metadata_font as FontVariation).base_font if metadata_font is FontVariation else metadata_font
+	expect(heading_base.resource_path == base_path and metadata_base.resource_path == base_path and FolderUI.THEME.default_font.resource_path == base_path and heading_font is FontVariation and float((heading_font as FontVariation).variation_opentype.get(TextServerManager.get_primary_interface().name_to_tag("wght"),0.0))>=700.0,"Headings, numerical labels and body share one family; headings are bold")
 	var licenses: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/fonts/LICENSES.json"))
 	expect(not licenses.is_empty(),"Bundled font license and provenance manifest loads")
 	for dimensions in [Vector2i(1152,648),Vector2i(1280,720)]:
