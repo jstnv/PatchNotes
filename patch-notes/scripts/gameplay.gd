@@ -58,6 +58,7 @@ var _awards_animate := true
 var circuit_background: Control
 var _title_checkpoint_job: RefCounted
 var _title_read_cache: StudioCheckpointStore
+var _title_validated_job: RefCounted
 
 func _ready() -> void:
 	theme=FolderUI.THEME
@@ -93,6 +94,7 @@ func _process(_delta: float) -> void:
 		info={"status":&"invalid","reason":job.error if not job.error.is_empty() else "Checkpoint inspection did not complete"}
 	if is_instance_valid(_active_phase) and _active_phase is MainMenu:
 		_title_read_cache=job.cache_store if info.status==&"valid" else null
+		_title_validated_job=job if info.status==&"valid" else null
 		_active_phase.update_checkpoint_info(info)
 
 func _build_pause_menu() -> void:
@@ -219,6 +221,7 @@ func _start_gameplay() -> void:
 			_active_phase = main_menu
 			%GameplayHUD.set_phase(main_menu)
 			if checkpoints!=null:
+				_title_read_cache=null;_title_validated_job=null
 				_title_checkpoint_job=_adopt_title_inspection(checkpoints.store.directory)
 				if _title_checkpoint_job==null:
 					_title_checkpoint_job=preload("res://scripts/persistence/checkpoint_read_job.gd").new()
@@ -357,6 +360,7 @@ func _enter_initial_studio(restored: bool = false) -> bool:
 		if studio != null: studio.free()
 		return false
 	_title_read_cache=null
+	_title_validated_job=null
 	studio.set_rival_world(rival_world)
 	studio.contract_requested.connect(_on_contract_requested)
 	studio.development_requested.connect(_on_development_requested)
@@ -902,8 +906,9 @@ func _present_checkpoint_load() -> void:
 	else:
 		overlay.show_checkpoint(checkpoints.last_payload)
 	await overlay.cover()
-	var operation := checkpoints.begin_load(_title_read_cache)
+	var operation := checkpoints.begin_load(_title_read_cache,_title_validated_job)
 	_title_read_cache=null
+	_title_validated_job=null
 	while not operation.done:
 		overlay.stage_label.text = operation.label()
 		# process_frame resumes before drawing: two yields guarantee a rendered

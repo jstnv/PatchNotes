@@ -6,6 +6,7 @@ extends RefCounted
 ## history, annual ledger, finance and RNG validation still applies.
 # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
 const CONTRACT_LATENCY_PREDECESSORS := [
+	"8797ab6a761ea58d0702ee86d6e2f6943c990bc7c09c3c0b586833bdbb3a669c", # Exact pre-late-career-performance source; saved rules and state are unchanged.
 	"cc2565a22815987d69aa388eae2811e0ca1cb9e66d0b1d657f088b1b2763f69f", # Exact pre-byte-budget source; saved rules and state are unchanged.
 	"7867f5e1df6a0272ef155aac431b2ee4344c9a5368c947e153b96dddb9bbac6e", # Exact pre-node-budget source; saved rules and state are unchanged.
 	"a9c205fa16d07f7b0fbc690ef927afeb04548d33439948b8ec1fe51eeb81a10f", # Exact pre-hidden-finance-refresh source; saved rules and state are unchanged.

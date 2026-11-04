@@ -6,11 +6,18 @@ const Market := preload("res://scripts/market/market_transaction_trial.gd")
 ## Cache only complete, typed Variant bytes after full validation. Never keep
 ## mutable records or trust IDs/revisions/hashes: nested edits must miss.
 ## Bounded across titles, fan shadows and prospective campaign calculations.
-const VALIDATED_RECORD_LIMIT := 256
-const VALIDATED_RECORD_BYTES := 8 * 1024 * 1024
+const VALIDATED_RECORD_LIMIT := 2048
+const VALIDATED_RECORD_BYTES := 32 * 1024 * 1024
 static var _validated_records: Array[PackedByteArray] = []
+static var _validated_lookup: Dictionary = {}
 static var _validated_record_bytes := 0
 static var _validation_lock := Mutex.new()
+const FACTOR_HISTORY_LIMIT := 512
+const FACTOR_HISTORY_BYTES := 16 * 1024 * 1024
+static var _factor_history_proofs: Dictionary = {}
+static var _factor_history_order: Array[PackedByteArray] = []
+static var _factor_history_bytes := 0
+static var _factor_history_lock := Mutex.new()
 ## Pure, checked cumulative calculations. Returned records are value snapshots.
 ## Two-argument fixtures intentionally retain the original Month 1-only model.
 static func create(release_id: StringName, total_units: Variant, review_tenths: int = -1,
@@ -41,22 +48,26 @@ static func is_valid(record: Dictionary) -> bool:
 	var key := var_to_bytes(record)
 	if key.size() > VALIDATED_RECORD_BYTES: return _validate_record(record)
 	_validation_lock.lock()
-	var index := _validated_records.find(key)
-	if index >= 0:
-		_validated_records.remove_at(index)
-		_validated_records.append(key)
+	if _validated_lookup.has(key):
 		_validation_lock.unlock()
 		return true
 	_validation_lock.unlock()
 	if not _validate_record(record): return false
+	_remember_valid_record(key)
+	return true
+
+static func _remember_valid_record(key: PackedByteArray) -> void:
+	if key.size()>VALIDATED_RECORD_BYTES:return
 	_validation_lock.lock()
-	if not _validated_records.has(key):
+	if not _validated_lookup.has(key):
+		_validated_lookup[key]=true
 		_validated_records.append(key)
 		_validated_record_bytes += key.size()
 	while _validated_records.size() > VALIDATED_RECORD_LIMIT or _validated_record_bytes > VALIDATED_RECORD_BYTES:
-		_validated_record_bytes -= _validated_records.pop_front().size()
+		var old: PackedByteArray=_validated_records.pop_front()
+		_validated_lookup.erase(old)
+		_validated_record_bytes -= old.size()
 	_validation_lock.unlock()
-	return true
 
 static func _validate_record(record: Dictionary) -> bool:
 	var clock_offset: Variant=record.get("market_clock_offset",0)
@@ -78,15 +89,7 @@ static func _validate_record(record: Dictionary) -> bool:
 	var age_cycles: int = record.total_earned_cycles
 	var first_month_cycles: int=Clock.month_end(1,calendar)
 	var age_months: int = Clock.action_month(age_cycles,true,calendar) if age_cycles>0 else 0
-	if record.market_factors.size()!=age_months: return false
-	for age_month in range(1,age_months+1):
-		if not record.market_factors.has(age_month): return false
-		var factor: Variant=record.market_factors[age_month]
-		if not Market.valid_factor(factor): return false
-		if not factor.historical and factor.snapshot_id!="market-0-neutral":
-			var first_cycle: int=record.last_processed_run_cycle-age_cycles+1+Clock.month_end(age_month-1,calendar)
-			var world_first_cycle: int=first_cycle-int(clock_offset)
-			if world_first_cycle<0 or factor.cycle_start!=Clock.month_start(world_first_cycle,Clock.shift(run_calendar,int(clock_offset))): return false
+	if not _valid_factor_history(record,age_months,calendar,run_calendar,clock_offset): return false
 	if age_cycles < 0 or record.earned_cycles != mini(first_month_cycles, age_cycles) or record.exhausted != (age_cycles >= first_month_cycles):
 		return false
 	if record.last_processed_run_cycle < -1 or record.last_settlement_run_cycle < -1 or record.last_settlement_run_cycle > record.last_processed_run_cycle:
@@ -111,6 +114,45 @@ static func _validate_record(record: Dictionary) -> bool:
 	if record.organic_awareness_scaled != expected.organic_awareness_scaled or record.active_awareness_scaled != expected.active_awareness_scaled or record.monthly_units != expected.monthly_units:
 		return false
 	return record.settled_cents >= 0 and record.settled_cents <= record.entitlement_cents and (record.settled_cents == 0 or record.last_settlement_run_cycle >= 0)
+
+## Positive proofs contain the full typed history and every date input. They
+## never retain caller-owned dictionaries or bypass the other record checks.
+static func _valid_factor_history(record: Dictionary,age_months: int,calendar: Dictionary,run_calendar: Dictionary,clock_offset: int) -> bool:
+	if record.market_factors.size()!=age_months:return false
+	var anchor: int=record.last_processed_run_cycle-record.total_earned_cycles+1
+	var key:=var_to_bytes([record.market_factors,age_months,anchor,calendar,run_calendar,clock_offset])
+	if key.size()<=FACTOR_HISTORY_BYTES:
+		_factor_history_lock.lock()
+		var known:=_factor_history_proofs.has(key)
+		_factor_history_lock.unlock()
+		if known:return true
+	# A proven exact prefix covers all earlier factors and dates. Only the
+	# newly appended month needs checking; altered histories miss this key.
+	var first_month:=1
+	if age_months>1 and key.size()<=FACTOR_HISTORY_BYTES:
+		var prefix: Dictionary=record.market_factors.duplicate()
+		prefix.erase(age_months)
+		var prior_key:=var_to_bytes([prefix,age_months-1,anchor,calendar,run_calendar,clock_offset])
+		_factor_history_lock.lock()
+		var prior_known:=_factor_history_proofs.has(prior_key)
+		_factor_history_lock.unlock()
+		if prior_known:first_month=age_months
+	for age_month in range(first_month,age_months+1):
+		if not record.market_factors.has(age_month):return false
+		var factor: Variant=record.market_factors[age_month]
+		if not Market.valid_factor(factor):return false
+		if not factor.historical and factor.snapshot_id!="market-0-neutral":
+			var world_first_cycle: int=anchor+Clock.month_end(age_month-1,calendar)-clock_offset
+			if world_first_cycle<0 or factor.cycle_start!=Clock.month_start(world_first_cycle,Clock.shift(run_calendar,clock_offset)):return false
+	if key.size()<=FACTOR_HISTORY_BYTES:
+		_factor_history_lock.lock()
+		if not _factor_history_proofs.has(key):
+			_factor_history_proofs[key]=true;_factor_history_order.append(key);_factor_history_bytes+=key.size()
+		while _factor_history_order.size()>FACTOR_HISTORY_LIMIT or _factor_history_bytes>FACTOR_HISTORY_BYTES:
+			var expired: PackedByteArray=_factor_history_order.pop_front()
+			_factor_history_proofs.erase(expired);_factor_history_bytes-=expired.size()
+		_factor_history_lock.unlock()
+	return true
 
 static func can_campaign(record: Dictionary) -> bool:
 	return bool(get_projection(record).get("can_campaign", false))
@@ -220,7 +262,29 @@ static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
 	if crosses_month and result.entitlement_cents > result.settled_cents:
 		result.settled_cents = result.entitlement_cents
 		result.last_settlement_run_cycle = run_cycle
+	if _sequential_transition_proven(record,result,run_cycle,age_month,begins_month):
+		_remember_valid_record(var_to_bytes(result))
+		return result
 	return result if is_valid(result) else {}
+
+## The prior record has already passed the complete validator above. For a
+## modern, consecutive mature title, unchanged history and a checked new
+## factor establish the next record by induction. Unusual and legacy clocks
+## retain the original full validation path.
+static func _sequential_transition_proven(before: Dictionary,after: Dictionary,run_cycle: int,month: int,begins: bool) -> bool:
+	var calendar: Dictionary=before.get("calendar",{})
+	if calendar.is_empty() or int(calendar.get("legacy_until",-1))!=0 or not before.later_enabled:return false
+	if before.total_earned_cycles<=Clock.month_end(1,calendar) or before.last_processed_run_cycle>=ProjectState.MAX_SIGNED_INT:return false
+	if run_cycle!=before.last_processed_run_cycle+1:return false
+	var prior_month: int=Clock.action_month(before.total_earned_cycles,true,calendar)
+	if month!=(prior_month+1 if begins else prior_month):return false
+	if begins:
+		var factor: Dictionary=after.market_factors[month]
+		if not factor.historical and factor.snapshot_id!="market-0-neutral":
+			var offset: int=before.get("market_clock_offset",0)
+			var world_first: int=run_cycle-after.total_earned_cycles+1+Clock.month_end(month-1,calendar)-offset
+			if world_first<0 or factor.cycle_start!=Clock.month_start(world_first,Clock.shift(before.get("run_calendar",{}),offset)):return false
+	return true
 
 static func _recalculate(record: Dictionary) -> Dictionary:
 	var projection := PrimitiveMonthOneSalesRevenueCalculator.calculate_for_total_units(record.total_units)

@@ -1905,6 +1905,8 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 	var licensed_engine_ids: Array = entitlements.get("licensed_ids",[])
 	var support_rights := _support_rights.duplicate(true)
 	var support_assessments := _support_assessments.duplicate(true)
+	# A local plan uses one unchanged snapshot; validate it on first use.
+	var market_validated := false
 	for id: StringName in _released_games:
 		if entitlements.get("version",1)==2 and not _release_engine_ids.has(id):return {}
 		if not _cash_initialized or not _released_games[id] is Dictionary or _released_games[id].get("release_id") != id:
@@ -1917,7 +1919,11 @@ func _plan_sales_cycle(campaign_release_id: StringName,market: Dictionary) -> Di
 		if _market_provider.is_valid():
 			if not _release_metadata.has(id): return {}
 			var metadata: Dictionary=_release_metadata[id]
-			factor=preload("res://scripts/market/market_transaction_trial.gd").sales_factor(market,str(_bank_run_id),str(id),str(metadata.genre),str(metadata.theme))
+			var market_rules=preload("res://scripts/market/market_transaction_trial.gd")
+			if not market_validated:
+				if not market_rules.valid(market):return {}
+				market_validated=true
+			factor=market_rules._sales_factor_from_valid_snapshot(market,str(_bank_run_id),str(id),str(metadata.genre),str(metadata.theme))
 			if factor.is_empty(): return {}
 		var next := ReleasedGameSales.next_cycle(_released_games[id], _completed_run_cycles + 1, will_next_cycle_cross_month_boundary(), id == campaign_release_id, int(factor.factor_bp), str(factor.snapshot_id),factor)
 		if next.is_empty():

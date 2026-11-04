@@ -295,9 +295,9 @@ func load_current() -> RunState:
 	while not operation.done: operation.advance()
 	return operation.restored
 
-func begin_load(parsed_cache: StudioCheckpointStore = null) -> RefCounted:
+func begin_load(parsed_cache: StudioCheckpointStore = null, title_job: RefCounted = null) -> RefCounted:
 	if _write_job!=null: flush()
-	return preload("res://scripts/persistence/checkpoint_load.gd").new(self,parsed_cache)
+	return preload("res://scripts/persistence/checkpoint_load.gd").new(self,parsed_cache,title_job)
 
 func _exit_tree() -> void:
 	_exiting=true

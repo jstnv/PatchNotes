@@ -7,6 +7,8 @@ var directory: String
 var validator: Callable
 var _writer: TCPServer
 var _scan_error := ""
+var capture_verified_source := false
+var _last_verified_source: Dictionary = {}
 var fault := &"" # Injected by focused verification; never loaded from a save.
 const PARSED_CACHE_LIMIT := 3
 # Current, backup and newly written generations must coexist during publication.
@@ -117,6 +119,7 @@ func _read_path(path: String, sequence: int, validation_scope: Variant = null) -
 	_remember_validated(source,payload,context)
 	if validation_scope != null and (validation_scope.size() < 2 or validation_scope.has(source)):
 		validation_scope[source] = _scope_proof(native) if _known_plain_native(source,native) else payload.duplicate(true)
+	if capture_verified_source:_last_verified_source={"path":path,"sequence":sequence,"bytes":bytes}
 	return {"status":&"valid","payload":payload,"sequence":sequence,"path":path}
 
 static func _same_typed_payload(a: Variant, b: Variant) -> bool:
@@ -239,6 +242,7 @@ static func _wire_copy(value: Variant) -> Variant:
 	return value
 
 func inspect(validation_scope: Variant = null) -> Dictionary:
+	_last_verified_source={}
 	var generations := _generations()
 	if not _scan_error.is_empty(): return {"status":&"invalid","reason":_scan_error}
 	if generations.is_empty(): return {"status":&"empty"}

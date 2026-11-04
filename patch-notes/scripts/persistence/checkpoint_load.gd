@@ -13,10 +13,12 @@ var _player_payload: Dictionary = {}
 var _run: RunState
 var _world: RivalWorld
 var _parsed_cache: StudioCheckpointStore
+var _title_job: RefCounted
 
-func _init(coordinator: Node, parsed_cache: StudioCheckpointStore = null) -> void:
+func _init(coordinator: Node, parsed_cache: StudioCheckpointStore = null, title_job: RefCounted = null) -> void:
 	_owner = coordinator
 	_parsed_cache = parsed_cache
+	_title_job = title_job
 
 func label() -> String:
 	return LABELS[mini(stage, LABELS.size() - 1)]
@@ -73,6 +75,7 @@ func _reject(reason: String, block_mutations: bool = true) -> void:
 	done = true
 
 var _read_job: RefCounted
+var _title_match_job: RefCounted
 func advance_async() -> void:
 	if done:return
 	if stage!=0:
@@ -81,6 +84,19 @@ func advance_async() -> void:
 		if not _owner.store.acquire():
 			_reject("Another Patch Notes process owns the save slot. Close it before continuing.");_owner.status_changed.emit();return
 		if _owner.rival_catalog==null:_reject("Rival definitions unavailable for Continue");return
+		if _title_job!=null and _title_job.get_script()==preload("res://scripts/persistence/checkpoint_read_job.gd"):
+			if _title_match_job==null:
+				_title_match_job=preload("res://scripts/persistence/checkpoint_title_match_job.gd").new()
+				_title_match_job.start(_title_job,_owner.store,_owner.rival_catalog)
+				return
+			if not _title_match_job.poll():return
+			var matched: bool=_title_match_job.matched and _title_match_job.lease_unchanged(_owner.store)
+			_title_match_job=null
+			if matched:
+				inspected=_title_job.inspected;_candidate=_title_job.candidate;_player_payload=_title_job.player_payload
+				_run=_title_job.player;_world=_title_job.world;_title_job=null;_parsed_cache=null
+				stage=3;return
+		_title_job=null
 		_read_job=preload("res://scripts/persistence/checkpoint_read_job.gd").new()
 		_read_job.start(_owner.store.directory,_owner.rival_catalog,_parsed_cache)
 		_parsed_cache=null
