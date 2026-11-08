@@ -16,10 +16,11 @@ func command(session: RefCounted,kind: StringName,payload: Dictionary={}) -> Dic
 	return session.command(&"development",{"request":session.development.command(kind,payload)})
 func combinations(h: RefCounted) -> Array:
 	var result: Array=[]
-	for a in 4:
-		for b in range(a+1,5):
-			for c in range(b+1,6):
-				for d in range(c+1,7):result.append([a,b,c,d])
+	var candidate_count: int=h._candidate_cards.size()
+	for a in range(candidate_count):
+		for b in range(a+1,candidate_count):
+			for c in range(b+1,candidate_count):
+				for d in range(c+1,candidate_count):result.append([a,b,c,d])
 	return result
 func is_minimum_group(session: RefCounted,slots: Array) -> bool:
 	var h: RefCounted=session.development.hand
@@ -50,6 +51,12 @@ func choose(session: RefCounted) -> Dictionary:
 		return command(session,&"priorities",{"distribution":priorities}) if h.priorities!=priorities else command(session,&"begin")
 	var key:=str(session.project_id())+":"+str(phase)
 	var count: int=hands.get(key,0)
+	if h._candidate_cards.is_empty():return command(session,&"request_exit")
+	if h._candidate_cards.size()<4:
+		var remaining_ids: Array=[]
+		for slot in h._candidate_cards.size():remaining_ids.append(h.candidate_ids[slot])
+		hands[key]=count+1
+		return command(session,&"play",{"candidate_ids":remaining_ids})
 	var manager:=employee(run,&"project_manager");var production:=employee(run,&"production")
 	var manager_project: Dictionary=manager.career.projects.get(session.project_id(),{})
 	var need_manager: bool=not C.current_course(manager).is_empty() and manager_project.get("specializations",[]).size()<2
@@ -71,14 +78,14 @@ func choose(session: RefCounted) -> Dictionary:
 			next[category]=limits.x
 			var keys: Array=[&"qa",&"marketing"] if phase==&"beta" else [0,1,2,3]
 			keys.erase(category);keys.append(category)
-			for key: Variant in keys:next[key]=limits.y
+			for category_key: Variant in keys:next[category_key]=limits.y
 			next[category]=limits.x
 			next=PriorityAllocation.normalize(next,keys,limits)
 			if phase==&"beta":next[&"insider"]=0
 			if next.get(category)!=limits.x:continue
 			return command(session,&"priorities",{"distribution":next})
 	if aligned==0 and phase in [&"design",&"alpha"] and C.alignment_available(run._employees):
-		for slot in 7:
+		for slot in h._candidate_cards.size():
 			var offers: Array=dev.actions.alignment_options([slot] as Array[int])
 			if not offers.is_empty():aligned+=1;return command(session,&"align_pass",{"quote":offers[0].quote})
 	if count>0 and (not need_match and (not need_manager or phase==&"beta" and count>=2) or count>=120):return command(session,&"request_exit")
@@ -96,14 +103,14 @@ func choose(session: RefCounted) -> Dictionary:
 		var target: StringName=&"design"
 		var feature_slot:=-1
 		if need_match:
-			for slot in 7:
+			for slot in h._candidate_cards.size():
 				if h._candidate_cards[slot].card_type==&"feature":feature_slot=slot;target=h._candidate_cards[slot].primary_stat;break
 		var rare: Array[int]=[]
-		for slot in 7:
+		for slot in h._candidate_cards.size():
 			if h._candidate_cards[slot].primary_stat==target:rare.append(slot)
 		if rare.size()>0 or feature_slot>=0:
 			if run.get_available_redraws()>0:
-				for slot in 7:
+				for slot in h._candidate_cards.size():
 					if slot in rare or slot==feature_slot or (phase==&"alpha" and h.candidate_ids[slot] in h.injected_candidate_ids):continue
 					for offer: Dictionary in dev.actions.alignment_options([slot] as Array[int]):
 						if offer.primary==target:aligned+=1;return command(session,&"align_pass",{"quote":offer.quote})
@@ -113,7 +120,7 @@ func choose(session: RefCounted) -> Dictionary:
 				if keep.size()==3:keep.pop_back()
 				keep.append(feature_slot)
 			var discard: Array=[]
-			for slot in 7:
+			for slot in h._candidate_cards.size():
 				if slot not in keep and discard.size()<4:discard.append(slot)
 			best=discard
 	var tokens: Array[int]=[]

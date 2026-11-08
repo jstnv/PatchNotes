@@ -19,10 +19,10 @@ func _run() -> void:
 	for event: Dictionary in state.events:
 		if event.type==&"career_hand":hand=event.duplicate(true);break
 	for mixed in [false,true]:
-		var broken:=state.duplicate(true);var duplicate:=hand.duplicate(true);duplicate.cycle=4
-		if mixed:duplicate.phase=String(duplicate.phase)
-		broken.events.append(duplicate)
-		check(broken,false,"Duplicate project/phase/cycle rejects, including mixed phase representation")
+		var repeated_state:=state.duplicate(true);var repeated_hand:=hand.duplicate(true);repeated_hand.cycle=4
+		if mixed:repeated_hand.phase=String(repeated_hand.phase)
+		repeated_state.events.append(repeated_hand)
+		check(repeated_state,false,"Duplicate project/phase/cycle rejects, including mixed phase representation")
 	var broken:=state.duplicate(true);var duplicate:=hand.duplicate(true);duplicate.cycle=3;duplicate.project_id=&"different";duplicate.project_cycle=12
 	broken.events.append(duplicate);check(broken,false,"Duplicate committed run cycle with different project rejects")
 	var legacy:=EmployeeRoster.hire(EmployeeRoster.create(&"legacy"),&"first",9)

@@ -5,6 +5,8 @@ extends RefCounted
 
 static func cumulative(net_cents: int, basis_points: int=2000) -> int:
 	if net_cents < 0 or basis_points < 0 or basis_points > 10000: return -1
+	# Preserve exact cents and overflow-safe quotient/remainder rounding.
+	@warning_ignore("integer_division")
 	return (net_cents / 10000) * basis_points + ((net_cents % 10000) * basis_points) / 10000
 
 static func increment(before_net_cents: int, after_net_cents: int, basis_points: int=2000) -> int:

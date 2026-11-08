@@ -6,22 +6,22 @@ func _verify() -> void:
 	database = root.get_node("CardDatabase")
 	for required in [30, 40, 60]: # State-level sizes; no new size UI or balance rule.
 		for scope in [0, required - 1, required, required + 1]:
-			var run := new_run()
-			var project := release(10, scope, required)
-			check(run.register_release(project), "Under/at/above Scope launches retain normal sales")
+			var scope_run := new_run()
+			var scope_project := release(10, scope, required)
+			check(scope_run.register_release(scope_project), "Under/at/above Scope launches retain normal sales")
 			var count := 1 if scope >= required else 0
-			check(run.get_sidestreet_offer_ids().size() == count, "Scope %d / %d produces %d entitlement" % [scope, required, count])
-			var before := snapshot(run, [project])
-			check(run.register_release(project) and snapshot(run, [project]) == before, "Duplicate launch cannot mint or remove an entitlement")
-			check(not run.is_sidestreet_offer_available(), "Qualified offer waits for Ironclad")
+			check(scope_run.get_sidestreet_offer_ids().size() == count, "Scope %d / %d produces %d entitlement" % [scope, required, count])
+			var scope_before := snapshot(scope_run, [scope_project])
+			check(scope_run.register_release(scope_project) and snapshot(scope_run, [scope_project]) == scope_before, "Duplicate launch cannot mint or remove an entitlement")
+			check(not scope_run.is_sidestreet_offer_available(), "Qualified offer waits for Ironclad")
 			var studio := load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
 			root.add_child(studio)
-			check(studio.setup(project, run, snapshots) and snapshot(run, [project]) == before, "Reconstructed Studio preserves qualification, cash, calendar, redraws and sales")
+			check(studio.setup(scope_project, scope_run, snapshots) and snapshot(scope_run, [scope_project]) == scope_before, "Reconstructed Studio preserves qualification, cash, calendar, redraws and sales")
 			studio.queue_free()
 	for scope in [20, 21, 22, 23]:
-		var run := new_run()
-		var project := release(0, scope)
-		check(run.register_release(project) and run.get_sidestreet_offer_ids().is_empty() and run.is_primitive_contract_offer_available(), "Starter Scope %d retains Ironclad but not SideStreet" % scope)
+		var starter_run := new_run()
+		var starter_project := release(0, scope)
+		check(starter_run.register_release(starter_project) and starter_run.get_sidestreet_offer_ids().is_empty() and starter_run.is_primitive_contract_offer_available(), "Starter Scope %d retains Ironclad but not SideStreet" % scope)
 	var run := new_run()
 	var project := release(0, 29)
 	run.register_release(project)
@@ -78,11 +78,11 @@ func _verify_year_labels() -> void:
 		await process_frame
 		var year: int = 1980 + cycle / 48
 		check(run.get_current_year() == year and hud.footer.text.contains(str(year)) and hud.header_title.text.contains(str(year)), "Cycle %d shows year %d in Studio and shared HUD" % [cycle, year])
-		var before := snapshot(run, [])
+		var browse_before := snapshot(run, [])
 		var store: FeatureStore=await actions.open_feature_implementation(studio,engine_id)
 		store.hide()
 		await create_timer(0.45).timeout
-		check(snapshot(run, []) == before and hud.footer.text.contains(str(year)), "Passive browsing does not advance year")
+		check(snapshot(run, []) == browse_before and hud.footer.text.contains(str(year)), "Passive browsing does not advance year")
 	for resolution in [Vector2i(1152, 648), Vector2i(900, 600)]:
 		root.size = resolution
 		root.content_scale_size = resolution

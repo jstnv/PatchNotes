@@ -216,12 +216,10 @@ func integration() -> void:
 	menu._name_input.text="Reference Studio"
 	for index in range(1,menu._specialty.item_count):
 		menu._specialty.select(index); menu._specialty.item_selected.emit(index)
-		var definitions: Dictionary={}
-		for entry: Dictionary in FeatureStoreCatalog.starting_features()+FeatureStoreCatalog.entries():definitions[StringName(entry.id)]=entry
-		var fixed: Dictionary=preload("res://scripts/engines/public_action_engine.gd").definition()
-		expect(fixed.library.all(func(id): return menu._preview.text.contains(str(definitions[id].name))) and menu._emphasis.text.contains("Public Action Engine"),"Every specialty preview binds the current fixed Public Action library")
+		expect(menu._emphasis.text=="Bonus awareness to games released in this category" and menu._preview.text.is_empty(),"Every Genre shows only the requested Awareness description")
 	menu._trait_checks[&"studio_buzz"].button_pressed=true
 	menu._open_folder(&"traits"); menu._show_review()
+	expect(menu._review.text.contains("Reference Studio") and menu._review.text.contains("Starting cash:") and not menu._review.text.contains("Public Action Engine") and not menu._review.text.contains("30%") and not menu._review.text.contains("+0.1"),"Overview retains Studio finances without the Public Engine description")
 	game._onboarding.answer(true)
 	await click(menu._play)
 	await preload("res://scripts/debug/ui_test_actions.gd").finish_new_save(game)

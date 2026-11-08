@@ -5,9 +5,9 @@ extends RefCounted
 const ProductionHand := preload("res://scripts/simulation/production_hand.gd")
 const CORE_BY_STAT := {"graphics": 0, "sound": 1, "technology": 2, "design": 3}
 
-static func pick(current: Dictionary, reference_cards: Array, run_id: StringName, use_candidate: bool = true) -> Array[int]:
-	var reference := _assess(current, reference_cards)
-	if reference.is_empty(): return _tokens(reference_cards)
+static func pick(current: Dictionary, reference_cards: Array, _run_id: StringName, use_candidate: bool = true) -> Array[int]:
+	var reference_assessment := _assess(current, reference_cards)
+	if reference_assessment.is_empty(): return _tokens(reference_cards)
 	var best: Dictionary = {}
 	var cards: Array = current.candidates
 	for a in range(cards.size() - 3):
@@ -17,11 +17,11 @@ static func pick(current: Dictionary, reference_cards: Array, run_id: StringName
 					var hand: Array = [cards[a], cards[b], cards[c], cards[d]]
 					var assessed := _assess(current, hand)
 					if assessed.is_empty() or assessed.synergy == "none": continue
-					if int(assessed.cost_cents) > int(reference.cost_cents) or int(assessed.cost_cents) > int(current.cash_cents): continue
-					if float(assessed.proxy) <= float(reference.proxy): continue
+					if int(assessed.cost_cents) > int(reference_assessment.cost_cents) or int(assessed.cost_cents) > int(current.cash_cents): continue
+					if float(assessed.proxy) <= float(reference_assessment.proxy): continue
 					if best.is_empty() or float(assessed.proxy) > float(best.proxy) or (float(assessed.proxy) == float(best.proxy) and _tokens_less(assessed.tokens, best.tokens)):
 						best = assessed
-	var chosen: Dictionary = best if use_candidate and not best.is_empty() else reference
+	var chosen: Dictionary = best if use_candidate and not best.is_empty() else reference_assessment
 	return chosen.tokens
 
 static func _assess(current: Dictionary, cards: Array) -> Dictionary:

@@ -154,13 +154,13 @@ static func presentation_identity(state: Dictionary, encoded := false) -> Dictio
 	if not state.get("entries") is Array:return {}
 	var identity:=state.duplicate()
 	var entries: Array=[]
-	var pending:=false
+	var has_pending_entry:=false
 	var codec:=CheckpointCodec.new()
 	for item: Variant in state.entries:
 		if not item is Dictionary or not item.get("complete") is bool:return {}
 		var stage: Variant=codec.integer(item.get("stage")) if encoded else item.get("stage")
-		if not codec.error.is_empty() or not stage is int or stage<0 or stage>LAST_STAGE or (item.complete and (stage!=LAST_STAGE or pending)):return {}
-		if not item.complete:pending=true
+		if not codec.error.is_empty() or not stage is int or stage<0 or stage>LAST_STAGE or (item.complete and (stage!=LAST_STAGE or has_pending_entry)):return {}
+		if not item.complete:has_pending_entry=true
 		var row: Dictionary=item.duplicate()
 		row.stage="0" if encoded else 0
 		row.complete=false

@@ -12,8 +12,8 @@ func check(ok: bool, message: String) -> void:
 	print("PASS: " if ok else "FAIL: ",message)
 	if not ok: failures += 1
 
-func increment(counts: Dictionary, key: String) -> void:
-	counts[key] = int(counts.get(key,0)) + 1
+func increment(counts: Dictionary, note_id: String) -> void:
+	counts[note_id] = int(counts.get(note_id,0)) + 1
 
 func key(kind: StringName, sample: int, pitch: int, velocity: int) -> String:
 	return "%s:%d:%d:%d" % [kind,sample,pitch,velocity]

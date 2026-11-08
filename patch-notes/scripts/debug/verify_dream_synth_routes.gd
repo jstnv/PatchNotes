@@ -26,10 +26,10 @@ func run() -> void:
 	var chord_routes := {}
 	for pitch in 128:
 		field.reset()
-		var bass = field.spawn_note(&"bass", pitch)
-		var chord = field.spawn_note(&"chord", pitch)
-		bass_routes[bass.route] = true
-		chord_routes[chord.route] = true
+		var first_bass = field.spawn_note(&"bass", pitch)
+		var first_chord = field.spawn_note(&"chord", pitch)
+		bass_routes[first_bass.route] = true
+		chord_routes[first_chord.route] = true
 	var disjoint := true
 	for route in bass_routes:
 		if chord_routes.has(route): disjoint = false

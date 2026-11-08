@@ -4,6 +4,7 @@ const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 const HUB_GROUPS := [&"studio_info", &"management", &"market", &"production"]
 
 signal tutorial_context_changed(context: StringName)
+signal launch_review_returned(source: StudioPhase)
 
 signal contract_requested(source: StudioPhase, state: ContractState)
 signal development_requested(source: StudioPhase, base_name: String, genre: StringName, theme_id: StringName)
@@ -14,11 +15,21 @@ var _snapshot_database: PrimitiveSnapshotDatabase
 var _feature_store: FeatureStore
 var _publisher_browser: PublisherBrowser
 var _publisher_notice: PanelContainer
+var _publisher_notice_layer: CanvasLayer
+var _publisher_notice_tween: Tween
+var _publisher_notice_remaining := 0.0
+var _publisher_notice_closing := false
+var _publisher_notice_pending_check := false
+var _publisher_route_pending := false
+var _publisher_notice_names: Array[String] = []
+const PUBLISHER_NOTICE_SECONDS := 10.0
 var _contract_detail: PanelContainer
 var _selected_contract_offer_id: StringName
 var _predevelopment: PredevelopmentOverlay
 var _review_view: PostGameReview
 var _selected_release_id: StringName
+var _campaign_feedback_id: StringName
+var _campaign_feedback_cycle := -1
 var _monthly_report: MonthlySalesReport
 var _search_work: OptionButton
 var _search_action: Button
@@ -49,6 +60,7 @@ var _run_refresh_pending := false
 var _hub: Control
 var _hub_motion: MenuTransitions
 var _returning_destination := false
+var _review_arrival_pending := false
 var _destination_layer: CanvasLayer
 var _destination_fits: Array[Dictionary]=[]
 
@@ -69,6 +81,7 @@ func _ready() -> void:
 	clip_contents = true
 	theme=preload("res://resources/ui/onyx_theme.tres")
 	resized.connect(_fit_dashboard)
+	visibility_changed.connect(_on_publisher_phase_visibility)
 	%Dashboard.visibility_changed.connect(_dashboard_visibility_changed)
 	%Dashboard.minimum_size_changed.connect(_fit_dashboard)
 	_fit_dashboard()
@@ -91,6 +104,7 @@ func _ready() -> void:
 	%CloseSummaryButton.pressed.connect(close_summary)
 	FolderUI.standard_back(%CloseSummaryButton)
 	%SummaryPanel.get_node("Margin").add_theme_constant_override("margin_top",20)
+	_arrange_summary_actions()
 	%DetailedReviewButton.pressed.connect(open_detailed_review)
 	%MonthlySalesButton.pressed.connect(open_monthly_sales)
 	%Contracts.pressed.connect(_open_contracts)
@@ -105,6 +119,24 @@ func _ready() -> void:
 		# mounted, derive action availability from the committed RunState.
 		_refresh_dashboard_actions()
 		_show_pending_publisher_notice()
+
+
+func _arrange_summary_actions() -> void:
+	# Keep release actions visible on a separate row instead of forcing a long
+	# title and four buttons into one horizontal strip at narrow widths.
+	var layout: VBoxContainer=$SummaryPanel/Margin/Layout
+	var header: HBoxContainer=$SummaryPanel/Margin/Layout/Header
+	var actions:=HBoxContainer.new()
+	actions.name="SummaryActions"
+	actions.add_theme_constant_override("separation",8)
+	layout.add_child(actions)
+	layout.move_child(actions,header.get_index()+1)
+	for button: Button in [%DetailedReviewButton,%MonthlySalesButton,%CampaignButton]:
+		button.reparent(actions)
+		button.custom_minimum_size.x=0
+		button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	%CampaignStatusLabel.reparent(layout)
+	layout.move_child(%CampaignStatusLabel,actions.get_index()+1)
 
 
 func _menu_button(parent: Node,label: String,key: String,callback: Callable) -> Button:
@@ -203,7 +235,13 @@ func _present_destination(view: Control,focus: Control=null,layer: CanvasLayer=n
 			current_view.remove_meta("folder_navigation_managed")
 			current_view.z_index = previous_z
 		_destination_layer=null;_returning_destination=false
-		if _hub_motion.depth()==1:_show_group(group)
+		if _hub_motion.depth()==1:
+			if _review_arrival_pending and current_view == _review_view:
+				_review_arrival_pending=false
+				%Dashboard.show()
+				_hub.close_group()
+				launch_review_returned.emit(self)
+			else:_show_group(group)
 	if view.get_parent()==self:
 		var fit_callback:=_queue_destination_fit.bind(view)
 		if not view.minimum_size_changed.is_connected(fit_callback):view.minimum_size_changed.connect(fit_callback)
@@ -345,35 +383,106 @@ func _open_publishers() -> void:
 func _show_pending_publisher_notice() -> void:
 	if _run_state == null or not is_node_ready():
 		return
+	var coordinator := get_tree().get_first_node_in_group(&"studio_notice_coordinator")
+	if coordinator != null:
+		coordinator.capture_publishers(_run_state)
+		return
+	# Keep the pending IDs until an active focused invitation/tour has closed.
+	if not is_visible_in_tree() or _publisher_notice_blocked():
+		_publisher_notice_pending_check = true
+		return
+	_publisher_notice_pending_check = false
 	var unlocked := _run_state.take_pending_publisher_notifications()
 	if unlocked.is_empty():
 		return
 	if _publisher_notice == null:
-		_publisher_notice = PanelContainer.new()
+		_publisher_notice_layer = CanvasLayer.new()
+		_publisher_notice_layer.name = "PublisherNoticeLayer"
+		_publisher_notice_layer.layer = 100
+		add_child(_publisher_notice_layer)
+		var host := Control.new()
+		host.name = "PublisherNoticeHost"
+		host.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_publisher_notice_layer.add_child(host)
+		host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_publisher_notice = FolderUI.surface(host)
 		_publisher_notice.name = "PublisherUnlockNotice"
-		# Keep the unlock notice available even when no companion is selected.
-		_hub.notice_host.add_child(_publisher_notice)
-		_publisher_notice.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-		_publisher_notice.offset_left=12;_publisher_notice.offset_right=312
-		_publisher_notice.offset_top=-112;_publisher_notice.offset_bottom=-12
-		_publisher_notice.grow_vertical=Control.GROW_DIRECTION_BEGIN
-		var row := HBoxContainer.new()
-		_publisher_notice.add_child(row)
-		var message := Label.new()
+		var background := _publisher_notice.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+		background.bg_color.a = 1.0
+		_publisher_notice.add_theme_stylebox_override("panel",background)
+		var content := VBoxContainer.new()
+		content.add_theme_constant_override("separation",12)
+		_publisher_notice.add_child(content)
+		var message := FolderUI.label(content,"",&"Label")
 		message.name = "PublisherUnlockMessage"
-		message.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		row.add_child(message)
-		var dismiss := Button.new()
-		dismiss.name = "DismissPublisherNotice"
-		dismiss.text = "Dismiss"
-		dismiss.pressed.connect(func(): _publisher_notice.hide())
-		row.add_child(dismiss)
-	var names: Array[String] = []
+		var actions := HBoxContainer.new()
+		actions.add_theme_constant_override("separation",10)
+		content.add_child(actions)
+		var show_me := FolderUI.button(actions,"Show me",_show_publishers_from_notice,&"PrimaryButton")
+		show_me.name = "ShowPublisherNotice"
+		show_me.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var got_it := FolderUI.button(actions,"Got it",_hide_publisher_notice.bind(false))
+		got_it.name = "GotPublisherNotice"
+		get_viewport().size_changed.connect(_fit_publisher_notice)
+	if not _publisher_notice.visible:
+		_publisher_notice_names.clear()
 	for id: StringName in unlocked:
-		names.append(PublisherCatalog.name_for(id))
-	(_publisher_notice.find_child("PublisherUnlockMessage", true, false) as Label).text = "Publisher unlocked: %s" % ", ".join(names)
+		var publisher_name := PublisherCatalog.name_for(id)
+		if publisher_name not in _publisher_notice_names:_publisher_notice_names.append(publisher_name)
+	(_publisher_notice.find_child("PublisherUnlockMessage", true, false) as Label).text = "Publisher unlocked: %s" % ", ".join(_publisher_notice_names)
+	if _publisher_notice_tween != null and _publisher_notice_tween.is_valid():_publisher_notice_tween.kill()
+	_publisher_notice_closing = false
+	_publisher_notice_remaining = PUBLISHER_NOTICE_SECONDS
 	_publisher_notice.show()
+	_fit_publisher_notice()
+	_publisher_notice.position.x = -_publisher_notice.size.x - 24.0
+	_publisher_notice.modulate.a = 0.0
+	_publisher_notice_tween = create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_publisher_notice_tween.tween_property(_publisher_notice,"position:x",24.0,0.24)
+	_publisher_notice_tween.tween_property(_publisher_notice,"modulate:a",1.0,0.18)
+
+func _fit_publisher_notice() -> void:
+	if not is_instance_valid(_publisher_notice):return
+	_publisher_notice.custom_minimum_size.x = minf(440.0,get_viewport().get_visible_rect().size.x-48.0)
+	_publisher_notice.size.x = _publisher_notice.custom_minimum_size.x
+	_publisher_notice.reset_size()
+	_publisher_notice.position.y = 24.0
+
+func _publisher_notice_blocked() -> bool:
+	for overlay: Node in get_tree().get_nodes_in_group(&"focused_guidance_overlay"):
+		if overlay is CanvasLayer and overlay.visible:return true
+	return false
+
+func _hide_publisher_notice(immediate: bool=false) -> void:
+	if not is_instance_valid(_publisher_notice) or not _publisher_notice.visible:return
+	if _publisher_notice_tween != null and _publisher_notice_tween.is_valid():_publisher_notice_tween.kill()
+	_publisher_notice_closing = true
+	_publisher_notice_remaining = 0.0
+	if immediate:
+		_publisher_notice.hide();_publisher_notice_names.clear();return
+	_publisher_notice_tween = create_tween().set_parallel()
+	_publisher_notice_tween.tween_property(_publisher_notice,"modulate:a",0.0,0.18)
+	_publisher_notice_tween.tween_property(_publisher_notice,"position:x",-_publisher_notice.size.x-24.0,0.18).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	_publisher_notice_tween.chain().tween_callback(func():
+		_publisher_notice.hide();_publisher_notice_names.clear())
+
+func _show_publishers_from_notice() -> void:
+	if _hub_motion == null or _publisher_route_pending:return
+	_publisher_route_pending = true
+	var deadline := Time.get_ticks_msec()+5000
+	while is_inside_tree() and is_visible_in_tree() and (_hub_motion.busy or _returning_destination) and Time.get_ticks_msec()<deadline:
+		await get_tree().process_frame
+	_publisher_route_pending = false
+	if not is_inside_tree() or not is_visible_in_tree() or _hub_motion.busy or _returning_destination or not is_instance_valid(_publisher_notice) or not _publisher_notice.visible or _publisher_notice_closing:return
+	_hide_publisher_notice(true)
+	if _hub_motion.depth()==1:
+		_show_group(&"market")
+		_hub.settle_motion()
+	_open_publishers()
+
+func _on_publisher_phase_visibility() -> void:
+	if not is_visible_in_tree():_hide_publisher_notice(true)
 
 
 func _open_predevelopment() -> void:
@@ -454,7 +563,10 @@ func open_detailed_review(launch_reveal := false) -> void:
 		_review_view.get_node("%ContinueButton").text = "Continue to Studio" if launch_reveal else "Back to Summary"
 		_review_view.continue_to_studio_requested.connect(func():
 			_review_view.hide()
-			if launch_reveal: close_summary(true)
+			if launch_reveal:
+				_review_arrival_pending=true
+				_hub._root_panel.hide()
+				close_summary(true)
 			else: open_summary())
 	%Dashboard.hide()
 	%SummaryPanel.hide()
@@ -778,6 +890,8 @@ func _purchase_selected_campaign() -> void:
 	if not _run_state.purchase_post_launch_campaign(_selected_release_id, expected_cycle):
 		%CampaignStatusLabel.text = "Campaign unavailable. Check its timing and cash before trying again."
 		return
+	_campaign_feedback_id=_selected_release_id
+	_campaign_feedback_cycle=_run_state.get_completed_run_cycles()
 	_refresh_summary()
 
 
@@ -851,13 +965,26 @@ func _refresh_summary() -> void:
 		%LaterProjectedUnitsLabel.text = "Month 1 forecast: %d units across %d earning cycles" % [int(later.get("projected_month_units", 0)),first_month_cycles]
 	else:
 		%OrganicAwarenessLabel.text = "Organic Awareness: %.4f" % (float(later.get("organic_awareness_scaled", 0)) / 10000.0)
-		%LaterProjectedUnitsLabel.text = "Projected units this release-age month: %d organic" % int(later.get("projected_month_units", 0))
-		if offer.get("eligible", false):
-			%LaterProjectedUnitsLabel.text += " · %d with campaign" % int(later.get("campaign_projected_month_units", 0))
-	%LaterProjectedUnitsLabel.text += "\nNew age months are before future market crowding; existing earning cycles retain their factor."
+		if int(later.get("active_awareness_scaled",0))!=int(later.get("organic_awareness_scaled",0)):
+			%OrganicAwarenessLabel.text += " · Active Awareness: %.4f" % (float(later.active_awareness_scaled) / 10000.0)
+		if int(later.get("next_age_cycle",1))==1:
+			%LaterProjectedUnitsLabel.text = "Projected units next release-age month: %d organic" % int(later.get("projected_month_units", 0))
+			if offer.get("eligible", false):
+				%LaterProjectedUnitsLabel.text += " · %d with campaign" % int(later.get("campaign_projected_month_units", 0))
+			%LaterProjectedUnitsLabel.text += "\nForecast excludes future market crowding."
+		else:
+			%LaterProjectedUnitsLabel.text = "Current release-age month: %d projected units, including market crowding and any campaign." % int(later.get("projected_month_units", 0))
+	if int(later.get("next_age_month", 1))==1:
+		%LaterProjectedUnitsLabel.text += "\nNew age months are before future market crowding; existing earning cycles retain their factor."
 	%CampaignButton.disabled = not offer.get("can_purchase", false)
 	if not offer.get("eligible", false):
-		%CampaignStatusLabel.text = "Campaigns open only at the first sales cycle of this game's Month 2 or later."
+		if int(later.get("next_age_month",1))==1:
+			var remaining:=maxi(0,first_month_cycles-int(earned.get("total_earned_cycles",0)))
+			%CampaignStatusLabel.text = "Available after %d more sales cycles, at the start of release-age Month 2 · $100 · 1 cycle." % remaining
+		elif int(later.get("next_age_cycle",1))>1:
+			%CampaignStatusLabel.text = "Next opportunity: start of release-age Month %d · $100 · 1 cycle." % (int(later.next_age_month)+1)
+		else:
+			%CampaignStatusLabel.text = "Campaign unavailable for this game."
 	elif not offer.get("affordable", false):
 		%CampaignStatusLabel.text = "Need $100.00 cash before the next sales cycle."
 	elif not offer.get("can_purchase", false):
@@ -865,6 +992,8 @@ func _refresh_summary() -> void:
 	else:
 		%CampaignStatusLabel.text = "One release-age month only · $100.00 · one productive cycle · no stacking."
 	if metadata.get("owner",&"studio") == &"publisher": %CampaignStatusLabel.text = "Publisher-owned commission: no Studio post-launch campaign spending."
+	if _campaign_feedback_id==_selected_release_id and _campaign_feedback_cycle==_run_state.get_completed_run_cycles():
+		%CampaignStatusLabel.text = "Campaign applied · $100 · 1 cycle. Sales and bills may also change cash.\n"+%CampaignStatusLabel.text
 	%MarketLabel.visible = not StringName(snapshot.get("forecast_id", &"")).is_empty()
 	if %MarketLabel.visible:
 		var forecast := _snapshot_database.get_forecast(snapshot.forecast_id)
@@ -936,6 +1065,15 @@ func _queue_destination_fit(view: Variant) -> void:
 	_destination_fits.append({"view":weakref(view),"frames":2})
 
 func _process(_delta: float) -> void:
+	if _publisher_notice_pending_check and is_visible_in_tree() and not _publisher_notice_blocked():
+		_publisher_notice_pending_check = false
+		_show_pending_publisher_notice.call_deferred()
+	if is_instance_valid(_publisher_notice) and _publisher_notice.visible and not _publisher_notice_closing:
+		var focus:=get_viewport().gui_get_focus_owner()
+		var interacting:=_publisher_notice.get_global_rect().has_point(get_viewport().get_mouse_position()) or focus!=null and _publisher_notice.is_ancestor_of(focus)
+		if not interacting:
+			_publisher_notice_remaining -= _delta
+			if _publisher_notice_remaining <= 0.0:_hide_publisher_notice()
 	var waiting:=_destination_fits.duplicate();_destination_fits.clear()
 	for item: Dictionary in waiting:
 		var view: Control=item.view.get_ref()

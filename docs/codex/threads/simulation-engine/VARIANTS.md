@@ -32,6 +32,8 @@ Use an explicit experiment configuration from the run guide and a **new output f
 
 Threads share CPU, memory and disk bandwidth; concurrency does not establish unlimited throughput or an approved AI population limit. Keep command/release/time bounds explicit and retain timeouts or blocked routes. Full native scene test harnesses have their own coordination requirements; the concurrent interface here is `simulate.py run/replay`.
 
+New variant folders also attempt transparent NTFS compression on supported Windows filesystems; otherwise they use ordinary files. They remain independent editable copies, not hardlinks. Variant metadata records `output_storage` and describes the scoped Git provenance: repository-wide tracked changes and runtime untracked entries, with other untracked paths unexamined. A worktree is not reported clean on that incomplete basis. Baseline archives, manifests, ancestry, failures and adoption requirements are unchanged.
+
 Candidate code and policies are trusted local executable code. Ordinary project/profile isolation is not an operating-system sandbox. Never point code at the canonical project, another candidate's mutable files, player saves or external services.
 
 The run records candidate identity, original baseline, current canonical identity, baseline drift and exact changed paths. A changed gameplay source rejects incompatible old Studio envelopes; create a legal fresh prefix for that version. Never edit checkpoint identity fields to defeat compatibility checks. Studio-only Continue remains the shared boundary.

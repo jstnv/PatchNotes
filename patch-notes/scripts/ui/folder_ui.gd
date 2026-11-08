@@ -7,7 +7,7 @@ const FRAME_SAFE_VERTICAL_INSET := 42.0
 
 static func enable_menu_gamepad() -> void:
 	for action in {&"ui_accept":JOY_BUTTON_A,&"ui_cancel":JOY_BUTTON_B}:
-		if InputMap.action_get_events(action).any(func(event):return event is InputEventJoypadButton or event is InputEventJoypadMotion):continue
+		if InputMap.action_get_events(action).any(func(candidate_event):return candidate_event is InputEventJoypadButton or candidate_event is InputEventJoypadMotion):continue
 		var event:=InputEventJoypadButton.new()
 		event.button_index=JOY_BUTTON_A if action==&"ui_accept" else JOY_BUTTON_B
 		InputMap.action_add_event(action,event)
@@ -39,10 +39,10 @@ static func panel_vertical_insets(owner: Node) -> Vector2:
 	var insets := Vector2.ONE * FRAME_SAFE_VERTICAL_INSET
 	var hud := owner.get_parent()
 	if hud == null: return insets
-	var header := hud.get_node_or_null("PersistentHeader") as Control
+	var hud_header := hud.get_node_or_null("PersistentHeader") as Control
 	var footer := hud.get_node_or_null("PersistentFooter") as Control
-	if header != null and header.is_visible_in_tree():
-		insets.x = maxf(insets.x,header.get_global_rect().end.y+8.0)
+	if hud_header != null and hud_header.is_visible_in_tree():
+		insets.x = maxf(insets.x,hud_header.get_global_rect().end.y+8.0)
 	if footer != null and footer.is_visible_in_tree():
 		insets.y = maxf(insets.y,owner.get_viewport().get_visible_rect().size.y-footer.get_global_rect().position.y+8.0)
 	return insets

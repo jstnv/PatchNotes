@@ -122,23 +122,78 @@ func run() -> void:
 	check(not hub._companion.is_visible_in_tree(),"No companion menu is visible with no selection")
 	check(idle_x > 0.0,"The Studio panel sits to the right in its idle position")
 	check(hub._root_panel.size.x >= 334.0,"The Studio panel includes the four-pixel width increase")
+	check(not hub._clip.clip_contents,"Companion is not cut by a fixed clipping rectangle")
 	check_button_wave(hub)
 	capture("idle-1152")
 	# Inspect the transition while it runs, rather than only its end state.
 	hub.root_buttons[&"studio_info"].pressed.emit()
 	var transition_root_positions := []
-	var clipped_companion := false
+	var saw_midpoint := false
+	var fully_visible := true
+	var start_fade := 1.0
+	var last_fade := 0.0
+	var fade_progressed := false
+	var companion_behind_root := true
+	var hit_tested := false
+	var root_received_hover := false
+	var captured_entrance := false
 	var limit := Time.get_ticks_msec() + 4000
 	while hub.transitioning and Time.get_ticks_msec() < limit:
 		transition_root_positions.append(hub._root_panel.position.x)
-		if hub._companion.visible and hub._companion.position.x < -0.5: clipped_companion = true
+		if hub._companion.visible:
+			var panel_rect: Rect2 = hub._companion.get_global_rect()
+			var companion_left: float = panel_rect.position.x
+			var studio_rect: Rect2 = hub._root_panel.get_global_rect()
+			if hub._clip.clip_contents and not hub._clip.get_global_rect().encloses(panel_rect): fully_visible = false
+			var alpha: float = hub._companion.modulate.a
+			start_fade = minf(start_fade,alpha)
+			if alpha > last_fade + 0.02: fade_progressed = true
+			last_fade = alpha
+			if companion_left >= studio_rect.get_center().x - 2.0 and companion_left < studio_rect.end.x:
+				saw_midpoint = true
+				if hub._clip.z_index >= hub._root_panel.z_index: companion_behind_root = false
+				if not hit_tested:
+					var root_button: Button = hub.root_buttons[&"studio_info"]
+					var point := Vector2(root_button.get_global_rect().end.x-8.0,root_button.get_global_rect().get_center().y)
+					if panel_rect.has_point(point):
+						hit_tested = true
+						pointer_move(point)
+						await process_frame
+						var hovered := root.gui_get_hovered_control()
+						root_received_hover = hovered == root_button or (hovered != null and root_button.is_ancestor_of(hovered))
+				if not captured_entrance:
+					capture("entrance-midpoint-1152")
+					captured_entrance = true
 		await process_frame
 	await wait_motion(hub)
+	check(absf(hub._clip.get_global_rect().position.x - hub._root_panel.get_global_rect().get_center().x) < 1.0,"Companion reveal begins at the Studio panel's midpoint")
+	check(saw_midpoint,"Whole companion enters from the Studio panel midpoint")
+	check(fully_visible and companion_behind_root,"Companion draws behind Studio without a fixed clipping rectangle")
+	check(hub.notice_host.z_index > hub._clip.z_index,"Studio notices stay above the moving companion")
+	check(hit_tested and root_received_hover,"Moving companion does not intercept pointer input for the Studio panel")
+	check(start_fade < 0.95 and fade_progressed and hub._companion.modulate.a > 0.99,"Companion fades in as it moves to the final position")
+	check(absf(hub._companion.get_global_rect().position.x - hub._root_panel.get_global_rect().end.x - 24.0) < 1.0,"Companion settles at the original right-hand position")
 	check(transition_root_positions.any(func(x):return x > 0.5 and x < idle_x - 0.5),"Studio panel visibly slides between idle and selected positions")
-	check(clipped_companion,"Companion menu emerges through its clipped opening")
 	capture("selected-1152")
 	hub.root_buttons[&"studio_info"].pressed.emit()
+	var saw_retraction := false
+	var retreat_fade := false
+	var previous_alpha := 1.0
+	limit = Time.get_ticks_msec() + 4000
+	while hub.transitioning and Time.get_ticks_msec() < limit:
+		if hub._companion.visible:
+			var companion_left: float = hub._companion.get_global_rect().position.x
+			var studio_rect: Rect2 = hub._root_panel.get_global_rect()
+			var alpha: float = hub._companion.modulate.a
+			if alpha < previous_alpha - 0.02: retreat_fade = true
+			previous_alpha = alpha
+			if companion_left >= studio_rect.get_center().x and companion_left < studio_rect.end.x:
+				if not saw_retraction: capture("retraction-midpoint-1152")
+				saw_retraction = true
+		await process_frame
 	await wait_motion(hub)
+	check(saw_retraction,"Companion frame retracts to the Studio panel midpoint")
+	check(retreat_fade,"Companion fades out as it returns to the midpoint")
 	for id: StringName in KEYS:
 		hub.root_buttons[id].pressed.emit()
 		await wait_motion(hub)

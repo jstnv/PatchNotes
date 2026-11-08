@@ -18,9 +18,13 @@ var _step:=0
 var _tour_phase: WeakRef
 var _preview_employee:=false
 var _preview_contract:=false
+var notices = preload("res://scripts/ui/studio_notice_queue.gd").new()
+var _queue_studio := ""
+var _presenting_notice := false
 const SIGNALS=[&"cash_changed",&"calendar_changed",&"finance_changed",&"sales_changed",&"contracts_changed",&"publishers_changed",&"engines_changed"]
 func _ready() -> void:
  process_mode=Node.PROCESS_MODE_ALWAYS
+ add_to_group(&"studio_notice_coordinator")
  view=Overlay.new();add_child(view)
  view.accepted.connect(_accept)
  view.dismissed.connect(dismiss)
@@ -29,6 +33,9 @@ func _ready() -> void:
 func bind_game(value: Control) -> void:
  game=value
  var hud=game.get_node("%GameplayHUD")
+ hud.challenge_notices.notice_requested.connect(_queue_progress)
+ hud.notice_requested.connect(_queue_tip)
+ hud.notice_selected.connect(_select_notice)
  hud.phase_changed.connect(_phase_changed)
  hud.how_to_play.tour_requested.connect(_guide_tour)
  hud.how_to_play.tour_availability=can_tour
@@ -37,41 +44,87 @@ func _phase_changed() -> void:
  if game==null:return
  if _run!=game.run_state:
   if _run!=null:
-   for name: StringName in SIGNALS:
-    if _run.is_connected(name,consider):_run.disconnect(name,consider)
+   for signal_name: StringName in SIGNALS:
+    if _run.is_connected(signal_name,consider):_run.disconnect(signal_name,consider)
   _run=game.run_state;last_opportunity=""
+  _queue_studio = str(_run._bank_run_id) if _run != null else ""
+  notices.load_state(_run.get_studio_notice_state() if _run != null else {})
   if _run!=null:
-   for name: StringName in SIGNALS:_run.connect(name,consider)
- if is_instance_valid(view) and view.is_open():dismiss(true)
+   for signal_name: StringName in SIGNALS:_run.connect(signal_name,consider)
+ if is_instance_valid(view) and view.is_open():
+  if _presenting_notice:_suspend_notice()
+  else:dismiss(true)
+ game.get_node("%GameplayHUD")._refresh_guidance.call_deferred()
  consider()
 func consider() -> void:
  _dirty=true;set_process(true)
+func _save_notices() -> bool:
+ var saved:=_run != null and not _queue_studio.is_empty() and _run.set_studio_notice_state(notices.snapshot_state())
+ _update_notice_button()
+ return saved
+func _update_notice_button() -> void:
+ if game!=null and is_instance_valid(game):game.get_node("%GameplayHUD").set_studio_notices(notices.entries(),_presenting_notice)
+func _enqueue_notice(entry: Dictionary) -> bool:
+ if _run==null or _queue_studio.is_empty():return false
+ var id:=str(entry.get("id",""))
+ if not id.is_empty() and notices.was_dismissed(id):return true
+ if not id.is_empty() and notices.contains_id(id):return _save_notices()
+ notices.enqueue(entry);var saved:=_save_notices();set_process(true)
+ return saved
+func _queue_tip(tip: Dictionary) -> void:
+ _enqueue_notice({"id":"tip:"+str(tip.key),"kind":"tip","title":tip.title,"body":tip.body})
+func _queue_progress(notice: Dictionary) -> void:
+ _enqueue_notice({"kind":"progress","title":notice.title,"body":notice.message})
+func capture_publishers(run: RunState) -> void:
+ if run==null or run!=_run:return
+ var ids:=run.get_pending_publisher_notifications()
+ if ids.is_empty():return
+ var saved:=true
+ for id: StringName in ids:
+  saved=_enqueue_notice({"id":"publisher:"+str(id),"kind":"publisher","title":"Publisher unlocked","body":PublisherCatalog.name_for(id)}) and saved
+ if saved:run.take_pending_publisher_notifications()
+func _select_notice(index: int) -> void:
+ if _presenting_notice:_suspend_notice()
+ notices.select(index);_save_notices();set_process(true)
+func _suspend_notice() -> void:
+ _presenting_notice=false
+ if is_instance_valid(view) and view.is_open():view.close(true)
+ _update_notice_button()
+func _finish_notice() -> void:
+ if not _presenting_notice:return
+ _presenting_notice=false;notices.take();_save_notices()
 func is_active() -> bool:return _routing or is_instance_valid(view) and view.is_open()
+func is_blocking() -> bool:return _routing or is_instance_valid(view) and view.is_open() and not view._notice_transient
 func _opportunity() -> String:
  return "%s:%s:%s"%[_run._bank_run_id,_run.get_completed_run_cycles(),game._active_phase.get_instance_id()]
 func _process(delta: float) -> void:
  if game==null or not is_instance_valid(game):return
  if view.is_open():
-  if game._checkpoint_dialog_visible() or game._active_phase is MainMenu:dismiss(true)
+  if _presenting_notice:
+   if not _safe():_suspend_notice()
+   return
+  if game._checkpoint_dialog_visible() or game._active_phase is MainMenu or get_tree().paused and view._notice_transient:dismiss(true)
   return
- if not _dirty or _routing:return
+ if _routing:return
  _elapsed+=delta
  if _elapsed<0.2:return
  _elapsed=0.0
- if not automatic_enabled:_dirty=false;set_process(false);return
- if not _safe():return
- if game.checkpoints!=null and game.checkpoints.debug_session:_dirty=false;set_process(false);return
- var opportunity:=_opportunity()
- if opportunity==last_opportunity:_dirty=false;set_process(false);return
- var s: Dictionary=Catalog.snapshot(_run)
- for offer: Dictionary in Catalog.candidates(s):
-  if offer.id!=&"bank" and not game._active_phase is StudioPhase:continue
-  if not preferences.seen(str(_run._bank_run_id),offer.id):
-   current_topic=offer.id;last_opportunity=opportunity;_dirty=false
-   preferences.mark(str(_run._bank_run_id),current_topic)
-   game.get_node("%GameplayHUD").contextual_tip.dismiss()
-   view.show_notice(offer);return
- _dirty=false;set_process(false)
+ if _run==null:return
+ capture_publishers(_run)
+ if _dirty and automatic_enabled and (game.checkpoints==null or not game.checkpoints.debug_session):
+  var s: Dictionary=Catalog.snapshot(_run)
+  for offer: Dictionary in Catalog.candidates(s):
+   _enqueue_notice({"id":"guide:"+str(offer.id),"kind":"guide","topic":offer.id,"title":offer.title,"body":offer.body})
+  _dirty=false
+ _update_notice_button()
+ if notices.count()==0 or not _safe():return
+ var notice: Dictionary=notices.peek()
+ current_topic=StringName(notice.get("topic",""));_presenting_notice=true
+ game.get_node("%GameplayHUD").contextual_tip.dismiss()
+ view.queued_notice=true;view.show_notice(notice);view.primary.visible=notice.kind in ["guide","publisher"]
+ view.progress.text = "NEW STUDIO GUIDANCE" if notice.kind == "guide" else "STUDIO NOTIFICATION"
+ view._notice_remaining=INF
+ _update_notice_button()
 func _safe() -> bool:
  if game==null or _run==null or _run._bank_run_id.is_empty() or not is_instance_valid(game._active_phase):return false
  if get_tree().paused or game._transition_in_progress or game._loading_checkpoint or game._save_navigation_pending or game._startup_panel!=null or game.guided_tutorial!=null or game.annual_awards_blocking() or game._checkpoint_dialog_visible():return false
@@ -83,15 +136,12 @@ func _safe() -> bool:
  for window: Window in game.find_children("*","Window",true,false):
   if window.visible:return false
  if phase is StudioPhase:
-  if phase._hub_motion==null or phase._hub_motion.busy or phase._hub.transitioning or phase._returning_destination or phase._hub_motion.depth()!=1:return false
- elif phase.has_method("get_workspace"):
-  var workspace=phase.get_workspace()
-  if workspace!=null and (workspace.overlay.visible or workspace.hand_motion!=null and workspace.hand_motion.busy):return false
- elif phase is ContractPhase:
-  for node: Node in phase.get_children():
-   if node is HandPresentation and node.busy:return false
+  if is_instance_valid(phase._publisher_notice) and phase._publisher_notice.is_visible_in_tree():return false
+  if phase._hub_motion==null or phase._hub_motion.busy or phase._hub.transitioning or phase._returning_destination or phase._hub_motion.depth()!=1 or not phase._hub.requested.is_empty() or not phase._hub.selected.is_empty() or not phase.get_node("%Dashboard").is_visible_in_tree():return false
+ else:return false
  return true
 func dismiss(immediate: bool=false) -> void:
+ if _presenting_notice:_finish_notice()
  _epoch+=1;_routing=false
  if game!=null:game.get_node("%GameplayHUD").focused_guidance_active=false
  if is_instance_valid(view):view.close(immediate)
@@ -103,7 +153,7 @@ func dismiss(immediate: bool=false) -> void:
   _preview_employee=false
   var studio: StudioPhase=game._active_phase as StudioPhase
   if studio!=null and _tour_phase!=null and _tour_phase.get_ref()==studio:studio._open_management(studio.get_node("%Employees"))
- tour_steps=[];current_topic=&"";set_process(false)
+ tour_steps=[];current_topic=&"";set_process(true)
 func can_tour(id: StringName) -> bool:
  if game==null or _run==null or not is_instance_valid(game._active_phase) or game._active_phase is MainMenu or _run._bank_run_id.is_empty():return false
  if id==&"bank":return not game._active_phase is FirstProjectSetup
@@ -142,23 +192,33 @@ func _guide_tour(id: StringName) -> void:
  await get_tree().create_timer(0.26,true).timeout
  if epoch!=_epoch or token!=_navigation_token() or _modal_blocks(id):return
  await start_tour(id)
-func _accept() -> void:await start_tour(current_topic)
+func _accept() -> void:
+ if _presenting_notice:
+  var notice: Dictionary=notices.peek()
+  _finish_notice()
+  if notice.get("kind","")=="publisher":
+   view.close(true)
+   var studio: StudioPhase=game._active_phase as StudioPhase
+   if studio!=null:studio._show_group(&"market");studio._hub.settle_motion();studio._open_publishers()
+   return
+ await start_tour(current_topic)
 func start_tour(id: StringName) -> bool:
  if _routing or not can_tour(id) or _hand_busy() or _modal_blocks(id):return false
+ if game._active_phase is StudioPhase:game._active_phase._hide_publisher_notice(true)
  _epoch+=1;var epoch:=_epoch
  game.get_node("%GameplayHUD").contextual_tip.dismiss()
  game.get_node("%GameplayHUD").focused_guidance_active=true
  current_topic=id;_routing=true;tour_steps=Catalog.steps(id);_step=0
  var phase: Control=game._active_phase
  _tour_phase=weakref(phase)
- view.show_notice({"title":"Opening "+str(Catalog.LABELS[id]),"body":"This is a read-only tour. No purchase, payment or productive action will be made.","id":id})
+ view.show_notice({"title":"Opening "+str(Catalog.LABELS[id]),"body":"This is a read-only tour. No purchase, payment or productive action will be made.","id":id},false)
  view.primary.disabled=true
  var opened: bool=await _route(id,epoch)
  if epoch!=_epoch or not is_instance_valid(phase) or game._active_phase!=phase:
   _routing=false;return false
  _routing=false;view.primary.disabled=false
  if not opened:
-  view.show_notice({"title":"Tour unavailable right now","body":"Close the current action or save warning and replay this tour from How to Play when you are ready.","id":id})
+  view.show_notice({"title":"Tour unavailable right now","body":"Close the current action or save warning and replay this tour from How to Play when you are ready.","id":id},false)
   view.primary.disabled=true;return false
  if game.checkpoints==null or not game.checkpoints.debug_session:preferences.mark(str(_run._bank_run_id),id)
  last_opportunity=_opportunity()
@@ -250,7 +310,7 @@ func _target(key: String) -> Control:
   if key=="DevelopNewEngine":return browser.develop_button
   if key=="EngineSkillTree":return browser.skill_tree
   if key=="BackToEngine":return browser.skill_back
- if key=="EmployeePanel" and studio._employees_panel!=null:return studio._employees_panel.course_grid if studio._employees_panel.section==&"courses" else studio._employees_panel.content
+ if key=="EmployeePanel" and studio._employees_panel!=null:return studio._employees_panel.course_grid if studio._employees_panel.section==&"courses" else studio._employees_panel._roster_page
  if key=="PublisherBrowser":return studio._publisher_browser
  if key=="PublisherList" and studio._publisher_browser!=null:return studio._publisher_browser._list
  if key=="MarketBrowser":return studio._market_browser
@@ -259,5 +319,5 @@ func _target(key: String) -> Control:
  return null
 func _exit_tree() -> void:
  if _run!=null:
-  for name: StringName in SIGNALS:
-   if _run.is_connected(name,consider):_run.disconnect(name,consider)
+  for signal_name: StringName in SIGNALS:
+   if _run.is_connected(signal_name,consider):_run.disconnect(signal_name,consider)

@@ -156,7 +156,7 @@ func verify_priority_matrix() -> void:
 			checked_routes += 1
 	var tied_seen := {}
 	for seed_value in range(24):
-		var f := fixture(1000 + seed_value, [40, 40, 10, 10])
+		var f := fixture(1000 + seed_value, [30, 30, 20, 20])
 		var stat: StringName = f.tutorial.get("first_stat")
 		check(stat in [&"graphics", &"sound"], "Two-way tie selects only highest categories")
 		tied_seen[stat] = true
@@ -178,7 +178,9 @@ func verify_priority_matrix() -> void:
 func verify_reconstruction_and_zero_cash() -> void:
 	var zero := fixture(606, [40, 20, 20, 20], true, true)
 	select_stat(zero.phase, &"graphics")
-	check(zero.phase.get_selected_candidate_views().size() == 4 and zero.phase.get_selected_candidate_views().all(func(view: CardView): return view.card_data.card_type == &"pass"), "Zero cash still offers four matching legal Passes, without a free Feature")
+	var zero_cards: Array[CardData] = []
+	for view: CardView in zero.phase.get_selected_candidate_views(): zero_cards.append(view.card_data)
+	check(zero_cards.size() == 4 and zero.run.primitive_feature_hand_cost_cents(zero_cards, zero.project.get_release_id()) == 0, "Zero cash still offers four matching affordable cards, including any zero-cost Features")
 	check(not (zero.phase.get_node("%PlayCardButton") as Button).disabled, "Pass-only zero-cash specialization can play")
 	check_legal_pool(zero, "Zero-cash deal")
 	dispose(zero)
@@ -250,7 +252,7 @@ func verify_play_redraw_and_failures() -> void:
 	var changed_priorities := {0: 25, 1: 25, 2: 25, 3: 25}
 	check(phase.commit_priority_distribution(changed_priorities), "Normal changed priorities remain available during guided lesson")
 	check(cards(phase) == second_before.cards and tutorial_snapshot(tutorial) == second_before.tutorial, "Priority commit preserves current pool and pending lesson target")
-	var boundary_rent := 50000 if (int(second_before.cycles) + 1) % 2 == 0 else 0
+	var boundary_rent := 30000 if (int(second_before.cycles) + 1) % 4 == 0 else 0
 	check(run.get_completed_run_cycles() == second_before.cycles + 1 and project.get_current_cycle() == second_before.project_cycle + 1 and run.get_cash_cents() == second_before.cash - boundary_rent, "Priority change keeps one cycle and services the same calendar rent")
 	select_stat(phase, second_stat)
 	var selected_target: CardView = phase.get_selected_candidate_views()[0]

@@ -64,7 +64,6 @@ func _initialize() -> void:
 			await close_game()
 			finish()
 			return
-		expect(circuits.get_parent()==overlay._surface and circuits.is_visible_in_tree(),"Continue loading shows the existing circuit background")
 		expect(game._loading_checkpoint and overlay.visible, "Loading guard remains active while overlay is visible")
 		expect(overlay.studio_label.text == STUDIO, "Loading identifies saved Studio including Unicode")
 		expect(overlay.date_label.text == "1980 · Month 1, Week 2", "Loading shows the saved year/month/week, not wall-clock date")
@@ -75,10 +74,18 @@ func _initialize() -> void:
 		event.keycode = KEY_ESCAPE
 		Input.parse_input_event(event)
 		game._on_studio_created("Must not replace save", &"action", [], menu)
+		# The loading layer is initially transparent over the departing title.
+		# It adopts the live circuits once that outgoing animation is complete.
+		var departure_deadline := Time.get_ticks_msec()+5000
+		while is_instance_valid(overlay) and circuits.get_parent()!=overlay._surface and Time.get_ticks_msec()<departure_deadline:
+			await process_frame
+		expect(is_instance_valid(overlay) and circuits.get_parent()==overlay._surface and circuits.is_visible_in_tree(),"Continue loading adopts the same visible circuits after title departure")
 		var rendered := false
 		var last_stage := ""
 		while game._loading_checkpoint:
-			if overlay.visible:
+			# The loading surface now goes away before the Studio HUD and panel
+			# finish their staged arrival, while the input fence remains active.
+			if is_instance_valid(overlay) and overlay.visible:
 				var stage: String = overlay.stage_label.text
 				if not stages.has(stage): stages.append(stage)
 				if stage != last_stage:
@@ -126,6 +133,12 @@ func open_game() -> void:
 	root.add_child(game)
 	current_scene = game
 	await process_frame
+	# Continue is intentionally fenced until the title's real asynchronous
+	# checkpoint inspection is ready; avoid racing it by emitting the signal.
+	var inspection_deadline := Time.get_ticks_msec()+30000
+	while game._title_checkpoint_job != null and Time.get_ticks_msec()<inspection_deadline:
+		await process_frame
+	expect(game._title_checkpoint_job == null, "Title checkpoint inspection completes before interaction")
 
 func close_game() -> void:
 	game.queue_free()

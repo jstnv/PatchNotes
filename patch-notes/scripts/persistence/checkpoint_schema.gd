@@ -231,6 +231,11 @@ static func root(education_enabled: bool = true, active_rival: bool = false, sto
 	versioned_proprietary_run.founding_roster_version="uint"
 	alternatives.append(proprietary_run);alternatives.append(versioned_proprietary_run)
 	for variant: Dictionary in alternatives.duplicate():alternatives.append(dict_with_calendar(variant))
+	var notice_state := {"version":"uint","pending":array_of({"id":"text","kind":"text","topic":"text","title":"text","body":"text"}),"dismissed":array_of("text")}
+	for variant: Dictionary in alternatives.duplicate():
+		var with_notices := variant.duplicate(true)
+		with_notices.studio_notice_state = notice_state
+		alternatives.append(with_notices)
 	var result := {"checkpoint_kind":"text","run_id":"id","sequence":"uint","source_build":"text","content_revision":"text","rng_algorithm":"text","run":union_of(alternatives),"rng":map_of("id",{"seed":"int","state":"int"})}
 	if active_rival: result.active_project_id = "id"
 	return result
@@ -238,13 +243,15 @@ static func root(education_enabled: bool = true, active_rival: bool = false, sto
 static func engine_feature_state() -> Dictionary:
 	var record: Dictionary={"name":"text","kind":"id","capacity":"uint","origin":"text","revision":"uint"}
 	for key: String in ["initial","implemented","committed","staged"]:record[key]=array_of("id")
+	var enabled_record:=record.duplicate(true)
+	enabled_record.enabled=array_of("id")
 	var entry: Dictionary=fields("base_cents admitted_cycle deposit_cents admission_discount")
 	entry.merge(fields("id engine_id feature_id","id"))
 	entry.payment=optional(fields("cycle paid_cents discount_percent saving_cents window"))
 	var configuration: Dictionary=fields("revision cycle cost_cents base_cents")
 	configuration.merge(fields("id engine_id","id"))
 	for key: String in ["added","removed","target"]:configuration[key]=array_of("id")
-	return {"version":"uint","engines":map_of("id",record),"entries":array_of(entry),"configurations":array_of(configuration)}
+	return {"version":"uint","engines":map_of("id",union_of([record,enabled_record])),"entries":array_of(entry),"configurations":array_of(configuration)}
 
 static func proprietary_engine_state() -> Dictionary:
 	var record: Dictionary={"owner_id":"id","name":"text","created_cycle":"uint","receipt_id":"id","technology_nodes":array_of("id"),"challenge_progress":map_of("id","uint"),"branch_progress":map_of("id","uint"),"scope_milestones":array_of("id"),"pass_efficiency":map_of("id","uint"),"pass_effectiveness":map_of("id","uint"),"bug_prevention":map_of("id","uint")}

@@ -1,5 +1,21 @@
 # Cross-system decisions
 
+## 2026-11-05 — Autosave only at Studio entry and exits
+
+The user replaces per-action autosaves with Studio entry, exit to Main Menu and exit game boundaries. Awards pages update immediately in memory without writing a checkpoint. The user explicitly chose to keep Studio-only Continue, so leaving Production or an active Contract still rolls back to the last saved Studio after confirmation. Studio-entry writes retain their captured state while later actions remain dirty. Exit boundaries and explicit Retry save current eligible Studio state. Settings persistence is separate. This supersedes the earlier save-before-every-awards-page and save-on-every-Studio-action rules. [Implementation and evidence](logs/2026-11-05-autosave-boundaries-v1.md).
+
+## 2026-11-04 — Genre Specialization base Awareness
+
+User direction: a Studio's permanent Genre Specialization gives only bonus base Awareness to games released in the same Genre. User selected **+20 Awareness as a trial**; nonmatching games receive none. The shared launch calculation applies it prospectively to player and rival Studios and retains existing Marketing, Fanbase, Promotion and Traits. Old release results, historical ownership/entitlements and certified archives stay frozen. The separate Public Action Engine hand bonus remains an engine effect. This supersedes the earlier no-specialty-Awareness rule. [Design and verification](logs/2026-11-04-genre-specialty-awareness-v1.md).
+
+## 2026-11-04 — Engine Feature activation and capacity
+
+The user supersedes the proposed prohibition on completing implementation above capacity. An implemented proprietary Feature can be enabled or disabled without cost or a cycle; only enabling is limited by normalized library Scope and enabled direct parents. Completion that would exceed capacity or has a disabled parent leaves the Feature implemented but disabled. A parent with enabled direct children cannot be disabled until they are disabled; the Store links to those children. Existing project and accepted Contract supplies remain frozen, and fixed Public/licensed engines remain read-only. Upgrades may replace their parent in the playable pool without disabling the parent. [Details and checks](logs/2026-11-04-engine-feature-activation-and-top-notices-v1.md).
+
+## 2026-11-04 — Starter Features for newly created engines
+
+The user directs that newly created proprietary engines begin with Text, 4-Color Palette, 8-Bit Sound and Keyboard & Mouse already implemented and available to future projects and Contracts. The four cards total 5 printed Scope. The normal $100 engine creation cost, 25 maximum Scope, Feature play costs, exhaustion, and Skill Tree rules remain unchanged. Existing engines retain their saved libraries and started projects/accepted Contracts retain frozen supply. This supersedes the earlier requirement to queue these cards for paid implementation on newly created engines; other Features still use the existing implementation workflow. [Design](design/proprietary-engine.md) · [verification](logs/2026-11-04-new-engine-starter-features-v1.md).
+
 ## 2026-11-01 — Proprietary Scope enforcement and starting Feature roots
 
 The user confirmed that proprietary capacity starts at 20 Scope and rises automatically by 5 with the existing purchased Skill Tree milestones. Each project freezes its selected engine's capacity; Design/Alpha hands must fit the remaining capacity in aggregate, including one-to-four-card hands, before activation. A rejected hand spends no Scope or Feature. The project requirement stays 30 Scope, so a 20-Scope engine can release below target with the existing Scope-completion Review penalty. Text, 4-Color Palette and 8-Bit Sound begin available for paid, engine-specific Feature implementation without prerequisites; the four free technology foundations do not grant those cards or change their printed values. [Current Engine Feature workflow](design/engine-features.md) · [focused check record](logs/2026-11-01-proprietary-scope-roots-v1.md).

@@ -290,8 +290,10 @@ func _refresh() -> void:
 	_research_button.text = "Other engine first" if not pending.is_empty() and pending[0].engine_id!=_engine_id else "Implement" if _research_quote.is_empty() else "Implement %s - 1 cycle" % CashFormatter.format_exact_cents(_research_quote.due_cents)
 	_research_button.tooltip_text = "Select a Feature node and queue its implementation first." if pending.is_empty() else "Only the first queued Feature can complete. Completion takes one productive cycle and makes it available to future games."
 	var owned := _summarize_owned_features()
-	_owned_summary.text = "AVAILABLE LIBRARY · Scope %d\nGraphics %d · Sound %d · Tech %d · Design %d" % [owned.scope, owned.graphics, owned.sound, owned.technology, owned.design]
-	_owned_summary.tooltip_text = "Implemented Features available to this engine's future games. Known cost per play: %s; Passes are free. Active games retain their frozen pool." % CashFormatter.format_exact_cents(owned.known_play_cost_cents)
+	var capacity: int = int(selected_record.get("capacity",0))
+	var scope_text := "%d / %d" % [owned.scope,capacity] if capacity > 0 and capacity < ProjectState.MAX_SIGNED_INT else str(owned.scope)
+	_owned_summary.text = "AVAILABLE LIBRARY · Scope %s\nGraphics %d · Sound %d · Tech %d · Design %d" % [scope_text, owned.graphics, owned.sound, owned.technology, owned.design]
+	_owned_summary.tooltip_text = "Enabled Features available to this engine's future games. Known cost per play: %s; Passes are free. Active games retain their frozen pool." % CashFormatter.format_exact_cents(owned.known_play_cost_cents)
 	if starter_gate:
 		_owned_summary.tooltip_text += "\n\nFirst-game pool: optional Primitive purchases cost 0 cycles."
 	if _nodes.is_empty():
@@ -303,6 +305,12 @@ func _refresh() -> void:
 		var record: Dictionary=selected_record
 		var status := "Available" if id in available_ids else "Implemented · held"
 		var color := Color("244b3d")
+		if record.kind==&"proprietary" and _run.owns_feature(id,_engine_id):
+			var activation: Dictionary = view.get("activation_quotes",{}).get(id,{})
+			if activation.is_empty():activation=_run.get_engine_feature_activation_quote(id,_engine_id)
+			if not activation.is_empty():
+				status = "Enabled" if activation.get("enabled",false) else "Disabled"
+				if not activation.get("enabled",false): color = Color("51455e")
 		if not reserve.is_empty() and not reserve.owned:
 			status = "Starter · 0 cycles" if reserve.initial else "Reserve · 1 cycle"
 			if not reserve.unlocked: status = "Locked · parent required"
@@ -567,7 +575,7 @@ func _purchase() -> void:
 	_admission_dialog.dialog_text = "Pay %s now (0 cycles). This down payment is irreversible.\nNo cancellation or reordering.\nComplete implementation: %s; 1 productive cycle. Familiarity may reduce the unpaid balance." % [CashFormatter.format_exact_cents(quote.down_cents),CashFormatter.format_exact_cents(quote.due_cents)]
 	if _run._feature_offers.get(_selected,{}).has("replaces_id"):
 		_admission_dialog.dialog_text += "\n\nUpgrade: completing this Feature replaces 8-Bit Sound in future draws."
-	_admission_dialog.dialog_text += "\n\nCompletion makes this Feature available to this engine's future games. A Feature is not guaranteed to be drawn or played."
+	_admission_dialog.dialog_text += "\n\nCompletion implements this Feature. Only enabled Features can appear in this engine's future games; a draw is not guaranteed."
 	_admission_dialog.confirmed.connect(func():
 		_run.admit_feature_research(quote)
 		_refresh())

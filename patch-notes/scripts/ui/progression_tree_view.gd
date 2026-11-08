@@ -31,12 +31,19 @@ var _panning:=false
 var _moved:=false
 var _camera_epoch:=0
 var _restoring_focus:=false
+var floating_controls := false
+var controls_panel: PanelContainer
 
 func _ready() -> void:
 	mouse_filter=Control.MOUSE_FILTER_PASS
 	custom_minimum_size.y=180
 	var box:=VBoxContainer.new();add_child(box);box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var tools:=HBoxContainer.new();tools.add_theme_constant_override("separation",8);box.add_child(tools)
+	var tools:=HBoxContainer.new();tools.add_theme_constant_override("separation",8)
+	if floating_controls:
+		controls_panel=PanelContainer.new();controls_panel.name="FloatingControls"
+		controls_panel.theme=FolderUI.THEME;controls_panel.theme_type_variation=&"FolderPanel"
+		controls_panel.z_index=4;add_child(controls_panel);controls_panel.add_child(tools)
+	else:box.add_child(tools)
 	FolderUI.button(tools,"−",func():set_zoom(zoom/1.25))
 	FolderUI.button(tools,"+",func():set_zoom(zoom*1.25))
 	FolderUI.button(tools,"Show all",fit_all)
@@ -50,8 +57,9 @@ func _ready() -> void:
 	scroll.gui_input.connect(_pointer)
 	canvas=Control.new();canvas.size_flags_horizontal=Control.SIZE_EXPAND_FILL;canvas.size_flags_vertical=Control.SIZE_EXPAND_FILL;scroll.add_child(canvas);canvas.gui_input.connect(_pointer)
 	tree=Control.new();canvas.add_child(tree);tree.draw.connect(_draw_edges)
+	if floating_controls:tree.texture_filter=CanvasItem.TEXTURE_FILTER_LINEAR
 	canvas.resized.connect(_center_canvas)
-	popup=PanelContainer.new();popup.name="ProgressionDetails";popup.theme=FolderUI.THEME;popup.theme_type_variation=&"FolderPanel";add_child(popup)
+	popup=PanelContainer.new();popup.name="ProgressionDetails";popup.theme=FolderUI.THEME;popup.theme_type_variation=&"FolderPanel";popup.z_index=5 if floating_controls else 0;add_child(popup)
 	var margin:=MarginContainer.new();popup.add_child(margin)
 	for edge in ["left","right","top","bottom"]:margin.add_theme_constant_override("margin_"+edge,18)
 	var detail:=VBoxContainer.new();detail.add_theme_constant_override("separation",10);margin.add_child(detail)
@@ -65,7 +73,8 @@ func _ready() -> void:
 	_parents=HBoxContainer.new();detail.add_child(_parents)
 	action_button=FolderUI.button(detail,"",func():action_requested.emit(selected_id),&"PrimaryButton")
 	action_extension=VBoxContainer.new();detail.add_child(action_extension)
-	popup.hide();resized.connect(_fit_popup)
+	popup.hide();resized.connect(_fit_popup);resized.connect(_fit_controls)
+	_fit_controls.call_deferred()
 
 func set_rows(values: Array,reset: bool=false) -> void:
 	var initial:=rows.is_empty() or reset
@@ -140,6 +149,7 @@ func set_description(text: String) -> void:_copy.text=text
 
 func close_details() -> void:
 	popup.hide()
+	_fit_controls()
 	if buttons.has(selected_id):buttons[selected_id].grab_focus()
 
 func _fit_popup() -> void:
@@ -147,6 +157,16 @@ func _fit_popup() -> void:
 	popup.custom_minimum_size.x=minf(detail_width,size.x-32);popup.size=Vector2(minf(detail_width,size.x-32),0);popup.reset_size()
 	popup.size.y=minf(maxf(minimum_detail_height,popup.get_combined_minimum_size().y),size.y-20)
 	popup.position=Vector2(maxf(10,size.x-popup.size.x-10),maxf(10,size.y-popup.size.y-10))
+	_fit_controls()
+
+func _fit_controls() -> void:
+	if not is_instance_valid(controls_panel):return
+	var width:=minf(720.0,maxf(0.0,size.x-16.0))
+	if is_instance_valid(popup) and popup.visible:
+		width=minf(width,maxf(controls_panel.get_combined_minimum_size().x,popup.position.x-16.0))
+	var height:=controls_panel.get_combined_minimum_size().y
+	controls_panel.position=Vector2(8.0,maxf(0.0,size.y-height-8.0))
+	controls_panel.size=Vector2(width,height)
 
 func _apply_scale() -> void:
 	tree.scale=Vector2.ONE*zoom;canvas.custom_minimum_size=_extent*zoom
@@ -154,7 +174,11 @@ func _apply_scale() -> void:
 	_center_canvas.call_deferred()
 
 func _center_canvas() -> void:
-	tree.position=((canvas.size-_extent*zoom)*0.5).max(Vector2.ZERO)
+	var reserved:=Vector2(0,_controls_height()) if floating_controls else Vector2.ZERO
+	tree.position=((canvas.size-_extent*zoom-reserved)*0.5).max(Vector2.ZERO)
+
+func _controls_height() -> float:
+	return controls_panel.get_combined_minimum_size().y+16.0 if is_instance_valid(controls_panel) else 0.0
 
 func set_zoom(value: float) -> void:
 	var point: Vector2=(Vector2(scroll.scroll_horizontal,scroll.scroll_vertical)+scroll.size*0.5)/zoom
@@ -167,7 +191,8 @@ func _move_camera(point: Vector2,epoch: int) -> void:
 
 func fit_all() -> void:
 	if _extent==Vector2.ZERO:return
-	zoom=clampf(minf((scroll.size.x-24)/_extent.x,(scroll.size.y-24)/_extent.y),0.1,1.0);_apply_scale();_camera_epoch+=1
+	var available_height:=scroll.size.y-24.0-(_controls_height() if floating_controls else 0.0)
+	zoom=clampf(minf((scroll.size.x-24)/_extent.x,available_height/_extent.y),0.1,1.0);_apply_scale();_camera_epoch+=1
 	_move_camera.call_deferred(Vector2.ZERO,_camera_epoch)
 
 func focus_root() -> void:

@@ -11,4 +11,4 @@ static func needs_wait(run: RunState) -> bool:
 
 static func wait_saved(run: RunState) -> bool:
 	var owner:=coordinator(run)
-	return true if owner==null else await owner.wait_saved()
+	return true if owner==null else await owner.wait_for_requested_save()

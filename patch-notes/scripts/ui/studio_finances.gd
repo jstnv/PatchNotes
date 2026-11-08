@@ -377,7 +377,7 @@ func refresh() -> void:
 	month_table.clear()
 	month_detail.text = ""
 	var root_item := month_table.create_item()
-	var selected: TreeItem
+	var selected: TreeItem = null
 	var rows: Array = report.get("rows", []) if available else []
 	for row: Dictionary in rows:
 		var item := month_table.create_item(root_item)

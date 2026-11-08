@@ -15,6 +15,7 @@ signal finance_changed
 signal fans_changed
 signal employees_changed
 signal engines_changed
+signal studio_notice_state_changed
 
 const CENTS_PER_DOLLAR := 100
 const MAX_REDRAWS := 4
@@ -109,6 +110,8 @@ func _registered_engine_ids() -> Array[StringName]:
 func _register_proprietary_engine(id: StringName,label: String) -> bool:
 	if not EngineFeatureActions.available(self) or id==&"legacy_engine" or not preload("res://scripts/engines/engine_marketplace.gd").find(id).is_empty():return false
 	var state:=get_engine_feature_state()
+	if state.version<EngineFeatures.VERSION:state=EngineFeatures.migrate(state,_feature_offers)
+	if state.is_empty():return false
 	if state.engines.size()>=128 or not EngineFeatures.add_record(state,id,label,&"proprietary",20,[] as Array[StringName]):return false
 	var entitlement:=get_engine_entitlements();entitlement.owned_ids.append(id)
 	_engine_features=state;_engine_entitlements=entitlement
@@ -128,11 +131,13 @@ func create_proprietary_engine(quote: Dictionary) -> Dictionary:
 	if quote.is_empty() or not quote.get("name") is String or quote!=get_proprietary_engine_creation_quote(quote.name):return {"ok":false,"error":"Engine creation is unavailable or unaffordable"}
 	var state:=get_proprietary_engine_state()
 	var features:=get_engine_feature_state()
+	if features.version<EngineFeatures.VERSION:features=EngineFeatures.migrate(features,_feature_offers)
+	if features.is_empty():return {"ok":false,"error":"Engine library migration failed"}
 	var access:=get_engine_entitlements()
 	var id: StringName=quote.id
 	var record: Dictionary=ProprietaryEngines.record(id,_bank_run_id,quote.name,_completed_run_cycles)
 	var finance: Dictionary=StudioFinanceLedger.plan(_studio_finance,_completed_run_cycles,_cash_cents,-ProprietaryEngines.COST_CENTS,&"other_expense",0,0,false,record.receipt_id)
-	if finance.is_empty() or not EngineFeatures.add_record(features,id,quote.name,&"proprietary",ProprietaryEngines.CAPACITY,[] as Array[StringName],ProprietaryEngines.ORIGIN):return {"ok":false,"error":"Engine creation could not be settled"}
+	if finance.is_empty() or not EngineFeatures.add_record(features,id,quote.name,&"proprietary",ProprietaryEngines.CAPACITY,ProprietaryEngines.FOUNDATIONS,ProprietaryEngines.STARTER_ORIGIN):return {"ok":false,"error":"Engine creation could not be settled"}
 	state.engines[id]=record
 	state.next_serial+=1
 	access.owned_ids.append(id)
@@ -161,7 +166,9 @@ func _sync_legacy_engine_grant(id: StringName) -> void:
 	var record: Dictionary=_engine_features.engines[&"legacy_engine"]
 	for field: String in ["initial","implemented"]:
 		if id not in record[field]:record[field].append(id)
+	if _engine_features.version==EngineFeatures.VERSION and id not in record.enabled:record.enabled.append(id)
 	var library: Array[StringName]=[];library.assign(record.initial)
+	if _engine_features.version==EngineFeatures.VERSION:library.assign(record.enabled)
 	record.committed=FeatureStoreCatalog.future_supply(library,_feature_offers)
 
 func valid_engine_state() -> bool:
@@ -208,6 +215,7 @@ var _sidestreet_entitlements: Dictionary = {}
 var _sidestreet_results: Dictionary = {}
 var _pending_contract_completion: ContractState
 var _unlocked_publishers: Dictionary = {}
+var _studio_notice_state: Dictionary = {}
 var _pending_publisher_notifications: Array[StringName] = []
 var _seen_tutorial_topics: Dictionary = {}
 var _studio_name := ""
@@ -812,6 +820,12 @@ func resourceful_saving(price: int) -> int:
 func get_feature_research_queue() -> Array:
 	return EngineFeatureActions.pending(self)
 
+func get_engine_feature_activation_quote(id: StringName,engine: StringName=&"") -> Dictionary:
+	return EngineFeatureActions.activation_quote(self,id,get_selected_engine_id() if engine.is_empty() else engine)
+
+func set_engine_feature_active(quote: Dictionary) -> bool:
+	return EngineFeatureActions.set_active(self,quote)
+
 func get_feature_research_quote(id: StringName,engine: StringName=&"") -> Dictionary:
 	return EngineFeatureActions.quote(self,id,get_selected_engine_id() if engine.is_empty() else engine)
 
@@ -840,7 +854,9 @@ func get_feature_store_view(engine: StringName=&"") -> Dictionary:
 	if graph.has("error"): return graph
 	var pending := get_feature_research_queue()
 	var blocked := get_financial_block_reason()
-	var result := {"offers":{},"reserves":{},"quotes":{},"financial_block_reason":blocked}
+	var active_state: Dictionary=EngineFeatures.migrate(engine_state,_feature_offers) if engine_state.version<EngineFeatures.VERSION else engine_state
+	if active_state.is_empty():return {"error":"Engine Feature state cannot be migrated"}
+	var result := {"offers":{},"reserves":{},"quotes":{},"activation_quotes":{},"financial_block_reason":blocked}
 	for id: StringName in _feature_definitions:
 		var offer := _feature_store_offer(id,graph,engine)
 		var reserve := _primitive_reserve_offer(id,graph,engine) if offer.is_empty() else {}
@@ -848,6 +864,7 @@ func get_feature_store_view(engine: StringName=&"") -> Dictionary:
 		result.reserves[id]=reserve
 		var available: Dictionary=reserve if offer.is_empty() else offer
 		result.quotes[id]={} if available.is_empty() else EngineFeatureActions.quote(self,id,engine,true,available,pending,blocked,engine_state,graph)
+		result.activation_quotes[id]=EngineFeatureActions.activation_quote(self,id,engine,active_state,graph)
 	return result
 
 
@@ -1859,6 +1876,21 @@ func _plan_cycle_records_for_result_proof(direct_cash_delta_cents: int,campaign_
 		key=var_to_bytes([campaign_release_id,_completed_run_cycles,_cash_initialized,
 			_market_provider.is_valid(),market,_bank_run_id,_released_games,_release_metadata,
 			_commission_deals,_support_rights,_support_assessments,_fanbase,_closed_historical_ids,_release_engine_ids,_calendar])
+		var summary_allowed:=not _market_provider.is_valid()
+		if not summary_allowed:
+			var provider: Object=_market_provider.get_object()
+			summary_allowed=provider!=null and provider.get_script()!=null and provider.get_script().resource_path=="res://scripts/market/rival_world.gd" and _market_provider.get_method()==&"market_for_run"
+		if not remember_finance_result and summary_allowed:
+			var summary: Dictionary=cache.read_preflight_summary(key,_released_games,_support_rights,_support_assessments)
+			if not summary.is_empty():
+				var amount: int=summary.payable
+				if amount > MAX_SIGNED_INT - cash_after_action:return {}
+				if _first_studio_economy:
+					if finance_kind.is_empty():
+						finance_kind = &"campaign" if not campaign_release_id.is_empty() else (&"other_expense" if direct_cash_delta_cents < 0 else (&"other_income" if direct_cash_delta_cents > 0 else &"calendar"))
+					var finance_plan: Dictionary=StudioFinanceLedger.plan(_studio_finance,_completed_run_cycles+1,_cash_cents,direct_cash_delta_cents,finance_kind,int(summary.earned),amount,true,source_id,false)
+					if finance_plan.is_empty():return {}
+				return {"eligible":true}
 		sales=cache.read(key)
 	if sales.is_empty():
 		sales=_plan_sales_cycle(campaign_release_id,market)
@@ -2418,4 +2450,14 @@ func activate_employee_trial() -> bool:
 	if next.is_empty():return false
 	_employees=next;migrate_employee_wages();_sync_employee_raises()
 	_publishing_cycle=true;finance_changed.emit();employees_changed.emit();_publishing_cycle=false
+	return true
+
+func get_studio_notice_state() -> Dictionary:
+	return _studio_notice_state.duplicate(true)
+
+func set_studio_notice_state(value: Dictionary) -> bool:
+	if not preload("res://scripts/tutorial/studio_notice_state.gd").valid(value): return false
+	if _studio_notice_state == value: return true
+	_studio_notice_state = value.duplicate(true)
+	studio_notice_state_changed.emit()
 	return true

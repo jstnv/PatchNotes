@@ -7,7 +7,9 @@ var _release_id := StringName("release_" + Crypto.new().generate_random_bytes(16
 func get_release_id() -> StringName:
 	return _release_id
 ## Prospective project rules; unversioned active rival projects are grandfathered.
+@warning_ignore("unused_private_class_variable") # Read by commands and checkpoint serialization.
 var _pass_budget_version := 2
+@warning_ignore("unused_private_class_variable") # Read by the development session and checkpoint code.
 var _pass_budget_origin := ""
 signal values_changed
 signal cycle_changed
@@ -52,6 +54,7 @@ var _unimplemented_alpha_feature_ids: Array[StringName] = []
 var _required_scope: int
 var _engine_id: StringName = &"legacy_engine"
 var _engine_capacity: int = 0 # Zero only on grandfathered, unfrozen profiles.
+@warning_ignore("unused_private_class_variable") # Read and written by phase commands and checkpoint code.
 var _skill_pass_remainders: Dictionary = {}
 
 func set_engine_id(id: StringName,capacity: int=0) -> bool:

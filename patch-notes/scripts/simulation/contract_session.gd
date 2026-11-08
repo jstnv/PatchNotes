@@ -48,10 +48,10 @@ func execute(request: Dictionary,readiness: Callable = Callable(),publication: C
 func _execute(kind: StringName,payload: Dictionary,readiness: Callable,publication: Callable) -> Dictionary:
 	if kind == &"begin":
 		if not cards.is_empty() or not payload.is_empty(): return reject("Contract already dealt")
-		var before := _rng.state
+		var rng_before := _rng.state
 		var deal := _build_candidate_pool()
 		if deal.is_empty() or (readiness.is_valid() and not readiness.call(deal)):
-			_rng.state = before
+			_rng.state = rng_before
 			return reject("Initial Contract draw rejected")
 		publish_initial(deal)
 		if publication.is_valid(): publication.call(deal)
@@ -183,7 +183,7 @@ func observation() -> Dictionary:
 func _build_candidate_pool(extra_exhausted: Dictionary = {}, category_rolls: Array[float] = [], definition_rolls: Array[float] = [], candidate_count: int = CANDIDATE_COUNT) -> Array[CardData]:
 	if (not category_rolls.is_empty() and category_rolls.size() != candidate_count) or (not definition_rolls.is_empty() and definition_rolls.size() != candidate_count):
 		return []
-	var cards: Array[CardData] = []
+	var dealt_cards: Array[CardData] = []
 	var rng_before:=_rng.state
 	var reserved: Dictionary = extra_exhausted.duplicate()
 	for slot in range(candidate_count):
@@ -193,9 +193,9 @@ func _build_candidate_pool(extra_exhausted: Dictionary = {}, category_rolls: Arr
 		if card == null:
 			_rng.state=rng_before
 			return []
-		cards.append(card)
+		dealt_cards.append(card)
 		if card.card_type == &"feature": reserved[card.id] = true
-	return cards
+	return dealt_cards
 
 
 func _draw_one(type_filter: StringName, reserved_features: Dictionary, category_roll: float, definition_roll: float, excluded_id: StringName = &"") -> CardData:

@@ -24,6 +24,8 @@ var _description_resize_queued := false
 var shopping_details: Label
 var price: RichTextLabel
 var _missing_targets: Array[StringName] = []
+var _dependency_kind: StringName = &"missing"
+var _activation_quote: Dictionary = {}
 var zoom_label: Label
 var zoom := 1.0
 var bounds := Vector2.ZERO
@@ -160,6 +162,7 @@ func configure(owner_store: FeatureStore, layout: VBoxContainer, map_host: Contr
 	price.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	details.add_child(price)
 	guidance_scroll = ScrollContainer.new()
+	guidance_scroll.name = "DependencyList"
 	guidance_scroll.custom_minimum_size = Vector2(310,140)
 	guidance_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	guidance_scroll.follow_focus = true
@@ -310,11 +313,11 @@ func layout_map(_children: Dictionary) -> void:
 					cone_points.append(rect.position - Vector2(COLUMN_STEP, 0))
 					cone_points.append(Vector2(rect.end.x + COLUMN_STEP, rect.position.y))
 			else:
-				var inner := rect.end.x if direction == Vector2.LEFT else rect.position.x
+				var inner_edge := rect.end.x if direction == Vector2.LEFT else rect.position.x
 				var outer := rect.position.x if direction == Vector2.LEFT else rect.end.x
 				if rect == root_area.grow(32.0):
-					cone_points.append(Vector2(inner, rect.position.y))
-					cone_points.append(Vector2(inner, rect.end.y))
+					cone_points.append(Vector2(inner_edge, rect.position.y))
+					cone_points.append(Vector2(inner_edge, rect.end.y))
 				else:
 					cone_points.append(Vector2(outer, rect.position.y - (ROW_STEP if across.y < 0 else 0.0)))
 					cone_points.append(Vector2(outer, rect.end.y + (ROW_STEP if across.y > 0 else 0.0)))
@@ -542,6 +545,7 @@ func fit_map() -> void:
 
 func dismiss() -> void:
 	_close_parent_links()
+	_close_dependency_list()
 	_stop_focus_animation()
 	if not store._selected.is_empty() and store._nodes.has(store._selected) and is_instance_valid(store._nodes[store._selected]):
 		var button: Button = store._nodes[store._selected]
@@ -555,9 +559,12 @@ func dismiss() -> void:
 
 func show_details() -> void:
 	_close_parent_links()
+	_close_dependency_list()
 	store._buy.disabled = true
 	price.text = ""
 	_missing_targets.clear()
+	_dependency_kind = &"missing"
+	_activation_quote = {}
 	var blockers: Array[String] = []
 	if store._selected.is_empty():
 		popup.hide()
@@ -588,8 +595,30 @@ func show_details() -> void:
 		store._buy.text="In fixed library" if store._run.owns_feature(store._selected,store._engine_id) else "Not in this fixed library"
 	elif store._run.owns_feature(store._selected,store._engine_id):
 		_missing_targets.clear()
-		store._buy.disabled=true
-		store._buy.text="Implemented · Available" if store._selected in engine_row.committed else "Implemented · Held from old configuration"
+		_activation_quote=store._run.get_engine_feature_activation_quote(store._selected,store._engine_id)
+		var active_children: Array = _activation_quote.get("active_children",[])
+		var inactive_parents: Array = _activation_quote.get("inactive_parents",[])
+		if _activation_quote.get("enabled",false):
+			if not active_children.is_empty():
+				_missing_targets.assign(active_children)
+				_dependency_kind=&"children"
+			else:
+				store._buy.text="Disable"
+				store._buy.disabled=not _activation_quote.get("can_toggle",false)
+		else:
+			if not inactive_parents.is_empty():
+				var names := _dependency_names(inactive_parents)
+				store._details.text += "\nEnable required parent Features: " + ", ".join(names)
+			if _activation_quote.get("scope_blocked",false):
+				store._buy.text="Reached scope limit"
+				store._buy.disabled=true
+				store._details.text += "\nEnabling needs %d / %d Scope." % [int(_activation_quote.get("projected_scope",0)),int(_activation_quote.get("scope_capacity",0))]
+			elif not inactive_parents.is_empty():
+				_missing_targets.assign(inactive_parents)
+				_dependency_kind=&"parents"
+			else:
+				store._buy.text="Enable"
+				store._buy.disabled=not _activation_quote.get("can_toggle",false)
 	elif offer.is_empty() and reserve.get("initial",false):
 		store._buy.disabled = not reserve.can_purchase
 		if not reserve.unlocked: blockers.append("Locked — " + str(reserve.prerequisite))
@@ -604,9 +633,10 @@ func show_details() -> void:
 		store._buy.text += " · " + CashFormatter.format_exact_cents(quote.due_cents if quote.queued else quote.down_cents)
 		store._buy.text += " - 1 cycle" if quote.queued else " down"
 	if not _missing_targets.is_empty():
-		var names: Array[String] = []
-		for id: StringName in _missing_targets: names.append(store._run._feature_definitions[id].name)
-		store._buy.text = "Missing: " + ", ".join(names)
+		var names := _dependency_names(_missing_targets)
+		if _dependency_kind==&"children":store._buy.text="(%d) active child nodes" % _missing_targets.size()
+		elif _dependency_kind==&"parents":store._buy.text="Enable parents: " + ", ".join(names)
+		else:store._buy.text = "Missing: " + ", ".join(names)
 		store._buy.disabled = false
 	if not store._run.owns_feature(store._selected,store._engine_id):
 		for reason in blockers:
@@ -626,10 +656,21 @@ func show_details() -> void:
 
 func _activate_action() -> void:
 	if _missing_targets.is_empty():
+		if not _activation_quote.is_empty():
+			store._run.set_engine_feature_active(_activation_quote)
+			store._refresh()
+			return
 		store._purchase()
 		return
+	if _dependency_kind==&"children" and int(_activation_quote.get("linked_children_count",0))>2:
+		_show_dependency_list()
+		return
 	if _missing_targets.size() == 1:
-		_focus_node(_missing_targets[0])
+		if store._nodes.has(_missing_targets[0]): _focus_node(_missing_targets[0])
+		else: _show_dependency_list()
+		return
+	if _missing_targets.size() > 2:
+		_show_dependency_list()
 		return
 	if _parents_expanded:
 		_close_parent_links()
@@ -639,7 +680,9 @@ func _activate_action() -> void:
 	_parent_revision += 1
 	for id: StringName in _missing_targets:
 		var link := Button.new()
-		link.text = store._run._feature_definitions[id].name
+		link.text = _dependency_name(id)
+		link.disabled = not store._nodes.has(id)
+		if link.disabled: link.tooltip_text = "This Feature is not displayed on the current map."
 		link.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		link.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 		link.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -651,6 +694,46 @@ func _activate_action() -> void:
 	# Reuse the existing camera framing so the selected card, panel, links and
 	# entrance overshoot all have room, including at the outer map edges.
 	focus_selection(store._selected)
+
+func _dependency_name(id: StringName) -> String:
+	return str(store._run._feature_definitions.get(id,{}).get("name",id))
+
+func _dependency_names(ids: Array) -> Array[String]:
+	var names: Array[String] = []
+	for id: StringName in ids:names.append(_dependency_name(id))
+	return names
+
+func _close_dependency_list() -> void:
+	if not is_instance_valid(guidance_scroll):return
+	var content := guidance_scroll.get_child(0)
+	for child: Node in content.get_children():
+		if child!=shopping_details:
+			content.remove_child(child)
+			child.queue_free()
+	guidance_scroll.hide()
+
+func _show_dependency_list() -> void:
+	if guidance_scroll.visible:
+		_close_dependency_list()
+		_queue_description_fit()
+		return
+	var content := guidance_scroll.get_child(0)
+	shopping_details.text = "Active child nodes" if _dependency_kind==&"children" else "Required parent Features"
+	shopping_details.show()
+	for id: StringName in _missing_targets:
+		var button := Button.new()
+		button.text = _dependency_name(id)
+		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		button.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.disabled = not store._nodes.has(id)
+		if button.disabled:button.tooltip_text = "This Feature is not displayed on the current map."
+		button.pressed.connect(_focus_node.bind(id))
+		content.add_child(button)
+	guidance_scroll.show()
+	_queue_description_fit()
+	popup.reset_size()
+	position_details.call_deferred()
 
 func _close_parent_links() -> void:
 	_parent_revision += 1
@@ -742,6 +825,7 @@ func _fit_description() -> void:
 	if not is_inside_tree() or _back==null: return
 	var usable:=_map_rect().size.y-_toolbar_height()
 	var overhead:=32.0+20.0+_back.get_combined_minimum_size().y+store._buy.get_combined_minimum_size().y+16.0
+	if guidance_scroll.visible:overhead+=guidance_scroll.custom_minimum_size.y+10.0
 	var height:=minf(store._details.get_combined_minimum_size().y,maxf(24.0,usable-overhead))
 	if not is_equal_approx(description_scroll.custom_minimum_size.y,height):
 		description_scroll.custom_minimum_size.y=height
@@ -766,6 +850,11 @@ func position_details() -> void:
 	var height := popup.size.y
 	if _parents_expanded: height = maxf(height, store._buy.global_position.y - popup.global_position.y + parent_links.size.y)
 	point.y = clampf(point.y, limits.position.y, maxf(limits.position.y, limits.end.y - height))
+	if guidance_scroll.visible and is_instance_valid(store._toolbar):
+		var toolbar_rect: Rect2=store._toolbar.get_global_rect()
+		if Rect2(point,Vector2(width,height)).intersects(toolbar_rect):
+			var above := toolbar_rect.position.y-height-8.0
+			if above>=limits.position.y:point.y=above
 	popup.global_position = point
 	_position_parent_links()
 
@@ -793,6 +882,7 @@ func _on_node_focused(id: StringName) -> void:
 	store._select_node(id)
 
 func _focus_node(id: StringName) -> void:
+	if not store._nodes.has(id): return
 	store._nodes[id].grab_focus()
 	# A dismissed popup can leave this node focused already.
 	if store._selected != id: store._select_node(id)
@@ -888,7 +978,8 @@ func _slide_menu(id: StringName) -> void:
 	_menu_tween.chain().tween_callback(func():
 		store._buy.mouse_filter = Control.MOUSE_FILTER_STOP
 		store._buy.focus_mode = Control.FOCUS_ALL
-		_reveal_parent_links())
+		_reveal_parent_links()
+		if guidance_scroll.visible:position_details.call_deferred())
 
 func _reveal_node(id: StringName) -> void:
 	_view_revision += 1
@@ -920,13 +1011,13 @@ func navigate_direction(direction: Vector2) -> void:
 				anchor = id
 				break
 	# Compare logical map positions, so zoom/tween rounding cannot reorder ties.
-	var center := (Vector2(scroll.scroll_horizontal, scroll.scroll_vertical) + _map_rect().size / 2.0 - tree.position) / zoom
-	if not anchor.is_empty(): center = store._nodes[anchor].position + store.NODE_SIZE / 2.0
+	var navigation_center := (Vector2(scroll.scroll_horizontal, scroll.scroll_vertical) + _map_rect().size / 2.0 - tree.position) / zoom
+	if not anchor.is_empty(): navigation_center = store._nodes[anchor].position + store.NODE_SIZE / 2.0
 	var target: StringName = &""
 	var best := INF
 	for id: StringName in store._nodes:
 		if id == anchor: continue
-		var delta: Vector2 = store._nodes[id].position + store.NODE_SIZE / 2.0 - center
+		var delta: Vector2 = store._nodes[id].position + store.NODE_SIZE / 2.0 - navigation_center
 		var score := delta.length_squared()
 		if not anchor.is_empty():
 			var forward := delta.dot(direction)

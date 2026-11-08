@@ -1,5 +1,7 @@
 # Sales, lifespan and campaigns
 
+**2026-11-04 campaign Summary repair — IMPLEMENTED locally.** Responsive actions and visible status keep Run Campaign accessible and explain its legal release-age window. Successful actions confirm the fee and cycle, while the Summary distinguishes organic and active Awareness and does not mislabel campaign-boosted, crowding-adjusted units. The persistent Studio tip clears the controls. Campaign timing, price, effects and sales/finance rules are unchanged. [Evidence](../logs/2026-11-04-released-game-campaign-ui-v1.md).
+
 **2026-10-31 Studio proceeds reporting:** per-title `studio_net_cents` and `studio_settled_cents` now reflect the same cumulative engine royalties already used by finance, after commission/support ownership. Raw post-platform sales, rounding, payments and economic formulas are unchanged. Native/HUD/checkpoint and Windows calendar acceptance pass. [Closeout](../logs/2026-10-31-calendar-acceptance-push-v2.md).
 
 **2026-10-31 calendar pacing — IMPLEMENTED locally.** Fresh release-age months have4 earning cycles; calendar settlement also follows the central4-cycle month. Existing earned halves/rounding, paid histories, campaign factors and future month boundaries migrate with explicit age/run contexts. All existing sales formulas, organic decay, fees and shares remain unchanged. Calendar and per-title age months remain separate. [Source and checks](../logs/2026-10-31-calendar-four-cycle-v1.md).

@@ -14,6 +14,90 @@ SPEC.loader.exec_module(simulate)
 
 
 class SimulatorRunnerTests(unittest.TestCase):
+    def test_git_provenance_excludes_generated_run_trees_but_keeps_runtime_untracked(self):
+        import subprocess
+        repo = self.root / "repo"
+        repo.mkdir()
+        subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+        (repo / "tracked.txt").write_text("before", encoding="utf-8")
+        (repo / "patch-notes/scripts").mkdir(parents=True)
+        (repo / "patch-notes/scripts/existing.gd").write_text("source", encoding="utf-8")
+        subprocess.run(["git", "add", "tracked.txt", "patch-notes/scripts/existing.gd"], cwd=repo, check=True)
+        subprocess.run(["git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-qm", "base"], cwd=repo, check=True)
+        (repo / "tracked.txt").write_text("after", encoding="utf-8")
+        runtime = repo / "patch-notes/scripts/new_rule.gd"
+        runtime.write_text("runtime source", encoding="utf-8")
+        generated = repo / "docs/codex/threads/ai-competitors/sims/old-run/project/fake.gd"
+        generated.parent.mkdir(parents=True)
+        generated.write_text("large generated output", encoding="utf-8")
+        evidence = self.root / "evidence"
+        evidence.mkdir()
+        result = simulate.git_provenance(repo, evidence)
+        status = (evidence / result["status"]["artifact"]).read_text(encoding="utf-8")
+        runtime_status = (evidence / result["runtime_status"]["artifact"]).read_text(encoding="utf-8")
+        self.assertIn("tracked.txt", status)
+        self.assertIn("patch-notes/scripts/new_rule.gd", runtime_status)
+        self.assertNotIn("old-run", status + runtime_status)
+        self.assertTrue(result["dirty"])
+        self.assertIn("untracked", result["status_scope"])
+
+    def test_unseen_untracked_work_is_not_claimed_as_a_clean_repository(self):
+        import subprocess
+        repo = self.root / "untracked-repo"
+        repo.mkdir()
+        subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+        (repo / "tracked.txt").write_text("same", encoding="utf-8")
+        subprocess.run(["git", "add", "tracked.txt"], cwd=repo, check=True)
+        subprocess.run(["git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-qm", "base"], cwd=repo, check=True)
+        (repo / "untracked-not-runtime.txt").write_text("private work", encoding="utf-8")
+        evidence = self.root / "untracked-evidence"
+        evidence.mkdir()
+        result = simulate.git_provenance(repo, evidence)
+        self.assertIsNone(result["dirty"])
+        self.assertIn("not enumerated", result["status_scope"])
+
+    def test_runtime_git_status_is_bounded_and_truncation_is_disclosed(self):
+        import subprocess
+        repo = self.root / "many-source-files"
+        repo.mkdir()
+        subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+        source = repo / "patch-notes/scripts"
+        source.mkdir(parents=True)
+        (source / "sentinel.gd").write_text("source", encoding="utf-8")
+        subprocess.run(["git", "add", "patch-notes/scripts/sentinel.gd"], cwd=repo, check=True)
+        for index in range(20):
+            (source / ("rule_%03d.gd" % index)).write_text("source", encoding="utf-8")
+        evidence = self.root / "bounded-evidence"
+        evidence.mkdir()
+        with patch.object(simulate, "PROVENANCE_STATUS_LIMIT", 40):
+            result = simulate.git_provenance(repo, evidence)
+        status = result["runtime_status"]
+        self.assertTrue(status["truncated"])
+        self.assertLessEqual((evidence / status["artifact"]).stat().st_size, 40)
+        self.assertTrue(result["dirty"])
+
+    @unittest.skipUnless(os.name == "nt", "NTFS compression is a Windows optimization")
+    def test_new_output_compression_preserves_independent_writable_bytes(self):
+        output = self.root / "compressed-output"
+        output.mkdir()
+        result = simulate.prepare_output_storage(output)
+        if result["status"] != "enabled":
+            self.skipTest("This filesystem did not enable NTFS compression: " + str(result))
+        target = output / "source.gd"
+        source = b"independent snapshot source\n" * 4096
+        target.write_bytes(source)
+        self.assertEqual(target.read_bytes(), source)
+        self.assertTrue(target.stat().st_file_attributes & 0x800)
+        target.write_bytes(b"independent update")
+        self.assertEqual(target.read_bytes(), b"independent update")
+        source_snapshot = simulate.copy_snapshot(self.project, output / "project")
+        copy = output / "project/scripts/rule.gd"
+        self.assertTrue(copy.stat().st_file_attributes & 0x800)
+        simulate.check_snapshot(output / "project", source_snapshot)
+        copy.write_text("changed in this independent run", encoding="utf-8")
+        self.assertEqual((self.project / "scripts/rule.gd").read_text(encoding="utf-8"), "retained source")
+
+
     def test_large_git_evidence_is_retained_without_buffering_in_result(self):
         output = self.root / "git-evidence"
         output.mkdir()

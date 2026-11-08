@@ -1,0 +1,5 @@
+# Annual Game Awards video, 2026-11-03
+
+Captured all ten pages of the 1980 ceremony from the current local Gameplay scene on `main` at `7c60a01cbfac76d3f3cae1062849a070b1563116` with the working tree's existing edits. Godot 4.7.1 loaded the [first-year career fixture](../findings/awards-presentation-20261101-v2/current-world/fixture.json.first-year.json) through the existing gameplay verifier's mount routine. The capture used a private profile and automated Next, results scrolling and Exit. The capture log reported a successful player/world restore, each stage from 0 through 9, and return to Studio.
+
+Delivered [the MP4](C:/Users/64jus/.codex/visualizations/2026/11/01/01a19550-3db3-7063-bdfc-48e0d232692c/Patch-Notes-1980-Annual-Game-Awards.mp4) with native game audio and 11 chapters. Trimmed the initial load. FFprobe reported 80.000 seconds, 1280×720, 2,400 frames at 30 fps, H.264 video and AAC audio. Full FFmpeg video and audio decode passed with `-xerror`. Inspected frames from the introduction, Graphics podium, final rewards and Studio. The only repo file added by this capture is this session log.

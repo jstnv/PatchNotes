@@ -2,10 +2,28 @@
 ## field are published in one CheckpointStore generation. Disk input supplies
 ## no classes, resource paths, constructors or executable Variant objects.
 extends RefCounted
+## Exact source before the Public/proprietary starter-policy guard; strict
+## player/rival content, finance, RNG and annual-ledger checks remain in force.
+const POLICY_GUARD_PREDECESSORS := ["9a1170fb13eac0e81551804a9c5357bf301e12091b10d7b240d8eb92e0768973"]
 ## Exact published and Phase3A worlds captured before this repair; full actor,
 ## history, annual ledger, finance and RNG validation still applies.
 # Exact pre-repair editor source, verified from a legal Contract/Search save pair.
 const CONTRACT_LATENCY_PREDECESSORS := [
+	"fc6b81d36d0f3311a1d0c844b5cdac3a5380cf3f358eebe453308aac3964a551", # Exact pre-warning-cleanup source; gameplay and saved state unchanged.
+	"7682469e3562293250d37f6bb5f124205c2bd51d08a58da8e290dae3b33cb63d", # Exact pre-Studio-creation layout source; gameplay and saved state unchanged.
+	"a8d29645def2c5fa8a18de5f9a4121ecee722977d3fb17255f236a2391b27b22", # Exact prior Genre-Awareness source; existing releases retain frozen outcomes.
+	"bc76a768efabb96989597a1535e4585db07f3658ccc8a4b3ef1347437bf7c2b8", # Exact pre-campaign-controls source; released-game rules and saved state are unchanged.
+	"7369645beb5e4a9aaa9456235cf612dcdac7eef3adfc6b172f7ba745cc32e4de", # Exact pre-challenge-popup presentation source; saved rules and state unchanged.
+	"63076f26e870c07de01688c372fed4c3002476fdda62acfb75793c49915b0ba5", # Exact pre-implementation-capacity source; saved queues and prior outcomes remain valid.
+	"032b72509e9e5587a463c64277edabd08e070d2139f1da9fcf6d15a2ccaa09d6", # Exact pre-Studio-layer presentation source; existing game state is unchanged.
+	"c47e5abf16d401fd7b06ad7b2e7e2e188a060410e5929b60dfc1ce882e9f109c", # Exact pre-starter-engine source; existing engines retain their frozen libraries.
+	"0100779ec59b17edffd05ae7d9a9268355e1e641cd92764be802fe9f07b96eb6", # Verified pre-companion-visibility presentation source; gameplay and saved state unchanged.
+	"c7e39d147c08e780cc9eb14bafe5d805a4dcb484503573254f17bc7dca0abbef", # Verified pre-scene-transition presentation source; gameplay and saved state unchanged.
+	"aab8705bb861a6d7399e28b942c2498ce48809e8f2ea63076140d0a990389eba", # Verified pre-unlock-notice presentation source; saved rules and state unchanged.
+	"9dff68aa7f8ca9bb2dc54383fa921421892a6213e778bd8fb237fc33879bfa81", # Verified pre-Studio-midpoint presentation source; saved rules and state unchanged.
+	"64867189ac6385df2992acff8dea8030637c0d0da1407f8464890af0b4304892", # Verified pre-trusted-replay source; saved rules and state unchanged.
+	"10f966ead12dd286da1d299ed0cada9dfb5addc4039f55beb19ce045904d7f18", # Verified pre-Fanbase-replay optimization source; saved rules and state unchanged.
+	"8b140acb4a65c45ca85556d24b7a87ca4eb251e05a795435606a73a785053d03", # Verified pre-production-visualizer source; gameplay and saved state unchanged.
 	"bd7cbb9e1f604086a16588e7b6c79c4dc8f684e2c748c6b4c60b0cfaff050d30", # Verified pre-Studio-slide-layer source; gameplay and saved state unchanged.
 	"35dfed1c2b25d7758b1eaa588e6e2c37a0c1da9ff0fc81436af010ce720cb2db", # Verified pre-Studio-button-motion source; gameplay and saved state unchanged.
 	"1bddc849d257cff1394f76bf797d8b9100b69e14ef6c655f7b256ecba5567196", # Exact pre-Studio-note-visualizer source; gameplay and saved state unchanged.
@@ -70,7 +88,7 @@ const CONTRACT_LATENCY_PREDECESSORS := [
 	"b3bca0e2764772c746b82f4c76a8e087e540714fc4892f81395dd30b9a76e47f",
 	"4f84dd8baa0d27022f04b5626629a430496d64fd2f3b84a6af45d22cda79f858", # Exact captured pre-grid UI runtime; current gameplay/finance/RNG unchanged.
 	"6b3fa06073593241c439c080903dcada00360f952fe2b084ff591656080d6563", "b496434dc8095aefd67d498de3f9f98c2992abaa5d531bbd36ff7017ec9a2547", "5d27b061021aac5944f855395ab011b9f3de844e4145f17c857bdac88f2f01eb", "e4512254abfa3817c820f5f42923946f25ea75012aa7cb1dfa6358d18595cc75", "035345172f2253b32d3e4540f1b299bbdb389f8d4bec487862397a91465fe0c0", "e1720b670204ebb318ed54e92b68cf157b9d9466cd0a61882f92601957c2edf9", "07ce9e0e59fcd60944fc4a117890c0d9ce4a2f437fa4c3b9375693db5908455d", "dd3874909e76aa243eaa8f855230561956c7e18744cd0c2842cabb4035f8dc35", "b8c50f210b5a300f0de547d64cce1e3b4888aeea0f763ae201a4e36954ba8e9e", "a574d685e47db14036bd4ab445a688dd6166de6993026fef1ed94253b42ce3ef"]
-const AWARDS_PRESENTATION_PREDECESSORS := ["ee16630a62508df8170e15b6dbc39a874a24d977792a42e0f3b56bd8bf10254f", "89b2459915e55f7d203780d6fc0d4b73218c3e44997b3a3111e33267f31080e1"]
+const AWARDS_PRESENTATION_PREDECESSORS := ["72ea9ed701a7fb366ed3ae4f0a93faad45e3ec9731a5518bc8cda86dada501f9", "e196114a55ca69930797db2a38d323aa2900650897478b8e1e615afb5e317c0e", "3f303b81bfef2ad0a6302470dcc5e8aff0aca7ad4bd38990c101b3257c1ccee3", "f93a89408f908db7e995f99346b638d43af4731a39ebf267b61fe3a536610edd", "abbed94c5e03d929c697da7fae6b59498c591d93d5d5b5237f81884c01fc326f", "6a3470e8badc8230ed22ce90499bf57cb87b7f29c429d13ce7c44287a3e4bdfb", "6f4a2c7d9f2fea272e84f95ac38c15c22d71cac4ba4146ae2046fae3a66cc7b5", "bb826f14ab7068c7f5534ce20312f42a2da5d23943bd9c23801043fbb92d4c9a", "e9ced0437c1e0ccf53c03e991452cdab84513f5dd528fc2f89876ca99dc98990", "8eaac2c17cf6650575b1df4de6fd5d980a3dd44dd4adf07ddd1aff157106bc83", "5fd610545683eac38a75f40e32b79d6301e3d2919e7cb357595c264d604a8db6", "ee16630a62508df8170e15b6dbc39a874a24d977792a42e0f3b56bd8bf10254f", "89b2459915e55f7d203780d6fc0d4b73218c3e44997b3a3111e33267f31080e1"]
 const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 const AWARD_LEDGER_PREDECESSORS := ["303959a85af6268f88e1cd4b855e747838a25fad8779d85621a17f77a0b19253"]
 
@@ -610,7 +628,7 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 	var source_ok: bool = predecessor_source in CAREER_PREDECESSORS or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in GAMEPLAY_RESTORATION_PREDECESSORS or predecessor_source in TECH_ROW_PRESENTATION_PREDECESSORS or predecessor_source in AUDIO_PREDECESSOR_SOURCES or grid_predecessor or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS or predecessor_source==current_source or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ERA_PREDECESSORS or predecessor_source in MENU_VISUALIZER_PREDECESSORS or predecessor_source in STARTER_SCOPE_PREDECESSORS or predecessor_source in SCORE_FLOAT_PREDECESSORS or predecessor_source in BALANCED_SMALL_HAND_PREDECESSORS or predecessor_source in BALANCED_BOOST_PREDECESSORS or predecessor_source in CARD_POP_PREDECESSORS or predecessor_source in EMPLOYEE_MENU_PREDECESSORS or predecessor_source in INSIDER_HOLD_PREDECESSORS or predecessor_source in PAUSE_TRANSITION_SOURCES or predecessor_source in LATENCY_PREDECESSOR_SOURCES or predecessor_source in SEARCH_PRESENTATION_SOURCES or predecessor_source in EMPLOYEE_PRE_SEARCH_SOURCES or predecessor_source in ROOT_FIRST_PREDECESSOR_SOURCES or predecessor_source in USABILITY_PRESENTATION_SOURCES or usability_predecessor or support_predecessor or relationship_predecessor or commission_predecessor
 	var paired_revision: String = StudioCheckpoint.RelationshipPrevious.new().revision() if relationship_predecessor else StudioCheckpoint.new().pre_course_revision() if predecessor_source==current_source or predecessor_source in STUDIO_GLOW_PREDECESSORS or predecessor_source in RESEARCH_CONFIRMATION_PREDECESSORS or predecessor_source in RESEARCH_PERFORMANCE_PREDECESSORS or predecessor_source in QUIT_PRESENTATION_PREDECESSORS or predecessor_source in STORE_NAVIGATION_PREDECESSORS or predecessor_source in STORE_ROOT_PRESENTATION_PREDECESSORS else StudioCheckpoint.new()._rules_revision(StudioCheckpoint.PRE_ERA_RULES)
 	if predecessor_source==current_source:paired_revision=StudioCheckpoint.new().revision()
-	if predecessor_source in STUDIO_MANAGEMENT_PREDECESSORS+RIVAL_POOL_PREDECESSORS+MARKET_HISTORY_PREDECESSORS+BUDGET_PREDECESSORS+VERSIONED_BUDGET_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS:
+	if predecessor_source in STUDIO_MANAGEMENT_PREDECESSORS+RIVAL_POOL_PREDECESSORS+MARKET_HISTORY_PREDECESSORS+BUDGET_PREDECESSORS+VERSIONED_BUDGET_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS+POLICY_GUARD_PREDECESSORS:
 		source_ok=true;paired_revision=StudioCheckpoint.new().revision()
 	if predecessor_source in CAREER_PREDECESSORS:paired_revision=StudioCheckpoint.new().pre_course_revision()
 	if predecessor_source in AUDIO_PREDECESSOR_SOURCES+STORE_ROOT_PRESENTATION_PREDECESSORS: paired_revision=StudioCheckpoint.new().pre_audio_revision()
@@ -633,11 +651,11 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 	if payload.size()!=7+int(payload.has("legacy"))+int(payload.has("market_origin"))+int(payload.has("annual_awards")) or payload.get("schema_version") not in ["1","2","3"] or not source_ok or payload.get("rng_algorithm")!=RunRandom.ALGORITHM or not payload.get("studios") is Array or not payload.get("history") is Array or not payload.get("market") is Dictionary:
 		error = "INCOMPATIBLE_RIVAL_WORLD_SOURCE_OR_SCHEMA"
 		return {}
-	if (predecessor_source==current_source or predecessor_source in AWARD_LEDGER_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS) and captured_source_identity.is_empty() and not payload.has("annual_awards"):
+	if (predecessor_source==current_source or predecessor_source in AWARD_LEDGER_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS+POLICY_GUARD_PREDECESSORS) and captured_source_identity.is_empty() and not payload.has("annual_awards"):
 		error="Missing current annual world ledger";return {}
 	var annual: Dictionary={}
 	if payload.has("annual_awards"):
-		if predecessor_source!=current_source and predecessor_source not in AWARD_LEDGER_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS:error="Legacy source cannot manufacture awards";return {}
+		if predecessor_source!=current_source and predecessor_source not in AWARD_LEDGER_PREDECESSORS+AWARDS_PRESENTATION_PREDECESSORS+CONTRACT_LATENCY_PREDECESSORS+POLICY_GUARD_PREDECESSORS:error="Legacy source cannot manufacture awards";return {}
 		var decoded_annual: Variant=_decode(payload.annual_awards,preload("res://scripts/awards/annual_awards_ledger.gd").schema())
 		if not error.is_empty() or not decoded_annual is Dictionary:error="Malformed annual ledger";return {}
 		annual=decoded_annual
@@ -731,7 +749,7 @@ func _read_checked(payload: Dictionary, player_payload: Dictionary, captured_sou
 				if not engine_state.engines.has(engine_id):error="Invalid frozen engine identity/capacity";return {}
 				var bound: Dictionary=engine_state.engines[engine_id]
 				var valid_capacity: bool=engine_capacity==bound.capacity
-				if bound.origin==preload("res://scripts/engines/proprietary_engine_state.gd").ORIGIN:
+				if preload("res://scripts/engines/proprietary_engine_state.gd").is_creation_origin(bound.origin):
 					valid_capacity=preload("res://scripts/engines/proprietary_engine_state.gd").valid_frozen_capacity(engine_capacity,bound.capacity)
 				if engine_capacity>0 and not valid_capacity:error="Invalid frozen engine identity/capacity";return {}
 				for feature: StringName in dev.project._feature_supply_ids:

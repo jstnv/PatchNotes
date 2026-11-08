@@ -65,8 +65,8 @@ func _capture(label: String, width: int) -> void:
 	var map := active_store._map
 	for lane: StringName in active_store.LANE_ORDER:
 		var area: Rect2 = map.category_regions[lane]
-		var view: Vector2 = map._map_rect().size - Vector2(24,24)
-		map.set_zoom(minf(view.x / area.size.x, view.y / area.size.y))
+		var lane_view: Vector2 = map._map_rect().size - Vector2(24,24)
+		map.set_zoom(minf(lane_view.x / area.size.x, lane_view.y / area.size.y))
 		map.center_after_layout(area.get_center(), map._view_revision)
 		await create_timer(0.2).timeout
 		await _capture(str(lane).replace(" & ","-").to_lower(), width)

@@ -54,9 +54,9 @@ func _run() -> void:
 			var weights:={0:40+tier*5,1:20,2:40-floor_value-tier*5,3:floor_value}
 			roster=c.hand(roster,id,&"design",0,cycle+1,facts,weights)
 			roster=c.hand(roster,id,&"alpha",1,cycle+2,facts,weights)
-			check(c.level(roster)==tier,"Unreleased PM hands never award level")
+			check(c.level(roster)==(tier+1 if tier==0 and game==3 else tier),"Manager 1 completes on its eighth hand; later tiers still require release")
 			roster=c.release(roster,id,cycle+2);cycle+=3
-		check(c.level(roster)==tier+1 and c.wage(roster.employees[manager])==110000+tier*10000,"Four distinct qualifying releases complete one tier")
+		check(c.level(roster)==tier+1 and c.wage(roster.employees[manager])==110000+tier*10000,"Course earns one tier and its prospective wage")
 	check(EmployeeRoster.valid(roster),"Full journal reconstructs exact career progress")
 	check(c.level(roster)==4,"Four trained Manager tiers")
 	before=roster.duplicate(true)

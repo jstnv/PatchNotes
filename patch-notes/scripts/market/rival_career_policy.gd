@@ -145,7 +145,7 @@ func choose(session: RefCounted,view: Dictionary) -> Dictionary:
 	_search=0;_marketing=0
 	var run: RunState=session.run
 	if view.phase==&"studio":
-		if run.needs_starter_selection() and scope(run)<30:
+		if run.needs_starter_selection() and run.get_selected_engine_id()==&"legacy_engine" and scope(run)<30:
 			var shopping:=_shop(run,true,30)
 			if not shopping.is_empty():return shopping
 			var loan:=_loan(run)

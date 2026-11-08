@@ -13,12 +13,12 @@ func _run() -> void:
 		if coordinator.store._writer.listen(int(port),"127.0.0.1")!=OK: quit(2); return
 	if mode=="setup":
 		game._on_studio_created("Bank restart fixture",&"action",[],game._active_phase)
-		var run: RunState = game.run_state
-		run.finalize_starter_selection()
-		var first := PrimitivePredevelopment.prepare_project("Bank accounting fixture",&"action",&"fantasy",run)
+		var initial_run: RunState = game.run_state
+		initial_run.finalize_starter_selection()
+		var first := PrimitivePredevelopment.prepare_project("Bank accounting fixture",&"action",&"fantasy",initial_run)
 		_finish_project(first)
-		expect(run.register_release(first),"Frozen release fixture registers")
-		for i in range(4): expect(run.complete_productive_action(),"Actual settled sales qualify")
+		expect(initial_run.register_release(first),"Frozen release fixture registers")
+		for i in range(4): expect(initial_run.complete_productive_action(),"Actual settled sales qualify")
 	else:
 		var inspected := coordinator.store.inspect()
 		expect(inspected.status==&"valid","Separate process validates finalized generation")

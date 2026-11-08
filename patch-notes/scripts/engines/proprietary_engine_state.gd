@@ -3,6 +3,7 @@ extends RefCounted
 
 const VERSION := 3
 const ORIGIN := "proprietary-creation-v1"
+const STARTER_ORIGIN := "proprietary-creation-v2"
 const COST_CENTS := 10000
 const CAPACITY := 25
 const LEGACY_CAPACITY := 20
@@ -17,6 +18,9 @@ const NODES := {
 
 static func empty() -> Dictionary:
 	return {"version":VERSION,"next_serial":1,"engines":{}}
+
+static func is_creation_origin(origin: Variant) -> bool:
+	return origin is String and origin in [ORIGIN,STARTER_ORIGIN]
 
 static func next_id(state: Dictionary,owner: StringName) -> StringName:
 	return StringName("%s:proprietary:%d"%[owner,int(state.get("next_serial",0))])
@@ -115,12 +119,14 @@ static func valid(state: Dictionary,owner: StringName,entitlements: Dictionary,f
 		if not row.get("name") is String or row.name.is_empty() or row.name!=row.name.strip_edges() or row.name.length()>80:return false
 		if not row.get("created_cycle") is int or row.created_cycle<0 or row.created_cycle>cycle:return false
 		var feature: Dictionary=features.engines[id]
-		if feature.kind!=&"proprietary" or feature.origin!=ORIGIN or feature.name!=row.name or feature.initial!=[]:return false
+		if feature.get("kind")!=&"proprietary" or not is_creation_origin(feature.get("origin")) or feature.get("name")!=row.name:return false
+		if feature.origin==ORIGIN and feature.get("initial")!=[]:return false
+		if feature.origin==STARTER_ORIGIN and (state.version!=VERSION or feature.get("initial")!=FOUNDATIONS):return false
 		if state.version==1:
 			if row.technology_nodes!=FOUNDATIONS or row.challenge_progress!={} or row.branch_progress!={} or row.scope_milestones!=[] or row.pass_efficiency!={} or row.pass_effectiveness!={} or row.bug_prevention!={} or feature.capacity!=LEGACY_CAPACITY:return false
 		elif not _valid_row(row,feature.capacity,ledger,id,cycle,LEGACY_CAPACITY if state.version==2 else CAPACITY):return false
 		var receipts: Array=ledger.get("actions",[]).filter(func(action: Dictionary) -> bool:return action.source_id==row.receipt_id)
 		if receipts.size()!=1 or receipts[0].kind!=&"other_expense" or receipts[0].cycle!=row.created_cycle or receipts[0].direct_delta!=-COST_CENTS or receipts[0].productive:return false
 	for id: StringName in features.get("engines",{}):
-		if features.engines[id].origin==ORIGIN and not state.engines.has(id):return false
+		if is_creation_origin(features.engines[id].origin) and not state.engines.has(id):return false
 	return true

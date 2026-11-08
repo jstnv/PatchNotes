@@ -28,6 +28,8 @@ var _write_catalog: RefCounted
 var _exiting := false
 var _last_write_player: Dictionary={}
 var _last_write_world: Dictionary={}
+## Dirty state alone never starts a write. Only a checkpoint boundary requests one.
+var _save_requested := false
 
 func _notify_status() -> void:
 	# UI children may already be gone during scene teardown. The writer still
@@ -39,19 +41,21 @@ func _ready() -> void:
 
 func is_saving() -> bool:
 	if debug_session:return false
-	return _write_job!=null or (background_saves and pending and failure.is_empty() and in_studio and run!=null and run.get_active_contract()==null)
+	return _write_job!=null or (background_saves and _save_requested and pending and failure.is_empty() and in_studio and run!=null and run.get_active_contract()==null)
 
 func _process(_delta: float) -> void:
 	if _write_job!=null and not _write_job.thread.is_alive():
 		_finish_write()
-		if pending and failure.is_empty(): _request_save.call_deferred()
+		if _save_requested and pending and failure.is_empty(): _request_save.call_deferred()
 
 func _request_save() -> void:
 	if debug_session:return
+	if not _save_requested: return
 	if not background_saves:
 		flush()
 		return
 	if _exiting or _write_job!=null or not pending or not failure.is_empty() or not in_studio or run==null or run.get_active_contract()!=null: return
+	_save_requested = false
 	if not store.acquire():
 		_failed("Another Patch Notes process owns the save slot.")
 		return
@@ -105,6 +109,7 @@ func _finish_write() -> void:
 	_last_write_world=completed_job.world
 	replace_on_save=false
 	pending=revision!=_change_revision
+	if not pending: _save_requested = false
 	failure=""
 	run.checkpoint_mutations_allowed=true
 	if result.status == &"saved": completed_saves += 1
@@ -114,10 +119,17 @@ func wait_saved() -> bool:
 	if debug_session:return true
 	if not background_saves: return flush()
 	if not failure.is_empty(): return false
-	_request_save()
+	# Explicit boundary (Studio entry, Main Menu, Quit or Retry) drains current work.
+	while in_studio and run != null and run.get_active_contract() == null and (pending or _write_job != null):
+		_save_requested = pending
+		_request_save()
+		if not await wait_for_requested_save(): return false
+	return failure.is_empty()
+
+func wait_for_requested_save() -> bool:
+	# Production departure may finish a Studio-entry write, but cannot request one.
 	while is_saving():
 		await get_tree().process_frame
-		if not failure.is_empty(): return false
 	return failure.is_empty()
 
 func retry_background() -> bool:
@@ -185,13 +197,14 @@ func attach_rivals(world: RivalWorld, definitions: RefCounted) -> bool:
 
 func attach(value: RunState) -> void:
 	if _write_job!=null: flush()
+	_save_requested = false
 	_last_write_player={};_last_write_world={}
 	# Bind/load pays the catalog hash once; autosaves reuse this current identity.
 	# Worker validation still rechecks the executable data before publication.
 	adapter.revision()
 	if run!=null:
-		for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"engines_changed",&"publisher_relationships_changed"]:
-			if run.is_connected(name,_changed): run.disconnect(name,_changed)
+		for signal_name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"engines_changed",&"publisher_relationships_changed",&"studio_notice_state_changed"]:
+			if run.is_connected(signal_name,_changed): run.disconnect(signal_name,_changed)
 		run.studio_departure_guard = Callable()
 		run.studio_action_guard = Callable()
 		run.checkpoint_before_mutation = Callable()
@@ -199,21 +212,22 @@ func attach(value: RunState) -> void:
 	run.studio_departure_guard = before_departure
 	run.studio_action_guard = before_studio_action
 	run.checkpoint_before_mutation = before_mutation
-	for name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"engines_changed",&"publisher_relationships_changed"]:
-		run.connect(name,_changed)
+	for signal_name in [&"cash_changed",&"calendar_changed",&"features_changed",&"sales_changed",&"contracts_changed",&"finance_changed",&"employees_changed",&"engines_changed",&"publisher_relationships_changed",&"studio_notice_state_changed"]:
+		run.connect(signal_name,_changed)
 
 func _changed() -> void:
 	if debug_session:pending=false;return
 	if not in_studio: return
 	_change_revision+=1
 	pending = true
-	if _write_job!=null:_write_job.supersede()
-	_request_save.call_deferred()
+	# Preserve an in-flight boundary snapshot. Later actions stay dirty until
+	# another boundary rather than superseding it into a per-action autosave.
 
 func entered_studio(restored: bool = false) -> void:
 	in_studio = true
 	if debug_session:pending=false;_notify_status();return
 	pending = not restored
+	_save_requested = pending
 	if pending:
 		_change_revision+=1
 		# Batch same-frame return/menu actions into the newest detached snapshot.
@@ -223,7 +237,9 @@ func entered_studio(restored: bool = false) -> void:
 
 func before_departure() -> bool:
 	if not in_studio: return false
-	return flush()
+	if _save_requested: _request_save()
+	if _write_job != null: _finish_write()
+	return failure.is_empty()
 
 func before_studio_action() -> bool:
 	if not in_studio or run==null:return false
@@ -231,10 +247,7 @@ func before_studio_action() -> bool:
 
 func before_mutation() -> bool:
 	if debug_session:return true
-	if not failure.is_empty(): return false
-	if background_saves: return true
-	if not in_studio or run._productive_cycle_in_progress or run._publishing_cycle or run._feature_purchase_in_progress or run._committing_cycle_cash: return true
-	return flush()
+	return failure.is_empty()
 
 func flush() -> bool:
 	if debug_session:pending=false;return true
@@ -255,6 +268,7 @@ func flush() -> bool:
 	# callbacks with identical state never create another generation.
 	if payload==last_payload:
 		pending = false
+		_save_requested = false
 		return true
 	# capture() just computed this fingerprint from executable resources. Reuse
 	# it only during this synchronous publication; later inspections/Continue
@@ -267,6 +281,7 @@ func flush() -> bool:
 	_last_write_player={};_last_write_world={}
 	replace_on_save = false
 	pending = false
+	_save_requested = false
 	failure = ""
 	run.checkpoint_mutations_allowed = true
 	completed_saves += 1
@@ -276,7 +291,7 @@ func flush() -> bool:
 func begin_debug_session() -> bool:
 	if debug_session:return true
 	if not in_studio or run==null or run.get_active_contract()!=null:return false
-	if not await wait_saved() or not failure.is_empty() or _write_job!=null:return false
+	if not await wait_for_requested_save() or not failure.is_empty() or _write_job!=null:return false
 	debug_session=true;pending=false;run.checkpoint_mutations_allowed=true
 	_notify_status();return true
 

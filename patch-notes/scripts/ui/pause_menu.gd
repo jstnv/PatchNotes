@@ -166,9 +166,9 @@ func _input(event: InputEvent) -> void:
 		if not can_pause.is_valid() or not can_pause.call(): return
 		# Real dismissible overlays get first refusal. Passive Godot tooltips
 		# otherwise consume Escape during GUI routing before _unhandled_input.
-		for owner in get_tree().get_nodes_in_group(CANCEL_OWNER_GROUP):
-			if owner is CanvasLayer and owner.visible: return
-			if owner is CanvasItem and owner.is_visible_in_tree(): return
+		for overlay in get_tree().get_nodes_in_group(CANCEL_OWNER_GROUP):
+			if overlay is CanvasLayer and overlay.visible: return
+			if overlay is CanvasItem and overlay.is_visible_in_tree(): return
 		open()
 		get_viewport().set_input_as_handled()
 		return

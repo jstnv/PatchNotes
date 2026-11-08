@@ -38,7 +38,8 @@ var artwork_path: String
 # their existing fields and validation semantics.
 var _ordered_core_contributions: Array = []
 const CORE_STATS := [&"graphics", &"sound", &"technology", &"design"]
-const MAX_ORDERED_VALUE: int = 9223372036854775807 / 1200
+# Exact integer quotient of the signed 64-bit maximum divided by 1200.
+const MAX_ORDERED_VALUE: int = 7686143364045646
 
 static func ordered_contributions_error(value: Variant) -> String:
 	if not value is Array or value.size() < 1 or value.size() > 3:

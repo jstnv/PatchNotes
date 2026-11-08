@@ -80,7 +80,8 @@ func _ready() -> void:
 	hide()
 
 func _build_course_details() -> void:
-	course_grid.minimum_detail_height=400.0
+	course_grid.popup.theme_type_variation=&"DocumentPanel" # Inspectors must obscure the tree beneath their text.
+	course_grid.minimum_detail_height=320.0
 	course_grid.detail_width=480.0
 	var heading: HBoxContainer = course_grid._title.get_parent()
 	course_grid._title.custom_minimum_size.x = 88
@@ -132,9 +133,9 @@ func _build_course_details() -> void:
 	var inset:=MarginContainer.new();challenge_panel.add_child(inset)
 	for edge in ["left","right","top","bottom"]:inset.add_theme_constant_override("margin_"+edge,14)
 	var challenge_box:=VBoxContainer.new();challenge_box.add_theme_constant_override("separation",8);inset.add_child(challenge_box)
-	challenge_heading=FolderUI.label(challenge_box,"Challenge Locked",&"SectionHeading");challenge_heading.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+	challenge_heading=FolderUI.label(challenge_box,"",&"SectionHeading");challenge_heading.hide()
 	challenge_label=FolderUI.label(challenge_box,"");challenge_label.name="CourseChallenge";challenge_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-	progress_bar=ProgressBar.new();progress_bar.name="CourseProgress";progress_bar.custom_minimum_size.y=62;progress_bar.show_percentage=false;progress_bar.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	progress_bar=ProgressBar.new();progress_bar.name="CourseProgress";progress_bar.custom_minimum_size.y=48;progress_bar.show_percentage=false;progress_bar.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	progress_bar.add_theme_stylebox_override("background",FolderUI.THEME.get_stylebox("normal",&"Button"))
 	progress_bar.add_theme_stylebox_override("fill",FolderUI.THEME.get_stylebox("normal",&"ActiveFolderTab"))
 	course_grid.action_extension.add_child(progress_bar)
@@ -219,14 +220,13 @@ func _inspect_course_node(id: StringName) -> void:
 	_course_switch_row.show()
 	var employee: Dictionary=run.get_employees().employees.get(node.employee_id,{})
 	var progress:=Data.course_progress(employee,node.course)
-	var text: String=_benefit(node.course) if node.role==&"qa" else "Permanent benefit: bundled priority planning for a later matching hand, once per project." if node.course==&"production_planning" else "Permanent benefit: choose a matching Core Pass through Redraw, spending one normal redraw." if node.course==&"pass_alignment" else "Permanent benefit: both priority limits widen by 5 points."
-	if node.role!=&"qa":text+="\n\nCompletion adds $100.00/month prospectively; enrollment gives no immediate benefit."
+	var text: String=_benefit(node.course) if node.role==&"qa" else "Once per game, change priorities during a matching hand without spending a cycle." if node.course==&"production_planning" else "Use one redraw to pick a Pass that matches a Feature." if node.course==&"pass_alignment" else "Lower your minimum and raise your maximum priority by 5 points."
 	_course_reward=text
 	_course_challenge=_criterion(node.course) if node.role==&"qa" else _career_criterion(node.course)
 	_course_enrolled=progress.enrolled
 	var offer: Dictionary=run.get_employee_course_quote(node.employee_id,node.course) if node.state=="ready" else {}
 	var reason := ""
-	if not progress.enrolled and offer.is_empty():reason="Hire this employee first." if employee.is_empty() else "Complete the preceding course and check available cash, overdue bills or any save/action warning."
+	if not progress.enrolled and offer.is_empty():reason="Hire this employee first." if employee.is_empty() else "Complete the previous course and check your available money."
 	course_grid.set_description(reason);course_grid._copy.visible=not reason.is_empty();course_grid.use_detail_extension()
 	_render_course_view()
 	progress_bar.visible=progress.enrolled;progress_bar.max_value=progress.maximum;progress_bar.value=progress.value;progress_label.text=progress.text
@@ -237,8 +237,8 @@ func _inspect_course_node(id: StringName) -> void:
 func _render_course_view(reset_scroll: bool = false) -> void:
 	if not is_instance_valid(challenge_heading) or not is_instance_valid(course_view_switch): return
 	var rewards := course_view_switch.value >= 0.5
-	challenge_heading.text = "Rewards" if rewards else "Challenge" if _course_enrolled else "Challenge Locked"
-	challenge_label.visible = rewards or _course_enrolled
+	challenge_heading.hide()
+	challenge_label.show()
 	challenge_label.text = _course_reward if rewards else _course_challenge
 	_challenge_switch_label.add_theme_color_override("font_color",FolderUI.color(&"muted") if rewards else FolderUI.color(&"mint"))
 	_reward_switch_label.add_theme_color_override("font_color",FolderUI.color(&"mint") if rewards else FolderUI.color(&"muted"))
@@ -283,9 +283,10 @@ static func _role_description(role: StringName) -> String:
 	return {&"production":"Enroll in Production courses to earn bundled priority planning and chosen matching Pass replacement.",&"qa":"Enroll in QA courses to earn specialization Bug searches and one-card Swap.",&"project_manager":"Complete sequential course challenges to widen priority ranges across planning screens."}.get(role,"")
 
 static func _career_criterion(course: StringName) -> String:
-	if course==&"production_planning":return "After enrollment, commit a Design hand with a Core Pass and a Feature matching its printed primary or secondary Core."
-	if course==&"pass_alignment":return "After enrollment, commit a printed Pass/Feature match in Design and Alpha of the same game, then release it."
-	return "After enrollment, release four distinct games with two actual Design, Alpha or Beta Specializations each, in categories at that hand's legal minimum. Contracts do not train this challenge."
+	if course==&"production_planning":return "In Design, play a Pass and a Feature with matching Core."
+	if course==&"pass_alignment":return "In one game, play a matching Pass and Feature in Design and Alpha. Then release the game."
+	if course==&"manager_1":return "Play 2 specialty hands under the category with the lowest priority, 4 times"
+	return "In each of 4 released games, play 2 specialty hands at the lowest allowed priority."
 
 func _career_summary(parent: Node,e: Dictionary) -> void:
 	if e.type==&"project_manager":
@@ -304,7 +305,7 @@ func _payroll_copy(parent: Node,e: Dictionary,payroll: Dictionary) -> void:
 			if effective>run.get_completed_run_cycles():FolderUI.label(parent,"Scheduled wage %s/month from cycle %d"%[CashFormatter.format_exact_cents(change.wage_cents),effective])
 
 static func _criterion(course: StringName) -> String:
-	return "In a single Beta hand, find and fix 2 bugs, 4 times." if course==&"mixed" else "Across projects, commit three pure four-Search and three pure four-Debug Beta hands. Zero-output hands count."
+	return "Find 2 bugs and fix 2 bugs in one Beta hand. Do this 4 times." if course==&"mixed" else "In Beta, play 4 Search cards in a hand 3 times, and 4 Debug cards in a hand 3 times."
 
 static func _benefit(course: StringName) -> String:
-	return "Permanent benefit: Feature specialization replays have a 25% trial chance each to discover one real Hidden Bug. Completion adds $100/month prospectively." if course==&"mixed" else "Permanent benefit: one later pure hand per project arms one Swap for a later hand. Select one QA card and use Swap; its value stays the same. Completion adds $100/month prospectively."
+	return "Each Feature replay in a specialty hand has a 25% chance to find a Hidden Bug." if course==&"mixed" else "Once per game, after 4 Search or 4 Debug cards, swap a QA card for its opposite for free."

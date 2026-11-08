@@ -50,9 +50,9 @@ func _run() -> void:
 	var payload:=adapter.capture(run)
 	var original:=payload.duplicate(true)
 	for key in ["fans","last_cycle"]:
-		var broken:=payload.duplicate(true)
-		broken.run.fanbase[key]=str(int(broken.run.fanbase[key])+1)
-		expect(adapter.hydrate(broken)==null,"Reject forged Fan "+key)
+		var forged:=payload.duplicate(true)
+		forged.run.fanbase[key]=str(int(forged.run.fanbase[key])+1)
+		expect(adapter.hydrate(forged)==null,"Reject forged Fan "+key)
 	var broken:=payload.duplicate(true)
 	broken.run.fanbase.months[0].ending="999"
 	expect(adapter.hydrate(broken)==null,"Reject altered monthly Fan journal")
@@ -66,7 +66,10 @@ func _run() -> void:
 	var before_fans:=run.get_fans()
 	var later:=fan_project(run,7.0,"Later fixture")
 	expect(later.get_awareness_result().get_fan_awareness()==mini(150,before_fans/4),"Later launch uses current quarter Fan Awareness")
-	var expected_units: int = 500*70*(300+mini(150,before_fans/4))/70/200
+	# This Action studio's matching Action release earns the +20 specialty trial.
+	# Assert the independent components before applying the one sales conversion.
+	expect(later.get_awareness_result().get_organic_awareness()==120 and later.get_awareness_result().get_current_launch_marketing()==0 and later.get_awareness_result().get_total_awareness()==120+mini(150,before_fans/4),"Matching specialty adds 20 once before Fan Awareness")
+	var expected_units: int = 500*70*(320+mini(150,before_fans/4))/70/200
 	expect(later.get_units_sold_result().get_final_units_sold()==expected_units,"Total Awareness enters sales conversion once without a second Fan multiplier")
 	expect(run.register_release(later),"Later launch commits once")
 	roundtrip(run,"Three-release Fan provenance")
@@ -84,10 +87,10 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
 	var path:=directory.path_join("checkpoint.1.json")
 	FileAccess.open(path,FileAccess.WRITE).store_string(CheckpointCodec.new().envelope(old))
-	var hash:=FileAccess.get_sha256(path)
+	var checkpoint_hash:=FileAccess.get_sha256(path)
 	var store:=StudioCheckpointStore.new(directory,adapter.validate)
 	expect(store.inspect().status==&"incompatible" and adapter.hydrate(old)==null,"Real pre-Fanbase shape remains unsupported without migration")
-	expect(FileAccess.get_sha256(path)==hash,"Unsupported prior checkpoint bytes preserved")
+	expect(FileAccess.get_sha256(path)==checkpoint_hash,"Unsupported prior checkpoint bytes preserved")
 	expect(StudioFinanceLedger._is_valid(run.get_studio_finance_snapshot()),"Fan accounting preserves exact finance")
 	print("Fanbase checkpoint: %d failures"%failures)
 	quit(0 if failures==0 else 1)

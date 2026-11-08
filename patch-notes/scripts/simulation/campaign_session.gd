@@ -133,6 +133,11 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 	if kind==&"select_engine":
 		if payload.size()!=1 or (not payload.get("engine_id") is String and not payload.get("engine_id") is StringName) or not run.select_engine(StringName(payload.engine_id)):return reject("Engine selection rejected")
 		return {"ok":true,"events":[{"type":"engine_selected","engine_id":run.get_selected_engine_id()}]}
+	if kind==&"set_engine_feature_active":
+		if payload.size()!=1 or not payload.get("quote") is Dictionary:return reject("Missing Feature activation quote")
+		var quote: Dictionary=payload.quote
+		if not run.set_engine_feature_active(quote):return reject("Feature activation rejected")
+		return {"ok":true,"events":[{"type":"engine_feature_activation_changed","engine_id":quote.engine_id,"feature_id":quote.feature_id,"enabled":not quote.enabled}]}
 	if kind in [&"admit_research",&"research"]:
 		if payload.size() != 1 or not payload.get("quote") is Dictionary: return reject("Missing research quote")
 		var ok := run.admit_feature_research(payload.quote) if kind == &"admit_research" else run.research_feature(payload.quote)
@@ -155,13 +160,17 @@ func observation() -> Dictionary:
 	for id in run.get_released_game_ids():
 		releases.append({"id":id,"metadata":run.get_release_metadata(id),"sales":run.get_released_game_sales(id),"campaign":run.get_post_launch_campaign_offer(id)})
 	var quotes: Array = []
+	var activation_quotes: Array = []
 	if in_studio:
 		var ids: Array = run._feature_definitions.keys()
 		ids.sort_custom(func(a: StringName,b: StringName) -> bool: return str(a) < str(b))
+		var store_view: Dictionary = run.get_feature_store_view()
 		for id in ids:
-			var quote := run.get_feature_research_quote(id)
+			var quote: Dictionary = store_view.get("quotes",{}).get(id,{})
 			if not quote.is_empty(): quotes.append(quote)
-	return {"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"engine_available_features":FeatureStoreCatalog.future_supply(run.get_owned_feature_ids(),run._feature_offers),"engine_features":run.get_engine_feature_state(),"selected_engine_id":run.get_selected_engine_id(),"owned_features":run.get_owned_feature_ids(),"research_queue":run.get_feature_research_queue(),"research_quotes":quotes,"releases":releases,"studio_actions":StudioActions.observation(run),"publisher_relationships":run.get_publisher_relationships(),"commission_quote":commission_quote,"support_quote":support_quote,"support_history":run.get_support_history(),"commission_deals":run.get_commission_deals(),"contract":{} if contract == null else contract.observation(),"development":{} if in_studio or contract != null else development.observation()}
+			var activation: Dictionary = store_view.get("activation_quotes",{}).get(id,{})
+			if not activation.is_empty(): activation_quotes.append(activation)
+	return {"run_id":run._bank_run_id,"project_id":project_id(),"phase":phase(),"sequence":sequence,"run_cycle":run.get_completed_run_cycles(),"cash_cents":run.get_cash_cents(),"fans":run.get_fans(),"engine_available_features":run.get_future_project_feature_ids(),"engine_features":run.get_engine_feature_state(),"selected_engine_id":run.get_selected_engine_id(),"owned_features":run.get_owned_feature_ids(),"research_queue":run.get_feature_research_queue(),"research_quotes":quotes,"feature_activation_quotes":activation_quotes,"releases":releases,"studio_actions":StudioActions.observation(run),"publisher_relationships":run.get_publisher_relationships(),"commission_quote":commission_quote,"support_quote":support_quote,"support_history":run.get_support_history(),"commission_deals":run.get_commission_deals(),"contract":{} if contract == null else contract.observation(),"development":{} if in_studio or contract != null else development.observation()}
 
 func quote_bank(principal_cents: Variant,months: Variant) -> Dictionary:
 	return run.get_bank_quote(principal_cents,months) if run != null else {}
@@ -197,6 +206,8 @@ func _replay_state_with_context(objects: Dictionary) -> Dictionary:
 	# scratch discarded by Continue change a campaign's authoritative digest.
 	var run_state: Dictionary = Replay._freeze(run,objects)
 	run_state.erase("_market_committed_candidate")
+	# Queued notices are presentation state, preserved in saves but not part of simulated command parity.
+	run_state.erase("_studio_notice_state")
 	objects[run] = run_state.duplicate(true) # Nested hand/Contract Run references use the same projection.
 	return {"kind":"campaign_v2","commission_request":_commission_request.duplicate(true),"support_request":_support_request.duplicate(true),"run":run_state,"sequence":sequence,"studio":in_studio,"development":{} if development == null or in_studio or contract != null else Replay._state(development,objects),"contract":{} if contract == null or in_studio else Replay._freeze(contract,objects),"definitions":definitions,"snapshots":Replay._freeze(snapshots,objects)}
 

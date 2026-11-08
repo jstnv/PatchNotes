@@ -9,7 +9,6 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import difflib
-import subprocess
 import hashlib
 import importlib.util
 import json
@@ -129,6 +128,7 @@ def create(args: argparse.Namespace) -> dict:
     parent = args.from_variant
     loaded = load_variant(parent) if parent else None
     output = new_output(args.output, [canonical] + ([parent] if parent else []))
+    output_storage = sim.prepare_output_storage(output)
     source = parent / "project" if parent else canonical
     creation = sim.copy_snapshot(source, output / "project")
     lineage = []
@@ -148,20 +148,11 @@ def create(args: argparse.Namespace) -> dict:
         sim.write_json(output / "base-manifest.json", base)
         archive(output / "project", output / "base-source.zip", base)
     sim.write_json(output / "creation-manifest.json", creation)
-    # Variants retain only branch/HEAD/dirty Git metadata. Their complete source
-    # bytes are already archived and hashed above. Do not materialize an unused
-    # binary diff and every generated evidence path in memory in this step.
-    provenance = {}
-    for key, command in (("branch", ["branch", "--show-current"]),
-                         ("head", ["rev-parse", "HEAD"]),
-                         ("dirty", ["status", "--porcelain=v1", "--untracked-files=normal"])):
-        try:
-            result = subprocess.run(["git", *command], cwd=args.repo, capture_output=True, timeout=30)
-            value = result.stdout.decode("utf8", errors="replace").strip()
-            provenance[key] = (bool(value) if key == "dirty" else value) if result.returncode == 0 else None
-        except (OSError, subprocess.TimeoutExpired):
-            provenance[key] = None
-    metadata = {"format": FORMAT, "status": "CANDIDATE", "id": args.id, "owner": args.owner.strip(), "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "canonical_project": str(canonical), "base_identity": identity(base), "creation_identity": identity(creation), "lineage": lineage, "canonical_git": {key: provenance[key] for key in ("branch", "head", "dirty")}, "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"}
+    # The exact source is already archived and hash-fenced above. Restrict Git
+    # provenance to tracked changes and runtime untracked entries, without an
+    # unused binary diff or recursively enumerating previous simulation output.
+    provenance = sim.git_provenance(args.repo, include_diff=False)
+    metadata = {"format": FORMAT, "status": "CANDIDATE", "id": args.id, "owner": args.owner.strip(), "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "canonical_project": str(canonical), "base_identity": identity(base), "creation_identity": identity(creation), "lineage": lineage, "canonical_git": {key: provenance[key] for key in ("branch", "head", "dirty", "status_scope")}, "output_storage": output_storage, "scope": "Editable proposal only; canonical adoption requires implementation review through the internal TODO"}
     sim.write_json(output / "variant.json", metadata)
     sim.write_json(output / "integrity.json", {name: sim.sha(output / name) for name in PROTECTED})
     (output / "README.md").write_text("# Candidate simulator: " + args.id + "\n\nOwner: " + args.owner.strip() + "\n\nEdit only `project/`. Baseline, creation manifest and metadata are hash-fenced; preserve them. Fork into a new version with `simulator_variant.py create --from-variant <this-folder>`. No Git commit is required.\n\nRun through canonical `tools/simulate.py run --variant <this-folder> --config <experiment.json> --output <new-run-folder>`. Each run freezes its source and receives private cache/profile paths, so different threads can run concurrently. Keep run outputs outside this version. Never point candidate code at live saves or canonical paths. Trusted local GDScript can access the filesystem; isolation is not a security sandbox.\n\nBefore proposing adoption, run focused checks and exact replay, then use `simulator_variant.py handoff --variant <this-folder> --evidence <run-bundle> --output <new-handoff-folder>`. Reference that handoff and the design decision in an internal TODO entry for the implementation thread. Handoff generation never edits TODO or applies changes. A successful simulation is evidence, not design approval. Studio-only Continue remains the canonical boundary.\n", encoding="utf-8")

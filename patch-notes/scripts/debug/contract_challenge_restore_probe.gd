@@ -6,11 +6,11 @@ func _run() -> void:
 	if OS.get_environment("PN_CHALLENGE_COLD")=="1":
 		var saved:=storage.inspect()
 		expect(saved.status==&"valid","cold disk generation is valid")
-		var restored:=adapter.hydrate(saved.get("payload",{}))
-		expect(restored!=null,"cold current Contract restore: " + adapter.error)
-		if restored!=null:
-			var expected:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(folder+".expected.json"))
-			expect(adapter.capture(restored)==expected,"cold exact fields, bonus and RNG")
+		var cold_restored:=adapter.hydrate(saved.get("payload",{}))
+		expect(cold_restored!=null,"cold current Contract restore: " + adapter.error)
+		if cold_restored!=null:
+			var cold_expected:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(folder+".expected.json"))
+			expect(adapter.capture(cold_restored)==cold_expected,"cold exact fields, bonus and RNG")
 		print("CHALLENGE_COLD failures=%d"%failures);quit(failures);return
 	var old:=OS.get_environment("PN_OLD_CONTRACT_STORAGE")
 	var prior:=StudioCheckpointStore.new(old,adapter.validate)

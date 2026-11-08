@@ -1,13 +1,14 @@
 ## Presentation-only observations of committed player progress. No saved state.
 extends Control
+signal notice_requested(notice: Dictionary)
 
 const ENTER_SECONDS:=0.22
 const HOLD_SECONDS:=3.5
 const EXIT_SECONDS:=0.24
 const MAX_VISIBLE:=3
-const WIDTH:=360.0
-const HEIGHT:=104.0
-const GAP:=8.0
+const WIDTH:=320.0
+const HEIGHT:=88.0
+const GAP:=4.0
 const EngineRules:=preload("res://scripts/engines/proprietary_engine_state.gd")
 
 var run: RunState
@@ -16,12 +17,18 @@ var _employees: Dictionary={}
 var _engines: Dictionary={}
 var _pending: Array[Dictionary]=[]
 var _visible: Array[Control]=[]
+var _animations: Dictionary={}
 
 func _ready() -> void:
 	mouse_filter=Control.MOUSE_FILTER_IGNORE
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	z_index=60
 	resized.connect(_layout_cards)
+	set_process(false)
+
+func _process(_delta: float) -> void:
+	# Unlock guidance can arrive or leave while a notice is on screen.
+	_layout_cards()
 
 func configure(footer_control: Control) -> void:
 	if is_instance_valid(footer) and footer.resized.is_connected(_layout_cards):footer.resized.disconnect(_layout_cards)
@@ -32,9 +39,13 @@ func bind_run(value: RunState) -> void:
 	if run==value:return
 	_disconnect_run();run=value
 	_pending.clear()
+	for animation: Tween in _animations.values():
+		if animation.is_valid():animation.kill()
+	_animations.clear()
 	for card: Control in _visible:
 		if is_instance_valid(card):card.queue_free()
 	_visible.clear()
+	set_process(false)
 	if run==null:return
 	_employees=_employee_snapshot(run._employees);_engines=run.get_proprietary_engine_state()
 	run.calendar_changed.connect(_observe);run.employees_changed.connect(_observe);run.engines_changed.connect(_observe)
@@ -105,6 +116,11 @@ static func progress_changes(old_roster: Dictionary,new_roster: Dictionary,old_e
 				continue
 			var before_career: Dictionary=old.get("career",{})
 			var after_career: Dictionary=current.get("career",{})
+			if role==&"project_manager" and course==&"manager_1":
+				var before_hands:=EmployeeRoster.Career.manager_one_hands({"career":before_career})
+				var after_hands:=EmployeeRoster.Career.manager_one_hands({"career":after_career})
+				if after_hands>before_hands:result.append(_notice(title,"%d / 4 pairs · %d / 2 hands"%[after_hands/2,after_hands%2]))
+				continue
 			if role==&"project_manager":
 				var before_games: Array=before_career.get("games",{}).get(course,[])
 				var after_games: Array=after_career.get("games",{}).get(course,[])
@@ -137,6 +153,9 @@ static func progress_changes(old_roster: Dictionary,new_roster: Dictionary,old_e
 func active_count() -> int:return _visible.size()
 
 func enqueue_all(changes: Array) -> void:
+	if notice_requested.get_connections().size() > 0:
+		for change: Dictionary in changes: notice_requested.emit(change)
+		return
 	for change: Dictionary in changes:_pending.append(change)
 	_show_pending()
 
@@ -144,42 +163,98 @@ func _show_pending() -> void:
 	if not is_inside_tree():return
 	while not _pending.is_empty() and _visible.size()<MAX_VISIBLE:
 		var entry: Dictionary=_pending.pop_front()
-		var slot:=Control.new();slot.name="ChallengeProgressSlot";slot.mouse_filter=Control.MOUSE_FILTER_IGNORE;slot.size=Vector2(WIDTH,HEIGHT);add_child(slot)
+		var slot:=Control.new();slot.name="ChallengeProgressSlot";slot.mouse_filter=Control.MOUSE_FILTER_IGNORE;slot.clip_contents=true;slot.size=Vector2(WIDTH,HEIGHT);add_child(slot)
 		var card:=FolderUI.surface(slot);card.name="ChallengeProgressNotice";card.mouse_filter=Control.MOUSE_FILTER_IGNORE
 		card.custom_minimum_size=Vector2(WIDTH,HEIGHT);card.size=Vector2(WIDTH,HEIGHT)
 		var box:=VBoxContainer.new();box.custom_minimum_size.x=WIDTH-32;box.mouse_filter=Control.MOUSE_FILTER_IGNORE;box.add_theme_constant_override("separation",3);card.add_child(box)
-		var heading:=FolderUI.label(box,str(entry.title),&"SectionHeading");heading.add_theme_font_size_override("font_size",15);heading.mouse_filter=Control.MOUSE_FILTER_IGNORE
-		var message:=FolderUI.label(box,str(entry.message),&"BodyLabel");message.add_theme_font_size_override("font_size",14);message.mouse_filter=Control.MOUSE_FILTER_IGNORE
-		_visible.append(slot);_layout_cards();card.modulate.a=0.0;card.position.y=-18
-		_fix_card_size.call_deferred(card)
-		var animation:=create_tween().set_parallel();animation.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		animation.tween_property(card,"modulate:a",1.0,ENTER_SECONDS)
-		animation.tween_property(card,"position:y",0.0,ENTER_SECONDS)
-		animation.chain().tween_interval(HOLD_SECONDS)
-		animation.chain().tween_property(card,"modulate:a",0.0,EXIT_SECONDS)
-		animation.chain().tween_callback(_finish_card.bind(weakref(slot)))
+		var heading:=FolderUI.label(box,str(entry.title),&"SectionHeading");heading.add_theme_font_size_override("font_size",14);heading.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		var message:=FolderUI.label(box,str(entry.message),&"BodyLabel");message.add_theme_font_size_override("font_size",13);message.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		_visible.append(slot);_layout_cards();card.modulate.a=0.0;card.position.y=-slot.size.y
+		_start_card(weakref(slot))
+	set_process(not _visible.is_empty())
 
-func _fix_card_size(card: Control) -> void:
-	if not is_instance_valid(card):return
+func _start_card(reference: WeakRef) -> void:
+	# Let wrapped labels settle before choosing the offscreen start point.
+	await get_tree().process_frame
+	var slot:=reference.get_ref() as Control
+	if not is_instance_valid(slot) or slot.get_child_count()==0:return
+	var card:=slot.get_child(0) as Control
 	card.reset_size()
-	var slot:=card.get_parent() as Control
-	if slot!=null:slot.size=card.size
+	slot.size=card.size
+	card.position.y=-slot.size.y
 	_layout_cards()
+	var animation:=create_tween().set_parallel();animation.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	animation.tween_property(card,"modulate:a",1.0,ENTER_SECONDS)
+	animation.tween_property(card,"position:y",0.0,ENTER_SECONDS)
+	animation.chain().tween_interval(HOLD_SECONDS)
+	animation.chain().tween_property(card,"modulate:a",0.0,EXIT_SECONDS)
+	animation.chain().tween_callback(_finish_card.bind(reference))
+	_animations[slot]=animation
+	if not slot.visible:animation.pause()
 
 func _finish_card(reference: WeakRef) -> void:
 	var card:=reference.get_ref() as Control
 	if card!=null:_remove_card(card)
 
 func _layout_cards() -> void:
-	var bottom:=size.y-58.0
-	if is_instance_valid(footer):bottom=footer.position.y-8.0
+	var top:=8.0
+	if is_instance_valid(footer):
+		var header:=footer.get_parent().get_node_or_null("PersistentHeader") as Control
+		if is_instance_valid(header) and header.visible:top=maxf(top,header.position.y+header.size.y+8.0)
+	var rightmost:=maxf(8.0,size.x-WIDTH-16.0)
+	var obstacles: Array[Rect2]=[]
+	# The persistent tip and synergy banner live on a separate CanvasLayer
+	# above this HUD. Use their actual visible bounds, not the HUD z-index.
+	if is_instance_valid(footer):
+		var hud:=footer.get_parent()
+		for item: Array in [["ContextualTip","panel"],["SynergyNotification","banner"]]:
+			var layer:=hud.get_node_or_null(item[0])
+			if not layer is CanvasLayer or not layer.visible:continue
+			var panel: Variant=layer.get(item[1])
+			if is_instance_valid(panel) and panel.is_visible_in_tree():obstacles.append(panel.get_global_rect())
+	for overlay in get_tree().get_nodes_in_group(&"focused_guidance_overlay"):
+		if not overlay is CanvasLayer or not overlay.visible:continue
+		var panel: Variant=overlay.get("panel")
+		if not is_instance_valid(panel) or not panel.is_visible_in_tree():continue
+		obstacles.append(panel.get_global_rect())
+	# Prefer the uppermost unobstructed column; ties keep the normal right dock.
+	# This lets a persistent tip remain open without indefinitely suppressing
+	# notices, while still clearing simultaneous guidance and synergy banners.
+	var candidates: Array[float]=[rightmost]
+	for bounds: Rect2 in obstacles:
+		for x: float in [bounds.position.x-WIDTH-GAP,bounds.end.x+GAP]:
+			if x>=8.0 and x<=rightmost:candidates.append(x)
+	var left:=rightmost
+	var best_top:=INF
+	for x: float in candidates:
+		var candidate_top:=top
+		for bounds: Rect2 in obstacles:
+			if bounds.end.x>x and bounds.position.x<x+WIDTH:
+				candidate_top=maxf(candidate_top,bounds.end.y+GAP)
+		if candidate_top<best_top:
+			left=x;best_top=candidate_top
+	top=best_top
+	var bottom:=size.y-GAP
+	if is_instance_valid(footer) and footer.visible:bottom=footer.position.y-GAP
+	var overflow:=false
 	for i in _visible.size():
 		var slot: Control=_visible[i]
-		bottom-=slot.size.y
-		slot.position=Vector2(maxf(8.0,(size.x-WIDTH)/2.0),maxf(8.0,bottom))
-		bottom-=GAP
+		var fits:=not overflow and top+slot.size.y<=bottom
+		if not fits:overflow=true
+		if slot.visible!=fits:
+			slot.visible=fits
+			var animation: Variant=_animations.get(slot)
+			if animation is Tween and animation.is_valid():
+				if fits:animation.play()
+				else:animation.pause()
+		if not fits:continue
+		slot.position=Vector2(left,top)
+		top+=slot.size.y+GAP
 
 func _remove_card(card: Control) -> void:
+	var animation: Variant=_animations.get(card)
+	if animation is Tween and animation.is_valid():animation.kill()
+	_animations.erase(card)
 	_visible.erase(card)
 	if is_instance_valid(card):card.queue_free()
 	_layout_cards();_show_pending()

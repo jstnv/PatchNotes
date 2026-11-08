@@ -374,7 +374,6 @@ func _has_valid_active_candidate_pool() -> bool:
 	if not is_node_ready() or %HandContainer.card_views().size() != _candidate_cards.size():
 		return false
 	var seen_feature_ids: Dictionary[StringName, bool] = {}
-	var pass_count := 0
 	for index in range(_candidate_cards.size()):
 		var card: CardData = _candidate_cards[index]
 		var child: CardView = %HandContainer.card_views()[index]
@@ -387,7 +386,6 @@ func _has_valid_active_candidate_pool() -> bool:
 		elif card.card_type == &"pass":
 			if not _get_pass_validation_error(card).is_empty() or not _pass_definitions.has(card):
 				return false
-			pass_count += 1
 		else:
 			return false
 	return _capture_development_actions().valid_pool()

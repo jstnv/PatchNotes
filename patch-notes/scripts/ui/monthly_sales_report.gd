@@ -110,7 +110,7 @@ func refresh() -> void:
 	elif _report.has("support"):
 		_totals.text = "Supported Studio-owned title · RAW TITLE: %d units · net %s\nStudio entitlement %s · paid %s · recoup %s / %s. Table and slices below show raw title sales." % [_report.units,_money(_report.net_cents),_money(_report.studio_net_cents),_money(_report.studio_settled_cents),_money(_report.support.rights.publisher_recoup_cents),_money(_report.support.terms.budget_cents)]
 	var root := _table.create_item()
-	var selection: TreeItem
+	var selection: TreeItem = null
 	for row: Dictionary in _report.rows:
 		var item := _table.create_item(root)
 		item.set_metadata(0, row.age_month)

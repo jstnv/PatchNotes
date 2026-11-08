@@ -48,9 +48,19 @@ func go() -> void:
  var before: Dictionary=Replay.freeze(run)
  var topic: StringName=focus.current_topic
  check(focus.preferences.seen(str(run._bank_run_id),topic),"Presented invitation is remembered for this Studio")
+ check(focus.is_active() and not focus.is_blocking() and game.pause_menu.can_pause.call(),"A temporary invitation leaves Pause available")
  focus.view.dismiss.pressed.emit();await create_timer(0.3).timeout;focus.consider();await create_timer(0.5).timeout
  check(not focus.view.is_open(),"Dismissing does not stack another popup at the same opportunity")
  check(Replay.freeze(run)==before,"Invitation/dismissal preserve complete real state and RNG")
+ if focus.can_tour(topic):
+  focus.current_topic=topic
+  focus.view.show_notice({"id":topic,"title":"Explore this feature","body":"Open its tour."})
+  focus.view.primary.pressed.emit()
+  check(await wait_for(func():return focus.view.is_open() and focus.view._tour,"Show me opens the requested real tour",20.0),"Show me completes routing")
+  check(focus.is_blocking(),"The active tour still owns focused input")
+  focus.dismiss();await create_timer(0.3).timeout
+  await focus.return_to_studio_root();await create_timer(0.3).timeout
+  check(Replay.freeze(run)==before,"Show me and closing its tour preserve full state and RNG")
  for id: StringName in [&"bank",&"engines",&"contracts",&"employees",&"implementation",&"skills",&"publishers",&"summaries",&"market"]:
   if not focus.can_tour(id):continue
   var frozen: Dictionary=Replay.freeze(run)

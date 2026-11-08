@@ -79,10 +79,15 @@ func verify() -> void:
 	var old_created:=old.create_proprietary_engine(old.get_proprietary_engine_creation_quote("Original"))
 	if old_created.get("ok",false):
 		old._proprietary_engines.version=1
-		old._engine_features.engines[old_created.engine_id].capacity=20
+		old._engine_features.version=2
+		for legacy_feature_row: Dictionary in old._engine_features.engines.values():legacy_feature_row.erase("enabled")
+		var prior: Dictionary=old._engine_features.engines[old_created.engine_id]
+		prior.capacity=20
+		prior.origin=old.ProprietaryEngines.ORIGIN
+		prior.initial.clear();prior.implemented.clear();prior.committed.clear()
 		var old_payload:=StudioCheckpoint.new().capture(old)
 		var migrated:=StudioCheckpoint.new().hydrate(old_payload) if not old_payload.is_empty() else null
-		check(migrated!=null and migrated.get_proprietary_engine_state().version==3 and migrated.get_proprietary_engine_row(old_created.engine_id).challenge_progress.is_empty(),"Phase 3A inert state migrates without granting nodes")
+		check(migrated!=null and migrated.get_proprietary_engine_state().version==3 and migrated.get_proprietary_engine_row(old_created.engine_id).challenge_progress.is_empty() and migrated.get_future_project_feature_ids(old_created.engine_id).is_empty(),"Phase 3A inert state migrates without granting nodes or starter Features")
 	var browser:=preload("res://scripts/ui/engine_market_browser.gd").new();root.add_child(browser);browser.open(run,null);browser._inspect(id);browser._open_skill_tree()
 	check(browser.skill_grid.is_visible_in_tree() and browser.skill_grid.buttons.size()==13 and browser.skill_grid.rows[&"graphics_2"].state=="complete" and browser.skill_grid.rows[&"engine"].status=="35 maximum Scope" and browser.description.text.contains("Maximum played Scope: 35"),"Engines UI shows purchased tree and Scope")
 	browser.queue_free()

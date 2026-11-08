@@ -91,6 +91,7 @@ static func _validate_uncached(state: Dictionary) -> bool:
 	var maximum_cycle: int=-1
 	var hand_cycles: Dictionary={}
 	var hand_identities: Dictionary={}
+	var career_v2_seen:=false
 	for event in state.events:
 		if typeof(event)!=TYPE_DICTIONARY: return false
 		# Rebuild into a private state. Public plans still copy their input; copying
@@ -103,6 +104,8 @@ static func _validate_uncached(state: Dictionary) -> bool:
 		if str(event.type).begins_with("career_") and event.cycle<maximum_cycle:return false
 		maximum_cycle=maxi(maximum_cycle,event.cycle)
 		if event.type==&"career_hand":
+			if career_v2_seen and not event.has("rules_version"):return false
+			if event.get("rules_version",1)==2:career_v2_seen=true
 			# phase historically accepts String and StringName by value. Preserve
 			# that equality; use typed tuple bytes rather than delimiter strings.
 			var identity:=var_to_bytes([event.project_id,StringName(event.phase),event.project_cycle])

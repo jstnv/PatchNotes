@@ -22,7 +22,7 @@ static func engine(run: RunState,id: StringName) -> Array:
 	for branch: StringName in rules.BRANCHES:
 		var direction: Vector2i=DIRECTIONS[branch]
 		var foundation:=StringName(str(branch)+"_foundation")
-		var base:=item(foundation,FOUNDATIONS[branch],direction,[&"engine"],"complete","Foundation",str(branch).capitalize()+" foundation technology. Supporting a technology does not grant its Feature card.")
+		var base:=item(foundation,FOUNDATIONS[branch],direction,[&"engine"],"complete","Foundation",str(branch).capitalize()+" foundation technology. Newly created engines include its Feature card; existing engines retain their saved libraries.")
 		base.branch=branch;rows.append(base)
 		var level: int=rules.generation(row,branch)
 		for generation in [1,2]:
@@ -99,8 +99,13 @@ static func course_progress(employee: Dictionary,course: StringName) -> Dictiona
 		var searches:=mini(3,int(employee.get("search_count",0)));var debugs:=mini(3,int(employee.get("debug_count",0)))
 		result.value=searches+debugs;result.text="Search %d/3 · Debug %d/3"%[searches,debugs]
 	elif employee.get("type")==&"project_manager":
-		result.value=mini(4,employee.get("career",{}).get("games",{}).get(course,[]).size())
-		result.text="%d / 4 qualifying releases"%result.value
+		if course==&"manager_1":
+			var hands:=EmployeeRoster.Career.manager_one_hands(employee)
+			result.value=mini(4,hands/2)
+			result.text="%d / 4 pairs · %d / 2 hands"%[result.value,hands%2]
+		else:
+			result.value=mini(4,employee.get("career",{}).get("games",{}).get(course,[]).size())
+			result.text="%d / 4 qualifying releases"%result.value
 	elif course==&"pass_alignment":
 		for project: Dictionary in employee.get("career",{}).get("projects",{}).values():
 			var matches:=int(not project.get("design",[]).is_empty())+int(not project.get("alpha",[]).is_empty())

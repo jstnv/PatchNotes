@@ -58,7 +58,7 @@ func _run() -> void:
 	var old: Variant=Freeze.freeze(run);var old_rng: int=h._deal_rng.state
 	var cancel: Dictionary=actions.redraw([0] as Array[int],[],func(_cards):return false)
 	expect(not cancel.ok and Freeze.freeze(run)==old and h._deal_rng.state==old_rng,"Canceled Swap preserves roster, budget and RNG")
-	var token: int=h.candidate_ids[0];var value: int=h._candidate_cards[0].beta_value
+	var _token: int=h.candidate_ids[0];var value: int=h._candidate_cards[0].beta_value
 	result=actions.redraw([0] as Array[int])
 	expect(result.ok and result.events[0].type=="qa_swap" and h._candidate_cards[0].id==&"debug" and h._candidate_cards[0].beta_value==value and run.get_available_redraws()==0 and h._deal_rng.state==old_rng,"Swap flips same-value card at zero budget without RNG")
 	expect(not actions.can_swap([0] as Array[int]) and not actions.redraw([0] as Array[int]).ok,"Used Swap cannot be repeated")

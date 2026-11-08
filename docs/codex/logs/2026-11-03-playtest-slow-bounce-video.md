@@ -1,0 +1,5 @@
+# Slower startup video bounce, 2026-11-03
+
+Revised the [bouncing-panel startup movie](2026-11-03-playtest-bounce-video.md) on `main` at `7c60a01cbfac76d3f3cae1062849a070b1563116`. This session added the MP4 and this log. The playtest panel travels 20 px between extremes, down from 22 px. One cycle now lasts three beats of the 70 BPM startup track (2.5714 s), up from two beats (1.7143 s). The phase places low points on beats 19 and 22 so the quick entry flows into the falling stroke and the retraction joins the rising stroke. The original cue frames 874, 915, 1157 and 1200 still control the sequence.
+
+Published `C:\Users\64jus\Downloads\Patch Notes Design Folder\Patch-Notes-Startup-Loop-Playtest-Slow-27s.mp4`. The verified copy is 8,252,644 bytes with SHA-256 `cccfade575690cde6fe510e6277e419581b5d892112903ab5d21222d6f6d6fd3`. FFmpeg decoded the complete H.264/AAC file at 1080p60. Both streams end together at tick 1,316,571 on a 48 kHz clock. The decoded upper border traveled 20 px across 243 checked frames. All 1,287 AAC packets and timestamps match the preceding movie. Both endpoints match pure black.

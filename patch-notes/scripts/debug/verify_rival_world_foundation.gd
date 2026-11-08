@@ -14,8 +14,8 @@ func expect(condition: bool, label: String) -> void:
 	failures += 1
 	push_error("Rival foundation: " + label)
 
-func recipe(id: String, specialty: String, seed: String) -> Dictionary:
-	return {"schema_version":1,"studio_id":id,"studio_name":id,"specialty":specialty,"traits":[],"seed":seed}
+func recipe(id: String, specialty: String, seed_value: String) -> Dictionary:
+	return {"schema_version":1,"studio_id":id,"studio_name":id,"specialty":specialty,"traits":[],"seed":seed_value}
 
 func policy(specialty: String, prefix: String) -> Callable:
 	return Fixture.factory({"genre":specialty,"theme":"fantasy","name_prefix":prefix,"selection":"features_first","hands":{"design":2,"alpha":2,"beta":2}})
@@ -45,9 +45,9 @@ func _initialize() -> void:
 		var reached := false
 		for step in range(12):
 			var chosen: Dictionary = p.call(player.observation())
-			var result: Dictionary = player.execute(player.command(StringName(chosen.type),chosen.get("payload",{})))
-			expect(result.ok,"player fixture follows actual campaign commands")
-			if not result.ok: break
+			var player_result: Dictionary = player.execute(player.command(StringName(chosen.type),chosen.get("payload",{})))
+			expect(player_result.ok,"player fixture follows actual campaign commands")
+			if not player_result.ok: break
 			if player.run.get_completed_run_cycles() == prior + 1:
 				reached = true
 				break

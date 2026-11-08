@@ -30,7 +30,6 @@ static func inspect(database: Node, overrides: Dictionary = {}) -> String:
 		if not pre.get(kind) is Array or pre[kind].is_empty(): return "Missing pre-development choices: " + kind
 		for entry in pre[kind]:
 			if not entry is Dictionary or not entry.get("id") is String or not entry.get("name") is String: return "Invalid pre-development choice: " + kind
-	var snapshots := PrimitiveSnapshotDatabase.new()
-	if not snapshots.validate_competitor_data(parsed[PrimitiveSnapshotDatabase.COMPETITOR_LEDGER_PATH]) or not snapshots.validate_forecast_data(parsed[PrimitiveSnapshotDatabase.FORECAST_LEDGER_PATH]):
+	if not PrimitiveSnapshotDatabase.validate_competitor_data(parsed[PrimitiveSnapshotDatabase.COMPETITOR_LEDGER_PATH]) or not PrimitiveSnapshotDatabase.validate_forecast_data(parsed[PrimitiveSnapshotDatabase.FORECAST_LEDGER_PATH]):
 		return "Invalid competitor or market forecast definitions."
 	return ""

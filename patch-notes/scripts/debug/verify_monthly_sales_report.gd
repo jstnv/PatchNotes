@@ -49,8 +49,8 @@ func _run() -> void:
 			check(run.get_cash_cents() == cash + paid_after - paid_before - (10000 if campaign else 0) and run.get_completed_run_cycles() == cycle + 1, "Run cash equals concurrent settlement less exact campaign fee; one cycle")
 			_reconcile(run)
 			if campaign:
-				var before := _snapshot(run, first_id)
-				check(not run.purchase_post_launch_campaign(first_id, cycle) and not run.purchase_post_launch_campaign(first_id, cycle + 1) and _snapshot(run, first_id) == before, "Repeat callback and mistimed action roll back")
+				var campaign_before := _snapshot(run, first_id)
+				check(not run.purchase_post_launch_campaign(first_id, cycle) and not run.purchase_post_launch_campaign(first_id, cycle + 1) and _snapshot(run, first_id) == campaign_before, "Repeat callback and mistimed action roll back")
 		check(revived, "A zero-unit month is followed by a real campaign revival fixture")
 		var report := run.get_released_game_monthly_report(first_id)
 		check(report.rows[0].slices.size() == 2 and report.rows[0].units == 751, "Both Month1 slices preserve odd-unit rounding")

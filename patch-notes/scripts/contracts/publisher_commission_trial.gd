@@ -217,7 +217,7 @@ static func _release_royalty_rate(d: Dictionary, release_id: StringName) -> int:
 	if engine==&"legacy_engine":return 0 if engine in access.owned_ids else -1
 	if not records.get(engine) is Dictionary:return -1
 	var record: Dictionary=records[engine]
-	if record.size()!=9 or record.get("origin") not in ["legacy-access-v1","declared-v1",preload("res://scripts/engines/public_action_engine.gd").ORIGIN,preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN,preload("res://scripts/engines/proprietary_engine_state.gd").ORIGIN]:return -1
+	if record.size()!=(10 if state.get("version")==3 else 9) or record.get("origin") not in ["legacy-access-v1","declared-v1",preload("res://scripts/engines/public_action_engine.gd").ORIGIN,preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN,preload("res://scripts/engines/proprietary_engine_state.gd").ORIGIN,preload("res://scripts/engines/proprietary_engine_state.gd").STARTER_ORIGIN]:return -1
 	if engine==&"public_action" and record.origin!=preload("res://scripts/engines/public_action_engine.gd").ORIGIN:return -1
 	if engine==&"public_action" or engine in access.licensed_ids:
 		if (engine==&"public_action" and record.get("kind")!=&"public") or (engine!=&"public_action" and record.get("kind")!=&"rival_licensed"):return -1

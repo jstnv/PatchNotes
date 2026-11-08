@@ -61,6 +61,8 @@ static func create(starting_fans: int = 0, calendar: Dictionary = {}) -> Diction
 static func awareness_for(fans: int) -> int:
 	if fans <= 0: return 0
 	# Selected trial: divide before clamping; even MAX_INT cannot overflow.
+	# Nonnegative integer quotient preserves exact fan and overflow arithmetic.
+	@warning_ignore("integer_division")
 	return mini(FAN_AWARENESS_LIMIT, fans / 4)
 
 static func register_release(state: Dictionary, record: Dictionary, launch_fans: int) -> Dictionary:
@@ -79,12 +81,18 @@ static func register_release(state: Dictionary, record: Dictionary, launch_fans:
 ## closing action publishes a fan delta. A neutral shadow measures potential reach
 ## so Review-suppressed sales cannot shield a disappointing game from loss.
 static func plan(state: Dictionary, previous: Dictionary, next_records: Dictionary, run_cycle: int, closed_historical_ids: Dictionary = {}) -> Dictionary:
+	return _plan_replay_internal(state, previous, next_records, run_cycle, closed_historical_ids, false)
+
+## The mutable path is reserved for validate's detached replay. Every next
+## record there comes from create/next_cycle or a copy of a validated closure.
+## Public callers always retain full checks and copy-on-write semantics.
+static func _plan_replay_internal(state: Dictionary, previous: Dictionary, next_records: Dictionary, run_cycle: int, closed_historical_ids: Dictionary, mutable_replay: bool) -> Dictionary:
 	if run_cycle != int(state.get("last_cycle", -1)) + 1 or int(state.get("fans", -1)) < 0:
 		return {}
 	var calendar: Dictionary = state.get("calendar",{})
 	if not Clock.valid(calendar): return {}
 	var crosses_month := Clock.is_boundary(run_cycle,calendar)
-	var updated := state.duplicate(true)
+	var updated := state if mutable_replay else state.duplicate(true)
 	var starting: int = updated.fans
 	var gains := 0
 	var losses := 0
@@ -98,12 +106,12 @@ static func plan(state: Dictionary, previous: Dictionary, next_records: Dictiona
 		var prior: Dictionary = previous[id]
 		var current: Dictionary = next_records[id]
 		var entry: Dictionary = updated.releases[id]
-		if not ReleasedGameSales.is_valid(current) or current.earned_units < entry.accounted_units or current.earned_units < prior.earned_units: return {}
+		if (not mutable_replay and not ReleasedGameSales.is_valid(current)) or current.earned_units < entry.accounted_units or current.earned_units < prior.earned_units: return {}
 		if closed_historical_ids.has(id):
 			if current != prior: return {}
 			continue
 		var campaign: bool = int(current.campaign_count) > int(prior.campaign_count)
-		var neutral: Dictionary = ReleasedGameSales.next_cycle(entry.neutral, run_cycle, crosses_month, campaign)
+		var neutral: Dictionary = ReleasedGameSales._next_cycle_validated_replay(entry.neutral, run_cycle, crosses_month, campaign, 10000, "market-0-neutral", {}, false) if mutable_replay else ReleasedGameSales.next_cycle(entry.neutral, run_cycle, crosses_month, campaign)
 		if neutral.is_empty(): return {}
 		entry.neutral = neutral
 		if crosses_month:
@@ -141,9 +149,15 @@ static func plan(state: Dictionary, previous: Dictionary, next_records: Dictiona
 
 static func _floor_product(value: int, multiplier: int, divisor: int) -> int:
 	if value < 0 or multiplier < 0 or divisor <= 0: return -1
+	# Nonnegative integer quotient preserves exact fan and overflow arithmetic.
+	@warning_ignore("integer_division")
 	var whole := value / divisor
+	# Nonnegative integer quotient preserves exact fan and overflow arithmetic.
+	@warning_ignore("integer_division")
 	if multiplier > 0 and whole > MAX_INT / multiplier: return -1
 	var base := whole * multiplier
+	# Nonnegative integer quotient preserves exact fan and overflow arithmetic.
+	@warning_ignore("integer_division")
 	var fraction := (value % divisor) * multiplier / divisor
 	if base > MAX_INT - fraction: return -1
 	return base + fraction
@@ -155,6 +169,8 @@ static func _neutral_month_one(awareness: int, market_bp: int) -> int:
 	PrimitiveUnitsSoldCalculator._reduce_factors(numerators, denominators)
 	var top := PrimitiveUnitsSoldCalculator._checked_product(numerators)
 	var bottom := PrimitiveUnitsSoldCalculator._checked_product(denominators)
+	# Nonnegative integer quotient preserves exact fan and overflow arithmetic.
+	@warning_ignore("integer_division")
 	return top / bottom if top >= 0 and bottom > 0 else -1
 
 static func schema() -> Dictionary:
@@ -222,9 +238,9 @@ static func validate(state: Dictionary, records: Dictionary, metadata: Dictionar
 				var campaign: bool = age_month >= 2 and prior_age == Clock.month_start(prior_age,age_calendar) and records[id].campaign_months.has(age_month)
 				var source_factor: Variant=records[id].market_factors.get(age_month,{})
 				if not source_factor is Dictionary or source_factor.is_empty(): return false
-				next[id] = ReleasedGameSales.next_cycle(current[id], boundary, Clock.is_boundary(boundary,records[id].get("run_calendar",{})), campaign,int(source_factor.factor_bp),str(source_factor.snapshot_id),source_factor)
+				next[id] = ReleasedGameSales._next_cycle_validated_replay(current[id], boundary, Clock.is_boundary(boundary,records[id].get("run_calendar",{})), campaign,int(source_factor.factor_bp),str(source_factor.snapshot_id),source_factor,false)
 				if next[id].is_empty(): return false
-			rebuilt = plan(rebuilt, current, next, boundary, closed_historical_ids if boundary > historical_close_cycle else {})
+			rebuilt = _plan_replay_internal(rebuilt, current, next, boundary, closed_historical_ids if boundary > historical_close_cycle else {}, true)
 			if rebuilt.is_empty(): return false
 			current = next
 		var award: Dictionary = awards.get(boundary,{})

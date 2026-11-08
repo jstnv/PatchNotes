@@ -1,0 +1,7 @@
+# Playtest announcement startup video, 2026-11-03
+
+On `main` at `7c60a01cbfac76d3f3cae1062849a070b1563116`, revised the [27.43-second standalone movie](2026-11-03-standalone-startup-loop-27s.md). This session added this log and the MP4 at `C:\Users\64jus\Downloads\Patch Notes Design Folder\Patch-Notes-Startup-Loop-Playtest-27s.mp4`. The edit used the previous export's held title and native circuit frames. Existing game and worktree edits were preserved.
+
+“Playtest build now available” slides down through a mask at the lower edge of the multicolor underline starting at 14.57 s. The cream Chakra Petch SemiBold lettering settles at 15.25 s, starts retracting at 19.28 s and clears by 20.00 s. The title begins disappearing at 20.57 s.
+
+FFmpeg decoded both complete streams. FFprobe verified 1,646 frames at 1920×1080 and 60 fps, with both streams ending on sample 1,316,571 at 48 kHz. The independent `existing-audit/playtest/verify_delta.py` comparison passed 14 of 14 checks against the previous export. All AAC packets and timestamps match. Every video packet outside frames 853–1212 matches. Both decoded loop endpoints match pure RGB black. Visual inspection of the decoded motion strip confirmed the wording, centered placement and complete retraction. The published file is 7,874,386 bytes, SHA-256 `c67b26c1a4629c29ad83e6771fcd97829d1d749798708f910f60dad44aabc720`. The requested revision is complete.

@@ -1,5 +1,7 @@
 # Proprietary Engine Skill Tree
 
+**2026-11-04 challenge notice presentation — IMPLEMENTED locally.** Smaller engine-progress notices enter from the top and retain the existing progress and readiness semantics. This supersedes the bottom-HUD position below. [Checks](../logs/2026-11-04-engine-feature-activation-and-top-notices-v1.md).
+
 **2026-11-03 challenge progress notices — IMPLEMENTED locally.** The bottom-HUD notice identifies the proprietary engine and specific upgrade when committed matching Feature Core advances a challenge; a completed threshold is identified as ready to implement. No engine mechanics, threshold or purchase terms change. [Checks and limits](../logs/2026-11-03-challenge-progress-notices-v1.md).
 
 **2026-11-03 upgrade inspector — IMPLEMENTED locally.** A Challenge / Rewards slider switches the selected upgrade's description while progress remains visible. The challenge explains matching printed Feature Core, eligible phases and exclusions; locked successors identify their prerequisite. Implement appears only after the challenge is complete, and the existing purchase quote still decides whether it is enabled. Already implemented upgrades have no purchase action. Existing trial thresholds, effects and costs remain unchanged. [Focused checks](../logs/2026-11-03-engine-upgrade-switch-v1.md).

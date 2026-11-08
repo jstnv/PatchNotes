@@ -33,10 +33,14 @@ static func upgrade(profile: Dictionary, cycle: int) -> Dictionary:
 static func position(cycle: int, profile: Dictionary={}) -> Dictionary:
 	if cycle<0 or not valid(profile):return {}
 	if profile.is_empty() or cycle<=int(profile.legacy_until):
+		# Whole calendar counts and bounds intentionally use integer truncation.
+		@warning_ignore("integer_division")
 		return {"month_index":cycle/2,"quarter":(cycle%2)*2}
 	var base: int=profile.legacy_until
 	var delta: int=cycle-base
 	var quarters: int=(base%2)*2+delta%4
+	# Whole calendar counts and bounds intentionally use integer truncation.
+	@warning_ignore("integer_division")
 	return {"month_index":base/2+delta/4+quarters/4,"quarter":quarters%4}
 
 static func month(cycle: int, profile: Dictionary={}) -> int:
@@ -46,6 +50,8 @@ static func month_of_year(cycle: int, profile: Dictionary={}) -> int:
 	return int(position(cycle,profile).get("month_index",0))%MONTHS_PER_YEAR+1
 
 static func year(cycle: int, start_year: int=1980, profile: Dictionary={}) -> int:
+	# Whole calendar counts and bounds intentionally use integer truncation.
+	@warning_ignore("integer_division")
 	return start_year+int(position(cycle,profile).get("month_index",0))/MONTHS_PER_YEAR
 
 static func is_boundary(cycle: int, profile: Dictionary={}) -> bool:
@@ -54,14 +60,22 @@ static func is_boundary(cycle: int, profile: Dictionary={}) -> bool:
 static func cycle_at(month_index: int, quarter: int=0, profile: Dictionary={}) -> int:
 	if month_index<0 or quarter<0 or quarter>=4 or not valid(profile):return -1
 	if profile.is_empty():
+		# Whole calendar counts and bounds intentionally use integer truncation.
+		@warning_ignore("integer_division")
 		if quarter%2!=0 or month_index>(MAX_INT-quarter/2)/2:return -1
+		# Whole calendar counts and bounds intentionally use integer truncation.
+		@warning_ignore("integer_division")
 		return month_index*2+quarter/2
 	var base: int=profile.legacy_until
+	# Whole calendar counts and bounds intentionally use integer truncation.
+	@warning_ignore("integer_division")
 	var base_month: int=base/2
 	var base_quarter: int=(base%2)*2
 	if month_index<base_month or (month_index==base_month and quarter<=base_quarter):
 		return cycle_at(month_index,quarter,{})
 	var months: int=month_index-base_month
+	# Whole calendar counts and bounds intentionally use integer truncation.
+	@warning_ignore("integer_division")
 	if months>(MAX_INT-4)/4:return -1
 	var delta: int=months*4+quarter-base_quarter
 	if delta<0 or delta>MAX_INT-base:return -1
@@ -87,7 +101,11 @@ static func quarters_between(first: int, last: int, profile: Dictionary={}) -> i
 	var a:=position(first,profile);var b:=position(last,profile)
 	if a.is_empty() or b.is_empty():return -1
 	var months: int=int(b.month_index)-int(a.month_index)
+	# Whole calendar counts and bounds intentionally use integer truncation.
+	@warning_ignore("integer_division")
 	if months>MAX_INT/4-1:return MAX_INT
+	# Whole calendar counts and bounds intentionally use integer truncation.
+	@warning_ignore("integer_division")
 	if months<-(MAX_INT/4-1):return -MAX_INT
 	return months*4+int(b.quarter)-int(a.quarter)
 

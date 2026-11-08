@@ -18,6 +18,11 @@ var notice_host: Control
 const IDLE_OFFSET := 48.0
 var _root_sliding := false
 var _wave: Node
+var _arrival_prepared := false
+var _arrival_tween: Tween
+var _arrival_companion_visible := false
+var _companion_fade: Tween
+var _companion_mouse_filters: Dictionary = {}
 
 func _init() -> void:
 	name="StudioHub"
@@ -31,11 +36,11 @@ func _init() -> void:
 	_wave.travel=3.0;_wave.period=3.6*3.0/7.0;add_child(_wave)
 	var initial_buttons: Array[Button]=[]
 	_wave.bind_buttons(_root_choices,initial_buttons)
-	_clip=Control.new();_clip.name="CompanionClip";_clip.clip_contents=true;add_child(_clip)
+	_clip=Control.new();_clip.name="CompanionClip";_clip.clip_contents=false;_clip.mouse_filter=Control.MOUSE_FILTER_IGNORE;_clip.z_index=0;add_child(_clip)
 	_companion=FolderUI.surface(_clip);_companion.name="CompanionPanel";_companion.add_to_group(PauseMenu.CANCEL_OWNER_GROUP);_companion.hide()
 	# Notices stay above both the moving root and its companion, in the spare
 	# area to the right of the root even while it moves to its idle position.
-	notice_host=Control.new();notice_host.name="StudioNoticeHost";notice_host.mouse_filter=Control.MOUSE_FILTER_IGNORE;notice_host.z_index=2;add_child(notice_host)
+	notice_host=Control.new();notice_host.name="StudioNoticeHost";notice_host.mouse_filter=Control.MOUSE_FILTER_IGNORE;notice_host.z_index=3;add_child(notice_host)
 	_contents=VBoxContainer.new();_contents.add_theme_constant_override("separation",14);_companion.add_child(_contents)
 	_heading=FolderUI.label(_contents,"",&"HeadingLabel")
 	resized.connect(_fit)
@@ -78,7 +83,7 @@ func _advance() -> void:
 	transitioning=true
 	_disable_choices()
 	if not selected.is_empty():
-		motion.slide_panel(_companion,_companion.position.x,-_clip.size.x,func():
+		_slide_companion(_companion.position.x,0.0,false,func():
 			groups[selected].hide();_companion.hide();selected=&"";transitioning=false;_advance())
 		return
 	if _root_panel.position.x>0.01:
@@ -88,10 +93,33 @@ func _advance() -> void:
 	for key: StringName in groups:groups[key].visible=key==selected
 	_heading.text=root_buttons[selected].text
 	_companion.show();_fit()
-	motion.slide_panel(_companion,-_clip.size.x,0,func():
+	_companion.modulate.a=0.0
+	_slide_companion(0.0,_companion_rest_x(),true,func():
 		transitioning=false
 		if selected!=requested:_advance()
 		else:_restore_choices())
+
+func _slide_companion(from_x: float,to_x: float,entering: bool,finished: Callable) -> void:
+	# The companion moves behind the root, without clipping in the outer gap.
+	# Keep the root clickable until the companion reaches its resting area.
+	var controls: Array[Node] = [_companion]
+	controls.append_array(_companion.find_children("*","Control",true,false))
+	for control: Control in controls:
+		if not _companion_mouse_filters.has(control): _companion_mouse_filters[control]=control.mouse_filter
+		control.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	var target_alpha := 1.0 if entering else 0.0
+	if _companion_fade != null: _companion_fade.kill()
+	if motion.animate:
+		_companion_fade=create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		_companion_fade.tween_property(_companion,"modulate:a",target_alpha,MenuTransitions.ENTRANCE_SECONDS)
+	else:_companion.modulate.a=target_alpha
+	motion.slide_panel(_companion,from_x,to_x,func():
+		if _companion_fade != null: _companion_fade.kill();_companion_fade=null
+		_companion.modulate.a=target_alpha
+		for control: Control in _companion_mouse_filters:
+			if is_instance_valid(control):control.mouse_filter=_companion_mouse_filters[control]
+		_companion_mouse_filters.clear()
+		finished.call())
 
 func _disable_choices() -> void:
 	for group: Control in groups.values():
@@ -109,11 +137,15 @@ func _fit() -> void:
 	var root_width:=maxf(330,_root_panel.get_combined_minimum_size().x)+4.0
 	if not _root_sliding:_root_panel.position=Vector2(IDLE_OFFSET if requested.is_empty() and selected.is_empty() else 0.0,0)
 	_root_panel.size=Vector2(root_width,size.y)
-	_clip.position=Vector2(root_width+24,0);_clip.size=Vector2(maxf(0,size.x-root_width-24),size.y)
+	# The companion starts at this midpoint, then moves into the right gap.
+	_clip.position=Vector2(root_width*0.5,0);_clip.size=Vector2(maxf(0,size.x-_clip.position.x),size.y)
 	notice_host.position=Vector2(root_width+IDLE_OFFSET+24,0)
 	notice_host.size=Vector2(maxf(0,size.x-notice_host.position.x),size.y)
-	_companion.size=_clip.size
-	if not transitioning:_companion.position=Vector2.ZERO
+	_companion.size=Vector2(maxf(0,size.x-root_width-24),size.y)
+	if not transitioning:_companion.position=Vector2(_companion_rest_x(),0)
+
+func _companion_rest_x() -> float:
+	return _root_panel.size.x+24.0-_clip.position.x
 
 func _process(_delta: float) -> void:
 	_wave.advance(_delta,is_visible_in_tree())
@@ -122,6 +154,27 @@ func _slide_root(target: float,finished: Callable) -> void:
 	_root_sliding=true
 	motion.slide_panel(_root_panel,_root_panel.position.x,target,func():
 		_root_sliding=false;finished.call())
+
+func prepare_studio_arrival() -> void:
+	_fit()
+	_root_sliding = true
+	_arrival_prepared = true
+	_arrival_companion_visible = _companion.visible
+	_companion.hide()
+	_root_panel.position.x = -_root_panel.size.x - maxf(0.0, global_position.x) - 12.0
+	_root_panel.show()
+
+func animate_studio_arrival() -> void:
+	if not _arrival_prepared:
+		prepare_studio_arrival()
+	var destination := IDLE_OFFSET if requested.is_empty() and selected.is_empty() else 0.0
+	_arrival_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_arrival_tween.tween_property(_root_panel, "position:x", destination, MenuTransitions.ENTRANCE_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await _arrival_tween.finished
+	_arrival_prepared = false
+	_root_sliding = false
+	_fit()
+	if _arrival_companion_visible: _companion.show()
 
 func _style_roots() -> void:
 	for key: StringName in root_buttons:
@@ -145,7 +198,7 @@ func close_group() -> void:
 		_restore_choices()
 		return
 	transitioning=true;_disable_choices()
-	motion.slide_panel(_companion,_companion.position.x,-_clip.size.x,func():
+	_slide_companion(_companion.position.x,0.0,false,func():
 		groups[selected].hide();selected=&"";_companion.hide()
 		if not requested.is_empty():
 			transitioning=false;_advance()

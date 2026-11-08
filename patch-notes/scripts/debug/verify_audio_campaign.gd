@@ -33,10 +33,10 @@ func run() -> void:
    if not command(normal,recorded,StringName(choice.type),choice.get("payload",{})).ok:break
    if normal.in_studio and normal.run.get_released_game_ids().size()>=2:break
   check(normal.run.get_released_game_ids().size()==2,"Unfunded fresh Studio reaches two releases")
-  var other:=fresh(true);var replay:=Replay.replay(other,recorded)
-  check(replay.ok,"Unfunded fresh two-release exact replay")
-  var report:={"failures":failures,"checks":checks,"commands":recorded.steps.size(),"releases":normal.run.get_released_game_ids().size(),"cash":normal.run.get_cash_cents(),"replay_ok":replay.ok,"source":Replay.source_identity(),"scope":"Unfunded fixed-policy two-release route; not final balance"}
-  FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT"),FileAccess.WRITE).store_string(JSON.stringify(report));print("AUDIO_FRESH ",JSON.stringify(report));quit(failures);return
+  var fresh_other:=fresh(true);var fresh_replay:=Replay.replay(fresh_other,recorded)
+  check(fresh_replay.ok,"Unfunded fresh two-release exact replay")
+  var fresh_report:={"failures":failures,"checks":checks,"commands":recorded.steps.size(),"releases":normal.run.get_released_game_ids().size(),"cash":normal.run.get_cash_cents(),"replay_ok":fresh_replay.ok,"source":Replay.source_identity(),"scope":"Unfunded fixed-policy two-release route; not final balance"}
+  FileAccess.open(OS.get_environment("PN_CARD_FRAME_OUTPUT"),FileAccess.WRITE).store_string(JSON.stringify(fresh_report));print("AUDIO_FRESH ",JSON.stringify(fresh_report));quit(failures);return
  var s:=fresh()
  var tape:=Replay.begin(s)
  for id: StringName in [&"16_bit_sound",&"main_theme",&"recorded_sounds",&"multiple_soundtracks",&"instrumental_sounds",&"dynamic_sequencing"]:

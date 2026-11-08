@@ -100,7 +100,7 @@ func _verify_offer_and_navigation() -> void:
 	var cash_observations: Array = []
 	var observe_cash := func(): cash_observations.append([run.get_primitive_contract(), run.get_cash_cents(), run.accept_primitive_contract()])
 	run.cash_changed.connect(observe_cash)
-	studio.contract_requested.connect(func(_source: StudioPhase, state: ContractState): accepted.append(state))
+	studio.contract_requested.connect(func(_source: StudioPhase, contract_state: ContractState): accepted.append(contract_state))
 	studio.get_node("%Contracts").pressed.emit()
 	(detail.find_child("AcceptContractButton", true, false) as Button).pressed.emit()
 	expect(accepted.size() == 1 and accepted[0] == run.get_primitive_contract(), "Acceptance creates and publishes one authoritative ContractState")

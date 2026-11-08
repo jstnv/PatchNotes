@@ -88,6 +88,17 @@ func cover() -> void:
 	# frame. Otherwise the old menu remains visible under half-faded text.
 	if _fade != null and _fade.is_running(): await _fade.finished
 
+func show_departure() -> void:
+	# Show the loading labels over the live background while the title exits.
+	# The layer still captures input, but does not obscure the outgoing motion.
+	if _fade != null: _fade.kill()
+	_surface.color = Color.TRANSPARENT
+	_surface.modulate.a = 1.0
+
+func finish_departure(circuit: Control, home: Control) -> void:
+	attach_background(circuit, home)
+	_surface.color = FolderUI.color(&"background")
+
 func attach_background(circuit: Control, home: Control) -> void:
 	if not is_instance_valid(circuit) or not is_instance_valid(home):return
 	_circuit=circuit;_circuit_home=weakref(home)

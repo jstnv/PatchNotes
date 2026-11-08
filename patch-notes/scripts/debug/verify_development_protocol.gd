@@ -4,6 +4,12 @@ const Session := preload("res://scripts/simulation/development_session.gd")
 const Replay := preload("res://scripts/simulation/development_replay.gd")
 var reentry_count:=0
 
+func playtest_expense(run: RunState) -> int:
+	var total:=0
+	for row: Dictionary in run.get_studio_finance_snapshot().get("monthly_rows",[]):
+		total+=int(row.get("playtest_cents",0))
+	return total
+
 func make_session(seed_value: int = 4417) -> RefCounted:
 	var project:=ProjectState.new(300)
 	project.set("_release_id",&"protocol_project")
@@ -12,6 +18,7 @@ func make_session(seed_value: int = 4417) -> RefCounted:
 	run.initialize_cash(0)
 	_expect(run.create_studio_with_traits("Protocol",&"action",[]),"Protocol studio")
 	run.set("_bank_run_id",&"protocol_studio")
+	run._engine_entitlements.studio_id=run._bank_run_id
 	run._publisher_relationships = RunState.RelationshipLedger.create(run._bank_run_id)
 	run._contract_search = RunState.ContractSearch.create(run._bank_run_id)
 	run.set("_employees",EmployeeRoster.create(&"protocol_studio"))
@@ -48,6 +55,7 @@ func _initialize() -> void:
 	broken.hand._pass_definitions.clear()
 	var broken_before:=Replay.state(broken)
 	_expect(not broken.execute(broken.command(&"begin")).ok and Replay.state(broken)==broken_before,"Failed initial deal restores RNG and planning state")
+	var observed_start_cycle: int=session.project.get_current_cycle()
 	# Reentrant commands from project signals cannot resolve twice.
 	session.project.cycle_changed.connect(func() -> void:
 		var inside:=Replay.state(session)
@@ -60,15 +68,18 @@ func _initialize() -> void:
 			var entered:=Replay.state(session)
 			_expect(not Replay.record(session,tape,session.command(&"enter_next_phase")).ok and Replay.state(session)==entered,"Repeated entry cannot mint redraws")
 			_expect(Replay.record(session,tape,session.command(&"begin")).ok,"Begin next phase")
-		var changed: Dictionary = {&"qa":70,&"marketing":30,&"insider":0} if phase==2 else {0:20,1:40,2:20,3:20}
+		var changed: Dictionary = {&"qa":60,&"marketing":40,&"insider":0} if phase==2 else {0:20,1:40,2:20,3:20}
 		_expect(Replay.record(session,tape,session.command(&"priorities",{"distribution":changed})).ok,"Active priority change")
 		for attempt in range(3):
 			var selected: Array[int] = session.hand.candidate_ids.slice(0,4)
 			_expect(Replay.record(session,tape,session.command(&"play",{"candidate_ids":selected})).ok,"Legal recorded hand")
 			if phase>0 and attempt==0:
 				_expect(Replay.record(session,tape,session.command(&"host_playtest")).ok,"Host Playtest recorded")
-				var pending:=Replay.state(session)
-				_expect(not Replay.record(session,tape,session.command(&"host_playtest")).ok and Replay.state(session)==pending,"Second pending playtest cannot charge twice")
+				var playtest_cycle: int=session.project.get_current_cycle()
+				var playtest_candidates: int=session.hand.candidate_ids.size()
+				var prior_expense:=playtest_expense(session.run)
+				_expect(Replay.record(session,tape,session.command(&"host_playtest")).ok and session.project.get_current_cycle()==playtest_cycle+1 and session.hand.candidate_ids.size()==playtest_candidates+2,"Second immediate Playtest advances one cycle and adds two cards")
+				_expect(playtest_expense(session.run)-prior_expense==(50000 if phase==2 else 0),"Second immediate Playtest charges the exact phase cost")
 		var cycle: int = session.project.get_current_cycle()
 		var run_cycle: int = session.run.get_completed_run_cycles()
 		_expect(Replay.record(session,tape,session.command(&"request_exit")).ok,"Exit request")
@@ -82,7 +93,7 @@ func _initialize() -> void:
 			_expect(Replay.record(session,tape,session.command(&"request_exit")).ok,"Request exit again")
 			_expect(Replay.record(session,tape,session.command(&"confirm_exit")).ok,"Confirm exit")
 		_expect(session.finalized and session.project.get_current_cycle()==cycle and session.run.get_completed_run_cycles()==run_cycle,"Finalization costs zero cycles")
-	_expect(reentry_count==14,"Exactly fourteen productive-cycle notifications")
+	_expect(reentry_count==16 and reentry_count==session.project.get_current_cycle()-observed_start_cycle,"Every one of sixteen subsequent productive cycles emits one notification")
 	var ended:=Replay.state(session)
 	_expect(not Replay.record(session,tape,session.command(&"enter_next_phase")).ok and Replay.state(session)==ended,"Beta boundary cannot enter Studio or refresh redraws")
 	var output:=OS.get_environment("PN_CARD_FRAME_OUTPUT")

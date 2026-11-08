@@ -1,0 +1,13 @@
+# Studio Creation spacing — 2026-11-04
+
+Branch `main`; starting HEAD `2ad3cf2b2bb63d324a970b10864b0f69843dcb1a`. The shared worktree already held extensive edits; those, `.codex-godot-temp`, player saves and previous evidence were preserved. No commit, push or exported build was made.
+
+The user requested a slightly larger Studio Traits heading, less space before Selected/Available, improved Overview spacing and removal of the Public Engine description from Overview. In `scripts/phases/main_menu.gd`, the heading is 26px instead of 24px, an empty validation label no longer reserves a line, and the Overview summary uses a bounded non-expanding scroll region. Invalid trait messages and independent scrollable lists remain. The Public Engine terms remain in the Engine browser/picker; only their description in Studio Creation Overview was removed. `how_to_play_content.gd` and `tutorial_overlay.gd` no longer direct players to Overview for those terms. Two debug fixture assertions were updated for the new Overview while retaining separate Engine checks.
+
+## Verification
+
+- Failing-first native layout baseline `sims/studio-creation-layout-20261104/before/` recorded the empty 38px Traits gap and old engine copy. The intermediate 116px Overview minimum remained too tall (`after-v2/`); reduced to 90px. A test-only parse correction is retained in `after/`.
+- Final native layout `after-v3/` passed **28/28** at actual 900×600 and 1280×720, including 26px heading, 8px Traits gap, 17px Overview gap, valid/invalid warning transitions, separate overflowing trait-list scrolling, long Studio name, fixed footer and removal of Public Engine text. 900×600 Overview capture was inspected. An independent final-source rerun without screenshot assertions passed **26/26** in `independent-final/`.
+- Final-source native folder navigation **120/120**, including actual Studio creation and save, invalid balances and Overview content, in `sims/studio-traits-layout-20261104/folder-nav-final/`. Public Engine acceptance **94/94** in `public-engine-final/`, including unchanged engine browser/picker terms. The folder test retains an existing scene UID fallback warning.
+- A real prior player/eight-rival save pair (source `7682469e3562293250d37f6bb5f124205c2bd51d08a58da8e290dae3b33cb63d`) first rejected at the source fence (`restore-before/`). One exact predecessor entry was added; both pairs restored under final source (`restore-final-stable-1/`, `restore-final-stable-2/`) with player exact except capture-sequence metadata, world exact except source stamp, eight rivals, unknown source rejected and input bytes unchanged.
+- `git -c core.whitespace=cr-at-eol diff --check` passed. Exported-build and physical-device appearance remain unverified.

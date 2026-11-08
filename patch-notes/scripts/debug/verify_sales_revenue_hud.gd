@@ -30,7 +30,7 @@ func _initialize() -> void:
 	expect(Replay.digest(run) == before,"Animation creates no cash, cycles, sales or RNG draws")
 	expect(hud.model.unpaid_cents == hud.model.total_cents and hud.model.settled_cents == 0,"Earned quarter-month is distinct from paid cash")
 	# Opposite launch alignment and concurrent titles exercise calendar aggregation.
-	var second := release_fixture(run,"Second",0.0)
+	release_fixture(run,"Second",0.0)
 	await settle()
 	for cycle in range(2,65):
 		expect(run.complete_productive_action(),"Productive cycle %d" % cycle)

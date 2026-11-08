@@ -6,6 +6,7 @@ computer control is used. See docs/codex/threads/simulation-engine/USAGE.md.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import datetime as dt
 import hashlib
 import importlib.util
@@ -15,6 +16,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import threading
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,6 +24,11 @@ SOURCE_ROOTS = {"scripts", "scenes", "data", "assets", "resources", "autoload", 
 SOURCE_SUFFIXES = {".gd", ".uid", ".tscn", ".tres", ".res", ".json", ".png", ".ico", ".svg", ".jpg", ".jpeg", ".webp", ".ogg", ".wav", ".mp3", ".ttf", ".otf", ".gdshader", ".gdshaderinc", ".import", ".txt", ".md", ".csv", ".bin"}
 ROOT_FILES = {"project.godot", "icon.svg", "icon.svg.import"}
 FORMAT = "patch-notes-isolated-simulation-v1"
+# Provenance must not recursively enumerate previous simulation artifacts.
+# The complete runtime contents are independently copied and hash-fenced by
+# workspace-source-manifest.json, including untracked source files.
+PROVENANCE_RUNTIME_PATHS = tuple("patch-notes/" + name for name in sorted(SOURCE_ROOTS | ROOT_FILES))
+PROVENANCE_STATUS_LIMIT = 4 * 1024 * 1024
 
 
 def sha(path: Path) -> str:
@@ -133,6 +140,26 @@ def isolated_environment(profile: Path) -> dict[str, str]:
     return environment
 
 
+def prepare_output_storage(output: Path) -> dict[str, str]:
+    """Best-effort transparent compression for a new, independent run folder.
+
+    Windows NTFS descendants inherit the directory flag. The snapshot is still
+    an ordinary writable copy, not a hardlink or a shared mutable cache. Never
+    apply this to an existing folder or to the source project.
+    """
+    if os.name != "nt":
+        return {"status": "not_supported", "method": "ntfs_directory"}
+    compact = shutil.which("compact.exe")
+    if not compact:
+        return {"status": "unavailable", "method": "ntfs_directory"}
+    try:
+        process = subprocess.run([compact, "/C", str(output)], capture_output=True, timeout=15, creationflags=subprocess.CREATE_NO_WINDOW)
+        compressed = bool(getattr(output.stat(), "st_file_attributes", 0) & 0x800)
+        return {"status": "enabled" if process.returncode == 0 and compressed else "unavailable", "method": "ntfs_directory"}
+    except (OSError, subprocess.TimeoutExpired):
+        return {"status": "unavailable", "method": "ntfs_directory"}
+
+
 def resolve_godot(explicit: str | None) -> Path:
     requested = explicit or os.environ.get("GODOT_BIN")
     if requested:
@@ -169,15 +196,69 @@ def run_process(label: str, argv: list[str], output: Path, environment: dict[str
     return command
 
 
-def git_provenance(repo: Path, evidence: Path | None = None) -> dict:
-    result = {}
-    for label, arguments in (("branch", ["branch", "--show-current"]), ("head", ["rev-parse", "HEAD"]), ("status", ["status", "--porcelain=v1", "--untracked-files=all"]), ("diff", ["diff", "--binary", "HEAD", "--", "patch-notes", "tools/simulate.py"])):
+def _bounded_runtime_git_status(repo: Path, arguments: list[str], evidence: Path | None) -> dict:
+    """Retain at most the declared limit; never write an unbounded Git listing."""
+    artifact = evidence / "runtime-git-status.txt" if evidence is not None else None
+    output = artifact.open("xb") if artifact is not None else contextlib.nullcontext(None)
+    with output as stream:
+        flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+        process = subprocess.Popen(["git", *arguments], cwd=repo, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, creationflags=flags)
+        timed_out = threading.Event()
+        def stop_timed_out() -> None:
+            if process.poll() is None:
+                timed_out.set()
+                try: process.kill()
+                except OSError: pass
+        timer = threading.Timer(30.0, stop_timed_out)
+        timer.daemon = True
+        timer.start()
+        count, truncated = 0, False
         try:
+            while True:
+                block = process.stdout.read1(65536)
+                if not block: break
+                portion = block[:max(0, PROVENANCE_STATUS_LIMIT - count)]
+                if stream is not None: stream.write(portion)
+                count += len(portion)
+                if len(portion) < len(block):
+                    truncated = True
+                    try: process.kill()
+                    except OSError: pass
+                    break
+            process.stdout.close()
+            exit_code = process.wait()
+        finally:
+            timer.cancel()
+            if process.poll() is None:
+                process.kill()
+                process.wait()
+    result = {"bytes": count, "exit": "timeout" if timed_out.is_set() else exit_code,
+              "truncated": truncated, "limit_bytes": PROVENANCE_STATUS_LIMIT}
+    if artifact is not None:
+        result.update(artifact=artifact.name, sha256=sha(artifact))
+    return result
+
+
+def git_provenance(repo: Path, evidence: Path | None = None, *, include_diff: bool = True) -> dict:
+    result = {"status_scope": "Tracked changes across the repository; untracked entries only within the frozen runtime paths, with untracked directories collapsed and status capped. Other untracked files are not enumerated. The source manifest records every frozen runtime file."}
+    commands = [
+        ("branch", ["branch", "--show-current"]),
+        ("head", ["rev-parse", "HEAD"]),
+        ("status", ["status", "--porcelain=v1", "--untracked-files=no"]),
+        ("runtime_status", ["status", "--porcelain=v1", "--untracked-files=normal", "--", *PROVENANCE_RUNTIME_PATHS]),
+    ]
+    if include_diff:
+        commands.append(("diff", ["diff", "--binary", "HEAD", "--", "patch-notes", "tools/simulate.py"]))
+    for label, arguments in commands:
+        try:
+            if label == "runtime_status":
+                result[label] = _bounded_runtime_git_status(repo, arguments, evidence)
+                continue
             if evidence is not None and label in {"status", "diff"}:
                 # Large shared worktrees may contain extensive generated
                 # evidence and binary edits. Retain exact bytes on disk rather
                 # than buffering them all alongside an executing Godot world.
-                artifact = evidence / ("git-status.txt" if label == "status" else "source.diff.patch")
+                artifact = evidence / {"status": "git-status.txt", "diff": "source.diff.patch"}[label]
                 with artifact.open("xb") as stream:
                     process = subprocess.run(["git", *arguments], cwd=repo, stdout=stream, stderr=subprocess.PIPE, timeout=30)
                 result[label] = {"artifact": artifact.name, "bytes": artifact.stat().st_size, "sha256": sha(artifact), "exit": process.returncode}
@@ -186,8 +267,17 @@ def git_provenance(repo: Path, evidence: Path | None = None) -> dict:
             result[label] = process.stdout.decode("utf-8", errors="replace").strip() if process.returncode == 0 else {"error": process.stderr.decode("utf-8", errors="replace")}
         except (OSError, subprocess.TimeoutExpired) as error:
             result[label] = {"error": str(error)}
-    status = result["status"]
-    result["dirty"] = bool(status) if isinstance(status, str) else (bool(status["bytes"]) if isinstance(status, dict) and status.get("exit") == 0 else None)
+    def has_changes(status: object) -> bool | None:
+        if isinstance(status, str):
+            return bool(status)
+        if isinstance(status, dict) and status.get("truncated"):
+            return True
+        if isinstance(status, dict) and status.get("exit") == 0:
+            return bool(status["bytes"])
+        return None
+    # A positive dirty result is certain. A negative result cannot establish a
+    # clean worktree because untracked files outside the runtime are omitted.
+    result["dirty"] = True if any(has_changes(result[key]) is True for key in ("status", "runtime_status")) else None
     return result
 
 
@@ -379,11 +469,12 @@ def main(argv: list[str] | None = None) -> int:
         if output.is_relative_to(args.variant.resolve()):
             raise ValueError("Output must be outside the editable variant")
     output.mkdir(parents=True, exist_ok=False)
+    output_storage = prepare_output_storage(output)
     (output / ".gdignore").touch()
     shutil.copy2(Path(__file__), output / "runner.py")
     if args.mode == "run" and args.variant:
         shutil.copy2(Path(__file__).with_name("simulator_variant.py"), output / "simulator_variant.py")
-    report = {"format": FORMAT, "mode": args.mode, "ok": False, "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "runner_sha256": sha(Path(__file__)), "python": sys.version, "scope": "Independent scene-free campaign simulation; not human/audible/UI acceptance or approved rival AI", "output": str(output)}
+    report = {"format": FORMAT, "mode": args.mode, "ok": False, "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "runner_sha256": sha(Path(__file__)), "python": sys.version, "scope": "Independent scene-free campaign simulation; not human/audible/UI acceptance or approved rival AI", "output": str(output), "output_storage": output_storage}
     write_json(output / "run-report.json", report)
     try:
         godot = resolve_godot(args.godot)

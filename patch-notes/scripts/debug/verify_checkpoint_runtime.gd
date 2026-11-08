@@ -4,6 +4,10 @@ func _run() -> void:
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
 	root.add_child(game)
 	await process_frame
+	var title_deadline := Time.get_ticks_msec() + 90000
+	while game._title_checkpoint_job != null and Time.get_ticks_msec() < title_deadline:
+		await process_frame
+	expect(game._title_checkpoint_job == null, "Title inspection completes before creating the fixture Studio")
 	var test_port := OS.get_environment("PN_CHECKPOINT_TEST_PORT")
 	if not test_port.is_empty():
 		game.checkpoints.store._writer = TCPServer.new()

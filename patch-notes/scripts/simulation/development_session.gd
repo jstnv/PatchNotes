@@ -100,7 +100,9 @@ func _execute(kind: StringName,payload: Dictionary) -> Dictionary:
 		if not hand.active:
 			hand.priorities=distribution.duplicate()
 			return {"ok":true,"events":[{"type":"priorities_planned"}]}
-		var allocation: RefCounted = BetaPriorityAllocation.new() if phase_index==2 else PriorityAllocation.new()
+		var allocation: RefCounted
+		if phase_index==2: allocation=BetaPriorityAllocation.new()
+		else: allocation=PriorityAllocation.new()
 		allocation.set_distribution(hand.priorities)
 		var publish:=func() -> void: hand.priorities=distribution.duplicate()
 		if not Actions.commit_priorities(project,run,allocation,distribution,publish): return reject("Priority change rejected")

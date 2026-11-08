@@ -44,12 +44,17 @@ func _run() -> void:
 	expect(overlay!=null,"Create immediately shows a new-save loading screen")
 	if overlay==null:
 		game.queue_free();await process_frame;quit(failures);return
-	expect(circuits.get_parent()==overlay._surface and circuits.is_visible_in_tree(),"New-save loading shows the existing circuit background")
 	expect(game._transition_in_progress and game.guided_tutorial==null,"Creation is guarded before the tutorial exists")
 	expect(overlay.studio_label.text=="Fresh Horizon" and overlay.date_label.text=="1980 · Month 1, Week 1","New-save loading shows Studio name and game date")
 	menu.studio_created.emit("Duplicate must not win",&"action",[])
 	var event:=InputEventKey.new();event.keycode=KEY_ESCAPE;event.pressed=true
 	root.push_input(event,true)
+	# The transparent loader now leaves the title and its circuits visible while
+	# the outgoing title animation finishes; only then does it adopt the circuits.
+	var departure_deadline := Time.get_ticks_msec()+5000
+	while is_instance_valid(overlay) and circuits.get_parent()!=overlay._surface and Time.get_ticks_msec()<departure_deadline:
+		await process_frame
+	expect(is_instance_valid(overlay) and circuits.get_parent()==overlay._surface and circuits.is_visible_in_tree(),"New-save loading adopts the same visible circuits after title departure")
 	var stages := []
 	var captured := false
 	var deadline:=Time.get_ticks_msec()+preload("res://scripts/debug/ui_test_actions.gd").NEW_SAVE_TIMEOUT_MSEC

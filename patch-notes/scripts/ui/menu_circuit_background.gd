@@ -6,6 +6,7 @@ const Tuning:=preload("res://scripts/ui/circuit_flow_settings.gd")
 const NoteTimeline:=preload("res://scripts/ui/menu_note_timeline.gd")
 const NOTE_DATA := "res://assets/boot/sequence_v1/menu_visual_notes.json"
 const STUDIO_NOTE_DATA := "res://assets/audio/crunch_time_70/studio_pool/studio_visual_notes.json"
+const PRODUCTION_NOTE_DATA := "res://assets/audio/crunch_time_70/production_visual_notes.json"
 const CYAN:=Color("22e7ef")
 const ORANGE:=Color("ff994f")
 @export var flow_settings:Tuning=Tuning.new()
@@ -23,6 +24,7 @@ var _last_trace_opacity:=-1.0
 var draw_microseconds:=0
 var _note_data: Dictionary = {}
 var _studio_note_data: Dictionary = {}
+var _production_note_data: Dictionary = {}
 var _note_timelines: Dictionary = {}
 
 class Board extends Control:
@@ -41,6 +43,8 @@ func _ready()->void:
 	if parsed is Dictionary and parsed.get("version") == 1: _note_data = parsed
 	var studio_parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(STUDIO_NOTE_DATA))
 	if studio_parsed is Dictionary and studio_parsed.get("version") == 1: _studio_note_data = studio_parsed
+	var production_parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(PRODUCTION_NOTE_DATA))
+	if production_parsed is Dictionary and production_parsed.get("version") == 1: _production_note_data = production_parsed
 	if flow_settings==null:flow_settings=Tuning.new()
 	field.bind(geometry,flow_settings)
 	_board=Board.new();_board.owner_flow=self;_board.name="CircuitGeometry"
@@ -81,10 +85,11 @@ func _make_note_timeline(id: StringName, at_seconds: float) -> RefCounted:
 	var rate := float(_note_data.get("sample_rate",48000))
 	var loop_length := float(_note_data.get("loop_frames",0)) / rate
 	var switch_length := float(_note_data.get("switch_frames",0)) / rate
-	if String(id).begins_with("studio_"):
-		var studio_rate := float(_studio_note_data.get("sample_rate",48000))
-		var studio_length := float(_studio_note_data.get("loop_frames",0)) / studio_rate
-		var studio_data: Dictionary = _studio_note_data.get("tracks",{}).get(String(id),{})
+	if String(id).begins_with("studio_") or String(id).begins_with("production_"):
+		var note_map := _studio_note_data if String(id).begins_with("studio_") else _production_note_data
+		var studio_rate := float(note_map.get("sample_rate",48000))
+		var studio_length := float(note_map.get("loop_frames",0)) / studio_rate
+		var studio_data: Dictionary = note_map.get("tracks",{}).get(String(id),{})
 		var events := []
 		for pair in [["bass",&"bass"],["hook",&"chord"]]:
 			for row: Array in studio_data.get(pair[0],[]):
@@ -113,7 +118,8 @@ func _music_note_events() -> Variant:
 	for clock: Dictionary in clocks:
 		var id := StringName(clock.timeline)
 		var studio_track: bool = String(id).begins_with("studio_") and _studio_note_data.get("tracks",{}).has(String(id))
-		if id not in [&"boot",&"switch_menu",&"menu"] and not studio_track: continue
+		var production_track: bool = String(id).begins_with("production_") and _production_note_data.get("tracks",{}).has(String(id))
+		if id not in [&"boot",&"switch_menu",&"menu"] and not studio_track and not production_track: continue
 		seen[id] = true
 		var seconds := float(clock.seconds)
 		if not _note_timelines.has(id):
@@ -135,7 +141,8 @@ func _music_note_events() -> Variant:
 			result.append(event)
 	for id: StringName in _note_timelines.keys():
 		if not seen.has(id): _note_timelines.erase(id)
-	return result if not seen.is_empty() else null
+	if seen.is_empty(): return null
+	return result
 func _rebuild_geometry()->void:
 	if size.x<2 or size.y<2 or geometry.area==size:return
 	# Preserve each pulse's route progress through window/aspect changes.

@@ -15,6 +15,16 @@ sim = variant.sim
 
 
 class VariantTests(unittest.TestCase):
+    def test_creation_uses_scoped_git_provenance_without_an_unused_diff(self):
+        provenance = {"branch": "main", "head": "abc", "dirty": None,
+                      "status_scope": "runtime untracked entries scoped"}
+        with patch.object(sim, "git_provenance", return_value=provenance) as captured:
+            path = self.create()
+        captured.assert_called_once_with(self.repo, include_diff=False)
+        metadata = sim.read_json(path / "variant.json")
+        self.assertEqual(metadata["canonical_git"]["status_scope"], provenance["status_scope"])
+        self.assertIsNone(metadata["canonical_git"]["dirty"])
+
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name)

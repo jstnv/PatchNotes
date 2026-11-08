@@ -211,8 +211,8 @@ func _confirm() -> void:
 		error_label.text = "Allocate exactly 100 priority points before beginning."
 		return
 	var genre: StringName = genre_input.get_selected_metadata()
-	var theme: StringName = theme_input.get_selected_metadata()
-	error_label.text = PrimitivePredevelopment.validation_error(name_input.text, genre, theme)
+	var selected_theme: StringName = theme_input.get_selected_metadata()
+	error_label.text = PrimitivePredevelopment.validation_error(name_input.text, genre, selected_theme)
 	if not error_label.text.is_empty():
 		name_input.grab_focus()
 		return
@@ -222,7 +222,7 @@ func _confirm() -> void:
 	elif support_mode:
 		_review_support()
 		return
-	begin_requested.emit(name_input.text.strip_edges(), genre, theme)
+	begin_requested.emit(name_input.text.strip_edges(), genre, selected_theme)
 
 func get_confirmed_commission_quote() -> Dictionary:
 	return _commission_quote.duplicate(true) if commission_mode else {}

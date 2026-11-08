@@ -26,6 +26,7 @@ var blend := Blend.new()
 var menu_blend := Blend.new()
 var studio_pool := StudioPool.new()
 var studio_pool_active := false
+var _visual_main_variant: StringName = &"a"
 var _visual_previous_studio_index := -1
 var _visual_studio_switch_seconds := 0.0
 var requested_theme: StringName = &"menu"
@@ -71,6 +72,7 @@ func _ready() -> void:
 	_boot_tail.bus = &"Music"
 	add_child(_boot_tail)
 	var path := B if ProjectSettings.get_setting("audio/soundtrack/prototype_variant", "A") == "B" else A
+	_visual_main_variant = &"b" if path == B else &"a"
 	var main := _loop(path)
 	var studio_streams: Array[AudioStreamWAV] = []
 	for studio_path: String in Map.STUDIO_POOL:
@@ -387,6 +389,7 @@ func visual_note_clocks() -> Array[Dictionary]:
 		"menu_seconds": grid.seconds,
 		"menu_weight": menu_blend.weight,
 		"studio_weight": blend.weight,
+		"main_variant": _visual_main_variant,
 		"studio_index": studio_pool.selected,
 		"studio_previous_index": _visual_previous_studio_index,
 		"studio_switch_seconds": _visual_studio_switch_seconds,
@@ -419,6 +422,10 @@ static func _visual_note_clock_projection(state: Dictionary) -> Array[Dictionary
 		var seconds := maxf(0.0, float(state.menu_seconds))
 		if menu_gain > 0.0:
 			result.append({"timeline": &"menu", "seconds": seconds, "gain": menu_gain})
+		var main_gain := (1.0 - menu_gain) * (1.0 - clampf(float(state.get("studio_weight", 0.0)), 0.0, 1.0))
+		if main_gain > 0.0:
+			var variant := "b" if String(state.get("main_variant", "a")) == "b" else "a"
+			result.append({"timeline": StringName("production_" + variant), "seconds": seconds, "gain": main_gain})
 		var studio_gain := (1.0 - menu_gain) * clampf(float(state.get("studio_weight", 0.0)), 0.0, 1.0)
 		var index := int(state.get("studio_index", -1))
 		var cutover := float(state.get("studio_switch_seconds", 0.0))

@@ -46,8 +46,8 @@ func push_from_bottom(view: Control, focus: Control, closed: Callable, bottom_gl
 func _push_offset(view: Control, focus: Control, closed: Callable, offset: Vector2) -> bool:
 	if busy or frames.is_empty() or frames.any(func(frame): return frame.view.get_ref()==view): return false
 	var previous: Control = frames[-1].view.get_ref()
-	var owner := get_viewport().gui_get_focus_owner()
-	frames[-1].focus = weakref(owner) if owner != null else null
+	var focused_control := get_viewport().gui_get_focus_owner()
+	frames[-1].focus = weakref(focused_control) if focused_control != null else null
 	view.set_meta("folder_navigation_managed",true)
 	frames.append({"view":weakref(view),"focus":null,"closed":closed,"offset":offset})
 	var rest := view.position
@@ -146,8 +146,8 @@ func _unlock_navigation() -> void:
 	_moving_vertical=false
 	if _owns_input_lock and is_instance_valid(_input_viewport): _input_viewport.gui_disable_input=_input_was_disabled
 	if _owns_input_lock and is_instance_valid(_input_viewport):
-		var owner: Variant=(_input_viewport.get_meta("folder_input_owner") if _input_viewport.has_meta("folder_input_owner") else null)
-		if owner is WeakRef and owner.get_ref()==self:
+		var input_owner: Variant=(_input_viewport.get_meta("folder_input_owner") if _input_viewport.has_meta("folder_input_owner") else null)
+		if input_owner is WeakRef and input_owner.get_ref()==self:
 			if _previous_input_owner==null:_input_viewport.remove_meta("folder_input_owner")
 			else:_input_viewport.set_meta("folder_input_owner",_previous_input_owner)
 	_owns_input_lock=false
@@ -237,8 +237,8 @@ func _start_entrance(menu: Control,visual: Control) -> void:
 			visual.get_parent().queue_sort())
 
 static func navigation_input_blocked(node: Node) -> bool:
-	var owner: Variant=(node.get_viewport().get_meta("folder_input_owner") if node.get_viewport().has_meta("folder_input_owner") else null)
-	return owner is WeakRef and is_instance_valid(owner.get_ref()) and owner.get_ref().busy
+	var input_owner: Variant=(node.get_viewport().get_meta("folder_input_owner") if node.get_viewport().has_meta("folder_input_owner") else null)
+	return input_owner is WeakRef and is_instance_valid(input_owner.get_ref()) and input_owner.get_ref().busy
 
 static func cancel_pressed(event: InputEvent) -> bool:
 	return event.is_action_pressed("ui_cancel") or (event is InputEventJoypadButton and event.pressed and event.button_index==JOY_BUTTON_B)

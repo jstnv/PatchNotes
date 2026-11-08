@@ -69,7 +69,13 @@ static func facts(cards: Array) -> Array:
 	return result
 
 static func hand(state: Dictionary, project: StringName, phase: StringName, project_cycle: int, cycle: int, cards: Array, priorities: Dictionary) -> Dictionary:
-	return EmployeeRoster._apply(state,{"type":&"career_hand","project_id":project,"phase":phase,"project_cycle":project_cycle,"cycle":cycle,"cards":cards.duplicate(true),"priorities":priorities.duplicate()}) if EmployeeRoster.valid(state) else {}
+	return EmployeeRoster._apply(state,{"type":&"career_hand","project_id":project,"phase":phase,"project_cycle":project_cycle,"cycle":cycle,"cards":cards.duplicate(true),"priorities":priorities.duplicate(),"rules_version":2}) if EmployeeRoster.valid(state) else {}
+
+static func manager_one_hands(employee: Dictionary) -> int:
+	var total:=0
+	for project: Dictionary in employee.get("career",{}).get("projects",{}).values():
+		total+=project.get("specializations",[]).size()
+	return mini(8,total)
 
 static func release(state: Dictionary, project: StringName, cycle: int) -> Dictionary:
 	return EmployeeRoster._apply(state,{"type":&"career_release","project_id":project,"cycle":cycle}) if EmployeeRoster.valid(state) else {}
@@ -81,6 +87,7 @@ static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) 
 	if copy_source:
 		for prior: Dictionary in state.events:
 			if prior.get("cycle",0)>event.cycle:return {}
+			if event.get("type")==&"career_hand" and not event.has("rules_version") and prior.get("type")==&"career_hand" and prior.get("rules_version",1)==2:return {}
 	var next:=state.duplicate(true) if copy_source else state
 	var kind: StringName=event.get("type",&"")
 	if kind==&"career_activate":
@@ -104,7 +111,7 @@ static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) 
 		employee.career.games[event.course]=[]
 		employee.career.projects={}
 	elif kind==&"career_hand":
-		if event.size()!=7 or typeof(event.get("project_id"))!=TYPE_STRING_NAME or event.project_id.is_empty() or typeof(event.get("project_cycle"))!=TYPE_INT or event.project_cycle<0 or event.get("phase") not in [&"design",&"alpha",&"beta"] or not event.get("cards") is Array or (event.cards.is_empty() or event.cards.size()>4) or not event.get("priorities") is Dictionary:return {}
+		if event.size()!=(8 if event.has("rules_version") else 7) or (event.has("rules_version") and event.rules_version!=2) or typeof(event.get("project_id"))!=TYPE_STRING_NAME or event.project_id.is_empty() or typeof(event.get("project_cycle"))!=TYPE_INT or event.project_cycle<0 or event.get("phase") not in [&"design",&"alpha",&"beta"] or not event.get("cards") is Array or (event.cards.is_empty() or event.cards.size()>4) or not event.get("priorities") is Dictionary:return {}
 		for card in event.cards:
 			if not card is Dictionary or card.size()!=5:return {}
 			for key in ["id","type","primary","secondary","beta"]:
@@ -114,7 +121,10 @@ static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) 
 		if not weights_ok:return {}
 		if event.phase!=&"beta":
 			if not PriorityAllocation.is_valid_with_bounds(event.priorities,limits(state)):return {}
-		elif not BetaPriorityAllocation.insiders_enabled():
+		# Journal reconstruction must respect a historical hand recorded while
+		# Insider was active, even if that pool has since been disabled. Live
+		# commands still enforce the current pool setting and bounds.
+		elif not BetaPriorityAllocation.insiders_enabled() and (copy_source or event.priorities.get(&"insider",-1)==0):
 			var beta_limits:=limits(state,true)
 			if event.priorities.get(&"insider",-1)!=0:return {}
 			for category: StringName in [&"qa",&"marketing"]:
@@ -137,9 +147,25 @@ static func apply(state: Dictionary, event: Dictionary, copy_source: bool=true) 
 			else:
 				var stat: StringName=event.cards[0].beta if event.phase==&"beta" else event.cards[0].primary
 				var same: bool=event.cards.size()==4 and event.cards.all(func(card):return (card.beta if event.phase==&"beta" else card.primary)==stat)
-				var key: Variant=stat if event.phase==&"beta" else CORE.find(stat)
+				var key: Variant=stat
+				if event.phase!=&"beta":key=CORE.find(stat)
 				var eligible: bool=stat in [&"qa",&"marketing"] and event.priorities.get(&"insider",-1)==0 if event.phase==&"beta" else stat in CORE
-				if same and eligible and event.priorities.get(key,-1)==limits(state,event.phase==&"beta").x and project.specializations.size()<2:project.specializations.append(action)
+				var new_first: bool=course==MANAGER[0] and event.get("rules_version",1)==2
+				if new_first:
+					var categories: Array=BetaPriorityAllocation.CATEGORIES if event.phase==&"beta" and int(event.priorities.get(&"insider",0))>0 else [&"qa",&"marketing"] if event.phase==&"beta" else [0,1,2,3]
+					eligible=stat in [&"qa",&"marketing"] if event.phase==&"beta" else stat in CORE
+					var lowest:=101
+					for category: Variant in categories:lowest=mini(lowest,int(event.priorities.get(category,101)))
+					if manager_one_hands(employee)>=8:
+						# Older saves can have eight accepted hands while awaiting release.
+						# Recognize them prospectively at the first new committed hand.
+						employee.career.courses[course].completed_cycle=event.cycle;employee.trained=true
+					elif same and eligible and event.priorities.get(key,-1)==lowest:
+						project.specializations.append(action)
+						employee.career.projects[event.project_id]=project
+						if manager_one_hands(employee)>=8:
+							employee.career.courses[course].completed_cycle=event.cycle;employee.trained=true
+				elif same and eligible and event.priorities.get(key,-1)==limits(state,event.phase==&"beta").x and project.specializations.size()<2:project.specializations.append(action)
 			employee.career.projects[event.project_id]=project
 	elif kind==&"career_release":
 		if event.size()!=3 or typeof(event.get("project_id"))!=TYPE_STRING_NAME or event.project_id.is_empty():return {}
@@ -199,4 +225,6 @@ static func validate_saved(state: Dictionary, finance: Dictionary, metadata: Dic
 
 static func event_schemas() -> Array:
 	var s=CheckpointSchema
-	return [{"type":"id","cycle":"uint","rules_version":"uint"},{"type":"id","role":"id","cycle":"uint"},{"type":"id","employee_id":"id","course":"id","cycle":"uint","fee_cents":"uint"},{"type":"id","project_id":"id","cycle":"uint"},{"type":"id","project_id":"id","phase":"id","project_cycle":"uint","cycle":"uint","cards":s.array_of(s.fields("id type primary secondary beta","id")),"priorities":s.union_of([s.map_of("uint","uint"),s.map_of("id","uint")])}]
+	var hand_schema={"type":"id","project_id":"id","phase":"id","project_cycle":"uint","cycle":"uint","cards":s.array_of(s.fields("id type primary secondary beta","id")),"priorities":s.union_of([s.map_of("uint","uint"),s.map_of("id","uint")])}
+	var new_hand: Dictionary=hand_schema.duplicate(true);new_hand.rules_version="uint"
+	return [{"type":"id","cycle":"uint","rules_version":"uint"},{"type":"id","role":"id","cycle":"uint"},{"type":"id","employee_id":"id","course":"id","cycle":"uint","fee_cents":"uint"},{"type":"id","project_id":"id","cycle":"uint"},hand_schema,new_hand]

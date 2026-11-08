@@ -191,17 +191,24 @@ func _space() -> void:
 
 func _string() -> Variant:
 	var start := _pos
+	# Only the strict printable ASCII subset can be returned without invoking
+	# the JSON decoder; every escape and non-ASCII span retains the old path.
+	var plain_ascii := start >= 0 and start < _text.length() and _text[start] == "\""
 	_pos += 1
 	while _pos < _text.length():
-		var c := _text[_pos]
+		var code := _text.unicode_at(_pos)
 		_pos += 1
-		if c.unicode_at(0) < 32: return fail("Unescaped string control")
-		if c == "\\":
+		if code < 32: return fail("Unescaped string control")
+		if code == 92:
+			plain_ascii = false
 			_pos += 1
-		elif c == "\"":
+		elif code == 34:
+			if plain_ascii: return _text.substr(start+1,_pos-start-2)
 			var parser := JSON.new()
 			if parser.parse(_text.substr(start,_pos-start)) != OK or not parser.data is String: return fail("Invalid JSON string")
 			return parser.data
+		elif code > 126:
+			plain_ascii = false
 	return fail("Unterminated JSON string")
 
 func _value(depth: int) -> Variant:

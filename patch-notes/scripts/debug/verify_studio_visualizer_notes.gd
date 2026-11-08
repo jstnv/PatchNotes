@@ -41,7 +41,10 @@ func run() -> void:
 	check(menu_seen and studio_seen, "Menu and Studio note clocks coexist with the audio mix gains during crossfade")
 	state.menu_weight = 0.0
 	state.studio_weight = 0.0
-	check(Song._visual_note_clock_projection(state).is_empty(), "Inaudible Studio and menu layers expose no note clocks")
+	var silent_layers := true
+	for entry: Dictionary in Song._visual_note_clock_projection(state):
+		if entry.timeline == &"menu" or String(entry.timeline).begins_with("studio_"): silent_layers = false
+	check(silent_layers, "Inaudible Studio and menu layers expose no note clocks")
 	# Pool selection changes on the mix cursor. The listener may still hear the
 	# previous arrangement for one output-latency interval after that boundary.
 	state.studio_weight = 1.0

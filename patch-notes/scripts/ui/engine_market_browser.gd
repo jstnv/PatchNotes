@@ -13,6 +13,9 @@ var creation: VBoxContainer
 var action: Button
 var status: Label
 var heading: Label
+var header_title: Label
+var header_subtitle: Label
+var header_back: Button
 var description: Label
 var feedback: Label
 var create_input: LineEdit
@@ -47,7 +50,10 @@ func _init() -> void:
 	host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var surface:=FolderUI.surface(host);surface.set_meta("bounded_folder",true)
 	var layout:=VBoxContainer.new();layout.add_theme_constant_override("separation",18);surface.add_child(layout)
-	FolderUI.header(layout,"Engines","Choose an engine, review its library, or develop your own.",_back)
+	var header:=FolderUI.header(layout,"Engines","Choose an engine, review its library, or develop your own.",_back)
+	header_back=header.get_child(0);var header_copy: VBoxContainer=header.get_child(1)
+	header_title=header_copy.get_child(0);header_subtitle=header_copy.get_child(1)
+	header_title.clip_text=true;header_title.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
 	var document:=FolderUI.surface(layout,true);document.size_flags_horizontal=Control.SIZE_EXPAND_FILL;document.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	var scroll:=ScrollContainer.new();scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
 	page_scroll=scroll;scroll.follow_focus=true
@@ -55,14 +61,14 @@ func _init() -> void:
 	var pages:=VBoxContainer.new();pages.size_flags_horizontal=Control.SIZE_EXPAND_FILL;pages.size_flags_vertical=Control.SIZE_EXPAND_FILL;scroll.add_child(pages)
 	overview=VBoxContainer.new();overview.name="EngineOverview";overview.add_theme_constant_override("separation",18);pages.add_child(overview)
 	FolderUI.label(overview,"Engines",&"HeadingLabel")
-	FolderUI.label(overview,"Libraries and terms are shown for each engine. New engines begin with foundation technologies and an empty Feature library.")
+	FolderUI.label(overview,"Libraries and terms are shown for each engine. New proprietary engines include four implemented starter Features.")
 	develop_button=FolderUI.button(overview,"Develop New Engine",func():_show_page(&"create"));develop_button.name="DevelopNewEngine"
 	develop_button.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
 	engine_list=VBoxContainer.new();engine_list.name="EngineList";engine_list.add_theme_constant_override("separation",8);overview.add_child(engine_list)
 	details=VBoxContainer.new();details.name="EngineDetails";details.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	details.add_theme_constant_override("separation",18);pages.add_child(details)
-	FolderUI.button(details,"Back to Engines",func():_show_page(&"overview"))
 	heading=FolderUI.label(details,"",&"HeadingLabel")
+	heading.hide()
 	status=FolderUI.label(details,"")
 	description=FolderUI.label(details,"",&"BodyLabel")
 	action=FolderUI.button(details,"",_act);action.name="EngineAction"
@@ -71,20 +77,19 @@ func _init() -> void:
 	configure_button.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
 	skill_button=FolderUI.button(details,"Skill Tree",_open_skill_tree);skill_button.name="OpenEngineSkillTree"
 	skill_button.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
-	details.move_child(configure_button,3);details.move_child(skill_button,4)
+	details.move_child(configure_button,2);details.move_child(skill_button,3)
 	feedback=FolderUI.label(details,"")
 	skill_page=VBoxContainer.new();skill_page.name="EngineProgression";skill_page.add_theme_constant_override("separation",18);pages.add_child(skill_page)
-	skill_back=FolderUI.button(skill_page,"Back to Engine",_back);skill_back.name="BackToEngine";skill_back.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
+	skill_back=header_back
 	skill_feedback=FolderUI.label(skill_page,"")
 	skill_tree=VBoxContainer.new();skill_tree.name="EngineSkillTree";skill_tree.add_theme_constant_override("separation",12);skill_page.add_child(skill_tree)
 	skill_page.size_flags_vertical=Control.SIZE_EXPAND_FILL;skill_tree.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	skill_grid=preload("res://scripts/ui/progression_tree_view.gd").new();skill_grid.size_flags_vertical=Control.SIZE_EXPAND_FILL;skill_tree.add_child(skill_grid)
+	skill_grid=preload("res://scripts/ui/progression_tree_view.gd").new();skill_grid.floating_controls=true;skill_grid.size_flags_vertical=Control.SIZE_EXPAND_FILL;skill_tree.add_child(skill_grid)
 	skill_grid.ready.connect(_build_skill_details)
 	skill_grid.inspected.connect(_inspect_skill_node);skill_grid.action_requested.connect(_purchase_skill_node)
 	creation=VBoxContainer.new();creation.name="EngineCreation";creation.add_theme_constant_override("separation",18);pages.add_child(creation)
-	FolderUI.button(creation,"Back to Engines",func():_show_page(&"overview"))
 	FolderUI.label(creation,"Develop New Engine",&"HeadingLabel")
-	FolderUI.label(creation,"$100 · %d maximum Scope · No royalties. Starts with four foundation technologies and no Feature cards."%run.ProprietaryEngines.CAPACITY)
+	FolderUI.label(creation,"$100 · %d maximum Scope · No royalties. Includes Text, 4-Color Palette, 8-Bit Sound and Keyboard & Mouse."%run.ProprietaryEngines.CAPACITY)
 	create_input=LineEdit.new();create_input.name="ProprietaryEngineName";create_input.placeholder_text="Name your engine";create_input.max_length=80
 	creation.add_child(create_input)
 	create_input.text_changed.connect(func(_value: String):_refresh_create())
@@ -137,10 +142,16 @@ func _show_page(page: StringName) -> void:
 	details.visible=page==&"detail"
 	creation.visible=page==&"create"
 	skill_page.visible=page==&"skill"
+	_update_header()
 	page_scroll.scroll_vertical=0
 	page_scroll.vertical_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED if page==&"skill" else ScrollContainer.SCROLL_MODE_AUTO
 	if page==&"create":_refresh_create();create_input.grab_focus()
-	if page==&"skill":skill_back.grab_focus();skill_grid.focus_root.call_deferred()
+	if page==&"skill":header_back.grab_focus();skill_grid.focus_root.call_deferred()
+
+func _update_header() -> void:
+	var engine_page := details.visible or skill_page.visible
+	header_title.text = heading.text if engine_page else "Engines"
+	header_subtitle.visible = not engine_page
 
 func _open_skill_tree() -> void:
 	if run==null or run.get_proprietary_engine_row(selected_id).is_empty():return
@@ -201,11 +212,17 @@ func _render_skill_view(reset_scroll: bool=false) -> void:
 		skill_grid._fit_popup.call_deferred()
 
 func _back() -> void:
-	if skill_page.visible:_show_page(&"detail");skill_button.grab_focus()
+	if skill_page.visible:
+		if skill_grid.popup.visible:skill_grid.close_details();return
+		_show_page(&"detail");skill_button.grab_focus()
+	elif details.visible:
+		_show_page(&"overview")
+		if buttons.has(selected_id):buttons[selected_id].grab_focus()
+	elif creation.visible:_show_page(&"overview");develop_button.grab_focus()
 	else:closed.emit()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if is_visible_in_tree() and skill_page.visible and MenuTransitions.cancel_pressed(event):
+	if is_visible_in_tree() and MenuTransitions.cancel_pressed(event):
 		_back();get_viewport().set_input_as_handled()
 
 func _refresh_details() -> void:
@@ -215,6 +232,7 @@ func _refresh_details() -> void:
 	var owned: bool=state.engines.has(selected_id)
 	var row: Dictionary=state.engines.get(selected_id,{})
 	heading.text=str(row.get("name",listing.get("name","Engine")))
+	_update_header()
 	for id: StringName in buttons:buttons[id].set_pressed_no_signal(id==selected_id)
 	var selected: Dictionary=state.engines.get(run.get_selected_engine_id(),{})
 	status.text="Selected for new projects: "+str(selected.get("name","Built-in Engine"))
@@ -291,7 +309,7 @@ func _inspect_skill_node(id: StringName) -> void:
 	skill_grid._copy.hide();skill_grid.use_detail_extension();_render_skill_view()
 	var row: Dictionary=run.get_proprietary_engine_row(selected_id)
 	var progress: int=int(definition.threshold) if node.state=="complete" else int(row.challenge_progress.get(node.branch,0)) if node.state!="locked" else 0
-	skill_progress.max_value=int(definition.threshold);skill_progress.value=progress;skill_progress.show()
+	skill_progress.max_value=int(definition.threshold);skill_progress.value=progress;skill_progress.visible=node.state!="ready"
 	skill_progress_label.text="Implemented" if node.state=="complete" else "%d / %d %s Core%s"%[progress,int(definition.threshold),category," · Locked" if node.state=="locked" else ""]
 	var quote: Dictionary=run.get_engine_skill_quote(selected_id,node.branch) if node.state=="ready" else {}
 	skill_grid.action_button.name="EngineSkill_%s_%d"%[node.branch,node.generation]

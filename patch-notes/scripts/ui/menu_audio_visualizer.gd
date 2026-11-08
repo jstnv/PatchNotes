@@ -66,8 +66,8 @@ func _audible_gain() -> float:
 	var song := get_node_or_null("/root/Soundtrack")
 	if song == null or not is_instance_valid(song.player) or not song.player.playing or song.player.stream_paused: return 0.0
 	var gain := 1.0
-	for name in [&"Music",&"Master"]:
-		var bus := AudioServer.get_bus_index(name)
+	for bus_name in [&"Music",&"Master"]:
+		var bus := AudioServer.get_bus_index(bus_name)
 		if bus < 0 or AudioServer.is_bus_mute(bus): return 0.0
 		gain *= db_to_linear(AudioServer.get_bus_volume_db(bus))
 	return gain if gain > 0.0001 else 0.0

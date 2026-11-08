@@ -54,6 +54,11 @@ var _boot_logo_atlas: AtlasTexture
 var _boot_logo_sheets: Array[Texture2D] = []
 var _boot_input_modes: Dictionary = {}
 var _boot_resume_modes: Dictionary = {}
+var _return_entrance := false
+var _loading_departure := false
+var _loading_snapshot: Dictionary = {}
+var _departure_sheets: Array[Texture2D] = []
+const LOGO_DEPARTURE_SECONDS := 128.0 / 30.0
 const Visualizer := preload("res://scripts/ui/menu_circuit_background.gd")
 
 const FOLDERS := {&"genre": "Genre Specializations", &"traits": "Traits", &"overview": "Overview"}
@@ -61,6 +66,10 @@ const FOLDERS := {&"genre": "Genre Specializations", &"traits": "Traits", &"over
 func _ready() -> void:
 	_boot_entrance = get_tree().root.has_meta("boot_menu_transition")
 	if _boot_entrance: get_tree().root.remove_meta("boot_menu_transition")
+	_return_entrance = get_tree().root.has_meta("return_menu_transition")
+	if _return_entrance:
+		get_tree().root.remove_meta("return_menu_transition")
+		_boot_entrance = true
 	FolderUI.enable_menu_gamepad()
 	theme = preload("res://resources/ui/onyx_theme.tres")
 	set_meta("folder_navigation_managed",true)
@@ -131,8 +140,8 @@ func _ready() -> void:
 	_refresh_checkpoint_info()
 	FolderUI.label(_title_screen,"PROTOTYPE",&"MetadataLabel")
 	var window := get_tree().root
-	var owner:=get_parent().get_parent() if get_parent()!=null else null
-	var shared: Node=owner.get_node_or_null("Background/PersistentCircuitBackground") if owner!=null else null
+	var game_root:=get_parent().get_parent() if get_parent()!=null else null
+	var shared: Node=game_root.get_node_or_null("Background/PersistentCircuitBackground") if game_root!=null else null
 	if shared!=null:
 		_visualizer=shared
 		background.transparent_base=true
@@ -234,9 +243,10 @@ func _prepare_boot_entrance() -> void:
 			_boot_input_modes[child] = [child.mouse_filter, child.focus_mode]
 			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			child.focus_mode = Control.FOCUS_NONE
-	var soundtrack := get_node("/root/Soundtrack")
-	soundtrack.boot_menu_started.connect(_begin_boot_entrance, CONNECT_ONE_SHOT)
-	if soundtrack.boot_phase == &"menu": _begin_boot_entrance()
+	if not _return_entrance:
+		var soundtrack := get_node("/root/Soundtrack")
+		soundtrack.boot_menu_started.connect(_begin_boot_entrance, CONNECT_ONE_SHOT)
+		if soundtrack.boot_phase == &"menu": _begin_boot_entrance()
 
 func _begin_boot_entrance() -> void:
 	if not _boot_entrance or _boot_entrance_started: return
@@ -258,12 +268,18 @@ func _set_boot_logo_frame(frame: int) -> void:
 	_boot_logo_atlas.region = Rect2((cell % 4) * 510, (cell / 4) * 250, 510, 250)
 
 func _update_boot_entrance(delta: float) -> void:
-	var soundtrack := get_node("/root/Soundtrack")
 	if not _boot_entrance_started:
-		var progress := clampf((soundtrack.boot_switch_seconds() - soundtrack._boot_clock.logo_reveal_at()) / 2.0, 0.0, 1.0)
+		var progress: float
+		if _return_entrance:
+			_boot_entrance_elapsed += delta
+			progress = clampf(_boot_entrance_elapsed / 2.0, 0.0, 1.0)
+		else:
+			var soundtrack := get_node("/root/Soundtrack")
+			progress = clampf((soundtrack.boot_switch_seconds() - soundtrack._boot_clock.logo_reveal_at()) / 2.0, 0.0, 1.0)
 		_boot_backdrop.entrance_progress = progress
 		var frame := mini(int(progress * 202.0), 202)
 		_set_boot_logo_frame(frame)
+		if _return_entrance and progress >= 1.0: _begin_boot_entrance()
 		return
 	_boot_entrance_elapsed += delta
 	var bars := clampf(_boot_entrance_elapsed / 1.25, 0.0, 1.0)
@@ -287,8 +303,78 @@ func _update_boot_entrance(delta: float) -> void:
 		if is_instance_valid(node): node.process_mode = _boot_resume_modes[node]
 	_boot_resume_modes.clear()
 	_boot_entrance = false
+	_return_entrance = false
 	_boot_logo_sheets.clear()
 	_actions.StartGame.grab_focus.call_deferred()
+
+## Keep the background and audio alive while the menu gives way to loading.
+## The caller owns the loading screen and should invoke restore on failure.
+func animate_to_loading(from_setup: bool) -> void:
+	if _loading_departure or _boot_entrance: return
+	_loading_departure = true
+	var focused := get_viewport().gui_get_focus_owner()
+	_loading_snapshot = {
+		"title_visible": _title_screen.visible,
+		"title_process": _title_screen.process_mode,
+		"setup_process": _setup_surface.process_mode,
+		"setup_position": _setup_surface.position,
+		"backdrop_progress": _boot_backdrop.entrance_progress,
+		"backdrop_colorful": _boot_backdrop.colorful_title,
+		"logo_visible": _boot_logo.visible,
+		"focus": weakref(focused) if is_instance_valid(focused) else null,
+		"children": {},
+	}
+	for child: Control in _title_screen.get_children():
+		_loading_snapshot.children[child] = [child.position, child.modulate]
+	_title_screen.process_mode = Node.PROCESS_MODE_DISABLED
+	_setup_surface.process_mode = Node.PROCESS_MODE_DISABLED
+	if is_instance_valid(focused): focused.release_focus()
+	# Setup remains above the title until it has slid away.
+	if from_setup: _title_screen.show()
+	for i in range(1, 7):
+		_departure_sheets.append(load("res://assets/boot/sequence_v1/disappear-%02d.png" % i))
+	var tween := create_tween()
+	tween.tween_method(_update_loading_departure.bind(from_setup), 0.0, 1.0, LOGO_DEPARTURE_SECONDS)
+	await tween.finished
+	_boot_logo.hide()
+
+func _update_loading_departure(progress: float, from_setup: bool) -> void:
+	var departure := clampf(progress * LOGO_DEPARTURE_SECONDS / 0.65, 0.0, 1.0)
+	var eased := 1.0 - pow(1.0 - departure, 3.0)
+	if from_setup:
+		_setup_surface.position.x = _loading_snapshot.setup_position.x + (size.x + _setup_surface.size.x) * eased
+	for child: Control in _title_screen.get_children():
+		if child == _boot_logo or not _loading_snapshot.children.has(child): continue
+		var original: Array = _loading_snapshot.children[child]
+		child.position.x = original[0].x - (_title_screen.position.x + child.size.x + 30.0) * eased
+		child.modulate.a = original[1].a * (1.0 - departure)
+	_boot_backdrop.entrance_progress = 1.0 - departure
+	var frame := mini(int(progress * 128.0), 127)
+	_boot_logo_atlas.atlas = _departure_sheets[frame / 24]
+	var cell := frame % 24
+	_boot_logo_atlas.region = Rect2((cell % 4) * 510, (cell / 4) * 250, 510, 250)
+
+func restore_after_loading_failure() -> void:
+	if not _loading_departure: return
+	for child: Control in _loading_snapshot.children:
+		if is_instance_valid(child):
+			child.position = _loading_snapshot.children[child][0]
+			child.modulate = _loading_snapshot.children[child][1]
+	_setup_surface.position = _loading_snapshot.setup_position
+	_title_screen.visible = _loading_snapshot.title_visible
+	_title_screen.process_mode = _loading_snapshot.title_process
+	_setup_surface.process_mode = _loading_snapshot.setup_process
+	_boot_backdrop.colorful_title = _loading_snapshot.backdrop_colorful
+	_boot_backdrop.entrance_progress = _loading_snapshot.backdrop_progress
+	_boot_logo_atlas.atlas = preload("res://assets/boot/start-v10/reveal-09.png")
+	_boot_logo_atlas.region = Rect2(1020,500,510,250)
+	_boot_logo.visible = _loading_snapshot.logo_visible
+	_departure_sheets.clear()
+	var old_focus: WeakRef = _loading_snapshot.focus
+	_loading_snapshot.clear()
+	_loading_departure = false
+	var focused: Control = old_focus.get_ref() if old_focus != null else null
+	if is_instance_valid(focused) and focused.is_visible_in_tree(): focused.grab_focus.call_deferred()
 
 func _layout_title() -> void:
 	if not is_instance_valid(_title_screen): return
@@ -303,6 +389,7 @@ func _layout_title() -> void:
 
 func _process(delta: float) -> void:
 	if not is_instance_valid(_visualizer) or navigation == null: return
+	if _loading_departure: return
 	if _boot_entrance:
 		_update_boot_entrance(delta)
 		_visualizer.set_active(true)
@@ -338,11 +425,11 @@ func _refresh_checkpoint_info() -> void:
 	if status==&"valid":
 		var saved:Dictionary=checkpoint_info.payload.run
 		_saved_studio_label.text="%s · %s"%[saved.studio_name,Clock.label(int(saved.completed_run_cycles),int(saved.get("calendar_start_year",1980)),Clock.from_saved_profile(saved.get("calendar",{})))]
-	if not checking and not _boot_entrance and is_inside_tree() and get_viewport().gui_get_focus_owner()==null:
+	if not checking and not _boot_entrance and not _loading_departure and is_inside_tree() and get_viewport().gui_get_focus_owner()==null:
 		_actions.StartGame.grab_focus.call_deferred()
 
 func _activate_action(id: String) -> void:
-	if _boot_entrance: return
+	if _boot_entrance or _loading_departure: return
 	if navigation.busy or navigation.depth()!=1: return
 	match id:
 		"StartGame": open_setup()
@@ -509,22 +596,8 @@ func _bounce(id: StringName) -> void:
 
 
 func _refresh_preview() -> void:
-	if _specialty.selected <= 0:
-		_emphasis.text = "Every Studio starts with Public Action Engine access."
-		_preview.text = "17 fixed Features · 27 Scope · No upfront fee · 30% post-platform royalty.\nChoose your Studio specialty; each game can use any Genre."
-		return
-	var preview := StudioSpecialties.preview(_specialty.get_item_metadata(_specialty.selected))
-	if preview.is_empty():
-		_emphasis.text = "Specialty roster unavailable."
-		_preview.text = ""
-		return
-	var public_engine:=preload("res://scripts/engines/public_action_engine.gd").definition()
-	var definitions: Dictionary={}
-	for entry: Dictionary in FeatureStoreCatalog.starting_features()+FeatureStoreCatalog.entries():definitions[StringName(entry.id)]=entry
-	var names: Array[String]=[]
-	for id: StringName in public_engine.library:names.append(str(definitions[id].name))
-	_emphasis.text = "Public Action Engine · 17 Features · 27 printed Scope"
-	_preview.text = ", ".join(names)+"\n\nPublic access, not engine ownership. No upfront fee; 30% royalty on post-platform revenue. Fixed library; no upgrades or Technology Skill Tree.\nStudio specialty is permanent; each game's Genre is chosen separately. The engine adds +0.1 Graphics/Technology only on qualifying Specialization hands."
+	_emphasis.text = "Bonus awareness to games released in this category"
+	_preview.text = ""
 
 func show_error(message: String) -> void:
 	_submitted = false
@@ -555,9 +628,12 @@ func _build_traits(layout: Node) -> void:
 	_traits_step.name = "StudioTraits"
 	_traits_step.add_theme_constant_override("separation", 8)
 	layout.add_child(_traits_step)
-	_label(_traits_step, "Studio Traits · Optional choices").theme_type_variation=&"FolderHeading"
+	var heading := _label(_traits_step, "Studio Traits · Optional choices")
+	heading.theme_type_variation=&"FolderHeading"
+	heading.add_theme_font_size_override("font_size",26)
 	_trait_error = _label(_traits_step, "")
 	_trait_error.name = "TraitError"
+	_trait_error.hide()
 	var groups := HBoxContainer.new()
 	groups.add_theme_constant_override("separation", 18)
 	groups.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -594,7 +670,9 @@ func _build_traits(layout: Node) -> void:
 	layout.add_child(_review_step)
 	_label(_review_step, "Your Studio · Overview").theme_type_variation=&"FolderHeading"
 	var summary_scroll := _trait_scroll(_review_step)
-	summary_scroll.get_parent().custom_minimum_size.y = 116
+	var summary_area := summary_scroll.get_parent() as ScrollContainer
+	summary_area.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	summary_area.custom_minimum_size.y = 90
 	_review = _label(summary_scroll, "")
 	_review.theme_type_variation=&"MetadataLabel"
 	_review.name = "Summary"
@@ -644,6 +722,7 @@ func _refresh_traits() -> void:
 		if check.get_parent() != list: check.reparent(list)
 		list.move_child(check,list.get_child_count()-1)
 	_trait_error.text = selection.reason
+	_trait_error.visible = not selection.reason.is_empty()
 	_draft_changed()
 
 
@@ -664,8 +743,6 @@ func _refresh_review() -> void:
 		return
 	_review.text = "%s · %s specialty\nPoints: %d · Starting cash bonus: %s\nStarting cash: %s · Monthly rent: %s" % [_name_input.text.strip_edges(), _specialty.get_item_text(_specialty.selected),selection.remaining_points,CashFormatter.format_exact_cents(selection.point_cash_cents+selection.get("family_funding_cents",0)),CashFormatter.format_exact_cents(550000+selection.point_cash_cents+selection.get("family_funding_cents",0)),CashFormatter.format_exact_cents(StudioFinanceLedger.starting_rent_cents(StudioTraits.is_active(selection,&"expensive_lease")))]
 	_review.text += "\nStarting Fans: %d%s" % [StudioTraits.starting_fans(selection), " (Cult Following trial; ordinary gains/losses)" if StudioTraits.starting_fans(selection) > 0 else ""]
-	if _specialty.selected > 0:
-		_review.text += "\nPublic Action Engine access · 17 fixed Features · 27 Scope\nNo upfront fee · 30% post-platform royalty · No upgrades/Technology Skill Tree"
 
 
 func _confirm_studio() -> void:
@@ -697,6 +774,9 @@ func _clear_trait_draft() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _loading_departure:
+		get_viewport().set_input_as_handled()
+		return
 	var focused := get_viewport().gui_get_focus_owner()
 	if focused == null or not is_ancestor_of(focused): return
 	if focused is OptionButton and focused.get_popup().visible: return

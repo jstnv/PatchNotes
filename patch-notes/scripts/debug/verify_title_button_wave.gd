@@ -70,9 +70,9 @@ func _run()->void:
 	check(hovered.scale.is_equal_approx(Vector2.ONE) and is_equal_approx(hovered.position.x,held),"Compression restores the exact stored position at normal width")
 	for i in 12:wave.advance(1.0/60.0,true)
 	check(absf(hovered.position.x-held)>0.1,"Wave resumes from its held phase after compression")
-	var paused:=start.position.x
+	var paused_position:=start.position.x
 	for i in 30:wave.advance(1.0/60.0,false)
-	check(is_equal_approx(start.position.x,paused),"Hidden/transitioning title suspends its idle motion")
+	check(is_equal_approx(start.position.x,paused_position),"Hidden/transitioning title suspends its idle motion")
 	for dimensions in [Vector2i(1152,648),Vector2i(1280,720),Vector2i(1920,1080)]:
 		root.size=dimensions;root.content_scale_size=dimensions;await frames(4)
 		wave.advance(0,true)

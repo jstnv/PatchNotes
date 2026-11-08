@@ -1,5 +1,7 @@
 # Employees and courses
 
+**2026-11-04 challenge notice presentation — IMPLEMENTED locally.** Smaller course-progress notices enter from the top, avoiding focused guidance and queuing overflow. Progress qualification and provisional release wording remain unchanged. This supersedes the bottom-HUD position below. [Checks](../logs/2026-11-04-engine-feature-activation-and-top-notices-v1.md).
+
 **2026-11-03 challenge progress notices — IMPLEMENTED locally.** Committed employee course progress produces a nonblocking notice above the bottom HUD. Production matches and Project Manager specializations that still need a release are explicitly provisional; later release credit or completion is presented separately. QA counters and earned course completion use their existing authoritative progress. Simultaneous notices are displayed or queued, and restoring an existing run does not replay earlier notices. [Checks and limits](../logs/2026-11-03-challenge-progress-notices-v1.md).
 
 **2026-11-03 course-detail switch — IMPLEMENTED locally.** Each employee course inspector has a two-position Challenge / Rewards slider in its upper-right header. It defaults to Challenge for each newly inspected course; existing pre-enrollment Challenge Locked behavior remains, while Rewards can be reviewed before enrollment. Enrolled-course progress stays visible in either view. Switching is presentation-only and preserves the selected view across refreshes. [Checks](../logs/2026-11-03-course-detail-switch-v1.md).

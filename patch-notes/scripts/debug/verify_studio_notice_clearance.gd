@@ -56,56 +56,76 @@ func _run() -> void:
 	run.initialize_cash_cents(0)
 	var studio := load("res://scenes/phases/studio_phase.tscn").instantiate() as StudioPhase
 	check(studio.setup(make_release(), run, snapshots), "First release enters Studio")
+	var guidance = load("res://scripts/ui/focused_guidance_overlay.gd").new()
+	root.add_child(guidance)
+	await process_frame
+	guidance.show_notice({"id":&"bank","title":"Other guidance","body":"A notice already on screen."})
 	root.add_child(studio)
 	for frame in 4: await process_frame
+	check(studio._publisher_notice == null and not run.get_pending_publisher_notifications().is_empty(), "A focused notice defers publisher unlock without consuming it")
+	guidance.close(true)
+	for frame in 4: await process_frame
+	check(run.get_pending_publisher_notifications().is_empty(), "Deferred publisher unlock is presented after the other notice closes")
+	guidance.queue_free()
 	var notice: PanelContainer = studio._publisher_notice
 	check(is_instance_valid(notice) and notice.is_visible_in_tree(), "Publisher notification is shown")
 	if not is_instance_valid(notice):
 		quit(failures + 1)
 		return
 	var message := notice.find_child("PublisherUnlockMessage", true, false) as Label
-	var dismiss := notice.find_child("DismissPublisherNotice", true, false) as Button
+	var show_me := notice.find_child("ShowPublisherNotice", true, false) as Button
+	var dismiss := notice.find_child("GotPublisherNotice", true, false) as Button
+	check(show_me != null and dismiss != null and show_me.text == "Show me" and dismiss.text == "Got it", "Notice exposes both requested actions")
+	if show_me == null or dismiss == null:
+		quit(failures + 1)
+		return
+	await create_timer(0.35).timeout
+	var layer := notice.get_parent().get_parent() as CanvasLayer
+	check(layer != null and layer.layer > 0, "Notice uses a screen-space layer above Studio and HUD")
+	var style := notice.get_theme_stylebox("panel") as StyleBoxFlat
+	check(style != null and is_equal_approx(style.bg_color.a,1.0), "Notice background is opaque")
 	for viewport_size in [Vector2i(900,600), Vector2i(1152,648), Vector2i(1920,1080)]:
 		root.size = viewport_size
 		for frame in 4: await process_frame
-		var root_rect: Rect2 = studio._hub._root_panel.get_global_rect()
 		var notice_rect: Rect2 = notice.get_global_rect()
 		var viewport_rect := root.get_visible_rect()
-		print("NOTICE_GEOMETRY viewport=%s visible=%s studio=%s hub=%s root=%s notice=%s text=%s dismiss=%s" % [viewport_size, root.get_visible_rect(), studio.get_global_rect(), studio._hub.get_global_rect(), root_rect, notice_rect, message.get_global_rect(), dismiss.get_global_rect()])
-		check(not root_rect.intersects(notice_rect), "Notice clears Studio panel at %s" % viewport_size)
+		print("NOTICE_GEOMETRY viewport=%s notice=%s text=%s actions=%s / %s" % [viewport_size, notice_rect, message.get_global_rect(), show_me.get_global_rect(), dismiss.get_global_rect()])
+		check(notice_rect.position.distance_to(Vector2(24,24)) < 2.0, "Notice stays at top-left at %s" % viewport_size)
 		check(viewport_rect.encloses(notice_rect), "Entire notice fits the viewport at %s" % viewport_size)
-		check(notice_rect.encloses(message.get_global_rect()) and notice_rect.encloses(dismiss.get_global_rect()), "Notice text and dismiss button fit at %s" % viewport_size)
+		check(notice_rect.encloses(message.get_global_rect()) and notice_rect.encloses(dismiss.get_global_rect()) and notice_rect.encloses(show_me.get_global_rect()), "Notice text and both actions fit at %s" % viewport_size)
+		check(show_me.global_position.y > message.global_position.y and dismiss.global_position.y > message.global_position.y, "Actions are below the message at %s" % viewport_size)
 	root.size = Vector2i(900,600)
 	message.text = "Publisher unlocked: Ironclad Interactive, Crown & Quill Software, Neon Circuit, SideStreet Games, Starwave"
 	for frame in 4: await process_frame
 	check(root.get_visible_rect().encloses(notice.get_global_rect()), "Multi-publisher notice fits narrow viewport")
 	check(notice.get_global_rect().encloses(message.get_global_rect()) and message.get_visible_line_count() >= message.get_line_count(), "All wrapped publisher names remain visible")
-	check(not notice.get_global_rect().intersects(studio._hub._root_panel.get_global_rect()), "Multi-publisher notice clears Studio panel")
+	check(notice.get_global_rect().encloses(show_me.get_global_rect()) and notice.get_global_rect().encloses(dismiss.get_global_rect()), "Multi-publisher actions stay inside the panel")
 	message.text = "Publisher unlocked: Ironclad Interactive"
 	root.size = Vector2i(1152,648)
 	for frame in 3: await process_frame
 	var before := [run.get_cash_cents(), run.get_completed_run_cycles()]
 	click(dismiss.get_global_rect().get_center())
-	await process_frame
-	check(not notice.visible, "Pointer dismisses notification with no selected menu")
+	await create_timer(0.25).timeout
+	check(not notice.visible, "Pointer closes notification with Got it")
 	notice.show()
+	notice.modulate.a = 1.0
+	notice.position = Vector2(24,24)
+	studio._publisher_notice_closing = false
+	studio._publisher_notice_remaining = StudioPhase.PUBLISHER_NOTICE_SECONDS
 	studio._hub.select_group(&"studio_info")
 	studio._hub.settle_motion()
 	for frame in 3: await process_frame
 	check(studio._hub._companion.is_visible_in_tree(), "Selected Studio menu is visible")
 	var companion: Control = studio._hub._companion
-	var overlaps := notice.get_global_rect().intersects(companion.get_global_rect())
-	var on_top := effective_z(notice) > effective_z(companion) or (effective_z(notice) == effective_z(companion) and notice.is_greater_than(companion))
-	check(not overlaps or on_top, "Notification is drawn over the selected companion when they overlap")
+	check(layer.layer > 0 and companion.is_visible_in_tree(), "Notification remains above the selected Studio menu")
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
 		check(root.get_texture().get_image().save_png("user://studio-notice-selected.png") == OK, "Selected menu screenshot saved")
-	# If the notice is geometrically covered by the companion, actual pointer
-	# hit-testing must still reach Dismiss; lower-drawn notices cannot do so.
-	click(dismiss.get_global_rect().get_center())
-	await process_frame
-	check(not notice.visible, "Pointer dismisses notification above selected Studio menu")
-	check(before == [run.get_cash_cents(), run.get_completed_run_cycles()], "Dismiss is presentation only")
+	click(show_me.get_global_rect().get_center())
+	var deadline := Time.get_ticks_msec() + 5000
+	while studio._hub_motion.busy and Time.get_ticks_msec() < deadline: await process_frame
+	check(not notice.visible and studio._publisher_browser != null and studio._publisher_browser.visible, "Show me opens the publisher browser")
+	check(before == [run.get_cash_cents(), run.get_completed_run_cycles()], "Notice actions are presentation only")
 	studio.queue_free()
 	await process_frame
 	print("STUDIO_NOTICE_CLEARANCE checks=%d failures=%d" % [checks, failures])

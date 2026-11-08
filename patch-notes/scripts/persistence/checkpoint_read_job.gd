@@ -11,7 +11,9 @@ class ReadValidator extends "res://scripts/persistence/checkpoint_write_validato
 		var next:=_market_compatible_payload(payload)
 		if next.is_empty():return "Invalid pre-market migration payload"
 		if preload("res://scripts/awards/award_receipts.gd").missing_world(next):return "Awarded Studio requires its global annual ledger"
-		var p: Dictionary=next.duplicate(true);p.erase("rival_world")
+		# Exclude the unrelated world before recursively copying the player DTO.
+		# The final deep copy still isolates every nested player field.
+		var p: Dictionary=next.duplicate(false);p.erase("rival_world");p=p.duplicate(true)
 		var r: RunState=adapter.hydrate(p)
 		if r==null:return adapter.error
 		var w: RivalWorld

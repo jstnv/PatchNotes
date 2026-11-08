@@ -9,9 +9,9 @@ var _failures := 0
 
 func _initialize() -> void:
 	await _verify_beta_entry_and_zero_state()
-	await _verify_discovery()
-	await _verify_fixing()
-	await _verify_full_lifecycle_and_invalid_inputs()
+	_verify_discovery()
+	_verify_fixing()
+	_verify_full_lifecycle_and_invalid_inputs()
 	await _verify_beta_persistence_and_concealment()
 	_finish()
 

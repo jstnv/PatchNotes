@@ -1,5 +1,9 @@
 # Studio Traits
 
+**2026-11-04 Studio Creation spacing.** The Traits title is slightly larger and empty validation text reserves no space; actual validation remains visible. Overview keeps a compact scrollable identity/finance summary and independent trait columns, and no longer displays the Public Engine description. Engine terms remain available in its own screens. [Evidence](../logs/2026-11-04-studio-creation-spacing-v1.md).
+
+**2026-11-04 Genre Awareness interaction.** Studio Genre Specialization now contributes +20 trial base Awareness to matching releases, independently of optional Traits. Existing additive Buzz/Unknown behavior remains in its usual order; previously released results stay frozen. [Decision and checks](../logs/2026-11-04-genre-specialty-awareness-v1.md).
+
 Authority: user-approved T1–T3 handoffs captured in [TODO](../TODO.md), superseding historical required-background and capped conversion rules. [Implementation evidence](../findings/2026-10-07-traits-implementation-v1.md).
 
 **2026-10-17 foundation disposition:** The user set Studio Traits balance work aside and requested a structural registry foundation. The [thread decision](../../../patch-notes/design-logs/threads/studio-traits/2026-10-17-trait-foundation-decision-v1.md) and [candidate handoff](../../../patch-notes/design-logs/threads/studio-traits/2026-10-17-trait-foundation-adoption-handoff-v1.md) specify the existing trait point/activation definitions without changing any values. PN Implementation [adopted the registry locally](../findings/queue-execution-20261017-v2/README.md); TODO now records IMPLEMENTED. Previous final-balance questions remain OPEN but **DEFERRED**; player reviews remain PENDING.

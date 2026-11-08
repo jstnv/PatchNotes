@@ -140,6 +140,7 @@ func snapshot(run: RunState, active_project_id: StringName = &"") -> Dictionary:
 	var state := {}
 	for field: String in FIELDS + SUPPORT_FIELDS:
 		state[field.trim_prefix("_")] = run.get(field)
+	if not run._studio_notice_state.is_empty(): state.studio_notice_state = run.get_studio_notice_state()
 	state.calendar=run.get_calendar_profile()
 	state.engine_entitlements = run.get_engine_entitlements()
 	state.engine_features = run.get_engine_feature_state()
@@ -259,13 +260,33 @@ func _validate(payload: Dictionary, active_rival: bool) -> String:
 	if reason.is_empty() and _last_decode_input==var_to_bytes([payload,active_rival]):native=_last_decode_value.duplicate(true)
 	_last_decode_input.clear();_last_decode_value.clear()
 	var cost:=key.size()+var_to_bytes(native).size()
-	if not reason.is_empty() or cost > VALIDATION_PROOF_BYTES: return reason
+	if not reason.is_empty() or key.size()+var_to_bytes({}).size()>VALIDATION_PROOF_BYTES: return reason
+	# A validated key remains useful even if its decoded DTO is too large to
+	# retain. Hydration safely decodes from the exact payload on a key-only hit.
+	if cost>VALIDATION_PROOF_BYTES:
+		native={}
+		cost=key.size()+var_to_bytes(native).size()
 	_proof_lock.lock()
 	if _proof_index(key)<0:
 		_validation_proofs.append({"key":key,"native":native,"cost":cost})
 		_validation_proof_bytes += cost
-	while _validation_proofs.size()>VALIDATION_PROOF_LIMIT or _validation_proof_bytes>VALIDATION_PROOF_BYTES:
+	while _validation_proofs.size()>VALIDATION_PROOF_LIMIT:
 		_validation_proof_bytes -= int(_validation_proofs.pop_front().cost)
+	# Prefer exact positive proofs to decoded-value copies. Replacing the
+	# detached DTO under the same lock used by readers cannot mutate a result
+	# that has already escaped, and the existing byte/entry bounds remain.
+	while _validation_proof_bytes>VALIDATION_PROOF_BYTES:
+		var dropped := false
+		for entry: Dictionary in _validation_proofs:
+			if not entry.native.is_empty():
+				var old_cost: int = entry.cost
+				entry.native = {}
+				entry.cost = entry.key.size()+var_to_bytes(entry.native).size()
+				_validation_proof_bytes -= old_cost-int(entry.cost)
+				dropped = true
+				break
+		if not dropped:
+			_validation_proof_bytes -= int(_validation_proofs.pop_front().cost)
 	_proof_lock.unlock()
 	return ""
 
@@ -308,6 +329,7 @@ func _validate_uncached(payload: Dictionary, active_rival: bool) -> String:
 	var active_id: StringName = value.active_project_id if active_rival else &""
 	if active_rival and (active_id.is_empty() or value.run.released_games.has(active_id)): return "Invalid active rival project"
 	var r: Dictionary = value.run
+	if r.has("studio_notice_state") and not preload("res://scripts/tutorial/studio_notice_state.gd").valid(r.studio_notice_state): return "Invalid Studio notice state"
 	if payload.source_build==BUILD and not r.has("calendar"):return "Missing calendar profile"
 	var calendar: Dictionary=r.get("calendar",{})
 	if not Calendar.valid(calendar) or (not calendar.is_empty() and int(calendar.legacy_until)>r.completed_run_cycles):return "Invalid calendar profile"
@@ -684,6 +706,9 @@ func hydrate(payload: Dictionary, active_rival: bool = false) -> RunState:
 	var value: Dictionary = _decode_payload(payload,active_rival)
 	var run := RunState.new()
 	var r: Dictionary = value.run
+	if r.has("studio_notice_state"):
+		if not preload("res://scripts/tutorial/studio_notice_state.gd").valid(r.studio_notice_state): error="Invalid Studio notice state"; return null
+		run._studio_notice_state = r.studio_notice_state.duplicate(true)
 	run._calendar=r.get("calendar",{}).duplicate(true)
 	run._founding_roster_version = r.get("founding_roster_version",1)
 	for field: String in FIELDS + SUPPORT_FIELDS:

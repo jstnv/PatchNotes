@@ -47,7 +47,7 @@ func wait_for(predicate: Callable, label: String, seconds := 90.0) -> bool:
 	return passed
 
 func ready_ceremony(game: Control, expected_stage: int) -> bool:
-	return is_instance_valid(game.annual_awards_ceremony) and game.annual_awards_ceremony.stage == expected_stage and not game._awards_saving and game._awards_action.is_empty() and not game._awards_navigation.busy
+	return is_instance_valid(game.annual_awards_ceremony) and game.annual_awards_ceremony.stage == expected_stage and not game._awards_saving and not game._save_navigation_pending and game._awards_action.is_empty() and not game._awards_navigation.busy
 
 func stored_entry(game: Control) -> Dictionary:
 	return game.checkpoints.last_payload.get("rival_world", {}).get("annual_awards", {}).get("entries", [{}])[0]
@@ -74,6 +74,7 @@ func mount(data: Dictionary, slot: String) -> Control:
 	game.get_node("%GameplayHUD").setup(null, run)
 	check(game.get_node("%GameplayHUD").settings_menu.set_skip_awards(true), "Persistent future-skip fixture is enabled")
 	check(game._enter_initial_studio(true), "Actual Gameplay mounts restored Studio")
+	game.checkpoints.entered_studio()
 	return game
 
 func go() -> void:
@@ -81,7 +82,7 @@ func go() -> void:
 	root.add_child(game)
 	await settle()
 	check(game.has_method("annual_awards_blocking"), "Actual Gameplay owns ceremony input exclusion")
-	check(game.has_method("_queue_annual_awards"), "Actual Gameplay queues durable Studio ceremony")
+	check(game.has_method("_queue_annual_awards"), "Actual Gameplay queues the Studio ceremony")
 	if failures:
 		game.queue_free()
 		await process_frame
@@ -107,14 +108,16 @@ func go() -> void:
 				check(game.annual_awards_ceremony.skip_button.visible, "Later ceremony exposes Skip to results")
 				game.annual_awards_ceremony.skip_button.pressed.emit()
 				game.annual_awards_ceremony.skip_button.pressed.emit()
-				check(game.annual_awards_ceremony.stage == 0 and game._awards_saving, "Skip waits for durable results and rejects duplicate")
-				if await wait_for(func(): return ready_ceremony(game,9), "Later Skip reaches durable final results"):
-					check(game.checkpoints.last_payload.rival_world.annual_awards.entries[index].stage == "9", "Later final result matches durable stage9")
+				check(game.annual_awards_ceremony.stage == 9 and not game._awards_saving, "Skip reaches results immediately and rejects duplicate")
+				if await wait_for(func(): return ready_ceremony(game,9), "Later Skip reaches final results without a save"):
+					check(game.rival_world.annual_awards.entries[index].stage == 9, "Later final result matches in-memory stage9")
+					await process_frame
 					game.annual_awards_ceremony.next_button.pressed.emit()
 		else:
 			if "--later-final-only" in OS.get_cmdline_user_args():
 				check(game.rival_world.advance_awards_stage(true), "Prepare genuine later final-stage resume")
-		if await wait_for(func(): return not game.annual_awards_blocking() and game.rival_world.pending_awards_index() == -1, "Later ceremony completes durably under selected presentation policy"):
+		if await wait_for(func(): return not game.annual_awards_blocking() and game.rival_world.pending_awards_index() == -1, "Later ceremony completes under selected presentation policy"):
+			check(await game.checkpoints.wait_saved(), "Explicit exit boundary saves later ceremony completion")
 			var entry: Dictionary = game.checkpoints.last_payload.rival_world.annual_awards.entries[index]
 			check(entry.complete and entry.stage == "9", "Later completion is stored exactly once")
 			check(game.annual_awards_ceremony == null and game._active_phase.visible and game.get_node("%GameplayHUD").visible, "Later completion restores actual Studio and HUD")
@@ -123,9 +126,9 @@ func go() -> void:
 		game.queue_free(); await settle(); finish(); return
 	if "--focus-only" in OS.get_cmdline_user_args():
 		for stage in 9: check(game.rival_world.advance_awards_stage(), "Prepare genuine resumed-stage9 progress")
-		if await wait_for(func(): return ready_ceremony(game,9), "Genuine resumed stage9 is durable"):
+		if await wait_for(func(): return ready_ceremony(game,9), "Genuine stage9 is displayed"):
 			game.annual_awards_ceremony.next_button.pressed.emit()
-			await wait_for(func(): return game.annual_awards_ceremony == null and not game._awards_waiting, "Resumed stage9 Exit completes durably")
+			await wait_for(func(): return game.annual_awards_ceremony == null and not game._awards_waiting, "Stage9 Exit completes without a page save")
 			check(root.gui_get_focus_owner() != null and root.gui_get_focus_owner().is_visible_in_tree(), "Visible Studio focus restores after a result with no preexisting focus")
 		game.queue_free(); await settle(); finish(); return
 	root.size = Vector2i(1152,648); root.content_scale_size = root.size
@@ -151,15 +154,17 @@ func go() -> void:
 	await shot("first-1152")
 	game.annual_awards_ceremony.next_button.pressed.emit()
 	game.annual_awards_ceremony.next_button.pressed.emit()
-	check(game.annual_awards_ceremony.stage == 0 and game._awards_saving and game.rival_world.annual_awards.entries[0].stage == 1, "Next retains old page while save owns new progress; duplicate rejected")
-	if not await wait_for(func(): return ready_ceremony(game,1), "First Next reaches durable stage1"):
+	check(game.annual_awards_ceremony.stage == 1 and not game._awards_saving and game.rival_world.annual_awards.entries[0].stage == 1, "Next changes the page immediately; duplicate rejected")
+	if not await wait_for(func(): return ready_ceremony(game,1), "First Next reaches stage1 immediately"):
 		game.queue_free(); await settle(); finish(); return
-	check(stored_entry(game).stage == "1", "Visible stage1 matches stored stage")
+	check(stored_entry(game).stage == "0", "Next leaves the Studio-entry checkpoint unchanged")
 	for stage in [2,3]:
+		await process_frame
 		game.annual_awards_ceremony.next_button.pressed.emit()
-		if not await wait_for(func(): return ready_ceremony(game,stage), "Durable Next stage%d" % stage):
+		if not await wait_for(func(): return ready_ceremony(game,stage), "Immediate Next stage%d" % stage):
 			game.queue_free(); await settle(); finish(); return
-		check(stored_entry(game).stage == str(stage), "Frozen page has matching durable stage%d" % stage)
+		check(stored_entry(game).stage == "0", "Page %d leaves saved stage unchanged" % stage)
+	check(await game.checkpoints.wait_saved(), "Explicit exit boundary saves stage3 before Continue")
 	game._continue_checkpoint()
 	await settle()
 	check(game.guided_tutorial == null, "Continue does not reopen the tutorial invitation")
@@ -172,22 +177,22 @@ func go() -> void:
 	await shot("continued-stage3-1280")
 	game.checkpoints.store.fault = &"before_write"
 	game.annual_awards_ceremony.next_button.pressed.emit()
+	check(not await game.checkpoints.wait_saved(), "Explicit exit boundary exposes injected write failure")
 	if not await wait_for(func(): return not game._awards_saving and not game.checkpoints.failure.is_empty(), "Injected durable-write failure reaches normal checkpoint recovery"):
 		game.queue_free(); await settle(); finish(); return
-	check(game.annual_awards_ceremony.stage == 3 and game.rival_world.annual_awards.entries[0].stage == 4 and stored_entry(game).stage == "3", "Failed save keeps old page while pending stage remains once-only")
-	check(game._save_failure_dialog.visible and game.annual_awards_ceremony.next_button.disabled and not studio.visible and not hud.visible, "Failed-save ceremony remains modal with normal Retry")
-	game.annual_awards_ceremony.next_button.pressed.emit()
-	check(game.rival_world.annual_awards.entries[0].stage == 4, "Failed-save duplicate cannot consume another stage")
+	check(game.annual_awards_ceremony.stage == 4 and game.rival_world.annual_awards.entries[0].stage == 4 and stored_entry(game).stage == "3", "Failed boundary save retains the displayed page and prior durable stage")
+	check(game._save_failure_dialog.visible and not studio.visible and not hud.visible, "Failed boundary save uses modal recovery")
 	game.checkpoints.store.fault = &""
 	game._retry_checkpoint_save()
 	if not await wait_for(func(): return ready_ceremony(game,4), "Retry saves pending progress and resumes stage4 once"):
 		game.queue_free(); await settle(); finish(); return
 	check(stored_entry(game).stage == "4" and not game._save_failure_dialog.visible, "Retry publishes exact stage and dismisses recovery")
 	for stage in [5,6,7,8,9]:
+		await process_frame
 		game.annual_awards_ceremony.next_button.pressed.emit()
-		if not await wait_for(func(): return ready_ceremony(game,stage), "Durable Next stage%d" % stage):
+		if not await wait_for(func(): return ready_ceremony(game,stage), "Immediate Next stage%d" % stage):
 			game.queue_free(); await settle(); finish(); return
-		check(stored_entry(game).stage == str(stage), "Final award page matches stored stage%d" % stage)
+		check(stored_entry(game).stage == "4", "Page %d leaves the last boundary unchanged" % stage)
 	await shot("final-1280")
 	var settings: DemoSettingsMenu = hud.settings_menu
 	var path := settings.settings_path
@@ -197,12 +202,14 @@ func go() -> void:
 	settings.settings_path = path
 	game.annual_awards_ceremony.skip_checkbox.button_pressed = false
 	check(not settings.committed.skip_awards and not DemoSettingsStore.read_settings(path).values.skip_awards, "Final checkbox persists future presentation choice")
+	await process_frame
 	game.annual_awards_ceremony.next_button.pressed.emit()
 	game.annual_awards_ceremony.next_button.pressed.emit()
-	if not await wait_for(func(): return game.annual_awards_ceremony == null and not game._awards_waiting, "Final Exit becomes durable before returning Studio"):
+	if not await wait_for(func(): return game.annual_awards_ceremony == null and not game._awards_waiting, "Final Exit returns to retained Studio without saving"):
 		game.queue_free(); await settle(); finish(); return
 	check(game._active_phase == studio and studio.visible and hud.visible and not game.annual_awards_blocking(), "Same Studio/HUD restore after completion")
 	check(root.gui_get_focus_owner() != null and root.gui_get_focus_owner().is_visible_in_tree(), "Valid retained Studio focus restores")
+	check(await game.checkpoints.wait_saved(), "Explicit exit boundary saves completed ceremony")
 	check(stored_entry(game).complete and stored_entry(game).stage == "9", "Completed final stage is durable")
 	check(StudioCheckpoint.new().capture(game.run_state) == owner_before and var_to_bytes(game.rival_world.annual_awards.entries[0].result) == frozen_before, "All presentation actions preserve exact owner DTO and result")
 	game._queue_annual_awards()
@@ -216,7 +223,7 @@ func go() -> void:
 	if not await wait_for(func(): return ready_ceremony(game,0), "Teardown fixture starts from real durable first result"):
 		game.queue_free(); await settle(); finish(); return
 	game.annual_awards_ceremony.next_button.pressed.emit()
-	check(game._awards_saving, "Teardown begins during an actual background stage save")
+	check(not game._awards_saving and game.checkpoints.pending, "Teardown begins with dirty ceremony progress and no page save")
 	var destroyed: WeakRef = weakref(game)
 	game.queue_free()
 	await settle()

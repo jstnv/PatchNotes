@@ -53,9 +53,15 @@ func run() -> void:
 	check(near(clocks[0].seconds,switch_end + Map.LENGTH * 2.0 + 0.2), "Menu cursor stays unwrapped across repeated loops")
 	state.phase = &""; state.shared_menu = true; state.menu_weight = 0.4
 	clocks = Song._visual_note_clock_projection(state)
-	check(clocks.size() == 1 and clocks[0].timeline == &"menu" and near(clocks[0].gain,0.4), "Shared transport exposes the audible menu blend")
+	var menu_seen := false
+	for entry: Dictionary in clocks:
+		if entry.timeline == &"menu" and near(entry.gain,0.4): menu_seen = true
+	check(menu_seen, "Shared transport exposes the audible menu blend")
 	state.menu_weight = 0.0
-	check(Song._visual_note_clock_projection(state).is_empty(), "No menu clock after the music has faded away")
+	menu_seen = false
+	for entry: Dictionary in Song._visual_note_clock_projection(state):
+		if entry.timeline == &"menu": menu_seen = true
+	check(not menu_seen, "No menu clock after the music has faded away")
 	state.menu_weight = 1.0; state.shared_menu = false
 	check(Song._visual_note_clock_projection(state).is_empty(), "Unrelated streams do not claim the menu note map")
 	var song = root.get_node("Soundtrack")

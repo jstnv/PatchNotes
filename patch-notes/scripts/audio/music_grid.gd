@@ -18,12 +18,12 @@ func unwrap(position: float, length: float, elapsed: float, paused: bool) -> int
 	previous_position = position
 	return loops
 
-func sample(position: float, loops: int, length: float, since_mix: float, latency: float, paused: bool) -> float:
+func sample(position: float, loop_count: int, length: float, since_mix: float, latency: float, paused: bool) -> float:
 	if paused or length <= 0.0: return seconds
 	# The WAV is rounded to a whole sample. Map its endpoint to exactly 64
 	# subdivisions, preventing that sub-sample error accumulating each loop.
 	var scale_to_grid := STEPS_PER_LOOP * STEP / length
-	mix_seconds = maxf(mix_seconds, (loops * length + position + since_mix) * scale_to_grid)
-	var heard := (loops * length + position + since_mix - latency) * scale_to_grid
+	mix_seconds = maxf(mix_seconds, (loop_count * length + position + since_mix) * scale_to_grid)
+	var heard := (loop_count * length + position + since_mix - latency) * scale_to_grid
 	seconds = maxf(seconds, maxf(0.0, heard)) # Audio-thread jitter never rewinds.
 	return seconds

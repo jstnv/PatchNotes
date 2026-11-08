@@ -135,7 +135,7 @@ func run_cases(database: Node) -> void:
 						else: rejected.merge(invalid,true)
 						var rejection: Dictionary = phase.execute(rejected)
 						_expect(not rejection.ok and rejection.events.is_empty() and freeze(phase)==command_before,"Malformed/stale Beta command rejects without mutation")
-					var readiness: Callable = func(_cards: Array) -> bool: return false
+					var readiness: Callable = func(_selected_cards: Array) -> bool: return false
 					var result: Dictionary = phase.execute(request,insight,categories,definitions,readiness if scenario == "view_reject" else Callable())
 					accepted = result.ok
 					if accepted:

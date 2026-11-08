@@ -1,0 +1,8 @@
+# Startup loop playtest panel, 2026-11-03
+
+On `main` at `7c60a01cbfac76d3f3cae1062849a070b1563116`, revised the [standalone playtest announcement](2026-11-03-playtest-startup-video.md). The new MP4 is `C:\Users\64jus\Downloads\Patch Notes Design Folder\Patch-Notes-Startup-Loop-Playtest-Panel-27s.mp4`. This session added the video and this log. Existing game and worktree edits were preserved.
+
+The cream “Playtest build now available” lettering spans the 892 px colored underline. The 940 × 99 px panel includes 24 px of side padding. Its deep-indigo face, violet border and clipped corners follow the normal main-menu button style in `onyx_theme.tres`. The panel and lettering move together behind the same underline mask. The previous smoothstep animation and frame cues are reused directly. Entrance starts at frame 874, settles at 915, retracts from 1157 and clears at 1200 before the logo departs at 1234.
+
+FFmpeg decoded the complete exported H.264 picture and stereo AAC. FFprobe and the packet check verified 1920×1080 at 60 fps, 1,646 frames, and matching stream durations of 1,316,571 ticks at 48 kHz. The first and last decoded frames match pure RGB black. Visual inspection of the entrance and hold confirmed the lettering aligns with the colored line and sits inside the panel. Published file SHA-256 `343286d73dae0a4f006b36ba99bb57ea0b3ba7f86c5dfd65cab34ff9aed60bab`, 7,738,757 bytes.
+Independent checks in `existing-audit/panel/verify_panel.py` passed 13/13. Strong decoded lettering spans x432–1321, within one pixel of each target edge. The panel clears by frame 1200, all audio packets and timestamps match the earlier exports, and all video packets outside frames 853–1212 match.

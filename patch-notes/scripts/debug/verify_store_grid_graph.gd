@@ -22,17 +22,17 @@ func _initialize() -> void: _run.call_deferred()
 func _run() -> void:
 	var args := OS.get_cmdline_user_args()
 	if args.size()==2 and args[0]=="--capture":
-		var run := fresh("grid-predecessor")
-		expect(run!=null,"Normal unfunded factory route initializes")
-		if run==null: quit(1); return
+		var prior_run := fresh("grid-predecessor")
+		expect(prior_run!=null,"Normal unfunded factory route initializes")
+		if prior_run==null: quit(1); return
 		for id: StringName in [&"save_files",&"split_screen",&"colored_text"]:
-			expect(run.admit_feature_research(run.get_feature_research_quote(id)),"Pre-change legal queue "+str(id))
+			expect(prior_run.admit_feature_research(prior_run.get_feature_research_quote(id)),"Pre-change legal queue "+str(id))
 		var adapter := StudioCheckpoint.new()
-		var pending := adapter.capture(run)
+		var pending := adapter.capture(prior_run)
 		expect(not pending.is_empty() and adapter.validate(pending).is_empty(),"Old pending queue is a valid Studio checkpoint")
 		for id: StringName in [&"save_files",&"split_screen",&"colored_text"]:
-			expect(run.research_feature(run.get_feature_research_quote(id)),"Pre-change legal completion "+str(id))
-		var owned := adapter.capture(run)
+			expect(prior_run.research_feature(prior_run.get_feature_research_quote(id)),"Pre-change legal completion "+str(id))
+		var owned := adapter.capture(prior_run)
 		expect(not owned.is_empty() and adapter.validate(owned).is_empty(),"Old completed purchases form a valid Studio checkpoint")
 		FileAccess.open(args[1],FileAccess.WRITE).store_string(JSON.stringify({"source_identity":Replay.source_identity(),"pending":pending,"owned":owned},"\t"))
 		quit(failures); return

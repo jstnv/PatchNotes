@@ -201,12 +201,11 @@ func _production(width: int) -> void:
 	if motion.busy: await motion.finished
 	expect(fan.visible and fan.get_child(1) == views[1] and project.get_core_score(0) == 12, "Redraw returns to the fan without altering unaffected cards or scores")
 	expect(fan.ordered_cards()[0] == views[1] and fan.ordered_cards()[-1] == fan.get_child(0), "Retained cards lead; replacement follows, without changing authoritative slots")
-	# Invalid hand must leave gameplay and visible candidates untouched.
-	fan.get_child(0).input_button.pressed.emit()
+	# Empty hands are invalid; one-card hands are legal under current rules.
 	var before := _snapshot(project, run)
+	expect(phase.get_selected_candidate_views().is_empty(), "Redraw returns with no cards selected")
 	phase.get_node("%PlayCardButton").pressed.emit()
-	expect(not motion.busy and _snapshot(project, run) == before and fan.visible and fan.get_child(0).is_selected(), "Rejected hand starts no animation and preserves selection and state")
-	phase.get_node("%HandContainer").get_child(0).input_button.pressed.emit()
+	expect(not motion.busy and _snapshot(project, run) == before and fan.visible and phase.get_selected_candidate_views().is_empty(), "Empty hand starts no animation and preserves state")
 	# Continue via the native phase transitions; Alpha gets the same fan/presenter.
 	project.finalize_design_bugs(false, 8, [&"text"], [])
 	expect(game.call("_replace_design_with_alpha", phase, load("res://scenes/phases/alpha_phase.tscn")), "Native Design-to-Alpha transition succeeds with the new workspace")
@@ -256,6 +255,17 @@ func _store(width: int) -> void:
 	await process_frame
 	var menu: MainMenu = game.get("_active_phase")
 	menu.navigation.animate=false
+	# Startup checkpoint inspection is asynchronous; pressing New Run while it
+	# still says checking is deliberately ignored by the real menu.
+	var inspect_deadline := Time.get_ticks_msec() + 60000
+	while menu.checkpoint_info.get("status", &"checking") == &"checking" and Time.get_ticks_msec() < inspect_deadline:
+		await process_frame
+	var inspection_ready: bool = menu.checkpoint_info.get("status", &"checking") != &"checking"
+	expect(inspection_ready, "Checkpoint inspection finishes before opening setup")
+	if not inspection_ready:
+		game.queue_free()
+		await process_frame
+		return
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
 		menu._replace_dialog.hide()
@@ -291,6 +301,11 @@ func _store(width: int) -> void:
 	var intermediate_zoom: float = store._map.zoom
 	expect(first_zoom > small and intermediate_zoom > first_zoom and store._map.focusing and is_zero_approx(store._map.popup.modulate.a), "Selecting an outer Store node smoothly zooms toward it before revealing details (%d)" % width)
 	await _step_store_camera(store._map, camera_tween, 11)
+	# The focus Tween deliberately lets container sizes settle for multiple
+	# process frames before it creates the separate details Tween.
+	for frame in 12:
+		if not store._map.focusing and store._map._menu_tween != null and store._map._menu_tween.is_valid(): break
+		await process_frame
 	var final_zoom: float = store._map.zoom
 	var menu_tween: Tween = store._map._menu_tween
 	expect(not store._map.focusing and final_zoom > intermediate_zoom and menu_tween != null and menu_tween.is_valid(), "Completed camera focus starts the separate menu animation")

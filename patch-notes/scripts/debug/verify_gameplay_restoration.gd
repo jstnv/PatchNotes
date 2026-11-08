@@ -15,9 +15,9 @@ func run() -> void:
  var r:=fresh()
  if args.size()==2 and args[0]=="--capture":
   for id: StringName in [&"power_ups",&"score_system"]:check(r.admit_feature_research(r.get_feature_research_quote(id)),"Old root paid admission "+str(id))
-  var a:=StudioCheckpoint.new();var saved:=a.capture(r)
-  check(not saved.is_empty() and a.validate(saved).is_empty(),"Exact prior paid queue is valid")
-  FileAccess.open(args[1],FileAccess.WRITE).store_string(JSON.stringify({"player":saved,"source":Replay.source_identity()}));quit(failures);return
+  var prior_adapter:=StudioCheckpoint.new();var prior_saved:=prior_adapter.capture(r)
+  check(not prior_saved.is_empty() and prior_adapter.validate(prior_saved).is_empty(),"Exact prior paid queue is valid")
+  FileAccess.open(args[1],FileAccess.WRITE).store_string(JSON.stringify({"player":prior_saved,"source":Replay.source_identity()}));quit(failures);return
  var g:=FeatureStoreCatalog.graph(r._feature_definitions,r._feature_offers)
  check(not g.has("error"),"Complete graph remains valid")
  for row: Array in [[&"timer_system",&"technology",2,&"design",1,1,95000],[&"inventory_system",&"technology",3,&"design",2,2,170000],[&"categorized_scores",&"design",7,&"technology",2,3,240000]]:

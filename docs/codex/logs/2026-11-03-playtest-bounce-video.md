@@ -1,0 +1,8 @@
+# Startup video with bouncing playtest panel, 2026-11-03
+
+Revised the [aligned standalone startup video](2026-11-03-playtest-aligned-video.md) on `main` at `7c60a01cbfac76d3f3cae1062849a070b1563116`. This session added the video and this log. The 892 × 99 px panel and its lettering move together. The opening drops quickly from the underline mask at frame 874, slowing from about 490 px/s to 22 px/s as it joins the slight downward movement of the wave at frame 915. Matched position, velocity and acceleration at the join let the bounce begin without a pause.
+
+The panel travels 22 px from top to bottom, once every two beats of the 70 BPM track. A smooth phase shift shortens each rise to 0.70 s and lengthens the fall to 1.01 s. The panel is moving upward when the retraction begins at frame 1157. It clears by frame 1200, ahead of the original logo departure at frame 1234.
+
+Published `C:\Users\64jus\Downloads\Patch Notes Design Folder\Patch-Notes-Startup-Loop-Playtest-Bounce-27s.mp4`, 8,297,261 bytes, SHA-256 `5df42eecc11c57e92cc7c283edac4a9acffe3073cf6cde5f424869b5e3ddfbeb`. FFmpeg decoded both complete streams. FFprobe and frame-packet checks verified 1,646 pictures at 1920 × 1080, 60 fps. Both media streams finish at tick 1,316,571 on the 48 kHz clock. The first and last decoded frames match pure black.
+Decoded motion follows the intended curve within one pixel across the visible entry, bounce and exit (0.40 px RMS). The entrance slows into the wave, and the panel rises faster than it falls. All 1,287 AAC packets and their timestamps match the previous export. Inspected the native hold crop and motion sequence through the final retraction.

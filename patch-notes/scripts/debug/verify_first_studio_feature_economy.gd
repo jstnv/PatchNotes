@@ -25,7 +25,8 @@ func _run() -> void:
 	check(created.get("ok", false) and run.get_cash_cents() == 540000 and run.get_completed_run_cycles() == 0, "Engine creation charges exactly $100 and no cycle")
 	if not created.get("ok",false): quit(1); return
 	var engine_id: StringName = created.engine_id
-	check(run.get_engine_feature_state().engines[engine_id].committed.is_empty(), "New engine starts with an empty Feature library")
+	var starters: Array[StringName]=[];starters.assign(run.ProprietaryEngines.FOUNDATIONS)
+	check(run.get_engine_feature_state().engines[engine_id].committed == starters, "New engine starts with the four implemented Features")
 	check(run.finalize_starter_selection(), "First-game selection can close before Implementation")
 	var snapshots := PrimitiveSnapshotDatabase.new()
 	snapshots.load_ledgers()
@@ -35,17 +36,17 @@ func _run() -> void:
 	await process_frame
 	check(not studio.get_node("%FeatureStoreButton").visible, "Standalone dashboard Feature Store is retired")
 	var store: FeatureStore=await preload("res://scripts/debug/ui_test_actions.gd").open_feature_implementation(studio,engine_id)
-	check(store.visible and store._owned_summary.text.contains("Scope 0"), "Owned engine opens its empty Feature Implementation tree")
-	var quote := run.get_feature_research_quote(&"text",engine_id)
-	check(quote.get("can_admit",false), "Foundational Text implementation can enter the engine queue")
+	check(store.visible and store._owned_summary.text.contains("Scope 5"), "Owned engine opens its four-Feature, five-Scope Implementation tree")
+	var quote := run.get_feature_research_quote(&"controller",engine_id)
+	check(quote.get("can_admit",false), "Independent Controller implementation can enter the engine queue")
 	var initial_cash := run.get_cash_cents()
 	check(run.admit_feature_research(quote) and run.get_cash_cents() == initial_cash - int(quote.down_cents) and run.get_completed_run_cycles() == 0, "Implementation down payment uses the quoted price and no cycle")
-	quote=run.get_feature_research_quote(&"text",engine_id)
+	quote=run.get_feature_research_quote(&"controller",engine_id)
 	initial_cash=run.get_cash_cents()
-	check(quote.get("can_research",false) and run.research_feature(quote), "Queued Text implementation completes")
+	check(quote.get("can_research",false) and run.research_feature(quote), "Queued Controller implementation completes")
 	check(run.get_cash_cents() == initial_cash - int(quote.due_cents) and run.get_completed_run_cycles() == 1, "Completion charges the unpaid balance in one productive cycle")
 	await process_frame
-	check(&"text" in run.get_future_project_feature_ids(engine_id) and store._owned_summary.text.contains("Scope 1"), "Paid Text is immediately available on this engine")
+	check(&"controller" in run.get_future_project_feature_ids(engine_id) and store._owned_summary.text.contains("Scope 6"), "Paid Controller is immediately available on this engine")
 	check(run.get_selected_engine_id() != engine_id and run.get_future_project_feature_ids().size() == 17, "Implementation does not silently change the selected project engine")
 	check(run.primitive_feature_hand_cost_cents([database.get_card(&"text"),database.get_card(&"controls")] as Array[CardData]) == 9000, "Printed Text and Controls retain $50 and $40 hand costs")
 	store.hide()

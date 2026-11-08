@@ -16,10 +16,10 @@ func check(ok: bool, label: String) -> void:
 		printerr("FAIL: " + label)
 	else: print("PASS: " + label)
 
-func fixture(request: Dictionary) -> Dictionary:
-	if not facts.has(request.source_id): return {}
-	var fact: Dictionary = facts[request.source_id]
-	if fact.request != request: return {}
+func fixture(event_request: Dictionary) -> Dictionary:
+	if not facts.has(event_request.source_id): return {}
+	var fact: Dictionary = facts[event_request.source_id]
+	if fact.request != event_request: return {}
 	return fact.amounts.duplicate(true)
 
 func request(id: StringName, publisher: StringName, cycle: int, rep: int, inv: int) -> Dictionary:
@@ -53,8 +53,8 @@ func pure_checks() -> void:
 	check(Ledger.reconstruct(four.ledger,&"owner-b",4,fixture).is_empty(),"another Studio cannot hydrate owner-a history")
 	check(not Ledger.plan(Ledger.create(&"owner-b"),&"owner-b",a,1,fixture).is_empty(),"same source text in separate Studio is independent")
 	for field in ["ordinal","requested_reputation_bp","credited_reputation_bp","requested_investment_bp","credited_investment_bp"]:
-		var bad: Dictionary = four.ledger.duplicate(true); bad.events[0][field] += 1
-		check(Ledger.reconstruct(bad,&"owner-a",4,fixture).is_empty(),"forged "+field+" rejects")
+		var forged: Dictionary = four.ledger.duplicate(true); forged.events[0][field] += 1
+		check(Ledger.reconstruct(forged,&"owner-a",4,fixture).is_empty(),"forged "+field+" rejects")
 	var bad: Dictionary = four.ledger.duplicate(true); bad.events.reverse()
 	check(Ledger.reconstruct(bad,&"owner-a",4,fixture).is_empty(),"reordered history rejects")
 	bad = four.ledger.duplicate(true); bad.events.append(bad.events[0].duplicate(true))

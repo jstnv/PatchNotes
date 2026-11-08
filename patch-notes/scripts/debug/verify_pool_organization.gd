@@ -1,7 +1,7 @@
 extends "res://scripts/debug/verify_game_lifespan_trial.gd"
 
 ## Presentation fixtures use real transactions; these are not human play traces.
-const OUT := "res://design-logs/campaign-pool-ui-v1"
+var OUT := OS.get_environment("PN_POOL_TEST_OUTPUT") if not OS.get_environment("PN_POOL_TEST_OUTPUT").is_empty() else "res://design-logs/campaign-pool-ui-v1"
 var traces: Array = []
 
 func settle() -> void:
@@ -153,16 +153,23 @@ func summary() -> void:
 	check(selected == first.get_release_id(), "Summary selects the actual older release ID")
 	var campaign: Button = studio.get_node("%CampaignButton")
 	var before := _snapshot(run, selected)
-	for dimensions in [Vector2i(1152, 648), Vector2i(1280, 720)]:
+	for dimensions in [Vector2i(900, 600), Vector2i(1152, 648), Vector2i(1280, 720)]:
+		root.min_size=Vector2i.ZERO
+		if DisplayServer.get_name()!="headless":DisplayServer.window_set_min_size(Vector2i.ZERO)
 		root.size = dimensions
 		root.content_scale_size = dimensions
 		await settle()
 		var header: Control = studio.get_node("SummaryPanel/Margin/Layout/Header")
-		var buttons: Array[Control] = [studio.get_node("%DetailedReviewButton"), studio.get_node("%MonthlySalesButton"), campaign, studio.get_node("%CloseSummaryButton")]
-		check(buttons.all(func(button): return button.get_parent() == header and header.get_global_rect().encloses(button.get_global_rect()) and studio.get_global_rect().encloses(button.get_global_rect())), "All four summary actions fit the top bar at %d" % dimensions.x)
+		var actions: Control = studio.get_node("SummaryPanel/Margin/Layout/SummaryActions")
+		var buttons: Array[Control] = [studio.get_node("%DetailedReviewButton"), studio.get_node("%MonthlySalesButton"), campaign]
+		var back: Control=studio.get_node("%CloseSummaryButton")
+		var status: Control=studio.get_node("%CampaignStatusLabel")
+		var viewport:=Rect2(Vector2.ZERO,Vector2(dimensions))
+		check(buttons.all(func(button): return button.get_parent() == actions and actions.get_global_rect().encloses(button.get_global_rect()) and viewport.encloses(button.get_global_rect())) and header.get_global_rect().encloses(back.get_global_rect()) and viewport.encloses(back.get_global_rect()), "All summary actions and Back fit their rows at %d" % dimensions.x)
+		var status_before:=status.get_global_rect()
 		studio.get_node("SummaryPanel/Margin/Layout/Scroll").scroll_vertical = 900
 		await settle()
-		check(campaign.is_visible_in_tree() and not campaign.disabled and campaign.get_global_rect().position.y == buttons[0].get_global_rect().position.y, "Campaign stays beside other actions while statistics scroll")
+		check(campaign.is_visible_in_tree() and not campaign.disabled and campaign.get_global_rect().position.y == buttons[0].get_global_rect().position.y and status.get_global_rect()==status_before and viewport.encloses(status_before), "Campaign and its explanation stay visible while statistics scroll")
 		await shot("summary-header-%d" % dimensions.x)
 	check(_snapshot(run, selected) == before, "Resizing, selecting and scrolling stay passive")
 	campaign.pressed.emit()

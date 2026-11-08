@@ -53,8 +53,18 @@ func halfway(studio: StudioPhase, view: Control, hud: GameplayHUD, label: String
 	var motion: MenuTransitions = studio._hub_motion
 	check(motion.busy and motion._navigation_tween != null, label + ": transition is active")
 	if not motion.busy or motion._navigation_tween == null: return
-	motion._navigation_tween.pause()
-	motion._navigation_tween.custom_step(0.10)
+	var tween: Tween = motion._navigation_tween
+	tween.pause()
+	var elapsed := tween.get_total_elapsed_time()
+	print("LAYER_MIDPOINT label=%s elapsed=%.6f target=0.100000" % [label, elapsed])
+	check(elapsed <= 0.10, label + ": midpoint was not already missed")
+	if elapsed > 0.10:
+		if tween.is_valid(): tween.play()
+		var missed_deadline := Time.get_ticks_msec() + 6000
+		while motion.busy and Time.get_ticks_msec() < missed_deadline: await process_frame
+		return
+	var remaining := maxf(0.0, 0.10 - elapsed)
+	if remaining > 0.0: tween.custom_step(remaining)
 	await process_frame
 	var sidebar: Control = studio._hub._root_panel if under == null else under
 	var header: Control = hud.get_node("PersistentHeader")
@@ -66,13 +76,14 @@ func halfway(studio: StudioPhase, view: Control, hud: GameplayHUD, label: String
 	check(not visible.intersects(header.get_global_rect()) or is_drawn_above(header, view), label + ": moving destination cannot cover top HUD")
 	check(not visible.intersects(footer.get_global_rect()) or is_drawn_above(footer, view), label + ": moving destination cannot cover bottom HUD")
 	await capture(label)
-	motion._navigation_tween.play()
+	check(tween.is_valid(), label + ": midpoint tween remains valid before resuming")
+	if tween.is_valid(): tween.play()
 	var deadline := Time.get_ticks_msec() + 6000
 	while motion.busy and Time.get_ticks_msec() < deadline: await process_frame
 	check(not motion.busy, label + ": transition finishes")
 	for frame in 2: await process_frame
 
-func pointer_click(button: Button) -> void:
+func pointer_click(button: Button, wait_for_frame := true) -> void:
 	var point := button.get_global_rect().get_center()
 	var mouse := InputEventMouseMotion.new()
 	mouse.position = point
@@ -85,7 +96,7 @@ func pointer_click(button: Button) -> void:
 		event.button_index = MOUSE_BUTTON_LEFT
 		event.pressed = down
 		root.push_input(event,true)
-	await process_frame
+	if wait_for_frame: await process_frame
 
 func run() -> void:
 	root.size = Vector2i(1280, 720)
@@ -147,7 +158,8 @@ func run() -> void:
 	await pointer_click(bank_button)
 	if hud.studio_finances.visible:
 		await halfway(studio, hud.studio_finances.dialog, hud, "bank-enter")
-		await pointer_click(hud.studio_finances.back_button)
+		# Sample the pop before the next frame can advance past its midpoint.
+		await pointer_click(hud.studio_finances.back_button, false)
 		await halfway(studio, hud.studio_finances.dialog, hud, "bank-back")
 		check(bank_button.has_focus(), "Bank pointer navigation restores focus to Bank button")
 	else: check(false, "Bank destination was created")

@@ -208,12 +208,22 @@ static func get_projection(record: Dictionary) -> Dictionary:
 
 static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
 		campaign_this_cycle: bool = false, factor_bp: int = 10000, snapshot_id: String = "market-0-neutral", factor_details: Dictionary = {}) -> Dictionary:
-	if not is_valid(record) or run_cycle <= record.last_processed_run_cycle or run_cycle < 0:
+	if not is_valid(record): return {}
+	return _next_cycle_validated_replay(record, run_cycle, crosses_month, campaign_this_cycle, factor_bp, snapshot_id, factor_details, true)
+
+## Internal replay callers must own a detached, already-validated predecessor.
+## Unusual or legacy transitions still use the full result-validation fallback.
+static func _next_cycle_validated_replay(record: Dictionary, run_cycle: int, crosses_month: bool,
+		campaign_this_cycle: bool, factor_bp: int, snapshot_id: String, factor_details: Dictionary, publish_proof: bool) -> Dictionary:
+	if run_cycle <= record.last_processed_run_cycle or run_cycle < 0:
 		return {}
 	if factor_bp<7000 or factor_bp>10000 or snapshot_id.is_empty(): return {}
 	if campaign_this_cycle and not can_campaign(record):
 		return {}
-	var result := record.duplicate(true)
+	# Private Fanbase reconstruction owns both records and only inserts into
+	# the history maps; share immutable historical entries until those maps
+	# change. Public transitions preserve the original deep-copy contract.
+	var result := record.duplicate(publish_proof)
 	var calendar: Dictionary=record.get("calendar",{})
 	var first_month_cycles: int=Clock.month_end(1,calendar)
 	if result.later_enabled:
@@ -225,6 +235,9 @@ static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
 	var age_month: int=Clock.action_month(result.total_earned_cycles,true,calendar)
 	var begins_month: bool=int(Clock.position(result.total_earned_cycles-1,calendar).quarter)==0
 	if begins_month:
+		if not publish_proof:
+			result.market_factors=record.market_factors.duplicate()
+			if campaign_this_cycle:result.campaign_months=record.campaign_months.duplicate()
 		var frozen := Market.neutral_factor() if factor_details.is_empty() else factor_details.duplicate(true)
 		if frozen.factor_bp!=factor_bp or frozen.snapshot_id!=snapshot_id or not Market.valid_factor(frozen):return {}
 		result.market_factors[age_month]=frozen
@@ -263,7 +276,7 @@ static func next_cycle(record: Dictionary, run_cycle: int, crosses_month: bool,
 		result.settled_cents = result.entitlement_cents
 		result.last_settlement_run_cycle = run_cycle
 	if _sequential_transition_proven(record,result,run_cycle,age_month,begins_month):
-		_remember_valid_record(var_to_bytes(result))
+		if publish_proof: _remember_valid_record(var_to_bytes(result))
 		return result
 	return result if is_valid(result) else {}
 

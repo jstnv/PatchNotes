@@ -135,5 +135,5 @@ func render(project: ProjectState, context: StringName, presented: Dictionary = 
 	hidden_bugs.visible = show_hidden_bugs and context==&"beta"
 	_hidden_column.visible=hidden_bugs.visible
 	if hidden_bugs.visible:
-		var hidden: int = maxi(0,int(presented._bug_total)-int(presented.discovered)) if presented.has("_bug_total") else project.get_hidden_bugs()
-		hidden_bugs.text = str(hidden)
+		var hidden_count: int = maxi(0,int(presented._bug_total)-int(presented.discovered)) if presented.has("_bug_total") else project.get_hidden_bugs()
+		hidden_bugs.text = str(hidden_count)

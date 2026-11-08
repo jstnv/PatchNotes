@@ -6,7 +6,7 @@ signal practice_requested
 
 const TOPICS := {
 	&"main_menu": [
-		{"title": "Create Your Studio", "body": "Choose Start Game, name your studio and choose one permanent Genre specialty. Preview its free starting Features, then enter Studio. The Store offers optional additions; each game can use any Genre."},
+		{"title": "Create Your Studio", "body": "Choose Start Game, name your studio and choose one permanent Genre specialty. Games released in that Genre receive bonus Awareness. Each game can use any Genre; review your Studio choices in Overview."},
 		{"title": "Produce a Game", "body": "Name the game and choose a Genre and Theme. During Design, Alpha and Beta, set priorities, select one to four cards per hand and decide when to move to the next phase."},
 		{"title": "After Release", "body": "Studio keeps your owned Features and released-game history. Browse reviews, sales, the Feature Store and available Contracts. The footer Tutorial button opens detailed help for your current screen."},
 	],

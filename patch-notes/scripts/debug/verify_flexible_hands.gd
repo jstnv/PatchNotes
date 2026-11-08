@@ -65,7 +65,7 @@ func _initialize() -> void:
 	for script in [Design, Alpha]:
 		for n in [1, 2, 3]:
 			var h = core_hand(script, n)
-			var before = h._deal_rng.state
+			var _before = h._deal_rng.state
 			var result: Dictionary = h.execute(h.command(h.candidate_ids.duplicate()))
 			check(result.ok, "%s accepts %d current cards" % [script.resource_path, n])
 			if not result.ok: continue
@@ -75,9 +75,9 @@ func _initialize() -> void:
 			check(h.pass_budget_available() == 10 - n, "Each new phase has eight additional starting Passes")
 		for n in [0, 5]:
 			var h = core_hand(script)
-			var rng = h._deal_rng.state
+			var rejected_rng = h._deal_rng.state
 			var result: Dictionary = h.execute(h.command(h.candidate_ids.slice(0, n)))
-			check(not result.ok and h._project_state.get_current_cycle() == 0 and h._deal_rng.state == rng and h._budget_spent == 0, "Empty/overlarge hand is atomic")
+			check(not result.ok and h._project_state.get_current_cycle() == 0 and h._deal_rng.state == rejected_rng and h._budget_spent == 0, "Empty/overlarge hand is atomic")
 		var old = core_hand(script, 2)
 		old._project_state._pass_budget_version = 1
 		check(old.pass_budget_available() == 2, "Existing active version1 retains its two starting Passes")

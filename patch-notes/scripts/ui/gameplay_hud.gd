@@ -3,6 +3,10 @@ extends Control
 
 var focused_guidance_active:=false
 signal phase_changed
+signal notice_requested(tip: Dictionary)
+signal notice_selected(index: int)
+var notice_button: Button
+var notice_list: PopupMenu
 const Clock := preload("res://scripts/calendar/calendar_clock.gd")
 
 var project: ProjectState
@@ -36,6 +40,12 @@ var _guidance_ready := false
 var _current_tip_key := ""
 var _presented_scores: Dictionary = {}
 var _score_pulses: Array[Label] = []
+var _studio_bar_tween: Tween
+var _studio_bar_prepared := false
+var _studio_header_offsets := Vector2.ZERO
+var _studio_footer_offsets := Vector2.ZERO
+var _studio_header_travel := 0.0
+var _studio_footer_travel := 0.0
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -139,8 +149,68 @@ func _ready() -> void:
 	settings_menu.name = "SettingsMenu"
 	add_child(settings_menu)
 	sales_hud = SalesRevenueHUD.new()
+	notice_button = Button.new()
+	notice_button.name = "StudioNotifications"
+	notice_button.tooltip_text = "Unopened Studio notifications"
+	notice_button.custom_minimum_size = Vector2(54, 42)
+	row.add_child(notice_button)
+	notice_list = PopupMenu.new()
+	notice_button.add_child(notice_list)
+	notice_button.pressed.connect(func():
+		notice_list.position = Vector2i(notice_button.get_screen_position() + Vector2(0, notice_button.size.y))
+		notice_list.popup())
+	notice_list.id_pressed.connect(func(index: int): notice_selected.emit(index))
 	row.add_child(sales_hud)
 	sales_hud.visibility_changed.connect(_layout_sales_hud)
+
+func set_studio_notices(entries: Array, presenting: bool = false) -> void:
+	if not is_instance_valid(notice_button): return
+	var first_unread := 1 if presenting and not entries.is_empty() else 0
+	var unread_count := entries.size() - first_unread
+	notice_button.visible = phase is StudioPhase
+	notice_button.disabled = unread_count == 0
+	notice_button.text = "!  %d" % unread_count
+	notice_list.clear()
+	for index in range(first_unread, entries.size()):
+		notice_list.add_item(str(entries[index].get("title", "Notification")), index)
+
+func _capture_studio_bar_positions() -> void:
+	_studio_header_offsets = Vector2(scoreboard.offset_top, scoreboard.offset_bottom)
+	_studio_footer_offsets = Vector2(footer_panel.offset_top, footer_panel.offset_bottom)
+	var viewport_bottom := get_viewport().get_visible_rect().end.y
+	_studio_header_travel = maxf(0.0, scoreboard.get_global_rect().end.y) + 12.0
+	_studio_footer_travel = maxf(0.0, viewport_bottom - footer_panel.get_global_rect().position.y) + 12.0
+	_studio_bar_prepared = true
+
+func _set_studio_bar_progress(progress: float) -> void:
+	var header_shift := -_studio_header_travel * (1.0 - progress)
+	var footer_shift := _studio_footer_travel * (1.0 - progress)
+	scoreboard.offset_top = _studio_header_offsets.x + header_shift
+	scoreboard.offset_bottom = _studio_header_offsets.y + header_shift
+	footer_panel.offset_top = _studio_footer_offsets.x + footer_shift
+	footer_panel.offset_bottom = _studio_footer_offsets.y + footer_shift
+
+func prepare_studio_bars() -> void:
+	if not _studio_bar_prepared:
+		_capture_studio_bar_positions()
+	_set_studio_bar_progress(0.0)
+
+func animate_studio_bars_in() -> void:
+	if not _studio_bar_prepared:
+		prepare_studio_bars()
+	_studio_bar_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_studio_bar_tween.tween_method(_set_studio_bar_progress, 0.0, 1.0, MenuTransitions.ENTRANCE_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await _studio_bar_tween.finished
+	_set_studio_bar_progress(1.0)
+	_studio_bar_prepared = false
+
+func animate_studio_bars_out() -> void:
+	if not _studio_bar_prepared:
+		_capture_studio_bar_positions()
+	_studio_bar_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_studio_bar_tween.tween_method(_set_studio_bar_progress, 1.0, 0.0, MenuTransitions.ENTRANCE_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	await _studio_bar_tween.finished
+	_set_studio_bar_progress(0.0)
 
 func setup(project_state: ProjectState, run_state: RunState) -> void:
 	if project != null:
@@ -177,8 +247,8 @@ func set_phase(controller: Control, cue_music: bool = true) -> void:
 	if soundtrack != null and cue_music:
 		var studio_music := controller is StudioPhase or controller is PostGameReview or controller is FirstProjectSetup
 		var from_title := is_instance_valid(phase) and phase is MainMenu
-		var theme: StringName = &"menu" if controller is MainMenu else &"studio" if studio_music else &"main"
-		soundtrack.request_theme(theme, studio_music and from_title, controller is StudioPhase)
+		var music_theme: StringName = &"menu" if controller is MainMenu else &"studio" if studio_music else &"main"
+		soundtrack.request_theme(music_theme, studio_music and from_title, controller is StudioPhase)
 	settings_menu.close()
 	studio_finances.close()
 	fans_dialog.hide()
@@ -308,16 +378,24 @@ func show_fans() -> void:
 func show_current_tip() -> void:
 	var tip := _guidance_for_current_state()
 	if tip.is_empty(): return
-	contextual_tip.show_tip(tip.title, tip.body)
+	# In development the Tip button is an immediate, dismissible aid. Automatic
+	# Studio notifications continue to use the persisted queue below.
+	if phase is DesignPhase or phase is AlphaPhase or phase is BetaPhase:
+		if not get_tree().paused and not focused_guidance_active:
+			contextual_tip.show_tip(tip.title, tip.body)
+		return
+	if notice_requested.get_connections().size() > 0: notice_requested.emit(tip)
+	else: contextual_tip.show_tip(tip.title, tip.body)
 
 
 func _refresh_guidance() -> void:
 	if focused_guidance_active:return
 	if not _guidance_ready or run == null or contextual_tip == null: return
-	# The overview desk has free space below the value cards; full destinations
-	# retain their upper hint dock so hints cannot cover their lower actions.
+	# The hub, Contract and release summary keep their primary actions at the
+	# top. Preserve the persistent tip but dock it below those controls.
 	var hub_view: bool = phase is StudioPhase and phase.get("_hub_motion") != null and phase._hub_motion.depth()==1
-	contextual_tip.dock_below_menu_controls(hub_view or (phase is StudioPhase and tutorial_context==&"contract"))
+	var summary_view: bool = phase is StudioPhase and phase.get_node("%SummaryPanel").is_visible_in_tree()
+	contextual_tip.dock_below_menu_controls(hub_view or summary_view or (phase is StudioPhase and tutorial_context==&"contract"))
 	var tip := _guidance_for_current_state()
 	if tip.is_empty():
 		tip_button.disabled = true
@@ -326,10 +404,13 @@ func _refresh_guidance() -> void:
 	tip_button.disabled = false
 	tip_button.tooltip_text = "%s\n%s" % [tip.title, tip.body]
 	if _current_tip_key == tip.key: return
+	if notice_requested.get_connections().is_empty(): return
+	var coordinator := get_tree().get_first_node_in_group(&"studio_notice_coordinator")
+	if coordinator == null or coordinator._run != run or coordinator._queue_studio.is_empty(): return
 	_current_tip_key = tip.key
 	# A changing hand must not erase guidance the player is still reading.
-	if not contextual_tip.panel.visible and run.visit_guidance_tip(StringName(tip.key)):
-		contextual_tip.show_tip(tip.title, tip.body)
+	if run.visit_guidance_tip(StringName(tip.key)):
+		notice_requested.emit(tip)
 
 
 func _guidance_for_current_state() -> Dictionary:
@@ -384,9 +465,9 @@ func _production_guidance() -> Dictionary:
 	if not is_instance_valid(phase) or not phase.has_method("get_workspace"):
 		return {"key": String(tutorial_context) + "_overview", "title": "Build your game", "body": "Set priorities and select one to four cards per hand. Open Tutorial for the full phase reference."}
 	var workspace: PhaseWorkspace = phase.get_workspace()
-	var name := String(tutorial_context)
+	var phase_name := String(tutorial_context)
 	if (tutorial_context == &"design" and not (phase is DesignPhase)) or (tutorial_context == &"alpha" and not (phase is AlphaPhase)) or (tutorial_context == &"beta" and not (phase is BetaPhase)):
-		return {"key": name + "_overview", "title": name.capitalize() + " guidance", "body": "Set priorities and select one to four cards per hand. Open Tutorial for the full phase reference."}
+		return {"key": phase_name + "_overview", "title": phase_name.capitalize() + " guidance", "body": "Set priorities and select one to four cards per hand. Open Tutorial for the full phase reference."}
 	if workspace.overlay.visible:
 		return {} # PriorityOverlay already presents its own help above the game.
 	if phase is DesignPhase:
@@ -415,10 +496,10 @@ func _production_guidance() -> Dictionary:
 			if not final_production.is_empty():
 				if not String(final_production.get("specialization_stat", &"")).is_empty():
 					var category := str(final_production.specialization_stat).capitalize()
-					return {"key": name + "_specialization_" + str(final_production.specialization_stat), "title": "%s Specialization ready" % category, "body": "All four cards share %s as their primary Core label. This hand earns ×1.5 Core gains, rounded by category; Scope stays printed." % category}
+					return {"key": phase_name + "_specialization_" + str(final_production.specialization_stat), "title": "%s Specialization ready" % category, "body": "All four cards share %s as their primary Core label. This hand earns ×1.5 Core gains, rounded by category; Scope stays printed." % category}
 				if final_production.get("balanced_production", false):
-					return {"key": name + "_balanced", "title": "Balanced Production ready", "body": "With a Feature, positive hand Core gains qualify if highest minus lowest is at most 1 point, or each is within ±15% of the average. Boost the Core total ×1.25, round down, then share it evenly after playing. Spare points follow Graphics, Sound, Technology, Design. Scope stays printed."}
-		return {"key": name + "_ready", "title": "Four cards selected", "body": "Play the hand to advance one cycle. Selected Features exhaust for this project; Passes can return."}
+					return {"key": phase_name + "_balanced", "title": "Balanced Production ready", "body": "With a Feature, positive hand Core gains qualify if highest minus lowest is at most 1 point, or each is within ±15% of the average. Boost the Core total ×1.25, round down, then share it evenly after playing. Spare points follow Graphics, Sound, Technology, Design. Scope stays printed."}
+		return {"key": phase_name + "_ready", "title": "Four cards selected", "body": "Play the hand to advance one cycle. Selected Features exhaust for this project; Passes can return."}
 	var available := workspace.get_pool_specialization_guidance()
 	if not available.is_empty(): return available
 	if tutorial_context == &"beta":
@@ -429,10 +510,10 @@ func _production_guidance() -> Dictionary:
 		var body := "Keep building Scope and Core Scores. Redraw selected cards without advancing a cycle; successful hands restore one redraw."
 		if tutorial_context == &"design": body += " Proceed to Alpha when you are ready."
 		if tutorial_context == &"alpha": body += " Match four primary Core labels for a ×1.5 synergy; open Tutorial for the other pattern."
-		return {"key": name + "_progress", "title": "Watch the project", "body": body}
+		return {"key": phase_name + "_progress", "title": "Watch the project", "body": body}
 	if tutorial_context == &"design":
 		return {"key": "design_choose", "title": "Select one to four cards", "body": "Choose one to four cards. A four-card synergy is a bonus for a matching hand. The first score on each card is its primary Core label; match all four for ×1.5 Core gains. Open Tutorial for other combos."}
-	return {"key": name + "_choose", "title": "Select one to four cards", "body": "Choose one to four cards. Matching all four primary Core labels gives ×1.5 Core gains; Tutorial explains other bonuses. Features exhaust; Passes return."}
+	return {"key": phase_name + "_choose", "title": "Select one to four cards", "body": "Choose one to four cards. Matching all four primary Core labels gives ×1.5 Core gains; Tutorial explains other bonuses. Features exhaust; Passes return."}
 
 func _queue_refresh() -> void:
 	if _refresh_pending or not is_inside_tree(): return

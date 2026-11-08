@@ -210,6 +210,23 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 1
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_main_translucent"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12941177, 0.105882354, 0.21960784, 0.70)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.43529412, 0.25882354, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 1
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jhu4i"]
 content_margin_left = 10.0
 content_margin_top = 8.0
@@ -447,7 +464,7 @@ FolderHeading/base_type = &"Label"
 FolderHeading/font_sizes/font_size = 24
 FolderHeading/fonts/font = SubResource("FontVariation_4oc4h")
 FolderPanel/base_type = &"PanelContainer"
-FolderPanel/styles/panel = SubResource("StyleBoxFlat_gcq62")
+FolderPanel/styles/panel = SubResource("StyleBoxFlat_main_translucent")
 FolderTab/base_type = &"Button"
 FolderTab/font_sizes/font_size = 17
 FolderTab/fonts/font = SubResource("FontVariation_4oc4h")

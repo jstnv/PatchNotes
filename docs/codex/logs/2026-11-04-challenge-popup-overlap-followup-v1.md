@@ -1,0 +1,17 @@
+# Challenge pop-up overlap follow-up — 2026-11-04
+
+Branch `main`, HEAD `2ad3cf2b2bb63d324a970b10864b0f69843dcb1a`; the shared worktree was already dirty. Existing edits, `.codex-godot-temp`, evidence and player saves were preserved. No commit, push or exported build was made.
+
+The user asked to ensure the pop-ups are fixed before continuing. Native reproduction found that the smaller top challenge notices overlapped the higher-layer persistent contextual tip and the synergy banner. At 900×600, focused unlock guidance also covered the tip's text. The revised placement considers actual visible bounds, chooses an unobstructed column and queues/preserves display time when there is no room. The tip moves clear of focused guidance and returns to its original dock after guidance closes. No challenge qualifications or rewards changed.
+
+Changed runtime files: `scripts/ui/challenge_progress_notices.gd`, `scripts/ui/contextual_tip.gd`, and `scripts/market/rival_world_checkpoint.gd` (one exact previous-source compatibility entry). Updated `scripts/debug/verify_challenge_notices_top.gd`; added isolated lifecycle and predecessor checks under `sims/challenge-trigger-recheck-20261104/`.
+
+## Evidence
+
+- Native before-fix reproduction: **9 overlap failures** for challenge notices with a tip or synergy banner (`sims/challenge-top-tip-overlap-20261104/before-combined/`); another native check reproduced **2 failures** for guidance covering the tip (`guide-tip-before/`).
+- Fixed combined overlays: native **91/91** and headless **85/85** at 1280×720 and 900×600 (`guide-tip-final-native/`, `guide-tip-final-headless/`). An independent native rerun passed **89/89** in `sims/challenge-notice-verification-20261104/final-native/`; timing caused fewer visible-slot assertions in that run. Actual captures were inspected, including narrow-screen guidance, tip and challenge notices. Tip dismiss and dock restoration, guidance actions, overflow and resumed notice expiration were checked.
+- Actual employee/QA/engine actions: **27/27** (`sims/challenge-trigger-recheck-20261104/`); isolated real HUD lifecycle **6/6** for pause/resume, same-run setup and awards-style hide/restore (`lifecycle-v4/`). Earlier lifecycle attempts had a zero-sized fixture or a diagnostic accessing a freed test node and remain retained.
+- A real preceding eight-rival player/world checkpoint initially failed the source identity fence after the UI script edits. Added only the SHA-verified exact predecessor `7369645beb5e4a9aaa9456235cf612dcdac7eef3adfc6b172f7ba745cc32e4de`; final restore matched player data except capture sequence metadata and the world except its current source stamp, retained eight studios, rejected an unknown source and left file bytes unchanged (`predecessor-before-v2/`, `predecessor-after-v3/`).
+- Broader legacy `verify_first_game_and_tips.gd` was attempted in an isolated profile but timed out after a new-save helper assertion and type error; it still asserts the superseded 12-Scope starter. `verify_gameplay_hud_overlay.gd` failed three Beta priority-overlay assertions; the prior [priority log](2026-11-03-priority-overlay-exit-v1.md) already records broader legacy fixture failures. These runs are retained under `sims/challenge-notice-verification-20261104/first-game/` and `hud-overlay/`; neither is claimed passing or established as a new pop-up defect.
+
+Device/export acceptance and the separately tracked Feature Store trail-rendering issue remain open. This focused work does not constitute a whole-game pop-up audit.

@@ -216,7 +216,7 @@ func go() -> void:
 			check(not ceremony.scroll.is_ancestor_of(ceremony.next_button), "Next remains outside scroll stage%d" % stage)
 			if stage >= 2 and stage <= 8:
 				if stage <= 5:
-					check(ceremony._heading.text == "Best " + str(frozen.awards[stage-2].name) and ceremony._body.get_child(0) == ceremony.podium, "Core page shows Best category heading directly above the podium")
+					check(ceremony._heading.text == "Best " + str(frozen.awards[stage-2].name) and ceremony._heading.get_global_rect().end.y <= ceremony.podium.get_global_rect().position.y, "Core page keeps its Best heading above the lowered podium")
 				check(ceremony.podium.get_child_count() == 3, "Three physical podium places stage%d" % stage)
 				check(ceremony.tie_note.visible and ceremony.tie_note.text.contains("Studio ID"), "Equal-score tie explanation visible")
 				var labels: Array = ceremony.score_labels

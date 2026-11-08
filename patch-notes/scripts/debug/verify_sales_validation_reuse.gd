@@ -29,14 +29,14 @@ func _initialize() -> void:
 	var repeated_us:=timed(ReleasedGameSales.is_valid,record)
 	expect(repeated_us*4<old_us,"Repeated exact sales reads avoid full history recalculation")
 	for field: String in ["earned_units","entitlement_cents","monthly_units","campaign_count","organic_awareness_scaled","active_awareness_scaled"]:
-		var changed:=pristine.duplicate(true)
-		changed[field]+=1
-		expect(not ReleasedGameSales.is_valid(changed),"Altered derived sales rejects: "+field)
+		var corrupted:=pristine.duplicate(true)
+		corrupted[field]+=1
+		expect(not ReleasedGameSales.is_valid(corrupted),"Altered derived sales rejects: "+field)
 		expect(ReleasedGameSales.is_valid(pristine),"Valid detached snapshot remains valid")
 	for field: String in ["total_units","earned_cycles","total_earned_cycles","earned_units"]:
-		var changed:=pristine.duplicate(true)
-		changed[field]=float(changed[field])
-		expect(not ReleasedGameSales.is_valid(changed),"Equal float cannot replace sales integer: "+field)
+		var wrong_type:=pristine.duplicate(true)
+		wrong_type[field]=float(wrong_type[field])
+		expect(not ReleasedGameSales.is_valid(wrong_type),"Equal float cannot replace sales integer: "+field)
 	var changed:=pristine.duplicate(true)
 	changed.release_id=String(changed.release_id)
 	expect(not ReleasedGameSales.is_valid(changed),"String cannot replace StringName")

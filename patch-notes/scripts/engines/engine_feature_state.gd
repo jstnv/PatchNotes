@@ -1,10 +1,11 @@
 ## Phase1 data only. Definitions, familiarity, finance and project physics live
 ## in their existing authoritative systems; this registry contains IDs/receipts.
 extends RefCounted
-const VERSION:=2
+const VERSION:=3
 const KINDS: Array[StringName]=[&"public",&"rival_licensed",&"proprietary"]
 const LEGACY:=&"legacy_engine"
 const Public:=preload("res://scripts/engines/public_action_engine.gd")
+const Proprietary:=preload("res://scripts/engines/proprietary_engine_state.gd")
 
 static func create(owned: Array[StringName],engines: Array[StringName],studio: StringName,offers: Dictionary={}) -> Dictionary:
 	var state: Dictionary={"version":VERSION,"engines":{},"entries":[],"configurations":[]}
@@ -23,6 +24,7 @@ static func add_record(state: Dictionary,id: StringName,label: String,kind: Stri
 	if id.is_empty() or state.engines.has(id) or label.strip_edges().is_empty() or label.length()>80 or kind not in KINDS or capacity<1:return false
 	if not unique_ids(library):return false
 	state.engines[id]={"name":label,"kind":kind,"capacity":capacity,"origin":origin,"initial":library.duplicate(),"implemented":library.duplicate(),"committed":library.duplicate(),"staged":[] as Array[StringName],"revision":0}
+	if state.get("version")==VERSION:state.engines[id].enabled=library.duplicate()
 	return true
 
 static func unique_ids(ids: Array) -> bool:
@@ -50,14 +52,16 @@ static func base_price(id: StringName,definitions: Dictionary,offers: Dictionary
 	return int(offers[id].base_price_cents) if offers.has(id) else (int(definitions[id].scope)+1)*15000
 
 static func valid(state: Dictionary,definitions: Dictionary,offers: Dictionary,ledger: Dictionary={},cycle: int=-1,studio: StringName=&"") -> bool:
-	if state.size()!=4 or state.get("version") not in [1,VERSION] or not state.get("engines") is Dictionary or state.engines.is_empty() or state.engines.size()>128 or not state.get("entries") is Array or not state.get("configurations") is Array:return false
+	if state.size()!=4 or state.get("version") not in [1,2,VERSION] or not state.get("engines") is Dictionary or state.engines.is_empty() or state.engines.size()>128 or not state.get("entries") is Array or not state.get("configurations") is Array:return false
 	var implemented: Dictionary={};var configured: Dictionary={};var revisions: Dictionary={}
 	var graph:=FeatureStoreCatalog.graph(definitions,offers)
 	if graph.has("error"):return false
 	var available_at: Dictionary={}
 	for id: Variant in state.engines:
 		var row: Variant=state.engines[id]
-		if not id is StringName or id.is_empty() or not row is Dictionary or row.size()!=9 or row.get("kind") not in KINDS or not row.get("name") is String or row.name.is_empty() or row.name.length()>80 or not row.get("capacity") is int or row.capacity<1 or not row.get("revision") is int or row.revision<0 or row.get("origin") not in ["legacy-access-v1","declared-v1",Public.ORIGIN,preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN,preload("res://scripts/engines/proprietary_engine_state.gd").ORIGIN]:return false
+		if not id is StringName or id.is_empty() or not row is Dictionary or row.size()!=(10 if state.version==VERSION else 9) or row.get("kind") not in KINDS or not row.get("name") is String or row.name.is_empty() or row.name.length()>80 or not row.get("capacity") is int or row.capacity<1 or not row.get("revision") is int or row.revision<0 or row.get("origin") not in ["legacy-access-v1","declared-v1",Public.ORIGIN,preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN,Proprietary.ORIGIN,Proprietary.STARTER_ORIGIN]:return false
+		if row.origin==Proprietary.ORIGIN and (row.kind!=&"proprietary" or row.get("initial")!=[]):return false
+		if row.origin==Proprietary.STARTER_ORIGIN and (row.kind!=&"proprietary" or row.get("initial")!=Proprietary.FOUNDATIONS):return false
 		if id==Public.ID and (row.kind!=&"public" or row.name!=Public.definition().name or row.capacity!=27 or row.origin!=Public.ORIGIN or row.initial!=Public.LIBRARY):return false
 		if id!=Public.ID and row.origin==Public.ORIGIN:return false
 		if row.origin==preload("res://scripts/engines/engine_marketplace.gd").RIVAL_ORIGIN:
@@ -67,7 +71,13 @@ static func valid(state: Dictionary,definitions: Dictionary,offers: Dictionary,l
 			if not row.get(key) is Array or not unique_ids(row[key]):return false
 			for feature: StringName in row[key]:
 				if not definitions.has(feature):return false
+		if state.version==VERSION:
+			if not row.get("enabled") is Array or not unique_ids(row.enabled):return false
+			for feature: StringName in row.enabled:
+				if feature not in row.implemented:return false
+			if normalize(row.enabled,offers)!=row.committed:return false
 		if row.kind!=&"proprietary" and (not row.staged.is_empty() or row.revision!=0 or row.initial!=row.implemented or normalize(row.initial,offers)!=row.committed):return false
+		if state.version==VERSION and row.kind!=&"proprietary" and row.enabled!=row.initial:return false
 		for feature: StringName in row.committed+row.staged:
 			if feature not in row.implemented:return false
 		for feature: StringName in row.staged:
@@ -125,8 +135,10 @@ static func valid(state: Dictionary,definitions: Dictionary,offers: Dictionary,l
 	for engine: StringName in state.engines:
 		if state.engines[engine].implemented!=implemented[engine] or state.engines[engine].revision!=revisions[engine]:return false
 		var expected: Array[StringName]=configured[engine]
-		if state.version==VERSION and state.engines[engine].kind==&"proprietary":
+		if state.version==2 and state.engines[engine].kind==&"proprietary":
 			expected=automatic_supply(expected,state.engines[engine],historical_removed.get(engine,{}),offers)
+		elif state.version==VERSION and state.engines[engine].kind==&"proprietary":
+			expected=normalize(state.engines[engine].enabled,offers)
 		if state.engines[engine].committed!=expected:return false
 	return true
 
@@ -141,23 +153,43 @@ static func automatic_supply(configured: Array[StringName],record: Dictionary,re
 	return normalize(ids,offers)
 
 static func migrate(state: Dictionary,offers: Dictionary) -> Dictionary:
-	if state.get("version")!=1:return state.duplicate(true)
+	var previous: int=int(state.get("version",0))
+	if previous==VERSION:return state.duplicate(true)
+	if previous not in [1,2]:return {}
 	var migrated: Dictionary=state.duplicate(true)
-	var removed: Dictionary={}
+	var removed: Dictionary={};var configured: Dictionary={}
+	for engine: StringName in migrated.engines:
+		configured[engine]=normalize(migrated.engines[engine].initial,offers)
 	for event: Dictionary in migrated.configurations:
 		if not removed.has(event.engine_id):removed[event.engine_id]={}
 		for id: StringName in event.removed:removed[event.engine_id][id]=true
+		configured[event.engine_id]=event.target.duplicate()
 	for engine: StringName in migrated.engines:
 		var row: Dictionary=migrated.engines[engine]
-		if row.kind!=&"proprietary":continue
-		var configured: Array[StringName]=[];configured.assign(row.committed)
-		row.committed=automatic_supply(configured,row,removed.get(engine,{}),offers)
+		if row.kind!=&"proprietary":
+			row.enabled=row.initial.duplicate()
+			continue
+		# V1 first uses the existing automatic-supply policy. For V2,
+		# reconstruct its unnormalized enabled list so replaced parents stay
+		# logically enabled although absent from the effective draw pool.
+		var base: Array[StringName]=[]
+		base.assign(row.committed if previous==1 else configured[engine])
+		var enabled: Array[StringName]=base.duplicate()
+		for id: StringName in row.staged:
+			if id not in enabled:enabled.append(id)
+		for id: StringName in row.implemented:
+			if id not in enabled and not removed.get(engine,{}).has(id):enabled.append(id)
+		var effective:=normalize(enabled,offers)
+		if previous==2 and effective!=row.committed:return {}
+		row.enabled=enabled
+		row.committed=effective
 	migrated.version=VERSION
 	return migrated
 
 static func needs_migration(state: Dictionary,offers: Dictionary) -> bool:
 	if state.get("version")!=1:return false
 	var upgraded:=migrate(state,offers)
+	if upgraded.is_empty():return false
 	for engine: StringName in state.engines:
 		if state.engines[engine].committed!=upgraded.engines[engine].committed:return true
 	return false
@@ -192,7 +224,7 @@ static func bindings_valid(state: Dictionary,entitlements: Dictionary,owned: Dic
 		var listing:=preload("res://scripts/engines/engine_marketplace.gd").find(id)
 		var terms: Dictionary=preload("res://scripts/engines/engine_marketplace.gd").terms_for_record(id,row)
 		var capacity: int=ProjectState.MAX_SIGNED_INT if id==LEGACY else int(terms.get("max_scope",listing.get("max_scope",20)))
-		if row.origin==preload("res://scripts/engines/proprietary_engine_state.gd").ORIGIN:
+		if Proprietary.is_creation_origin(row.origin):
 			if row.capacity not in [20,25,30,35]:return false
 		elif row.capacity!=capacity:return false
 	return true

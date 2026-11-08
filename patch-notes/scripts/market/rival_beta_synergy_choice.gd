@@ -2,9 +2,9 @@
 ## Legal settlement and hidden Bugs remain entirely with BetaHandCommand.
 extends RefCounted
 
-static func pick(current: Dictionary, reference_cards: Array, run_id: StringName, use_candidate: bool = true) -> Array[int]:
-	var reference := _assess(reference_cards)
-	if reference.is_empty(): return _tokens(reference_cards)
+static func pick(current: Dictionary, reference_cards: Array, _run_id: StringName, use_candidate: bool = true) -> Array[int]:
+	var reference_assessment := _assess(reference_cards)
+	if reference_assessment.is_empty(): return _tokens(reference_cards)
 	var cards: Array = current.candidates
 	var best: Dictionary = {}
 	var known := int(current.get("known_bugs", 0))
@@ -21,7 +21,7 @@ static func pick(current: Dictionary, reference_cards: Array, run_id: StringName
 					var strictly_better := false
 					var dominated := false
 					for hidden in range(upper_hidden + 1):
-						var baseline_remaining := _remaining(reference, known, hidden)
+						var baseline_remaining := _remaining(reference_assessment, known, hidden)
 						var candidate_remaining := _remaining(candidate, known, hidden)
 						if candidate_remaining > baseline_remaining:
 							dominated = true
@@ -33,7 +33,7 @@ static func pick(current: Dictionary, reference_cards: Array, run_id: StringName
 					candidate.improvement = improvement
 					if best.is_empty() or improvement > int(best.improvement) or (improvement == int(best.improvement) and _tie_better(candidate, best)):
 						best = candidate
-	var chosen: Dictionary = best if use_candidate and not best.is_empty() else reference
+	var chosen: Dictionary = best if use_candidate and not best.is_empty() else reference_assessment
 	return chosen.tokens
 
 static func _assess(cards: Array) -> Dictionary:

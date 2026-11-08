@@ -29,10 +29,10 @@ func _run() -> void:
 				expect(run.purchase_starter_feature(id),"Native optional starter purchase")
 				expect(run.get_completed_run_cycles()==0 and run.owns_feature(id),"Starter ownership with zero time")
 				await process_frame
-				var prior := coordinator.store.inspect()
+				var starter_before := coordinator.store.inspect()
 				expect(not run.purchase_starter_feature(id),"Duplicate starter rejected")
 				await process_frame
-				expect(coordinator.store.inspect()==prior,"Rejected starter leaves generation bytes and sequence unchanged")
+				expect(coordinator.store.inspect()==starter_before,"Rejected starter leaves generation bytes and sequence unchanged")
 				found = true
 				break
 		expect(found,"Eligible starter fixture found")

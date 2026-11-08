@@ -23,45 +23,45 @@ func ready_ledger(start: int = 550000, latest: int = 200000) -> Dictionary:
 func _initialize() -> void:
 	for start in [550000,570000]:
 		for odd in [false,true]:
-			var l := ready_ledger(start)
-			if odd: l = step(l)
-			var before := l.duplicate(true)
-			var q := F.bank_quote(l,50001,3,&"run")
-			check(q.accepted and q.capacity_cents == 37500 and l == before,"Passive exact capacity")
-			check(F.accept_loan(l,q,&"other").is_empty() and l == before,"Cross-run reject")
-			var accepted := F.accept_loan(l,q,&"run")
+			var initial_ledger := ready_ledger(start)
+			if odd: initial_ledger = step(initial_ledger)
+			var before := initial_ledger.duplicate(true)
+			var initial_quote := F.bank_quote(initial_ledger,50001,3,&"run")
+			check(initial_quote.accepted and initial_quote.capacity_cents == 37500 and initial_ledger == before,"Passive exact capacity")
+			check(F.accept_loan(initial_ledger,initial_quote,&"other").is_empty() and initial_ledger == before,"Cross-run reject")
+			var accepted := F.accept_loan(initial_ledger,initial_quote,&"run")
 			check(not accepted.is_empty(),"Accept")
-			l = accepted.ledger
-			check(l.cash_cents == before.cash_cents+50001 and l.last_cycle == before.last_cycle,"Zero-cycle proceeds")
-			check(F.report(l,l.last_cycle,l.cash_cents).available,"Accepted journal reconstructs")
-			check(F.accept_loan(l,q,&"run").is_empty(),"Duplicate/stale quote")
-			check(not F.bank_quote(l,50000,12,&"run").accepted,"Second active loan")
-			var due: int = q.schedule.first_due_cycle
-			while l.last_cycle < q.schedule.last_due_cycle:
-				l = step(l)
-				check(F.report(l,l.last_cycle,l.cash_cents).available,"Every scheduled journal reconstructs")
-			check(l.bank_loans[0].closed and l.bank_loans[0].principal_paid_cents == 50001,"Full term principal closes")
-			check(l.bank_loans[0].interest_paid_cents == q.schedule.total_interest_cents,"Full term interest")
-			check(l.obligations.filter(func(x): return x.expense_type == &"bank_installment")[0].due_cycle == due,"First full month provenance")
-			var decoded: Dictionary = bytes_to_var(var_to_bytes(l))
-			check(decoded == l and F.report(decoded,l.last_cycle,l.cash_cents).available,"Typed complete state roundtrip")
+			initial_ledger = accepted.ledger
+			check(initial_ledger.cash_cents == before.cash_cents+50001 and initial_ledger.last_cycle == before.last_cycle,"Zero-cycle proceeds")
+			check(F.report(initial_ledger,initial_ledger.last_cycle,initial_ledger.cash_cents).available,"Accepted journal reconstructs")
+			check(F.accept_loan(initial_ledger,initial_quote,&"run").is_empty(),"Duplicate/stale quote")
+			check(not F.bank_quote(initial_ledger,50000,12,&"run").accepted,"Second active loan")
+			var due: int = initial_quote.schedule.first_due_cycle
+			while initial_ledger.last_cycle < initial_quote.schedule.last_due_cycle:
+				initial_ledger = step(initial_ledger)
+				check(F.report(initial_ledger,initial_ledger.last_cycle,initial_ledger.cash_cents).available,"Every scheduled journal reconstructs")
+			check(initial_ledger.bank_loans[0].closed and initial_ledger.bank_loans[0].principal_paid_cents == 50001,"Full term principal closes")
+			check(initial_ledger.bank_loans[0].interest_paid_cents == initial_quote.schedule.total_interest_cents,"Full term interest")
+			check(initial_ledger.obligations.filter(func(x): return x.expense_type == &"bank_installment")[0].due_cycle == due,"First full month provenance")
+			var decoded: Dictionary = bytes_to_var(var_to_bytes(initial_ledger))
+			check(decoded == initial_ledger and F.report(decoded,initial_ledger.last_cycle,initial_ledger.cash_cents).available,"Typed complete state roundtrip")
 	for latest in [0,1000]:
 		check(not F.bank_quote(ready_ledger(550000,latest),50000,12,&"run").accepted,"Zero/weak latest cannot borrow")
 	for elapsed in [0,1,2,3,4]:
-		var l := ready_ledger()
-		var q := F.bank_quote(l,50000,12,&"run")
-		l = F.accept_loan(l,q,&"run").ledger
-		for i in range(elapsed): l = step(l)
-		var payoff := F.payoff_quote(l,q.loan_id)
-		var cash: int = l.cash_cents
-		var result := F.pay_off(l,payoff)
+		var term_ledger := ready_ledger()
+		var term_quote := F.bank_quote(term_ledger,50000,12,&"run")
+		term_ledger = F.accept_loan(term_ledger,term_quote,&"run").ledger
+		for i in range(elapsed): term_ledger = step(term_ledger)
+		var term_payoff := F.payoff_quote(term_ledger,term_quote.loan_id)
+		var cash: int = term_ledger.cash_cents
+		var result := F.pay_off(term_ledger,term_payoff)
 		check(not result.is_empty(),"Before/at/after due payoff")
-		l = result.ledger
-		check(l.cash_cents == cash-payoff.total_cents and l.bank_loans[0].closed,"Exact payoff cash and closure")
-		check(F.report(l,l.last_cycle,l.cash_cents).available and F.pay_off(l,payoff).is_empty(),"Payoff replay and duplicate protection")
-		var interest: int = l.bank_loans[0].interest_paid_cents
-		l = step(step(l))
-		check(l.bank_loans[0].interest_paid_cents == interest,"Future interest waived")
+		term_ledger = result.ledger
+		check(term_ledger.cash_cents == cash-term_payoff.total_cents and term_ledger.bank_loans[0].closed,"Exact payoff cash and closure")
+		check(F.report(term_ledger,term_ledger.last_cycle,term_ledger.cash_cents).available and F.pay_off(term_ledger,term_payoff).is_empty(),"Payoff replay and duplicate protection")
+		var interest: int = term_ledger.bank_loans[0].interest_paid_cents
+		term_ledger = step(step(term_ledger))
+		check(term_ledger.bank_loans[0].interest_paid_cents == interest,"Future interest waived")
 	var l := ready_ledger()
 	var q := F.bank_quote(l,50000,12,&"run")
 	var stale: Dictionary = F.plan(l,4,l.cash_cents,1,&"other_income").ledger

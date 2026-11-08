@@ -139,7 +139,9 @@ func verify_finance_and_ui(catalog: RefCounted) -> void:
 	check(store.find_child("CommitEngineConfiguration",true,false)==null and not browser.configure_button.visible,"Fixed library has no Stage or Commit controls")
 	var menu: MainMenu=MainMenu.new();root.add_child(menu);await process_frame
 	menu._specialty.select(1);menu._refresh_preview()
-	check(menu._emphasis.text.contains("27") and menu._preview.text.contains("30%"),"New-Studio preview describes Public27 and royalty")
+	check(menu._emphasis.text=="Bonus awareness to games released in this category" and menu._preview.text.is_empty(),"Studio specialty describes its Awareness benefit without engine terms")
+	menu._name_input.text="Engine Overview";menu._refresh_review()
+	check(menu._review.text.contains("Engine Overview") and menu._review.text.contains("Starting cash:") and not menu._review.text.contains("Public Action Engine") and not menu._review.text.contains("30%") and not menu._review.text.contains("+0.1"),"Overview keeps studio finances without the Public Engine description")
 	check(run.random_streams.snapshot()==rng,"Browsing/reporting consumes no mechanical RNG")
 	browser.queue_free();picker.queue_free();menu.queue_free();store.queue_free();await process_frame
 

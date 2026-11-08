@@ -80,11 +80,11 @@ static func valid(value: Dictionary, world: RivalWorld, planned_ledgers: Diction
 		for id in book.transaction_ids:
 			if not seen.has(id): return false
 	for id in value.offers:
-		var offer: Variant=value.offers[id]
-		if not offer is Dictionary or offer.size()!=3 or offer.get("kind") not in ["primary","secondary"] or not offer.get("terms") is Dictionary or not offer.get("consents") is Array or offer.terms.get("tx_id")!=id or not offer.terms.get("buyer") is String or not all.has(offer.terms.get("studio_id")): return false
-		if not _terms_valid(offer.kind,offer.terms): return false
+		var pending_offer: Variant=value.offers[id]
+		if not pending_offer is Dictionary or pending_offer.size()!=3 or pending_offer.get("kind") not in ["primary","secondary"] or not pending_offer.get("terms") is Dictionary or not pending_offer.get("consents") is Array or pending_offer.terms.get("tx_id")!=id or not pending_offer.terms.get("buyer") is String or not all.has(pending_offer.terms.get("studio_id")): return false
+		if not _terms_valid(pending_offer.kind,pending_offer.terms): return false
 		var holders := {}
-		for holder: Variant in offer.consents:
+		for holder: Variant in pending_offer.consents:
 			if not holder is String or not Ownership._valid_holder(holder) or holders.has(holder): return false
 			holders[holder]=true
 	return true

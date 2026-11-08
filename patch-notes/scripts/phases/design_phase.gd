@@ -705,12 +705,12 @@ func get_first_game_guidance() -> Dictionary:
 	if tutorial.stage == FirstGameTutorial.Stage.REDRAW_HAND and matching.size() == 3 and not other_slots.is_empty():
 		if _run_state.get_available_redraws() == 0:
 			return {"key": "first_game_redraw_empty", "title": "No redraws left", "hint": "First game · Play a hand to restore one redraw.", "body": "This pool is one %s card short of Specialization. Your redraw bank is empty. You can play any affordable one- to four-card hand normally; a successful hand restores one redraw." % core}
-		var ready := _selected_card_views.size() == 1 and _selected_card_views[0].card_data.primary_stat != stat
-		var wrong_selection := not ready and not _selected_card_views.is_empty()
+		var redraw_ready := _selected_card_views.size() == 1 and _selected_card_views[0].card_data.primary_stat != stat
+		var wrong_selection := not redraw_ready and not _selected_card_views.is_empty()
 		var selection_help := "Click selected cards again to deselect them. " if wrong_selection else ""
-		return {"key": "first_game_redraw_now" if ready else "first_game_redraw_wrong" if wrong_selection else "first_game_redraw_select",
-			"title": "Redraw your selected card" if ready else "One card away from %s Specialization" % core,
-			"hint": "First game · " + ("Press Redraw for the fourth %s card." % core if ready else "Keep three %s cards. Select only one other card and Redraw." % core),
+		return {"key": "first_game_redraw_now" if redraw_ready else "first_game_redraw_wrong" if wrong_selection else "first_game_redraw_select",
+			"title": "Redraw your selected card" if redraw_ready else "One card away from %s Specialization" % core,
+			"hint": "First game · " + ("Press Redraw for the fourth %s card." % core if redraw_ready else "Keep three %s cards. Select only one other card and Redraw." % core),
 			"body": selection_help + "Keep the three %s cards unselected for now. Select only one card with a different primary label, then Redraw. This tutorial guarantees a %s Pass: one redraw, zero cash or cycles. Then find all four %s cards in the fan and Implement. Later redraws use normal chance." % [core, core, core]}
 	return {"key": "first_game_pool_changed", "title": "Your pool has changed", "hint": "First game · Find four matching primary labels, or play another hand.", "body": "Your choices changed the guided pattern. You can still find a Specialization by matching four primary Core labels, or play any affordable four cards normally. The guided opening ends after your second successful Design hand."}
 

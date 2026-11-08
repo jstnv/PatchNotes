@@ -194,6 +194,7 @@ func _render() -> void:
 	skip_checkbox.visible = stage == 9
 	skip_checkbox.set_pressed_no_signal(_skip_preference)
 	scroll.scroll_vertical = 0
+	_body.size_flags_vertical = Control.SIZE_EXPAND_FILL if stage >= 2 and stage <= 8 else Control.SIZE_FILL
 	if stage == 0:
 		_heading.text = "A year of making games"
 		FolderUI.label(_body, "Welcome to the %d Annual Game Awards." % int(_result.get("year", 0)), &"HeadingLabel")
@@ -220,6 +221,11 @@ func _render() -> void:
 
 func _award(award: Dictionary) -> void:
 	_heading.text = award_title(award)
+	# Keep the nominee cards above the fixed actions when the page has room.
+	# The scroll container still handles content taller than the viewport.
+	var top_space := Control.new()
+	top_space.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_body.add_child(top_space)
 	var kind := str(award.get("metric_kind", "core"))
 	var category := str(award.get("id", ""))
 	var nominees: Array = award.get("nominees", [])

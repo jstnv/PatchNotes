@@ -45,7 +45,10 @@ static func _state(session: RefCounted,objects: Dictionary) -> Dictionary:
 		for property in card.get_property_list():
 			if property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE: fields[property.name]=_freeze(card.get(property.name),objects)
 		definitions.append(fields)
-	return {"project":_freeze(session.project,objects),"run":_freeze(session.run,objects),"hand":_freeze(session.hand,objects),"phase":session.phase_index,"sequence":session.sequence,"confirmation":session.awaiting_confirmation,"finalized":session.finalized,"definitions":definitions,"snapshots":_freeze(session.snapshots,objects)}
+	var run_state: Dictionary = _freeze(session.run,objects)
+	run_state.erase("_studio_notice_state")
+	objects[session.run] = run_state.duplicate(true)
+	return {"project":_freeze(session.project,objects),"run":run_state,"hand":_freeze(session.hand,objects),"phase":session.phase_index,"sequence":session.sequence,"confirmation":session.awaiting_confirmation,"finalized":session.finalized,"definitions":definitions,"snapshots":_freeze(session.snapshots,objects)}
 
 static func digest(value: Variant) -> String:
 	return JSON.stringify(freeze(value)).sha256_text()

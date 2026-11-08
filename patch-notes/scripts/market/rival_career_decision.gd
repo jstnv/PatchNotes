@@ -16,7 +16,7 @@ func observation(current: RefCounted) -> Dictionary:
 		view.engine_features=current.run.get_engine_feature_state()
 		view.engine_configuration=current.run.get_engine_configuration_quote()
 		view.selected_engine_id=current.run.get_selected_engine_id()
-		view.engine_available_features=FeatureStoreCatalog.future_supply(current.run.get_owned_feature_ids(),current.run._feature_offers)
+		view.engine_available_features=current.run.get_future_project_feature_ids()
 	return view
 func choose(view: Dictionary,_lifetime: RefCounted) -> Dictionary:
 	prior=view;return policy.choose(session,view)

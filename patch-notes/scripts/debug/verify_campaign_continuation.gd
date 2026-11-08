@@ -3,14 +3,16 @@ const Session := preload("res://scripts/simulation/campaign_session.gd")
 var checks := 0
 var financial_comparisons := 0
 
-## Historical fixed Bank/payroll route. Preserve its original v3 supply;
-## current v4 solvency is exercised by the separate fresh public-command route.
+## Controlled fixture funding permits the full finance/continuation route;
+## purchases and the one-time recovery loan still use current legal rules.
 func fresh(recipe: Dictionary) -> RefCounted:
 	var session:RefCounted=super.fresh(recipe)
 	if session!=null:
-		session.run._owned_features.clear()
-		for id:StringName in StudioSpecialties.preview(&"action",3).ids:session.run._owned_features[id]=true
-		session.run._founding_roster_version=3
+		var created: Dictionary=session.run.create_proprietary_engine(session.run.get_proprietary_engine_creation_quote("Continuation engine"))
+		expect(created.get("ok",false),"Create fixture proprietary engine")
+		if created.get("ok",false):
+			expect(session.run.select_engine(created.engine_id) and session.run.finalize_starter_selection(),"Select fixture engine")
+		expect(session.run.spend_cash_cents(session.run.get_cash_cents()-50000),"Prepare cash-poor recovery fixture")
 	return session
 
 func game(session: RefCounted,title: String) -> void:
@@ -25,7 +27,9 @@ func game(session: RefCounted,title: String) -> void:
 	for phase_index in range(3):
 		if phase_index > 0: dev(session,&"enter_next_phase")
 		dev(session,&"begin")
-		for hand_index in range(4 if title=="First" else 2): dev(session,&"play",{"candidate_ids":session.development.hand.candidate_ids.slice(0,4)})
+		for hand_index in range(4 if title=="First" else 2):
+			if session.development.hand.candidate_ids.is_empty():break
+			dev(session,&"play",{"candidate_ids":session.development.hand.candidate_ids.slice(0,4)})
 		dev(session,&"request_exit")
 		if session.development.awaiting_confirmation: dev(session,&"confirm_exit")
 	act(session,&"launch")
@@ -84,20 +88,25 @@ func _initialize() -> void:
 	var recipe := {"schema_version":1,"studio_id":"continuation_fixture","studio_name":"Continuation","specialty":"action","traits":[],"seed":"4417"}
 	var session := fresh(recipe)
 	tape = Replay.begin(session)
+	var bank: Dictionary = session.quote_bank(150000,24)
+	money(session,&"bank_borrow",&"accept_bank_loan",bank)
+	money(session,&"bank_borrow",&"accept_bank_loan",bank,false)
+	# Synthetic capital is supplied before the recorded prefix, never during it.
+	expect(session.run.add_cash(20000),"Fund continuation route")
+	tape = Replay.begin(session)
 	game(session,"First")
+	game(session,"SecondBeforeCheckpoint")
+	act(session,&"activate_employees")
 	var reentry := [0]
 	session.run.cash_changed.connect(func() -> void:
 		reentry[0] += 1
 		expect(session.export_checkpoint().is_empty() and not session.execute(session.command(&"acknowledge_publishers")).ok,"Busy publication cannot checkpoint or reenter"))
-	var bank: Dictionary = session.quote_bank(50000,12)
+	bank = session.quote_bank(50000,12)
 	money(session,&"bank_borrow",&"accept_bank_loan",bank,false)
 	money(session,&"hire",&"hire_production_specialist",session.run.get_production_hire_quote())
 	money(session,&"hire",&"hire_production_specialist",{},false)
-	act(session,&"admit_research",{"quote":session.run.get_feature_research_quote(&"save_files")})
+	act(session,&"admit_research",{"quote":session.run.get_feature_research_quote(&"menu_system")})
 	complete_contract(session,{"kind":&"ironclad"})
-	bank = session.quote_bank(150000,24)
-	money(session,&"bank_borrow",&"accept_bank_loan",bank)
-	money(session,&"bank_borrow",&"accept_bank_loan",bank,false)
 	var prefix: Dictionary = tape
 	var envelope: Dictionary = session.export_checkpoint()
 	expect(not envelope.is_empty(),"Studio checkpoint with research, payroll, Bank, sales/Fans and completed Contract")
@@ -145,13 +154,13 @@ func _initialize() -> void:
 	expect(ended != null and not ended.export_checkpoint().is_empty() and not ended.execute(ended.command(&"acknowledge_publishers")).ok,"Terminal counter restores without wrapping")
 	# Continuation tape starts at the saved nonzero sequence; compare every result.
 	tape = Replay.begin(session)
-	act(session,&"research",{"quote":session.run.get_feature_research_quote(&"save_files")})
+	act(session,&"research",{"quote":session.run.get_feature_research_quote(&"menu_system")})
 	# A legal available publisher offer, including Promotion when Crown/Neon unlocks.
 	for offer: Dictionary in session.observation().studio_actions.contract_offers:
 		complete_contract(session,offer)
 		break
 	game(session,"Second")
-	expect(session.run.owns_feature(&"save_files") and &"save_files" in session.development.project.get_feature_supply_ids(),"Post-restore next project uses completed research")
+	expect(session.run.owns_feature(&"menu_system") and &"menu_system" in session.development.project.get_feature_supply_ids(),"Post-restore next project uses completed implementation")
 	var replayed := Replay.replay(restored,tape)
 	expect(replayed.ok and Replay.state(restored) == Replay.state(session),"Uninterrupted vs restored suffix exact at every command")
 	expect(Replay.save_tape(output+".tape.json",tape),"Save fresh-process continuation tape")

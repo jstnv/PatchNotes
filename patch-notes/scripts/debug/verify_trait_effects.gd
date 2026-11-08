@@ -19,20 +19,22 @@ func _initialize() -> void:
 	check(StudioTraits.launch_awareness(unknown,7,true) == 0, "Unknown floors at zero")
 	check(StudioTraits.launch_awareness(unknown,134,true) == 124 and StudioTraits.launch_awareness(unknown,135,true) == 125, "Neon threshold boundary")
 	check(StudioTraits.launch_awareness(StudioTraits.evaluate(&"family_funding",[&"studio_buzz",&"unknown_name"]),100,true) == 100, "Legacy preview remains inactive")
-	for marketing in [34,35]:
+	# Matching Action adds 20 base Awareness, so use 14/15 to keep the
+	# original 124/125 Neon threshold test exact.
+	for marketing in [14,15]:
 		var run := RunState.new()
 		run.initialize_cash_cents(0)
 		run.create_studio_with_traits("Launch", &"action", [&"unknown_name"])
 		check(not run.register_release(null) and run.trait_launch_awareness(100) == 90, "Rejected release does not spend first-launch penalty")
 		var project := ready_project(run, marketing)
-		check(project != null and project.get_awareness_result().get_total_awareness() == 90 + marketing, "Native calculator freezes adjusted Awareness")
+		check(project != null and project.get_awareness_result().get_total_awareness() == 110 + marketing and project.get_awareness_result().get_organic_awareness()==120, "Native calculator freezes matching Genre base plus adjusted Awareness")
 		check(run.register_release(project), "Native release registers")
 		var snapshot := run.get_released_game_sales(project.get_release_id())
-		check(snapshot.launch_awareness == 90 + marketing and run.get_release_metadata(project.get_release_id()).review.awareness == snapshot.launch_awareness, "Sales/history share frozen value")
-		check((PublisherCatalog.NEON_CIRCUIT in run.get_unlocked_publisher_ids()) == (marketing == 35), "Native Neon profile threshold uses frozen Awareness")
+		check(snapshot.launch_awareness == 110 + marketing and run.get_release_metadata(project.get_release_id()).review.awareness == snapshot.launch_awareness, "Sales/history share frozen value")
+		check((PublisherCatalog.NEON_CIRCUIT in run.get_unlocked_publisher_ids()) == (marketing == 15), "Native Neon profile threshold uses frozen Awareness")
 		check(run.register_release(project) and run.get_released_game_ids().size() == 1 and run.trait_launch_awareness(100) == 100, "Duplicate registration cannot consume another first release")
 		var second := ready_project(run, 0)
-		check(run.register_release(second) and second.get_awareness_result().get_total_awareness() == 100, "Second release has no Unknown penalty")
+		check(run.register_release(second) and second.get_awareness_result().get_total_awareness() == 120, "Second release has no Unknown penalty and retains matching Genre bonus")
 	print("Trait effects verification: %d failures" % failures)
 	quit(failures)
 

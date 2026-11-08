@@ -118,8 +118,11 @@ func run() -> void:
 	# zero, while crossfade exposes both tails with separate clocks.
 	var fade := SoundtrackScript._visual_note_clock_projection({"phase":&"switch","switch_seconds":0.09,"tail_active":true,"tail_seconds":4.0})
 	check(fade.size() == 2 and fade[0].timeline == &"boot" and fade[1].timeline == &"switch_menu", "Boot-to-switch crossfade retains both note clocks")
-	var off := SoundtrackScript._visual_note_clock_projection({"phase":&"","shared_menu":true,"menu_weight":0.0})
-	check(off.is_empty(), "Fully inaudible menu layer supplies no stale menu note clock")
+	var off := SoundtrackScript._visual_note_clock_projection({"phase":&"","shared_menu":true,"menu_weight":0.0,"studio_weight":0.0,"menu_seconds":0.0})
+	var stale_menu := false
+	for entry: Dictionary in off:
+		if entry.timeline == &"menu": stale_menu = true
+	check(not stale_menu, "Fully inaudible menu layer supplies no stale menu note clock")
 
 	# A late first switch frame must still show every note from its beginning.
 	circuit._note_timelines.clear()

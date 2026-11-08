@@ -28,7 +28,10 @@ func _verify() -> void:
 	var game: Control = load("res://scenes/gameplay.tscn").instantiate()
 	root.add_child(game)
 	await process_frame
-	while game._loading_checkpoint: await process_frame
+	var title_deadline := Time.get_ticks_msec() + 20000
+	while (game._loading_checkpoint or game._title_checkpoint_job != null) and Time.get_ticks_msec() < title_deadline: await process_frame
+	check(not game._loading_checkpoint and game._title_checkpoint_job == null,"Title checkpoint inspection finishes before Studio creation")
+	if game._loading_checkpoint or game._title_checkpoint_job != null: quit(1); return
 	var menu: MainMenu = game._active_phase
 	game._on_studio_created("Engine Continue",&"action",[],menu)
 	var deadline := Time.get_ticks_msec() + 20000

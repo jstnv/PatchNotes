@@ -77,11 +77,11 @@ func _verify_browser_and_release_thresholds() -> void:
 	await process_frame
 	check(run.get_unlocked_publisher_ids() == [&"ironclad"] and run.get_pending_publisher_notifications().is_empty(), "Only Ironclad unlocks at first release, and Studio presents its notification once")
 	var notice: PanelContainer = studio._publisher_notice
-	check(is_instance_valid(notice) and notice.get_parent() == studio._hub.notice_host and notice.is_visible_in_tree(), "One-time unlock banner remains visible in the Studio notification host")
+	check(is_instance_valid(notice) and notice.get_parent().name == "PublisherNoticeHost" and notice.is_visible_in_tree(), "One-time unlock banner is visible in the screen-space notification host")
 	check(is_instance_valid(notice) and (notice.find_child("PublisherUnlockMessage", true, false) as Label).text.contains("Ironclad Interactive"), "One-time unlock banner names Ironclad")
 	if is_instance_valid(notice):
-		var dismiss := notice.find_child("DismissPublisherNotice", true, false) as Button
-		await process_frame
+		var dismiss := notice.find_child("GotPublisherNotice", true, false) as Button
+		await create_timer(0.35).timeout
 		var point := dismiss.get_global_rect().get_center()
 		var move := InputEventMouseMotion.new()
 		move.position = point; move.global_position = point
@@ -91,8 +91,8 @@ func _verify_browser_and_release_thresholds() -> void:
 			click.position = point; click.global_position = point
 			click.button_index = MOUSE_BUTTON_LEFT; click.pressed = down
 			root.push_input(click,true)
-		await process_frame
-		check(not notice.visible, "Publisher unlock banner is dismissible by pointer")
+		await create_timer(0.25).timeout
+		check(not notice.visible, "Publisher unlock banner closes with Got it by pointer")
 	var before := snapshot(run, project)
 	studio.get_node("%PublisherList").pressed.emit()
 	await wait_studio_navigation(studio)

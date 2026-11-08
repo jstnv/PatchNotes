@@ -19,6 +19,12 @@ func _verify() -> void:
 	root.min_size=Vector2i.ZERO;root.size=dimensions;root.content_scale_size=dimensions
 	var menu: MainMenu=game.get("_active_phase")
 	menu.navigation.animate=false
+	var ready_deadline:=Time.get_ticks_msec()+60000
+	while (menu.checkpoint_info.get("status")==&"checking" or menu._boot_entrance or menu.navigation.busy) and Time.get_ticks_msec()<ready_deadline:
+		await process_frame
+	if menu.checkpoint_info.get("status")==&"checking" or menu._boot_entrance or menu.navigation.busy:
+		print("SETUP_TIMEOUT status=",menu.checkpoint_info.get("status"));quit(2);return
+	print("SETUP_READY status=",menu.checkpoint_info.get("status"))
 	menu.get_node("CenterContainer/MenuLayout/StartGame").pressed.emit()
 	if is_instance_valid(menu._replace_dialog) and menu._replace_dialog.visible:
 		menu._replace_dialog.hide();menu._replace_dialog.confirmed.emit()

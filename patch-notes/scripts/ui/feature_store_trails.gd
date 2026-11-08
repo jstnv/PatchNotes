@@ -96,7 +96,7 @@ func _draw_range(path: PackedVector2Array, start: float, end: float, head: float
 			var side_b := normal * width * 0.5 * lerpf(0.2,1.0,fade_b)
 			var color_a := Color(color.r,color.g,color.b,color.a * fade_a)
 			var color_b := Color(color.r,color.g,color.b,color.a * fade_b)
-			draw_polygon(PackedVector2Array([from + side_a,to + side_b,to - side_b,from - side_a]),PackedColorArray([color_a,color_b,color_b,color_a]))
+			draw_primitive(PackedVector2Array([from + side_a,to + side_b,to - side_b,from - side_a]),PackedColorArray([color_a,color_b,color_b,color_a]),PackedVector2Array())
 		walked += length
 		if walked >= end: break
 
@@ -117,15 +117,15 @@ func _draw_tip(path: PackedVector2Array, total: float, start: float, end: float,
 	var color_a := Color(color.r,color.g,color.b,color.a * fade_a)
 	var color_b := Color(color.r,color.g,color.b,color.a * fade_b)
 	if total - b <= 0.01:
-		draw_polygon(PackedVector2Array([point_a + side_a,point_b,point_a - side_a]),PackedColorArray([color_a,color_b,color_a]))
+		draw_primitive(PackedVector2Array([point_a + side_a,point_b,point_a - side_a]),PackedColorArray([color_a,color_b,color_a]),PackedVector2Array())
 	else:
-		draw_polygon(PackedVector2Array([point_a + side_a,point_b + side_b,point_b - side_b,point_a - side_a]),PackedColorArray([color_a,color_b,color_b,color_a]))
+		draw_primitive(PackedVector2Array([point_a + side_a,point_b + side_b,point_b - side_b,point_a - side_a]),PackedColorArray([color_a,color_b,color_b,color_a]),PackedVector2Array())
 
 func _draw() -> void:
 	if active_edges.is_empty() or not is_instance_valid(map_view): return
-	var visible := get_global_transform().affine_inverse() * map_view.get_global_rect()
+	var visible_rect := get_global_transform().affine_inverse() * map_view.get_global_rect()
 	for edge: Dictionary in active_edges.values():
-		if not visible.intersects(edge.bounds): continue
+		if not visible_rect.intersects(edge.bounds): continue
 		var path: PackedVector2Array = edge.path
 		var total: float = edge.length
 		for head: float in pulse_heads(_clock - float(edge.started),total):

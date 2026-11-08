@@ -1,0 +1,16 @@
+# GDScript warning cleanup — 2026-11-04
+
+Branch `main`, starting HEAD `2ad3cf2b2bb63d324a970b10864b0f69843dcb1a`. The worktree was already extensively modified; existing changes, `.codex-godot-temp`, saves and retained evidence were preserved. No commit, push or export.
+
+The user supplied editor screenshots showing integer-division, shadowed-name and unused-member/argument warnings. This is a focused cleanup, not a verified removal of all 273 editor messages. `card_data.gd` uses the exact integer quotient 7,686,143,364,045,646 for its existing 64-bit safety limit; it is not converted through an imprecise float. `music_grid.gd` and the rival selectors rename shadowing locals/parameters, and the selectors mark their unused run identifier as such. Loop variables shadowing Node properties were renamed in Studio, Pause, checkpoint, focused guidance and menu visualizer scripts. `project_state.gd` retains its three externally accessed fields and has narrowly scoped warning annotations explaining those usages; no global warning settings were disabled.
+
+Non-debug scripts participate in the world source identity. The exact preceding source `fc6b81d36d0f3311a1d0c844b5cdac3a5380cf3f358eebe453308aac3964a551` was added to the existing explicit predecessor list. The genuine preceding player/eight-rival checkpoint from the prior native Studio-creation run was restored in isolation: player exact except capture sequence, world exact except source stamp, unknown source rejected and original file unchanged (`sims/warning-audit-20261104/prior-save/`).
+
+## Checks and limits
+
+- Soundtrack sync: 3,503 checks, 0 failures (dummy audio). Balanced Production: 1,309 checks, 0 failures. Pass Budget and Three-Core foundation: 0 failures. Three-Core also reported an existing missing `sprites.png` artwork warning.
+- Original and renamed rival selectors were loaded side by side: 16 comparisons, 0 differences (`selector-comparison/`). The broader rival verifier reported two setup failures before selector invocation and timed out after 180 seconds (`rival-focused/`); no full-suite pass is claimed.
+- Studio notice 27/27, menu visualizer 33/33, focused modal 51/51, and a focused Pause overlay-blocking probe passed in isolated headless profiles.
+- Existing `verify_checkpoint_runtime` failed its immediate Studio-save assertion. `verify_pause_menu` timed out after guided-practice setup failed and produced an invalid payload access. The first focused-integration invocation omitted required fixture configuration and failed; a configured retry published its prior pair but failed waiting for the expected invitation. The cause is unconfirmed. These artifacts remain under `sims/warning-audit-20261104/`.
+- A stale preceding-save capture fixture failed and timed out; the genuine native prior checkpoint described above was used instead. A headless editor diagnostic ended with `Scan thread aborted`; check-only parsing did not report the editor analyzer warnings. Therefore the remaining editor warning inventory and actual post-cleanup count are **not verified**, and further warning-by-warning review remains open. No warning category was globally disabled.
+- `git -c core.whitespace=cr-at-eol diff --check` passed, with existing line-ending advisories.
